@@ -1,4 +1,6 @@
-package it.polimi.ingsw.psp12.model;
+package it.polimi.ingsw.psp12.model.board;
+
+import it.polimi.ingsw.psp12.model.Worker;
 
 public class Cell
 {

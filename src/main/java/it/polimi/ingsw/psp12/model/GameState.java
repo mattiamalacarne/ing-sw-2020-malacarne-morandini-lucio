@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.model.board.Board;
+
 public class GameState
 {
     private Board gameBoard;

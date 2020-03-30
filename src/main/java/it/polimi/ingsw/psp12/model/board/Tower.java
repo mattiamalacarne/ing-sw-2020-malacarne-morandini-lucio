@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp12.model;
+package it.polimi.ingsw.psp12.model.board;
 
 import java.awt.*;
 

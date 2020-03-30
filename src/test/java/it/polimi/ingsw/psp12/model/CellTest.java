@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.model.board.Cell;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

@@ -1,0 +1,5 @@
+<card>
+    <name>Minotauro</name>
+    <ShortDesc>Il mostro dalla testa di toro</ShortDesc>
+    <Desc>Tuo spostamento: il tuo lavoratore può spostarsi nella casella di un giocatore avversario (in base alle normali regole di spostamento) se la casella successiva nella stessa direzione è libera, il lavorstore avversario è costretto a spostarsi in quella casella (indipendentemente dal livello)</Desc>
+</card>

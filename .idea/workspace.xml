@@ -2,18 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Board.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Cell.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/GameState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/NetworkInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Point.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Tower.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/model/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/apollo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/artemis.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/atena.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/atlante.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/demetra.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/efesto.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/ermes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/minotauro.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/cards/pan.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ing-sw-2020-malacarne-morandini-lucio.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ing-sw-2020-12.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +49,9 @@
     </option>
   </component>
   <component name="ProjectId" id="1ZZzkdsmaAwIMfHy9wVOxdxcJ56" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -58,7 +59,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
@@ -119,12 +120,20 @@
       <option name="project" value="LOCAL" />
       <updated>1585061920662</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Model base created, Cell give error caused by methods expecting return">
+      <created>1585329834740</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585329834740</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Firts project upload" />
-    <option name="LAST_COMMIT_MESSAGE" value="Firts project upload" />
+    <MESSAGE value="Model base created, Cell give error caused by methods expecting return" />
+    <option name="LAST_COMMIT_MESSAGE" value="Model base created, Cell give error caused by methods expecting return" />
   </component>
   <component name="WindowStateProjectService">
     <state x="276" y="148" key="#Project_Structure" timestamp="1585321214093">
@@ -147,38 +156,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
-    <state x="448" y="112" key="CommitChangelistDialog2" timestamp="1585061919081">
+    <state x="448" y="112" key="CommitChangelistDialog2" timestamp="1585329831598">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="448" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1585061919081" />
+    <state x="448" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1585329831598" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1585321476471" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1585325274101">
+    <state width="1874" height="282" key="GridCell.Tab.0.bottom" timestamp="1585344546018">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1585325274101" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1585325274101">
+    <state width="1874" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1874" height="282" key="GridCell.Tab.0.center" timestamp="1585344546018">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1585325274101" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1585325274100">
+    <state width="1874" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1874" height="282" key="GridCell.Tab.0.left" timestamp="1585344546018">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1585325274100" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1585325274101">
+    <state width="1874" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1874" height="282" key="GridCell.Tab.0.right" timestamp="1585344546018">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1585325274101" />
-    <state x="461" y="161" key="SettingsEditor" timestamp="1585325021295">
+    <state width="1874" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state x="461" y="164" width="1040" height="850" key="SettingsEditor" timestamp="1585578115212">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="161" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1585325021295" />
-    <state x="524" y="207" key="Vcs.Push.Dialog.v2" timestamp="1585061946683">
+    <state x="461" y="164" width="1040" height="850" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1585578115212" />
+    <state x="524" y="207" key="Vcs.Push.Dialog.v2" timestamp="1585329839755">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="524" y="207" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1585061946683" />
+    <state x="524" y="207" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1585329839755" />
     <state x="616" y="240" width="672" height="677" key="run.anything.popup" timestamp="1585325185898">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

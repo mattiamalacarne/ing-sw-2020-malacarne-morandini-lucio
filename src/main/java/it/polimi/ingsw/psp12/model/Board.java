@@ -4,25 +4,24 @@ public class Board
 {
     private Cell boardCells[][];
 
-    public Board() {}
-
-    private static class BoardHandler
+    public Board()
     {
-        private static final Board board = new Board();
+
     }
 
-    public static Board getBoard()
-    {
-        return BoardHandler.board;
-    }
-
-    /**
-     *
-     * @param p cell's coordinates
-     * @return  a cell locatate at point coordinates
-     */
     public Cell getCell(Point p)
     {
-        return boardCells[p.getX()][p.getY()];
+        // TODO: Ricordrsi di sostituire il return
+        return null;
+    }
+
+    public void move(Point oldPoint, Point newPoint)
+    {
+
+    }
+
+    public void build(Point oldPoint, Point newPoint)
+    {
+
     }
 }

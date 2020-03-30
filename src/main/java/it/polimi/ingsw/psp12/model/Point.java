@@ -22,4 +22,8 @@ public class Point
     public int getY() {
         return y;
     }
+
+    public boolean isOnBoard() {
+        return (x >= 0 && x <= 4 && y >= 0 && y <= 4);
+    }
 }

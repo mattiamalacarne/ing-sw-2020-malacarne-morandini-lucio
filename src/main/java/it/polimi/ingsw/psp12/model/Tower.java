@@ -8,7 +8,7 @@ public class Tower
     private char CLISprite;
 
     private int level;
-    private Boolean dome;
+    private boolean dome;
 
     public Image getGUISPrite() {
         return GUISPrite;
@@ -22,9 +22,16 @@ public class Tower
         return level;
     }
 
-    public void incrementLevel() {}
-    public Boolean hasDome()
-    {
+    public void incrementLevel() {
+        if (level < 3)
+            level++;
+    }
+
+    public void buildDome() {
+        dome = true;
+    }
+
+    public boolean hasDome() {
         return dome;
     }
 }

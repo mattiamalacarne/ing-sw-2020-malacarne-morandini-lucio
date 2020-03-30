@@ -10,7 +10,7 @@ public class Player
     private NetworkInfo client;
 
     public Worker[] getWorkers() {
-        return workers;
+        return workers.clone();
     }
 
     public String getName() {

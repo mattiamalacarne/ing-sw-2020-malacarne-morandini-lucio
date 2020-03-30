@@ -5,8 +5,13 @@ public class Cell
     private Tower tower;
     private Worker worker;
 
-    public Boolean hasTower() {}
-    public Boolean hasWorker() {}
+    public boolean hasTower() {
+        return false;
+    }
+
+    public boolean hasWorker() {
+        return false;
+    }
 
     public Tower getTower() {
         return tower;
@@ -16,14 +21,17 @@ public class Cell
         return worker;
     }
 
+    public Cell() {
+        tower = new Tower();
+    }
+
     /**
      *
      * @param currentLevel the level of the actual cell tower
-     * @return true if tower.level - currentlevel<= 1
+     * @return true if tower.level - currentLevel <= 1
      */
-    public Boolean canMoveOn(int currentLevel)
-    {
-        return (tower.getLevel() - currentLevel <= 1) ? true : false;
+    public boolean canMoveOn(int currentLevel) {
+        return (tower.getLevel() - currentLevel) <= 1;
     }
 
 

@@ -1,0 +1,38 @@
+package it.polimi.ingsw.psp12.model;
+
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class PointTest {
+    @Test
+    public void isOnGrid_Xlt0_ShouldReturnFalse () {
+        Point p1 = new Point(-1, 3);
+        assertFalse(p1.isOnBoard());
+    }
+
+    @Test
+    public void isOnGrid_Ylt0_ShouldReturnFalse () {
+        Point p2 = new Point(4, -1);
+        assertFalse(p2.isOnBoard());
+    }
+
+    @Test
+    public void isOnGrid_Xgt4_ShouldReturnFalse () {
+        Point p3 = new Point(5, 2);
+        assertFalse(p3.isOnBoard());
+    }
+
+    @Test
+    public void isOnGrid_Ygt4_ShouldReturnFalse () {
+        Point p4 = new Point(1, 5);
+        assertFalse(p4.isOnBoard());
+    }
+
+    @Test
+    public void isOnGrid_XYok_ShouldReturnTrue () {
+        Point p5 = new Point(2, 3);
+        assertTrue(p5.isOnBoard());
+    }
+}

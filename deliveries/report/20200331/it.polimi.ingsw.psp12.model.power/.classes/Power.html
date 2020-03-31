@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Power</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model.power</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Power (it.polimi.ingsw.psp12.model.power)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Power</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model.power;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Board;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Point;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.Action;
+<i>8</i>&nbsp;
+<b class="nc"><i>9</i>&nbsp;public abstract class Power {</b>
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    int maxHeight;
+<i>12</i>&nbsp;    int maxMoves;
+<i>13</i>&nbsp;    int movesNumbers;
+<i>14</i>&nbsp;    int buildsNumbers;
+<i>15</i>&nbsp;    Point oldPosition;
+<i>16</i>&nbsp;    int id;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public void setMaxHeight(int maxHeight) {
+<b class="nc"><i>19</i>&nbsp;        this.maxHeight = maxHeight;</b>
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public abstract int getNextPlayerHeight();
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public boolean checkVictory(){
+<i>25</i>&nbsp;        //TODO: temp return
+<b class="nc"><i>26</i>&nbsp;        return false;</b>
+<i>27</i>&nbsp;    };
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public void updateOldPosition(Point p){
+<b class="nc"><i>30</i>&nbsp;        oldPosition = p;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public void reset(){
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public Cell[] possibleMoves(Board b, Worker w){
+<i>38</i>&nbsp;        //TODO: temp return
+<b class="nc"><i>39</i>&nbsp;        return null;</b>
+<i>40</i>&nbsp;    };
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public Cell[] possibleBuilds(Board b, Worker w){
+<i>43</i>&nbsp;        //TODO: temp return
+<b class="nc"><i>44</i>&nbsp;        return null;</b>
+<i>45</i>&nbsp;    };
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public Action[] nextActions(GameState gameState){
+<i>48</i>&nbsp;        //TODO: temp return
+<b class="nc"><i>49</i>&nbsp;        return null;</b>
+<i>50</i>&nbsp;    };
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public int getPowerId() {
+<b class="nc"><i>53</i>&nbsp;        return id;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-03-31 14:14</div>
+</div>
+</body>
+</html>

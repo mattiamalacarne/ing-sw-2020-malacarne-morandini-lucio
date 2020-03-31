@@ -6,10 +6,14 @@ public class Board
 
     public Board()
     {
-
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                boardCells[x][y] = new Cell(x, y);
+            }
+        }
     }
 
-    public Cell getCell(Point p)
+    public Cell getCell(Point pos)
     {
         // TODO: Ricordrsi di sostituire il return
         return null;
@@ -20,7 +24,7 @@ public class Board
 
     }
 
-    public void build(Point oldPoint, Point newPoint)
+    public void build(Point pos)
     {
 
     }

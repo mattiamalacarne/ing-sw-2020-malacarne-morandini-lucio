@@ -1,25 +1,18 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.model.board.Cell;
+
 import java.awt.*;
 
 public class Worker
 {
-    private Image GUIsprite;
-    private char CLIsprite;
+    private Cell position;
 
-    public Image getGUIsprite() {
-        return GUIsprite;
+    public Cell getPosition() {
+        return position;
     }
 
-    public char getCLIsprite() {
-        return CLIsprite;
-    }
-
-    public void setGUIsprite(Image img) {
-        this.GUIsprite = img;
-    }
-
-    public void setCLIsprite(char c) {
-        this.CLIsprite = c;
+    public void move(Cell cell) {
+        position = cell;
     }
 }

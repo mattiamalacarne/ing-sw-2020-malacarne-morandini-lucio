@@ -14,7 +14,7 @@ public class GameState
 
     public void addPlayer(Player player) {}
 
-    public Player getCurrentPlayer() { return new Player();}
+    public Player getCurrentPlayer() { return new Player(1, "a");}
 
     public void nextTurn() {}
 }

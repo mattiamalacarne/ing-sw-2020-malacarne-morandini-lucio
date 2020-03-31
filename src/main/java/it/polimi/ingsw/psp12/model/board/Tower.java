@@ -4,19 +4,8 @@ import java.awt.*;
 
 public class Tower
 {
-    private Image GUISPrite;
-    private char CLISprite;
-
     private int level;
     private boolean dome;
-
-    public Image getGUISPrite() {
-        return GUISPrite;
-    }
-
-    public char getCLISprite() {
-        return CLISprite;
-    }
 
     public int getLevel() {
         return level;
@@ -25,6 +14,8 @@ public class Tower
     public void incrementLevel() {
         if (level < 3)
             level++;
+        else
+            dome = true;
     }
 
     public void buildDome() {

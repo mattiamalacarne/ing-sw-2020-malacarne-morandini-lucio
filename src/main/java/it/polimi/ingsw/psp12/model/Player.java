@@ -5,6 +5,12 @@ import it.polimi.ingsw.psp12.model.power.Power;
 
 import java.awt.*;
 
+/**
+ * <p><b>Class</b> that represent the player</p>
+ * <p>This class store the information for the game state</p>
+ *
+ * @author mattia
+ */
 public class Player
 {
     private int id;
@@ -23,26 +29,52 @@ public class Player
         }
     }
 
+    /**
+     * Get the selected worker
+     * @param index the index in the list of the current player's worker
+     * @return the corrisponding worker in the list
+     */
     public Worker getWorker(int index) {
         return workers[index];
     }
 
+    /**
+     * update the position of the moved worker
+     * @param index the worker that is moving
+     * @param pos new worler position in the board
+     */
     public void updateWorkerPosition(int index, Cell pos) {
         workers[index].move(pos);
     }
 
+    /**
+     * get the selected player name
+     * @return the name of the player
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * get the player id
+     * @return the player id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * get the player color
+     * @return the player color
+     */
     public Color getColor() {
         return new Color(0, 0, 0);
     }
 
+    /**
+     * set the player power depending of his card
+     * @param pow the new poer of the player
+     */
     public void setPower(Power pow) {
         this.power = pow;
     }

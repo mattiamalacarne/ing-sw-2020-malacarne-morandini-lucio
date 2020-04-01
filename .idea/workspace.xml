@@ -192,9 +192,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
-    <state x="448" y="112" key="CommitChangelistDialog2" timestamp="1585329831598">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="373" y="48" key="CommitChangelistDialog2" timestamp="1585753420048">
+      <screen x="0" y="0" width="1600" height="843" />
     </state>
+    <state x="373" y="48" key="CommitChangelistDialog2/0.0.1600.843@0.0.1600.843" timestamp="1585753420048" />
     <state x="448" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1585329831598" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />

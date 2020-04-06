@@ -1,6 +1,10 @@
 package it.polimi.ingsw.psp12.client;
 
 
+import it.polimi.ingsw.psp12.view.userinterface.InterfaceSelector;
+import it.polimi.ingsw.psp12.view.userinterface.UserInterface;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -18,8 +22,8 @@ public class ClientLauncher
      * Ask user wich interface the game has to load
      * @return reference of the selected interface
      */
-    private Object chooseUserInterface()
-    {
+    private UserInterface chooseUserInterface() throws IOException {
+
         System.out.println("Select the interface you want to use");
         System.out.println("1) CLI");
         System.out.println("2) GUI");
@@ -35,12 +39,12 @@ public class ClientLauncher
                 case 1:
                 {
                     System.out.println("CLI");
-                    return new Object(); // Return an instance of CLI
+                    return new InterfaceSelector().setInterface(interfaceSelected); // Return an instance of CLI
                 }
                 case 2:
                 {
                     System.out.println("GUI");
-                    return new Object(); // Return an instance of GUI
+                    return new InterfaceSelector().setInterface(interfaceSelected);// Return an instance of GUI
                 }
                 default: {System.out.println("Selection not possible, please choose one of the listed interface");}
 
@@ -49,14 +53,11 @@ public class ClientLauncher
         return null;
     }
 
-    public static void main (String[] args)
-    {
+    public static void main (String[] args) throws IOException {
+
         ClientLauncher client = new ClientLauncher();
-        Object inter = client.chooseUserInterface();
-        System.out.println("Interface selected");
-        //Setup the server info with the selected interface
-        // userinterface.getServerInfo() ....
-        // After serverInfo is setup connect to the server and the cli will listen for command (next is select if create a room or join a room)
+        UserInterface ui = client.chooseUserInterface();
+
     }
 
 

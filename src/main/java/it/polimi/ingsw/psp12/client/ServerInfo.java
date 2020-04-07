@@ -11,7 +11,8 @@ import java.net.UnknownHostException;
  */
 public class ServerInfo
 {
-    public Inet4Address serverIp = (Inet4Address) Inet4Address.getByName("127.0.0.1"); // default ip localhost
+    // default ip localhost
+    public Inet4Address serverIp = (Inet4Address) Inet4Address.getByName("127.0.0.1");
     public int serverPort = 55555; // default server port
 
     public ServerInfo(Inet4Address customIp, int customPort) throws UnknownHostException

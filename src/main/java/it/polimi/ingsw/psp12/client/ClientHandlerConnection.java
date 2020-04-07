@@ -13,18 +13,24 @@ import java.net.Socket;
  */
 public class ClientHandlerConnection implements Runnable
 {
-    ServerInfo serverInfo;
+    private ServerInfo serverInfo;
     private Socket clientSocket;
     private ObjectOutputStream output_stream;
     private ObjectInputStream input_stream;
 
     /**
+     * Identifier of the client in the connection;
+     */
+    private String clientName;
+
+    /**
      * prepare the client for connect to the server
      * @param server the server info containing ip and port
      */
-    public ClientHandlerConnection(ServerInfo server)
+    public ClientHandlerConnection(ServerInfo server, String clientName)
     {
         this.serverInfo = server;
+        this.clientName = clientName;
     }
 
     @Override
@@ -40,13 +46,14 @@ public class ClientHandlerConnection implements Runnable
             output_stream.flush();
 
             input_stream = new ObjectInputStream(clientSocket.getInputStream());
+            System.out.println("55555");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void sendRequestToServer(String msg) throws IOException
+    public void sendRequestToServer(String msg) throws IOException
     {
         output_stream.writeObject(msg);
         output_stream.flush();

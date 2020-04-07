@@ -1,0 +1,131 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Tower</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model.board</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Tower (it.polimi.ingsw.psp12.model.board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Tower</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model.board;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.awt.*;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * &lt;p&gt;&lt;b&gt;Class&lt;/b&gt; that represent a tower&lt;/p&gt;
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; * @author mattia
+<i>9</i>&nbsp; */
+<i>10</i>&nbsp;
+<b class="fc"><i>11</i>&nbsp;public class Tower</b>
+<i>12</i>&nbsp;{
+<i>13</i>&nbsp;    private int level;
+<i>14</i>&nbsp;    private boolean dome;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * get the selected toer level
+<i>18</i>&nbsp;     * @return the tower level
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    public int getLevel() {
+<b class="fc"><i>21</i>&nbsp;        return level;</b>
+<i>22</i>&nbsp;    }
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * increment the tower level, if the level is max (3) than build a dome on the top
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public void incrementLevel() {
+<b class="fc"><i>28</i>&nbsp;        if (level &lt; 3)</b>
+<b class="fc"><i>29</i>&nbsp;            level++;</b>
+<i>30</i>&nbsp;        else
+<b class="fc"><i>31</i>&nbsp;            dome = true;</b>
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /**
+<i>35</i>&nbsp;     * build a dome on any level (if is possible)
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    public void buildDome() {
+<b class="fc"><i>38</i>&nbsp;        dome = true;</b>
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * check if the selected tower has a dome on top
+<i>43</i>&nbsp;     * @return true if there is a dome, false if not
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public boolean hasDome() {
+<b class="fc"><i>46</i>&nbsp;        return dome;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-06 20:02</div>
+</div>
+</body>
+</html>

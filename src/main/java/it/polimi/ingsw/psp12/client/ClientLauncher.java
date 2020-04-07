@@ -10,7 +10,7 @@ import java.util.Scanner;
 /**
  * <p><b>Class</b> responsable for launch the game<p/>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 public class ClientLauncher
 {
@@ -22,7 +22,7 @@ public class ClientLauncher
      * Ask user wich interface the game has to load
      * @return reference of the selected interface
      */
-    private UserInterface chooseUserInterface() throws IOException {
+    private UserInterface chooseUserInterface()  {
 
         System.out.println("Select the interface you want to use");
         System.out.println("1) CLI");
@@ -34,20 +34,21 @@ public class ClientLauncher
         while (choosedInterface.hasNextInt())
         {
             int interfaceSelected = choosedInterface.nextInt();
-            switch (interfaceSelected)
+            if (interfaceSelected < 1 || interfaceSelected > 2)
             {
-                case 1:
+                System.out.println("Selection not possible, please choose one of the listed interface");
+                continue;
+            } else
+            {
+                try
                 {
-                    System.out.println("CLI");
-                    return new InterfaceSelector().setInterface(interfaceSelected); // Return an instance of CLI
-                }
-                case 2:
-                {
-                    System.out.println("GUI");
-                    return new InterfaceSelector().setInterface(interfaceSelected);// Return an instance of GUI
-                }
-                default: {System.out.println("Selection not possible, please choose one of the listed interface");}
+                    return new InterfaceSelector().setInterface(interfaceSelected);
 
+                } catch (IOException e)
+                {
+                    System.out.println("Error: Error while building userinterface");
+                    e.printStackTrace();
+                }
             }
         }
         return null;

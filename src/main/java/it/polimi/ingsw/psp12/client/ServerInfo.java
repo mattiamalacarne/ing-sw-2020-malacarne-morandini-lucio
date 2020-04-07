@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
  * <p><b>Class</b> for storing server information, used for open a socket connetion</p>
  * <p>It will be created by the user interface storing ip and a port</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 public class ServerInfo
 {

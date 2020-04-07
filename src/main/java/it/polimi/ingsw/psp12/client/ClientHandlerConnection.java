@@ -9,7 +9,7 @@ import java.net.Socket;
 /**
  * <p><b>Class</b> responsable for the connection with the main server</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 public class ClientHandlerConnection implements Runnable
 {

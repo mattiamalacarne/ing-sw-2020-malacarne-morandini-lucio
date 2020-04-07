@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 /**
  * <p>This <b>Interface</b> is the user interface manager</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 
 public interface UserInterface

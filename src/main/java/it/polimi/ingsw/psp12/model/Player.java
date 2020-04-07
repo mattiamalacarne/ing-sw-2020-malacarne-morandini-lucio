@@ -9,7 +9,7 @@ import java.awt.*;
  * <p><b>Class</b> that represent the player</p>
  * <p>This class store the information for the game state</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 public class Player
 {

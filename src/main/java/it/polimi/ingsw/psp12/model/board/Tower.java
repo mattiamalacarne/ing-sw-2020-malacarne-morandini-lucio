@@ -5,7 +5,7 @@ import java.awt.*;
 /**
  * <p><b>Class</b> that represent a tower</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 
 public class Tower

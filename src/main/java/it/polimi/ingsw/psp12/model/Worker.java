@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * <p><b>Class</b> that represent a worker</p>
  *
- * @author mattia
+ * @author Mattia Malacarne
  */
 
 public class Worker

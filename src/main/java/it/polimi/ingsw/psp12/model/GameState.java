@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+import it.polimi.ingsw.psp12.utils.Observable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.Collections;
  * Class that manages games instances, the board, the players and the current turn
  * @author Luca Morandini
  */
-public class GameState
+public class GameState extends Observable
 {
     /**
      * The game board where the game is played

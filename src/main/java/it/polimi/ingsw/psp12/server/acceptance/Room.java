@@ -1,4 +1,6 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.server.acceptance;
+
+import it.polimi.ingsw.psp12.network.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp12.server;
 
+import it.polimi.ingsw.psp12.server.acceptance.Constants;
+import it.polimi.ingsw.psp12.server.acceptance.Server;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -11,7 +14,19 @@ public class ServerLauncher
 {
     public static void main(String[] args)
     {
-        Server acceptanceServer;
+        try {
+            GameServer testGameServer = new GameServer(Constants.MATCHES_STARTING_PORT, 2);
+            Thread testThread = new Thread(testGameServer);
+            testThread.start();
+
+            System.out.printf("test game started on port " + Constants.MATCHES_STARTING_PORT);
+        } catch (IOException e) {
+            System.out.println("failed to start server");
+            e.printStackTrace();
+        }
+
+
+        /*Server acceptanceServer;
         try {
             acceptanceServer = new Server(Constants.ACCEPTANCE_PORT);
         }
@@ -41,6 +56,6 @@ public class ServerLauncher
                     System.out.println("command unknown");
                 }
             }
-        }
+        }*/
     }
 }

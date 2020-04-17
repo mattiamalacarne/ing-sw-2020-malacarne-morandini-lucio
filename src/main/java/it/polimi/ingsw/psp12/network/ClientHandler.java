@@ -1,4 +1,7 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.network;
+
+import it.polimi.ingsw.psp12.server.CommandHandler;
+import it.polimi.ingsw.psp12.server.GameServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,7 +19,17 @@ public class ClientHandler implements Runnable {
 
     private ObjectOutputStream outgoing;
 
-    ClientHandler(Socket client)
+    /**
+     * Handler of game commands
+     */
+    private CommandHandler handler;
+
+    /**
+     * Server of the game that manages system commands
+     */
+    private GameServer server;
+
+    public ClientHandler(Socket client)
     {
         this.socket = client;
 
@@ -42,12 +55,21 @@ public class ClientHandler implements Runnable {
     {
         while (true) {
             try {
-                Object next = incoming.readObject();
+                Command cmd = (Command)incoming.readObject();
+
+                // TODO: if system command
+                server.processCommand(cmd, this);
+
+                // TODO: else if game command
+                //handler.processCommand(cmd);
             }
             catch (IOException e) {
                 // TODO: manage exception
                 System.out.println("client " + socket.getInetAddress() + " connection dropped");
                 e.printStackTrace();
+
+                // notify the server that the client has disconnected
+                server.processCommand(new Command(), this); // TODO: DisconnectedCommand
             }
             catch (ClassNotFoundException e) {
                 // TODO: manage exception
@@ -58,12 +80,12 @@ public class ClientHandler implements Runnable {
 
     /**
      * Send a message to the client
-     * @param msg message to be sent to the client
+     * @param command message to be sent to the client
      */
-    public void send(String msg)
+    public void send(Command command)
     {
         try {
-            outgoing.writeObject(msg);
+            outgoing.writeObject(command);
         }
         catch (IOException e) {
             // TODO: manage exception
@@ -84,5 +106,21 @@ public class ClientHandler implements Runnable {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Set the handler of game commands
+     * @param commandHandler
+     */
+    public void setCommandHandler(CommandHandler commandHandler) {
+        handler = commandHandler;
+    }
+
+    /**
+     * Set the server that manages system commands
+     * @param gameServer
+     */
+    public void setGameServer(GameServer gameServer) {
+        this.server = gameServer;
     }
 }

@@ -1,11 +1,10 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Board;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+import it.polimi.ingsw.psp12.network.Command;
 import it.polimi.ingsw.psp12.utils.Observable;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Class that manages games instances, the board, the players and the current turn
@@ -64,11 +63,14 @@ public class GameState extends Observable
     /**
      * Add the player to the game
      * @param name nickname of the player
+     * @return created player
      */
-    public void addPlayer(String name) {
+    public Player addPlayer(String name) {
         // TODO: throw exception if players array is full
         players[playersCount] = new Player(playersCount, name);
         playersCount++;
+
+        return players[playersCount];
     }
 
     /**
@@ -113,6 +115,20 @@ public class GameState extends Observable
     }
 
     /**
+     * Determines if a user is already registered with the name passed
+     * @param name name of the user that is trying to register
+     * @return true if user is already registered
+     */
+    public boolean alreadyRegistered(String name) {
+        for (int i = 0; i < playersCount; i++) {
+            if (players[i].getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the current state of the turn
      * @return turn state
      */
@@ -135,5 +151,26 @@ public class GameState extends Observable
         // go back to zero
         // when the current turn overflows the number of players
         turn = (turn + 1) % playersCount;
+    }
+
+    /**
+     * Moves the position of a worker on the map
+     * @param oldPoint current position of the worker
+     * @param newPoint new position of the worker after the move
+     */
+    public void move(Point oldPoint, Point newPoint) {
+        gameBoard.move(oldPoint, newPoint);
+
+        notifyObservers(new Command());
+    }
+
+    /**
+     * Increments the level of a tower on the map
+     * @param pos coordinates of the tower
+     */
+    public void build(Point pos) {
+        gameBoard.build(pos);
+
+        notifyObservers(new Command());
     }
 }

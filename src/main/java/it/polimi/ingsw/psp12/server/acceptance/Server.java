@@ -1,4 +1,9 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.server.acceptance;
+
+import it.polimi.ingsw.psp12.network.ClientHandler;
+import it.polimi.ingsw.psp12.network.Command;
+import it.polimi.ingsw.psp12.server.acceptance.Constants;
+import it.polimi.ingsw.psp12.server.acceptance.Room;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -68,7 +73,8 @@ public class Server implements Runnable{
 
                 availableRooms.put(port, room);
 
-                client.send("created");
+                //client.send("created");
+                client.send(new Command());
                 break;
             }
             case "join":
@@ -77,7 +83,8 @@ public class Server implements Runnable{
                 int port = 0;
                 Room room = availableRooms.get(port);
                 if (room == null) {
-                    client.send("invalid request");
+                    //client.send("invalid request");
+                    client.send(new Command());
                 }
 
                 room.addClient(client);

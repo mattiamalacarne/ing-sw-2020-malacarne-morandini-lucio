@@ -42,7 +42,7 @@ public class ClientLauncher
             {
                 try
                 {
-                    return new InterfaceSelector().setInterface(interfaceSelected);
+                    return InterfaceSelector.setInterface(interfaceSelected);
 
                 } catch (IOException e)
                 {

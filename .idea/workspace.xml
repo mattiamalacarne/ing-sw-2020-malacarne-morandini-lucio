@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="Created the basic UserInterface, starting to setup the CLI, ClientHandler and socket">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/CLInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUinterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/InterfaceSelector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/UserInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ClientHandlerConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ClientHandlerConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ClientLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ClientLauncher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ServerInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/ServerInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUinterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUinterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/InterfaceSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/InterfaceSelector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +16,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -64,7 +60,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -78,8 +74,10 @@
   </component>
   <component name="RunManager" selected="Application.ClientLauncher">
     <configuration name="ClientLauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="13" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="it.polimi.ingsw.psp12.client.ClientLauncher" />
-      <module name="ing-sw-2020-malacarne-morandini-lucio" />
+      <module name="ing-sw-2020-12" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="it.polimi.ingsw.psp12.client.*" />
@@ -167,7 +165,21 @@
       <option name="project" value="LOCAL" />
       <updated>1585753491413</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Remowe switch while choosing an interface, check the selection with an if is better.">
+      <created>1586263937786</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1586263937786</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Changed author name (mattia -&gt; Mattia Malacarne)">
+      <created>1586263977742</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1586263977742</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,9 +191,15 @@
     <MESSAGE value="Moved all xml card files in the resources folder" />
     <MESSAGE value="Created the client launcher and the class for starting and managing connection with the server" />
     <MESSAGE value="Created the basic UserInterface, starting to setup the CLI, ClientHandler and socket" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created the basic UserInterface, starting to setup the CLI, ClientHandler and socket" />
+    <MESSAGE value="Remowe switch while choosing an interface, check the selection with an if is better." />
+    <MESSAGE value="Changed author name (mattia -&gt; Mattia Malacarne)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed author name (mattia -&gt; Mattia Malacarne)" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="677" y="177" key="#ClientLauncher" timestamp="1586875490848">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="677" y="177" key="#ClientLauncher/0.0.1920.1040@0.0.1920.1040" timestamp="1586875490848" />
     <state x="276" y="148" key="#Project_Structure" timestamp="1585321214093">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -209,59 +227,68 @@
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
     <state x="575" y="233" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1600.820@0.23.1600.820" timestamp="1585850215916" />
-    <state x="448" y="58" key="CommitChangelistDialog2" timestamp="1586171102246">
-      <screen x="0" y="0" width="1920" height="1023" />
+    <state x="448" y="112" key="CommitChangelistDialog2" timestamp="1586263972551">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="373" y="48" key="CommitChangelistDialog2/0.0.1600.843@0.0.1600.843" timestamp="1585753561017" />
     <state x="448" y="58" key="CommitChangelistDialog2/0.0.1920.1023@0.0.1920.1023" timestamp="1586171102246" />
-    <state x="448" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1585329831598" />
+    <state x="448" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1586263972551" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1585321476471" />
-    <state width="1558" height="244" key="GridCell.Tab.0.bottom" timestamp="1585907196798">
-      <screen x="0" y="0" width="1600" height="843" />
+    <state width="1877" height="204" key="GridCell.Tab.0.bottom" timestamp="1587061096231">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1237" height="282" key="GridCell.Tab.0.bottom/0.0.1280.728@0.0.1280.728" timestamp="1586971342829" />
     <state width="1558" height="244" key="GridCell.Tab.0.bottom/0.0.1600.843@0.0.1600.843" timestamp="1585907196798" />
-    <state width="1874" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1877" height="204" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587061096231" />
     <state width="1558" height="211" key="GridCell.Tab.0.bottom/0.23.1600.820@0.23.1600.820" timestamp="1585850237360" />
-    <state width="1558" height="244" key="GridCell.Tab.0.center" timestamp="1585907196798">
-      <screen x="0" y="0" width="1600" height="843" />
+    <state width="1877" height="204" key="GridCell.Tab.0.center" timestamp="1587061096231">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1237" height="282" key="GridCell.Tab.0.center/0.0.1280.728@0.0.1280.728" timestamp="1586971342828" />
     <state width="1558" height="244" key="GridCell.Tab.0.center/0.0.1600.843@0.0.1600.843" timestamp="1585907196798" />
-    <state width="1874" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1877" height="204" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587061096231" />
     <state width="1558" height="211" key="GridCell.Tab.0.center/0.23.1600.820@0.23.1600.820" timestamp="1585850237359" />
-    <state width="1558" height="244" key="GridCell.Tab.0.left" timestamp="1585907196797">
-      <screen x="0" y="0" width="1600" height="843" />
+    <state width="1877" height="204" key="GridCell.Tab.0.left" timestamp="1587061096231">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1237" height="282" key="GridCell.Tab.0.left/0.0.1280.728@0.0.1280.728" timestamp="1586971342828" />
     <state width="1558" height="244" key="GridCell.Tab.0.left/0.0.1600.843@0.0.1600.843" timestamp="1585907196797" />
-    <state width="1874" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1877" height="204" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587061096231" />
     <state width="1558" height="211" key="GridCell.Tab.0.left/0.23.1600.820@0.23.1600.820" timestamp="1585850237359" />
-    <state width="1558" height="244" key="GridCell.Tab.0.right" timestamp="1585907196798">
-      <screen x="0" y="0" width="1600" height="843" />
+    <state width="1877" height="204" key="GridCell.Tab.0.right" timestamp="1587061096231">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state width="1237" height="282" key="GridCell.Tab.0.right/0.0.1280.728@0.0.1280.728" timestamp="1586971342829" />
     <state width="1558" height="244" key="GridCell.Tab.0.right/0.0.1600.843@0.0.1600.843" timestamp="1585907196798" />
-    <state width="1874" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1585344546018" />
+    <state width="1877" height="204" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587061096231" />
     <state width="1558" height="211" key="GridCell.Tab.0.right/0.23.1600.820@0.23.1600.820" timestamp="1585850237359" />
-    <state x="384" y="121" width="900" height="722" key="SettingsEditor" timestamp="1585751823420">
-      <screen x="0" y="23" width="1600" height="820" />
+    <state x="461" y="164" width="900" height="722" key="SettingsEditor" timestamp="1586260677175">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="164" width="1040" height="850" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1585578115212" />
+    <state x="461" y="164" width="1040" height="850" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586260677175" />
     <state x="384" y="121" width="900" height="722" key="SettingsEditor/0.23.1600.820@0.23.1600.820" timestamp="1585751823420" />
-    <state x="671" y="153" key="Vcs.Push.Dialog.v2" timestamp="1586170886939">
-      <screen x="0" y="0" width="1920" height="1023" />
+    <state x="372" y="200" key="Vcs.Push.Dialog.v2" timestamp="1586264313683">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="437" y="168" key="Vcs.Push.Dialog.v2/0.0.1600.843@0.0.1600.843" timestamp="1585753594304" />
     <state x="671" y="153" key="Vcs.Push.Dialog.v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586170886939" />
-    <state x="524" y="207" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1585329839755" />
+    <state x="372" y="200" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1586264313683" />
     <state x="516" y="215" key="com.intellij.ide.util.TipDialog" timestamp="1585746899173">
       <screen x="0" y="23" width="1920" height="1000" />
     </state>
     <state x="516" y="215" key="com.intellij.ide.util.TipDialog/0.23.1920.1000@0.23.1920.1000" timestamp="1585746899173" />
-    <state x="747" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586168429237">
-      <screen x="0" y="0" width="1920" height="1023" />
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587126961552">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="747" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586168429237" />
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587126961552" />
+    <state x="656" y="125" width="737" height="789" key="find.popup" timestamp="1586260817157">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="125" width="737" height="789" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1586260817157" />
     <state x="543" y="338" key="git4idea.merge.GitPullDialog" timestamp="1586170873381">
       <screen x="0" y="0" width="1920" height="1023" />
     </state>

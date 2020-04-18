@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp12.server;
 import it.polimi.ingsw.psp12.controller.Controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
-import it.polimi.ingsw.psp12.network.Command;
+import it.polimi.ingsw.psp12.network.messages.Message;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -72,14 +72,14 @@ public class GameServer implements Runnable {
 
     /**
      * Process system commands incoming from clients
-     * @param command command to be processed
+     * @param message message to be processed
      * @param client client that generated the command
      */
-    public void processCommand(Command command, ClientHandler client) {
+    public void processCommand(Message message, ClientHandler client) {
 
         // TODO: if ("subscribe command")
         {
-            String name = "test"; // "command.getName()"
+            String name = "test"; // "message.getName()"
             subscribeClient(name, client);
         }
         // TODO: else if ("disconnected command")
@@ -100,11 +100,11 @@ public class GameServer implements Runnable {
             controller.addClient(client, name);
 
             // send subscription confirmation to the client
-            client.send(new Command()); // TODO: subscribe confirmation command
+            //client.send(new Message()); // TODO: subscribe confirmation command
         }
         else {
             // ask for another name
-            client.send(new Command()); // TODO: invalid name command
+            //client.send(new Message()); // TODO: invalid name command
         }
     }
 }

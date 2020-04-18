@@ -3,14 +3,14 @@ package it.polimi.ingsw.psp12.model;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
-import it.polimi.ingsw.psp12.network.Command;
+import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.utils.Observable;
 
 /**
  * Class that manages games instances, the board, the players and the current turn
  * @author Luca Morandini
  */
-public class GameState extends Observable
+public class GameState extends Observable<Message>
 {
     /**
      * The game board where the game is played
@@ -161,7 +161,7 @@ public class GameState extends Observable
     public void move(Point oldPoint, Point newPoint) {
         gameBoard.move(oldPoint, newPoint);
 
-        notifyObservers(new Command());
+        //notifyObservers(new Message());
     }
 
     /**
@@ -171,6 +171,6 @@ public class GameState extends Observable
     public void build(Point pos) {
         gameBoard.build(pos);
 
-        notifyObservers(new Command());
+        //notifyObservers(new Message());
     }
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp12.server.acceptance;
 
 import it.polimi.ingsw.psp12.network.ClientHandler;
-import it.polimi.ingsw.psp12.network.Command;
+import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.server.acceptance.Constants;
 import it.polimi.ingsw.psp12.server.acceptance.Room;
 
@@ -74,7 +74,7 @@ public class Server implements Runnable{
                 availableRooms.put(port, room);
 
                 //client.send("created");
-                client.send(new Command());
+                //client.send(new Message());
                 break;
             }
             case "join":
@@ -84,7 +84,7 @@ public class Server implements Runnable{
                 Room room = availableRooms.get(port);
                 if (room == null) {
                     //client.send("invalid request");
-                    client.send(new Command());
+                    //client.send(new Message());
                 }
 
                 room.addClient(client);

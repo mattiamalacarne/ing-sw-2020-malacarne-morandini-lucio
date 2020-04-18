@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp12.network.messages;
 
-import it.polimi.ingsw.psp12.model.enumeration.MsgType;
-
 import java.io.Serializable;
 
 /**
@@ -10,17 +8,18 @@ import java.io.Serializable;
  * @author Mattia Malacarne
  */
 
-public class Message implements Serializable
+public abstract class Message implements Serializable
 {
     // Message header
     /** Encapsulate the command direct to the server **/
     protected MsgType type;
 
-    /** pass the cmd to the server **/
-    protected String cmd;
-
-    public Message(String cmd)
+    public Message(MsgType type)
     {
-        this.cmd = cmd;
+        this.type = type;
+    }
+
+    public MsgType getType() {
+        return type;
     }
 }

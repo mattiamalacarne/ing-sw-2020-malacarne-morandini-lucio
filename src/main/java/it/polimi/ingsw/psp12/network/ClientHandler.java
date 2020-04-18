@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.network;
 
+import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.server.CommandHandler;
 import it.polimi.ingsw.psp12.server.GameServer;
 
@@ -55,13 +56,19 @@ public class ClientHandler implements Runnable {
     {
         while (true) {
             try {
-                Command cmd = (Command)incoming.readObject();
+                Message msg = (Message)incoming.readObject();
 
-                // TODO: if system command
-                server.processCommand(cmd, this);
-
-                // TODO: else if game command
-                //handler.processCommand(cmd);
+                switch (msg.getType())
+                {
+                    case SYSTEM:
+                        // system commands are processed by the game server
+                        server.processCommand(msg, this);
+                        break;
+                    case GAME:
+                        // game commands are processed by the command handler
+                        handler.processCommand(msg);
+                        break;
+                }
             }
             catch (IOException e) {
                 // TODO: manage exception
@@ -69,7 +76,7 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
 
                 // notify the server that the client has disconnected
-                server.processCommand(new Command(), this); // TODO: DisconnectedCommand
+                //server.processCommand(new Message(), this); // TODO: DisconnectedMessage
             }
             catch (ClassNotFoundException e) {
                 // TODO: manage exception
@@ -80,12 +87,12 @@ public class ClientHandler implements Runnable {
 
     /**
      * Send a message to the client
-     * @param command message to be sent to the client
+     * @param message message to be sent to the client
      */
-    public void send(Command command)
+    public void send(Message message)
     {
         try {
-            outgoing.writeObject(command);
+            outgoing.writeObject(message);
         }
         catch (IOException e) {
             // TODO: manage exception

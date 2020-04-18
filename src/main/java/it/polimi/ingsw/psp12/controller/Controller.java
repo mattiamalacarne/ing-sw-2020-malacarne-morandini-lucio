@@ -3,7 +3,7 @@ package it.polimi.ingsw.psp12.controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.network.ClientHandler;
-import it.polimi.ingsw.psp12.network.Command;
+import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.server.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Game controller that manages the commands from the clients, send responses and updates the game model
  * @author Luca Morandini
  */
-public class Controller implements Observer<Command> {
+public class Controller implements Observer<Message> {
     /**
      * Model of the current game
      */
@@ -49,7 +49,7 @@ public class Controller implements Observer<Command> {
     //TODO: each update methods manages a different type of message
 
     @Override
-    public void update(Command command) {
+    public void update(Message message) {
 
     }
 

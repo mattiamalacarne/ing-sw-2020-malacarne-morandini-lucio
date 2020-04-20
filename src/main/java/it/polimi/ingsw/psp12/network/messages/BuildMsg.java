@@ -18,7 +18,7 @@ public class BuildMsg extends Message
      */
     public BuildMsg(Cell toBuild)
     {
-        super(MsgType.GAME);
+        super(MsgCommand.BUILD);
         this.toBuild = toBuild;
     }
 }

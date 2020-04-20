@@ -19,7 +19,7 @@ public class CellRequestMsg extends Message
      */
     public CellRequestMsg(Action action)
     {
-        super(MsgType.GAME);
+        super(MsgCommand.CELL_REQUEST);
         this.action = action;
     }
 }

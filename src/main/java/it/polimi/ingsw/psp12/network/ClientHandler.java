@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.network;
 
 import it.polimi.ingsw.psp12.network.messages.Message;
+import it.polimi.ingsw.psp12.network.messages.MsgCommand;
 import it.polimi.ingsw.psp12.server.CommandHandler;
 import it.polimi.ingsw.psp12.server.GameServer;
 
@@ -76,7 +77,7 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
 
                 // notify the server that the client has disconnected
-                //server.processCommand(new Message(), this); // TODO: DisconnectedMessage
+                server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
             }
             catch (ClassNotFoundException e) {
                 // TODO: manage exception

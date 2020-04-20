@@ -19,7 +19,7 @@ public class MoveMsg extends Message
      * @param to the new cell for the worker
      */
     public MoveMsg(Cell from, Cell to) {
-        super(MsgType.GAME);
+        super(MsgCommand.MOVE);
         this.from = from;
         this.to = to;
     }

@@ -45,12 +45,16 @@ public class Controller implements Observer<Message> {
         view.addObserver(this);
     }
 
-
-    //TODO: each update methods manages a different type of message
-
     @Override
     public void update(Message message) {
-
+        // process incoming command from client
+        switch (message.getCommand())
+        {
+            case MOVE:
+            case BUILD:
+            case CELL_REQUEST:
+                break;
+        }
     }
 
 }

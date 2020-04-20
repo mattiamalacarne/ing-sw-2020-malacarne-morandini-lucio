@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp12.controller.Controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.messages.Message;
+import it.polimi.ingsw.psp12.network.messages.MsgCommand;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -76,16 +77,17 @@ public class GameServer implements Runnable {
      * @param client client that generated the command
      */
     public void processCommand(Message message, ClientHandler client) {
-
-        // TODO: if ("subscribe command")
+        // process incoming command from client
+        switch (message.getCommand())
         {
-            String name = "test"; // "message.getName()"
-            subscribeClient(name, client);
-        }
-        // TODO: else if ("disconnected command")
-        {
-            // remove client from game
-            // and if necessary terminate game
+            case JOIN:
+                String name = "test"; // "message.getName()"
+                subscribeClient(name, client);
+                break;
+            case DISCONNECTED:
+                // remove client from game
+                // and if necessary terminate game
+                break;
         }
     }
 

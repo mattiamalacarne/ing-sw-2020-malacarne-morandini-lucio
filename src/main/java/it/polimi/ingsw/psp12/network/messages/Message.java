@@ -8,18 +8,22 @@ import java.io.Serializable;
  * @author Mattia Malacarne
  */
 
-public abstract class Message implements Serializable
+public class Message implements Serializable
 {
     // Message header
     /** Encapsulate the command direct to the server **/
-    protected MsgType type;
+    protected MsgCommand command;
 
-    public Message(MsgType type)
+    public Message(MsgCommand cmd)
     {
-        this.type = type;
+        this.command = cmd;
     }
 
     public MsgType getType() {
-        return type;
+        return command.getType();
+    }
+
+    public MsgCommand getCommand() {
+        return command;
     }
 }

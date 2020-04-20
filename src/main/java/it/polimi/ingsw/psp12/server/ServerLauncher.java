@@ -19,7 +19,7 @@ public class ServerLauncher
             Thread testThread = new Thread(testGameServer);
             testThread.start();
 
-            System.out.printf("test game started on port " + Constants.MATCHES_STARTING_PORT);
+            System.out.printf("test game started on port " + Constants.MATCHES_STARTING_PORT + "\n");
         } catch (IOException e) {
             System.out.println("failed to start server");
             e.printStackTrace();

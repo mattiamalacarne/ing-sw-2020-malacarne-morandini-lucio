@@ -1,10 +1,11 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.server.game;
 
 import it.polimi.ingsw.psp12.controller.Controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.messages.Message;
-import it.polimi.ingsw.psp12.network.messages.MsgCommand;
+import it.polimi.ingsw.psp12.network.Room;
+import it.polimi.ingsw.psp12.server.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -14,10 +15,16 @@ import java.net.Socket;
  * Server that manages a single game on the provided port
  * @author Luca Morandini
  */
-public class GameServer implements Runnable {
+public class GameServer implements Runnable, Server {
+    /**
+     * Socket used to accept clients
+     */
     private ServerSocket socket;
 
-    private boolean running;
+    /**
+     * Room that host the current game
+     */
+    private Room room;
 
     /**
      * Controller of the game managed by the server
@@ -29,24 +36,24 @@ public class GameServer implements Runnable {
      */
     private GameState model;
 
-    public GameServer(int port, int maxPlayersCount) throws IOException {
-        socket = new ServerSocket(port);
-        model = new GameState(maxPlayersCount);
+    public GameServer(Room room) throws IOException {
+        this.room = room;
+
+        socket = new ServerSocket(room.getAssignedPort());
+        model = new GameState(room.getMaxPlayersCount());
         controller = new Controller(model);
     }
 
     @Override
     public void run() {
-        running = true;
-
-        while (running) {
+        while (room.isRunning()) {
             try {
                 Socket client = socket.accept();
 
                 // create client handler
                 ClientHandler clientHandler = new ClientHandler(client);
                 // subscribe the server as system commands handler
-                clientHandler.setGameServer(this);
+                clientHandler.setServer(this);
 
                 // TODO: change bare Thread class with Executor/ThreadPool?
                 Thread thread = new Thread(clientHandler);
@@ -76,6 +83,7 @@ public class GameServer implements Runnable {
      * @param message message to be processed
      * @param client client that generated the command
      */
+    @Override
     public void processCommand(Message message, ClientHandler client) {
         // process incoming command from client
         switch (message.getCommand())
@@ -83,6 +91,11 @@ public class GameServer implements Runnable {
             case JOIN:
                 String name = "test"; // "message.getName()"
                 subscribeClient(name, client);
+
+                if (room.isFull()) {
+                    // TODO: start game
+                }
+
                 break;
             case DISCONNECTED:
                 // remove client from game
@@ -100,6 +113,9 @@ public class GameServer implements Runnable {
         if (!model.alreadyRegistered(name)) {
             // register client to the game
             controller.addClient(client, name);
+
+            // update room with the new client
+            room.clientJoined();
 
             // send subscription confirmation to the client
             //client.send(new Message()); // TODO: subscribe confirmation command

@@ -5,7 +5,7 @@ package it.polimi.ingsw.psp12.server.acceptance;
  * @author Luca Morandini
  */
 public class Constants {
-    static public final int ACCEPTANCE_PORT = 10000;
+    static public final int ACCEPTANCE_PORT = 55555;
 
     static public final int MATCHES_STARTING_PORT = 20000;
 

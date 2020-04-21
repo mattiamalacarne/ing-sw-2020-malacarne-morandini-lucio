@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.server.game;
 
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.network.ClientHandler;
@@ -39,8 +39,6 @@ public class VirtualView extends Observable<Message> implements Observer<Message
 
     @Override
     public void processCommand(Message message) {
-        // TODO: cast and process command
-
         notifyObservers(message);
     }
 

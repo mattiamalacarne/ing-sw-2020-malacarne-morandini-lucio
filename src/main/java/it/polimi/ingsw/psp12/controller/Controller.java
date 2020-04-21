@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.messages.Message;
-import it.polimi.ingsw.psp12.server.VirtualView;
+import it.polimi.ingsw.psp12.server.game.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
 import java.util.ArrayList;

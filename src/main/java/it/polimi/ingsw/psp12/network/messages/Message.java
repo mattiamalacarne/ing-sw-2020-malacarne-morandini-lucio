@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp12.network.messages;
 
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+import it.polimi.ingsw.psp12.network.enumeration.MsgType;
+
 import java.io.Serializable;
 
 /**

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.client;
 
 import it.polimi.ingsw.psp12.exceptions.MessageTypeNotFoundException;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 
 /** class for reading a generic message from the server and cast it toa specific one for interpretation

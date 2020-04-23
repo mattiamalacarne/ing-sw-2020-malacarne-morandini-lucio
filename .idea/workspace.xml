@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="Added MessageTypeNotFoundException for preventing error during cast, it should be never called...">
-      <change afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/exceptions/MessageTypeNotFoundException.java" afterDir="false" />
+    <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +192,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587665164787</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler">
+      <created>1587665748827</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1587665748827</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,7 +215,8 @@
     <MESSAGE value="Changed author name (mattia -&gt; Mattia Malacarne)" />
     <MESSAGE value="Created the first Message class" />
     <MESSAGE value="Setup the messages, created the message handler class.&#10;N.B. Not completed, missing documentation and a possibile singleton implementation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Setup the messages, created the message handler class.&#10;N.B. Not completed, missing documentation and a possibile singleton implementation." />
+    <MESSAGE value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler" />
   </component>
   <component name="WindowStateProjectService">
     <state x="677" y="177" key="#ClientLauncher" timestamp="1586875490848">
@@ -242,12 +250,12 @@
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
     <state x="575" y="233" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1600.820@0.23.1600.820" timestamp="1585850215916" />
-    <state x="549" y="112" key="CommitChangelistDialog2" timestamp="1587665632306">
+    <state x="549" y="112" key="CommitChangelistDialog2" timestamp="1587665746309">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="373" y="48" key="CommitChangelistDialog2/0.0.1600.843@0.0.1600.843" timestamp="1585753561017" />
     <state x="448" y="58" key="CommitChangelistDialog2/0.0.1920.1023@0.0.1920.1023" timestamp="1586171102246" />
-    <state x="549" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665632306" />
+    <state x="549" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665746309" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -280,6 +288,10 @@
     <state width="1558" height="244" key="GridCell.Tab.0.right/0.0.1600.843@0.0.1600.843" timestamp="1585907196798" />
     <state width="1877" height="204" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587061096231" />
     <state width="1558" height="211" key="GridCell.Tab.0.right/0.23.1600.820@0.23.1600.820" timestamp="1585850237359" />
+    <state x="672" y="255" key="MultipleFileMergeDialog" timestamp="1587665782628">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="672" y="255" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587665782628" />
     <state x="461" y="164" width="900" height="722" key="SettingsEditor" timestamp="1586260677175">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -299,11 +311,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="730" y="227" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587485402915" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587470616360">
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587665752972">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="747" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586168429237" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587470616360" />
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665752972" />
     <state x="656" y="125" width="737" height="789" key="find.popup" timestamp="1586260817157">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

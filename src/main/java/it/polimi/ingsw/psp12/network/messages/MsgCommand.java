@@ -8,7 +8,10 @@ public enum MsgCommand {
     /** Game commands **/
     MOVE(MsgType.GAME),
     BUILD(MsgType.GAME),
-    CELL_REQUEST(MsgType.GAME);
+    CELL_REQUEST(MsgType.GAME),
+    CELL_LIST(MsgType.GAME),
+    SELECTED_CELL(MsgType.GAME),
+    BOARD_UPDATE(MsgType.GAME);
 
     /** Determine if this is a system or game message **/
     private MsgType type;

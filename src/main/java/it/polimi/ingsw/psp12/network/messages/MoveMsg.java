@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
  * Class for representing a move request (client->server)

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
  * Class representing a general cell request, used for requesting a cell list

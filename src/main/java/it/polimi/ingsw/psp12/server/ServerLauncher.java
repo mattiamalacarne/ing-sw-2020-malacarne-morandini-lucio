@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp12.server;
 
+import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
 import it.polimi.ingsw.psp12.server.acceptance.Constants;
-import it.polimi.ingsw.psp12.server.acceptance.Server;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -14,31 +14,28 @@ public class ServerLauncher
 {
     public static void main(String[] args)
     {
+        AcceptanceServer acceptanceServer;
         try {
-            GameServer testGameServer = new GameServer(Constants.MATCHES_STARTING_PORT, 2);
-            Thread testThread = new Thread(testGameServer);
-            testThread.start();
-
-            System.out.printf("test game started on port " + Constants.MATCHES_STARTING_PORT + "\n");
-        } catch (IOException e) {
-            System.out.println("failed to start server");
-            e.printStackTrace();
-        }
-
-
-        /*Server acceptanceServer;
-        try {
-            acceptanceServer = new Server(Constants.ACCEPTANCE_PORT);
+            // create an instance of acceptance server
+            acceptanceServer = new AcceptanceServer(Constants.ACCEPTANCE_PORT);
         }
         catch (IOException e) {
-            System.out.println("error while starting server... aborting");
+            System.out.println("failed to start acceptance server, shutting down...");
             e.printStackTrace();
+
             System.exit(1);
             return;
         }
 
         // launch acceptance server on a separate thread
-        new Thread(acceptanceServer).start();
+        String threadName = "acceptance_server_" + Constants.ACCEPTANCE_PORT;
+        Thread acceptanceThread = new Thread(acceptanceServer, threadName);
+        acceptanceThread.start();
+
+        System.out.println("acceptance server started on port " + Constants.ACCEPTANCE_PORT);
+
+
+        // TODO: manage system administrator commands from CLI
 
         // listen for commands
         Scanner scanner = new Scanner(System.in);
@@ -56,6 +53,6 @@ public class ServerLauncher
                     System.out.println("command unknown");
                 }
             }
-        }*/
+        }
     }
 }

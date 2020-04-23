@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp12.server;
+package it.polimi.ingsw.psp12.server.game;
 
 import it.polimi.ingsw.psp12.network.messages.Message;
 

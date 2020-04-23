@@ -1,9 +1,9 @@
 package it.polimi.ingsw.psp12.network;
 
 import it.polimi.ingsw.psp12.network.messages.Message;
-import it.polimi.ingsw.psp12.network.messages.MsgCommand;
-import it.polimi.ingsw.psp12.server.CommandHandler;
-import it.polimi.ingsw.psp12.server.GameServer;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+import it.polimi.ingsw.psp12.server.game.CommandHandler;
+import it.polimi.ingsw.psp12.server.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,9 +27,9 @@ public class ClientHandler implements Runnable {
     private CommandHandler handler;
 
     /**
-     * Server of the game that manages system commands
+     * Server that manages system commands
      */
-    private GameServer server;
+    private Server server;
 
     public ClientHandler(Socket client)
     {
@@ -126,9 +126,9 @@ public class ClientHandler implements Runnable {
 
     /**
      * Set the server that manages system commands
-     * @param gameServer
+     * @param server
      */
-    public void setGameServer(GameServer gameServer) {
-        this.server = gameServer;
+    public void setServer(Server server) {
+        this.server = server;
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.client;
 
+import it.polimi.ingsw.psp12.exceptions.MessageTypeNotFoundException;
 import it.polimi.ingsw.psp12.network.messages.*;
 
 /** class for reading a generic message from the server and cast it toa specific one for interpretation
@@ -23,7 +24,7 @@ public class MessageHandler
         return message.getCommand();
     }
 
-    private Message gnericMessageToSpec(Message message)
+    private Message gnericMessageToSpec(Message message) throws MessageTypeNotFoundException
     {
         MsgCommand cmd = setMsgType(message);
         switch (cmd)
@@ -34,6 +35,7 @@ public class MessageHandler
             case CELL_LIST: return (CellListMsg) message;
             case SELECTED_CELL: return (SelectCellMsg) message;
             case BOARD_UPDATE: return (UpdateBoardMsg) message;
+            default: throw new MessageTypeNotFoundException();
         }
     }
 

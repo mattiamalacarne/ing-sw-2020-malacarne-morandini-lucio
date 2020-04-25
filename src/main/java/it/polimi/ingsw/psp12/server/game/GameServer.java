@@ -3,6 +3,8 @@ package it.polimi.ingsw.psp12.server.game;
 import it.polimi.ingsw.psp12.controller.Controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+import it.polimi.ingsw.psp12.network.messages.JoinMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.Room;
 import it.polimi.ingsw.psp12.server.Server;
@@ -89,13 +91,15 @@ public class GameServer implements Runnable, Server {
         switch (message.getCommand())
         {
             case JOIN:
-                String name = "test"; // "message.getName()"
-                subscribeClient(name, client);
+                JoinMsg msg = (JoinMsg)message;
+                // subscribe the client to the game
+                subscribeClient(msg.getUserName(), client);
 
                 if (room.isFull()) {
                     // TODO: start game
+                    // if all client have joined the game can start
+                    model.initGame();
                 }
-
                 break;
             case DISCONNECTED:
                 // remove client from game
@@ -118,11 +122,11 @@ public class GameServer implements Runnable, Server {
             room.clientJoined();
 
             // send subscription confirmation to the client
-            //client.send(new Message()); // TODO: subscribe confirmation command
+            client.send(new Message(MsgCommand.JOINED));
         }
         else {
-            // ask for another name
-            //client.send(new Message()); // TODO: invalid name command
+            // ask user for another name
+            client.send(new Message(MsgCommand.INVALID_NICKNAME));
         }
     }
 }

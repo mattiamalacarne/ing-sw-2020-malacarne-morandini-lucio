@@ -10,6 +10,8 @@ public enum MsgCommand {
     CREATE(MsgType.SYSTEM), // create a new room
     CREATED(MsgType.SYSTEM), // confirm creation of a new room
     JOIN(MsgType.SYSTEM), // join an existing room
+    JOINED(MsgType.SYSTEM), // confirm that user has joined a game
+    INVALID_NICKNAME(MsgType.SYSTEM), // nickname provided by the user is already taken
     DISCONNECTED(MsgType.SYSTEM), // client has disconnected from the server
 
     /** Game commands **/

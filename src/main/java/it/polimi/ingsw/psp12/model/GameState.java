@@ -173,4 +173,11 @@ public class GameState extends Observable<Message>
 
         //notifyObservers(new Message());
     }
+
+    /**
+     * Starts the initialization of the game
+     */
+    public void initGame() {
+
+    }
 }

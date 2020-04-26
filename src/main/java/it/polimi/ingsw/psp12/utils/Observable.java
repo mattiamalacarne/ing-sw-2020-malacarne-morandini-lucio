@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Generic Observable class
  * @param <T> massage sent between observers and observable classes
+ * @author Michele Lucio
  */
 public abstract class Observable<T> {
 

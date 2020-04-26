@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.network.messages.CellListMsg;
+import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -9,6 +11,7 @@ import java.net.UnknownHostException;
  * <p>This <b>Interface</b> is the user interface manager</p>
  *
  * @author Mattia Malacarne
+ * @author Michele Lucio
  */
 
 public interface UserInterface
@@ -33,4 +36,37 @@ public interface UserInterface
     public String setClientName();
 
     public int getGamePort(ServerInfo serverInfo) throws IOException;
+
+    /**
+     * Communicates to the user the correct creation of the room
+     */
+    public void roomCreatedMessage() throws IOException;
+
+    /**
+     * The user chooses the port of game room where to enter
+     * @param roomList
+     */
+    public void selectGamePort(RoomsMsg roomList) throws IOException;
+
+    /**
+     * Communicates to the user the correct entry in the room
+     */
+    public void joinPlayerNameConfirmation() throws IOException;
+
+    /**
+     * The user insert the name again, because the previous one is already used
+     */
+    public void joinPlayerNameAlreadyUsed() throws IOException;
+
+    /**
+     * The user chooses the cell where to move
+     * @param cellListMsg
+     */
+    public void move(CellListMsg cellListMsg) throws IOException;
+
+    /**
+     * The user chooses the cell where to build
+     * @param cellListMsg
+     */
+    public void build(CellListMsg cellListMsg) throws IOException;
 }

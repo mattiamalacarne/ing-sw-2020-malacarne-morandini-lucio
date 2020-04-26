@@ -1,9 +1,10 @@
 package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
- * Class for send to server a selected cell generally used for request a list of possiblemove after choosing a worker
+ * Class for send to server a selected cell generally used for request a list of possible move after choosing a worker
  * @author Mattia Malacarne
  */
 public class SelectCellMsg extends Message
@@ -12,10 +13,9 @@ public class SelectCellMsg extends Message
 
     /**
      * Init the message with a cell
-     * @param cmd the command for server
      * @param selectedCell the cell selected by the user
      */
-    public SelectCellMsg(MsgCommand cmd, Cell selectedCell) {
+    public SelectCellMsg(Cell selectedCell) {
         super(MsgCommand.SELECTED_CELL);
         this.selectedCell = selectedCell;
     }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
- * Class epresenting the message related to a build intention
+ * Class representing the message related to a build intention
  *
  * @author Mattia Malacarne
  */

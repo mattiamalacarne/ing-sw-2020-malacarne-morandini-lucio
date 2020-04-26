@@ -1,6 +1,9 @@
 package it.polimi.ingsw.psp12.client;
 
 
+import it.polimi.ingsw.psp12.network.messages.Message;
+import it.polimi.ingsw.psp12.utils.Observable;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,7 +14,7 @@ import java.net.Socket;
  *
  * @author Mattia Malacarne
  */
-public class ClientHandlerConnection implements Runnable
+public class ClientHandlerConnection extends Observable<Message> implements Runnable
 {
     private ServerInfo serverInfo;
     private Socket clientSocket;
@@ -39,7 +42,7 @@ public class ClientHandlerConnection implements Runnable
         // Connect to the server
         try {
             clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
-            System.out.println("Copnnesso al server!");
+            System.out.println("Connesso al server!");
 
             // Init the stream after connection
             output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -47,15 +50,25 @@ public class ClientHandlerConnection implements Runnable
 
             input_stream = new ObjectInputStream(clientSocket.getInputStream());
             System.out.println("55555");
-        } catch (IOException e) {
+
+            while (true){
+
+                Message msg = (Message) input_stream.readObject();
+                notifyObservers(msg);
+
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void sendRequestToServer(String msg) throws IOException
+    public void sendRequestToServer(Message msg) throws IOException
     {
         output_stream.writeObject(msg);
         output_stream.flush();
     }
+
+
 }

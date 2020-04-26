@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Board;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
  * Class for send a board to draw from server to client

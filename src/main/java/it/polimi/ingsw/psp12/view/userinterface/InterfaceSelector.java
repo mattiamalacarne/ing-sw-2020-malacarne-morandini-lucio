@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 public class InterfaceSelector
 {

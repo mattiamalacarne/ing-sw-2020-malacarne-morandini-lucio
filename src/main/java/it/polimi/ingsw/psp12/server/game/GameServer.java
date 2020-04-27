@@ -108,24 +108,33 @@ public class GameServer implements Runnable, Server {
     }
 
     /**
-     * Subscribe to a game if the name selected by the user is not already taken
+     * Subscribe to a game if the room is not full and the name selected by the user is not already taken
      * @param name name provided by the user
      * @param client client handler of the user
      */
     private void subscribeClient(String name, ClientHandler client) {
-        if (!model.alreadyRegistered(name)) {
-            // register client to the game
-            controller.addClient(client, name);
-
-            // update room with the new client
-            room.clientJoined();
-
-            // send subscription confirmation to the client
-            client.send(new Message(MsgCommand.JOINED));
+        // subscribe the client only if the room is not full
+        if (room.isFull()) {
+            // notify the client that the user is already full and close connection
+            client.send(new Message(MsgCommand.ROOM_FULL));
+            client.close();
+            return;
         }
-        else {
+
+        // subscribe the client only if the selected name is not already taken
+        if (model.alreadyRegistered(name)) {
             // ask user for another name
             client.send(new Message(MsgCommand.INVALID_NICKNAME));
+            return;
         }
+
+        // register client to the game
+        controller.addClient(client, name);
+
+        // update room with the new client
+        room.clientJoined();
+
+        // send subscription confirmation to the client
+        client.send(new Message(MsgCommand.JOINED));
     }
 }

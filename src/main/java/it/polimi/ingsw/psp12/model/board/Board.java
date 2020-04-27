@@ -2,6 +2,9 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class that manages the game board and gives access to the cells
  * @author Luca Morandini
@@ -71,5 +74,23 @@ public class Board
         }
 
         boardCells[pos.getX()][pos.getY()].getTower().incrementLevel();
+    }
+
+    /**
+     * Returns the list of available cells that are not occupied by a worker
+     * @return list of cells without a worker
+     */
+    public List<Cell> getCellsWithoutWorker() {
+        List<Cell> cells = new ArrayList<>();
+
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (!boardCells[x][y].hasWorker()) {
+                    cells.add(boardCells[x][y]);
+                }
+            }
+        }
+
+        return cells;
     }
 }

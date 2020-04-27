@@ -1,10 +1,16 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Board;
+import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.network.messages.Message;
+import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
 import it.polimi.ingsw.psp12.utils.Observable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Class that manages games instances, the board, the players and the current turn
@@ -38,6 +44,11 @@ public class GameState extends Observable<Message>
      */
     private TurnState state;
 
+    /**
+     * Available colors that a user can choose
+     */
+    private List<String> colors;
+
 
     /**
      * Constructor of the class
@@ -46,10 +57,10 @@ public class GameState extends Observable<Message>
     public GameState(int maxPlayersCount) {
         // TODO: throw exception if count not in [2,3]
         gameBoard = new Board();
-        state = TurnState.INIT;
         players = new Player[maxPlayersCount];
         playersCount = 0;
-        turn = 0;
+
+        initColors();
     }
 
     /**
@@ -154,6 +165,14 @@ public class GameState extends Observable<Message>
     }
 
     /**
+     * Returns the index of the player that is currently playing
+     * @return index of the turn
+     */
+    public int getTurn() {
+        return turn;
+    }
+
+    /**
      * Moves the position of a worker on the map
      * @param oldPoint current position of the worker
      * @param newPoint new position of the worker after the move
@@ -175,9 +194,55 @@ public class GameState extends Observable<Message>
     }
 
     /**
-     * Starts the initialization of the game
+     * Initialize the game
      */
     public void initGame() {
+        state = TurnState.INIT;
+        turn = 0;
+    }
 
+    /**
+     * Update the player with the selected information
+     * @param color color of the workers
+     * @param points positions of the workers
+     */
+    public void setPlayerInfo(String color, Point points[]) {
+        // place workers on the board and set color
+        for (int i = 0; i < 2; i++) {
+            Cell c = gameBoard.getCell(points[i]);
+            Worker w = getCurrentPlayer().getWorker(i);
+            // set worker color
+            w.setColor(color);
+
+            // place worker on the board
+            w.move(c);
+            c.addWorker(w);
+        }
+
+        // remove color from available colors
+        colors.remove(color);
+
+        // update clients with the new board
+        notifyObservers(new UpdateBoardMsg(getGameBoard()));
+    }
+
+    /**
+     * Initialize the list of available colors
+     */
+    private void initColors() {
+        colors = new ArrayList<>();
+        colors.add("red");
+        colors.add("green");
+        colors.add("blue");
+        colors.add("orange");
+        colors.add("purple");
+    }
+
+    /**
+     * Return the list of available colors that a user can select
+     * @return available colors
+     */
+    public List<String> getAvailableColors() {
+        return new ArrayList<>(colors);
     }
 }

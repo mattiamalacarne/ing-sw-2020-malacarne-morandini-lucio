@@ -64,14 +64,6 @@ public class Player
     }
 
     /**
-     * get the player color
-     * @return the player color
-     */
-    public Color getColor() {
-        return new Color(0, 0, 0);
-    }
-
-    /**
      * set the player power depending of his card
      * @param pow the new poer of the player
      */

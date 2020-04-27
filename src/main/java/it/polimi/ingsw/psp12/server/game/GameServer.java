@@ -96,9 +96,8 @@ public class GameServer implements Runnable, Server {
                 subscribeClient(msg.getUserName(), client);
 
                 if (room.isFull()) {
-                    // TODO: start game
                     // if all client have joined the game can start
-                    model.initGame();
+                    controller.initGame();
                 }
                 break;
             case DISCONNECTED:

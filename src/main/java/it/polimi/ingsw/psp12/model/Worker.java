@@ -14,6 +14,8 @@ public class Worker
 {
     private Cell position;
 
+    private String color;
+
     /**
      * get the selected worker position
      * @return the worker position in the board
@@ -28,5 +30,21 @@ public class Worker
      */
     public void move(Cell cell) {
         position = cell;
+    }
+
+    /**
+     * Set the color of the worker selected by the user
+     * @param color color selected by the user
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    /**
+     * Get the color of the worker
+     * @return the color of the worker
+     */
+    public String getColor() {
+        return color;
     }
 }

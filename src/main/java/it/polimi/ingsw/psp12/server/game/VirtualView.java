@@ -37,6 +37,14 @@ public class VirtualView extends Observable<Message> implements Observer<Message
         clientHandler.send(message);
     }
 
+    /**
+     * Get the player associated with the virtual view
+     * @return player reference
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
     @Override
     public void processCommand(Message message) {
         notifyObservers(message);

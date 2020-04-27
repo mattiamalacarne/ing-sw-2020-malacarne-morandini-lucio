@@ -15,6 +15,8 @@ public enum MsgCommand {
     DISCONNECTED(MsgType.SYSTEM), // client has disconnected from the server
 
     /** Game commands **/
+    REQUEST_INFO(MsgType.GAME),
+    PLAYER_INFO(MsgType.GAME),
     MOVE(MsgType.GAME),
     BUILD(MsgType.GAME),
     CELL_LIST(MsgType.GAME),

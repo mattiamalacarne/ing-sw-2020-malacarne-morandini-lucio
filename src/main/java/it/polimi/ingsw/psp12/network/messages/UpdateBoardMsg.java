@@ -13,10 +13,9 @@ public class UpdateBoardMsg extends Message
 
     /**
      * Init the message with the board obtained after a move/build
-     * @param cmd the command for the client
      * @param newBoard the board for the client
      */
-    public UpdateBoardMsg(MsgCommand cmd, Board newBoard) {
+    public UpdateBoardMsg(Board newBoard) {
         super(MsgCommand.BOARD_UPDATE);
         this.board = newBoard;
     }

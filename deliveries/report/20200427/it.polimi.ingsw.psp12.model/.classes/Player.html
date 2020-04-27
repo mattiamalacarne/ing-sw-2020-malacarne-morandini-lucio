@@ -1,0 +1,184 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Player</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Player (it.polimi.ingsw.psp12.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Player</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87,5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,9%
+  </span>
+  <span class="absValue">
+    (20/ 22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.power.Power;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.utils.Color;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;/**
+<i>8</i>&nbsp; * &lt;p&gt;&lt;b&gt;Class&lt;/b&gt; that represent the player&lt;/p&gt;
+<i>9</i>&nbsp; * &lt;p&gt;This class store the information for the game state&lt;/p&gt;
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * @author Mattia Malacarne
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class Player
+<i>14</i>&nbsp;{
+<i>15</i>&nbsp;    private int id;
+<i>16</i>&nbsp;    private Worker workers[];
+<i>17</i>&nbsp;    private String name;
+<i>18</i>&nbsp;    private Power power;
+<i>19</i>&nbsp;    private boolean initialized;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;    public Player(int id, String name) {</b>
+<b class="fc"><i>23</i>&nbsp;        this.id = id;</b>
+<b class="fc"><i>24</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>25</i>&nbsp;        this.initialized = false;</b>
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;        workers = new Worker[2];</b>
+<b class="fc"><i>28</i>&nbsp;        for (int i = 0; i &lt; 2; i++) {</b>
+<b class="fc"><i>29</i>&nbsp;            workers[i] = new Worker();</b>
+<i>30</i>&nbsp;        }
+<b class="fc"><i>31</i>&nbsp;    }</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Get the selected worker
+<i>35</i>&nbsp;     * @param index the index in the list of the current player&#39;s worker
+<i>36</i>&nbsp;     * @return the corrisponding worker in the list
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public Worker getWorker(int index) {
+<b class="fc"><i>39</i>&nbsp;        return workers[index];</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * update the position of the moved worker
+<i>44</i>&nbsp;     * @param index the worker that is moving
+<i>45</i>&nbsp;     * @param pos new worler position in the board
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    public void updateWorkerPosition(int index, Cell pos) {
+<b class="fc"><i>48</i>&nbsp;        workers[index].move(pos);</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * get the selected player name
+<i>53</i>&nbsp;     * @return the name of the player
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    public String getName() {
+<b class="fc"><i>56</i>&nbsp;        return name;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * get the player id
+<i>61</i>&nbsp;     * @return the player id
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public int getId() {
+<b class="fc"><i>64</i>&nbsp;        return id;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * set the player power depending of his card
+<i>69</i>&nbsp;     * @param pow the new poer of the player
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public void setPower(Power pow) {
+<b class="nc"><i>72</i>&nbsp;        this.power = pow;</b>
+<b class="nc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Initialize player color and workers positions
+<i>78</i>&nbsp;     * @param color color of the workers
+<i>79</i>&nbsp;     * @param cells positions of the workers
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public void initialize(Color color, Cell cells[]) {
+<b class="fc"><i>82</i>&nbsp;        for (int i = 0; i &lt; 2; i++) {</b>
+<i>83</i>&nbsp;            // set worker color
+<b class="fc"><i>84</i>&nbsp;            workers[i].setColor(color);</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;            // place worker on the board
+<b class="fc"><i>87</i>&nbsp;            updateWorkerPosition(i, cells[i]);</b>
+<b class="fc"><i>88</i>&nbsp;            cells[i].addWorker(workers[i]);</b>
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;        initialized = true;</b>
+<b class="fc"><i>92</i>&nbsp;    }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * Determine if the player has been initialized
+<i>96</i>&nbsp;     * @return true if player has been initialized
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    public boolean isInitialized() {
+<b class="fc"><i>99</i>&nbsp;        return initialized;</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-27 22:00</div>
+</div>
+</body>
+</html>

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.network.messages.CellListMsg;
 import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
+import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -69,4 +71,10 @@ public interface UserInterface
      * @param cellListMsg
      */
     public void build(CellListMsg cellListMsg) throws IOException;
+
+    /**
+     * Draw the gameBoard on the screen
+     * @param boardMsg
+     */
+    public void drawBoard(UpdateBoardMsg boardMsg);
 }

@@ -5,6 +5,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/CellRequestMsg.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/ChangeTurnStateMsg.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/CLInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/CLInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/UserInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/UserInterface.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587665748827</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler, readded commands in enum">
+      <created>1587665956376</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1587665956376</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,7 +226,8 @@
     <MESSAGE value="Created the first Message class" />
     <MESSAGE value="Setup the messages, created the message handler class.&#10;N.B. Not completed, missing documentation and a possibile singleton implementation." />
     <MESSAGE value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler" />
+    <MESSAGE value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler, readded commands in enum" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler, readded commands in enum" />
   </component>
   <component name="WindowStateProjectService">
     <state x="677" y="177" key="#ClientLauncher" timestamp="1586875490848">
@@ -235,12 +246,12 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585324972181" />
-    <state x="766" y="231" key="#com.intellij.ide.util.MemberChooser" timestamp="1586171084302">
-      <screen x="0" y="0" width="1920" height="1023" />
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1587994865884">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="638" y="190" key="#com.intellij.ide.util.MemberChooser/0.0.1600.843@0.0.1600.843" timestamp="1585906889820" />
     <state x="766" y="231" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1023@0.0.1920.1023" timestamp="1586171084302" />
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1585329713680" />
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587994865884" />
     <state x="789" y="398" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585747130171">
       <screen x="0" y="23" width="1920" height="1000" />
     </state>
@@ -250,12 +261,12 @@
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
     <state x="575" y="233" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1600.820@0.23.1600.820" timestamp="1585850215916" />
-    <state x="549" y="112" key="CommitChangelistDialog2" timestamp="1587665746309">
+    <state x="473" y="112" key="CommitChangelistDialog2" timestamp="1587665953859">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="373" y="48" key="CommitChangelistDialog2/0.0.1600.843@0.0.1600.843" timestamp="1585753561017" />
     <state x="448" y="58" key="CommitChangelistDialog2/0.0.1920.1023@0.0.1920.1023" timestamp="1586171102246" />
-    <state x="549" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665746309" />
+    <state x="473" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665953859" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -297,12 +308,12 @@
     </state>
     <state x="461" y="164" width="1040" height="850" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586260677175" />
     <state x="384" y="121" width="900" height="722" key="SettingsEditor/0.23.1600.820@0.23.1600.820" timestamp="1585751823420" />
-    <state x="372" y="200" key="Vcs.Push.Dialog.v2" timestamp="1587665258531">
+    <state x="372" y="200" key="Vcs.Push.Dialog.v2" timestamp="1587665977212">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="437" y="168" key="Vcs.Push.Dialog.v2/0.0.1600.843@0.0.1600.843" timestamp="1585753594304" />
     <state x="671" y="153" key="Vcs.Push.Dialog.v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586170886939" />
-    <state x="372" y="200" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665258531" />
+    <state x="372" y="200" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665977212" />
     <state x="516" y="215" key="com.intellij.ide.util.TipDialog" timestamp="1585746899173">
       <screen x="0" y="23" width="1920" height="1000" />
     </state>
@@ -311,11 +322,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="730" y="227" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587485402915" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587665752972">
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587993974884">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="747" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586168429237" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665752972" />
+    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587993974884" />
     <state x="656" y="125" width="737" height="789" key="find.popup" timestamp="1586260817157">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

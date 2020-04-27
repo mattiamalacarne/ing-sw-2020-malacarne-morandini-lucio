@@ -3,8 +3,10 @@ package it.polimi.ingsw.psp12.view.userinterface;
 import it.polimi.ingsw.psp12.client.ClientHandlerConnection;
 import it.polimi.ingsw.psp12.client.MessageHandler;
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
+import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
 import it.polimi.ingsw.psp12.view.userinterface.UserInterface;
 
 import java.io.IOException;
@@ -232,5 +234,12 @@ public class CLInterface implements UserInterface
             }
         }while (choice<0 || choice>=cellListMsg.getCellList().size() );
 
+    }
+
+    @Override
+    public void drawBoard(UpdateBoardMsg boardMsg) {
+        //TODO: Add code for draw a board on screen.. [così dovrebbe essere ok]
+        CLIBoardGenerator boardGenerator = new CLIBoardGenerator(boardMsg.getBoard());
+        System.out.println(boardGenerator.toString());
     }
 }

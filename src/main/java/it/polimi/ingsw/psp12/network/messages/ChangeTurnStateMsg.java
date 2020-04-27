@@ -4,23 +4,24 @@ import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 
 /**
- * Class representing a general cell request, used for requesting a cell list
+ * Class for send to server a request to change the current turn state (action fr player)
+ * the server will responde with a list of possibilemove o build for the state selected
  *
  * @author Mattia Malacarne
  */
-public class CellRequestMsg extends Message
+public class ChangeTurnStateMsg extends Message
 {
-
-    // TODO: Controllare, si possono unire la richiesta di celle e move action poichè dipendono l'uno dall'altro
 
     private Action action;
     /**
-     * Request a list of cell where build or move is possible
+     * Change the turn state and request the cell list
      * @param action define if build cell list or move cell list (Da vedere potrebbe non serive)
      */
-    public CellRequestMsg(Action action)
+    public ChangeTurnStateMsg(Action action)
     {
-        super(MsgCommand.CELL_REQUEST);
+        super(MsgCommand.CHANGE_TURN_STATE);
         this.action = action;
     }
+
+
 }

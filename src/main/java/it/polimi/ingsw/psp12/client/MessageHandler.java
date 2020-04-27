@@ -68,11 +68,11 @@ public class MessageHandler implements Observer<Message>
                 userInterface.build( (CellListMsg) message );
                 break;
 
-            case CELL_REQUEST:  /*(CellRequestMsg) message;*/
+            case CHANGE_TURN_STATE:  /*(CellRequestMsg) message;*/
             case CELL_LIST:  /*(CellListMsg) message;*/
 
             case SELECTED_CELL:  /*(SelectCellMsg) message;*/
-            case BOARD_UPDATE:  /*(UpdateBoardMsg) message;*/
+            case BOARD_UPDATE:  userInterface.drawBoard((UpdateBoardMsg) message); // Directly get the board on casting
             default: throw new MessageTypeNotFoundException();
         }
     }

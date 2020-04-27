@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,8 @@ public class GameStateTest {
 
     @Test
     public void setCurrentState_ShouldUpdateState() {
+        // initialize state
+        gameState2.initGame();
         // check initial state
         assertEquals(TurnState.INIT, gameState2.getCurrentState());
 
@@ -173,5 +176,81 @@ public class GameStateTest {
         // check previous player
         assertEquals(2, gameState3.getPreviousPlayer().getId());
         assertEquals("P3", gameState3.getPreviousPlayer().getName());
+    }
+
+    @Test
+    public void alreadyRegistered_NewName_ShouldReturnFalse() {
+        gameState2.addPlayer("Pippo");
+        assertFalse(gameState2.alreadyRegistered("Pluto"));
+    }
+
+    @Test
+    public void alreadyRegistered_NameUsed_ShouldReturnTrue() {
+        gameState2.addPlayer("Pippo");
+        assertTrue(gameState2.alreadyRegistered("Pippo"));
+    }
+
+    @Test
+    public void initGame_ShouldResetTurnState() {
+        gameState2.initGame();
+        assertEquals(TurnState.INIT, gameState2.getCurrentState());
+    }
+
+    @Test
+    public void setPlayerInfo_ShouldInitPlayer() {
+        // initialize state with a player
+        gameState2.addPlayer("Test");
+        gameState2.initGame();
+
+        // check initial state
+        String initialColors[] = new String[] {"red", "green", "blue", "orange", "purple"};
+        assertArrayEquals(initialColors, gameState2.getAvailableColors().toArray());
+
+        assertFalse(gameState2.getCurrentPlayer().isInitialized());
+
+        // set player info
+        Point points[] = new Point[] { new Point(0, 0), new Point(2, 1) };
+        gameState2.setPlayerInfo("blue", points);
+
+        // check final state
+        String finalColors[] = new String[] {"red", "green", "orange", "purple"};
+        assertArrayEquals(finalColors, gameState2.getAvailableColors().toArray());
+
+        assertTrue(gameState2.getCurrentPlayer().isInitialized());
+
+        Worker w1 = gameState2.getCurrentPlayer().getWorker(0);
+        assertEquals(points[0], w1.getPosition().getLocation());
+        assertEquals("blue", w1.getColor());
+        assertTrue(gameState2.getGameBoard().getCell(points[0]).hasWorker());
+
+        Worker w2 = gameState2.getCurrentPlayer().getWorker(1);
+        assertEquals(points[1], w2.getPosition().getLocation());
+        assertEquals("blue", w2.getColor());
+        assertTrue(gameState2.getGameBoard().getCell(points[1]).hasWorker());
+    }
+
+    @Test
+    public void isInitialized_ShouldReturnTrueAfterAllPlayersAreReady() {
+        // initialize state
+        gameState2.addPlayer("Pippo");
+        gameState2.addPlayer("Pluto");
+        gameState2.initGame();
+
+        // set first player info
+        Point points1[] = new Point[] { new Point(0, 0), new Point(2, 1) };
+        gameState2.setPlayerInfo("blue", points1);
+
+        // check intermediate state
+        assertFalse(gameState2.isInitialized());
+
+        // move to second player
+        gameState2.nextTurn();
+
+        // set second player info
+        Point points2[] = new Point[] { new Point(1, 3), new Point(0, 2) };
+        gameState2.setPlayerInfo("red", points2);
+
+        // check final state
+        assertTrue(gameState2.isInitialized());
     }
 }

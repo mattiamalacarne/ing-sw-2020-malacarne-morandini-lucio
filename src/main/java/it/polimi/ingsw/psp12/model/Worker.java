@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.view.userinterface.CLI.Color;
 
 import java.awt.*;
 
@@ -14,7 +15,7 @@ public class Worker
 {
     private Cell position;
 
-    private String color;
+    private Color color;
 
     /**
      * get the selected worker position
@@ -36,7 +37,7 @@ public class Worker
      * Set the color of the worker selected by the user
      * @param color color selected by the user
      */
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -44,7 +45,7 @@ public class Worker
      * Get the color of the worker
      * @return the color of the worker
      */
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 }

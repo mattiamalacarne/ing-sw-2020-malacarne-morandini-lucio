@@ -65,25 +65,24 @@ public class CLIBoardGenerator {
         int x = cell.getLocation().getX();
         int y = cell.getLocation().getY();
 
-        boardString.append("#");
+        boardString.append("#"); //meglio ■ ?
         boardString.append(String.format(innerStringFormat,"["+ x + "," + y + "]"));
         boardString.append("#");
     }
 
     //LEVEL 3: player or cupola
     private void makeLine2(StringBuilder boardString, Cell cell){
-        //FIXME: il worker dovrebbe avere il livello a cui si trova?
-        if ( (cell.hasWorker() /*&& cell.getWorker().getLevel()*/) || cell.getTower().hasDome() ){
+        if ( (cell.hasWorker() && cell.getTower().getLevel()==3) || cell.getTower().hasDome() ){
 
             //there is a worker on level 3
             if (cell.hasWorker()){
-                //FIXME: il worker dovrebbe avere i parametri nome e colore ?
-                boardString.append(String.format(innerStringFormat ));
+                //FIXME: nome player
+                boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
             }
 
             //there is a dome
             else if (cell.getTower().hasDome()){
-                boardString.append(String.format(innerStringFormat,"    ^  "));
+                boardString.append(String.format(innerStringFormat,"    ^  ")); //meglio ▲ ?
             }
 
         }else {
@@ -93,17 +92,39 @@ public class CLIBoardGenerator {
 
     //LEVEL 2: player or build
     private void makeLine3(StringBuilder boardString, Cell cell){
+        if (cell.hasWorker() && cell.getTower().getLevel()==2){
+            //FIXME: nome player
+            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()!=0){
+            boardString.append(String.format(innerStringFormat, "-"));
+        }else {
+            boardString.append(String.format(innerStringFormat, ""));
+        }
 
     }
 
     //LEVEL 1: player or build
     private void makeLine4(StringBuilder boardString, Cell cell){
-
+        if (cell.hasWorker() && cell.getTower().getLevel()==1){
+            //FIXME: nome player
+            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()!=0){
+            boardString.append(String.format(innerStringFormat, "-"));
+        }else {
+            boardString.append(String.format(innerStringFormat, ""));
+        }
     }
 
     //LEVEL 0: player or build
     private void makeLine5(StringBuilder boardString, Cell cell){
-
+        if (cell.hasWorker() && cell.getTower().getLevel()==0){
+            //FIXME: nome player
+            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()==0){
+            boardString.append(String.format(innerStringFormat, "-"));
+        }else {
+            boardString.append(String.format(innerStringFormat, ""));
+        }
     }
 
     public String toString(){

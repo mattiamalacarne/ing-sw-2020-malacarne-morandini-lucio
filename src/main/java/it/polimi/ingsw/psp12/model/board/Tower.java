@@ -14,7 +14,7 @@ public class Tower
     private boolean dome;
 
     /**
-     * get the selected toer level
+     * get the selected tower level
      * @return the tower level
      */
     public int getLevel() {

@@ -9,7 +9,6 @@ import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
 import it.polimi.ingsw.psp12.utils.Observable;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -81,7 +80,7 @@ public class GameState extends Observable<Message>
         players[playersCount] = new Player(playersCount, name);
         playersCount++;
 
-        return players[playersCount];
+        return players[playersCount - 1];
     }
 
     /**
@@ -165,14 +164,6 @@ public class GameState extends Observable<Message>
     }
 
     /**
-     * Returns the index of the player that is currently playing
-     * @return index of the turn
-     */
-    public int getTurn() {
-        return turn;
-    }
-
-    /**
      * Moves the position of a worker on the map
      * @param oldPoint current position of the worker
      * @param newPoint new position of the worker after the move
@@ -202,22 +193,33 @@ public class GameState extends Observable<Message>
     }
 
     /**
+     * Determine if all the players have completed their initialization process
+     * @return true if all the players have been initialized
+     */
+    public boolean isInitialized() {
+        for (int i = 0; i < playersCount; i++) {
+            if (!players[i].isInitialized()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Update the player with the selected information
      * @param color color of the workers
      * @param points positions of the workers
      */
     public void setPlayerInfo(String color, Point points[]) {
-        // place workers on the board and set color
+        // get the cells associated to the points selected by the user
+        Cell cells[] = new Cell[2];
         for (int i = 0; i < 2; i++) {
-            Cell c = gameBoard.getCell(points[i]);
-            Worker w = getCurrentPlayer().getWorker(i);
-            // set worker color
-            w.setColor(color);
-
-            // place worker on the board
-            w.move(c);
-            c.addWorker(w);
+            cells[i] = gameBoard.getCell(points[i]);
         }
+
+        // initialize player
+        players[turn].initialize(color, cells);
 
         // remove color from available colors
         colors.remove(color);

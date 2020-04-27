@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.power.Power;
 
 import java.awt.*;
@@ -17,11 +18,13 @@ public class Player
     private Worker workers[];
     private String name;
     private Power power;
+    private boolean initialized;
 
 
     public Player(int id, String name) {
         this.id = id;
         this.name = name;
+        this.initialized = false;
 
         workers = new Worker[2];
         for (int i = 0; i < 2; i++) {
@@ -69,5 +72,32 @@ public class Player
      */
     public void setPower(Power pow) {
         this.power = pow;
+    }
+
+
+    /**
+     * Initialize player color and workers positions
+     * @param color color of the workers
+     * @param cells positions of the workers
+     */
+    public void initialize(String color, Cell cells[]) {
+        for (int i = 0; i < 2; i++) {
+            // set worker color
+            workers[i].setColor(color);
+
+            // place worker on the board
+            updateWorkerPosition(i, cells[i]);
+            cells[i].addWorker(workers[i]);
+        }
+
+        initialized = true;
+    }
+
+    /**
+     * Determine if the player has been initialized
+     * @return true if player has been initialized
+     */
+    public boolean isInitialized() {
+        return initialized;
     }
 }

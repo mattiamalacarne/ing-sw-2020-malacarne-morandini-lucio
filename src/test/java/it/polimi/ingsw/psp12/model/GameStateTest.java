@@ -2,8 +2,11 @@ package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -203,29 +206,37 @@ public class GameStateTest {
         gameState2.initGame();
 
         // check initial state
-        String initialColors[] = new String[] {"red", "green", "blue", "orange", "purple"};
+        Color initialColors[] = Color.values();
         assertArrayEquals(initialColors, gameState2.getAvailableColors().toArray());
 
         assertFalse(gameState2.getCurrentPlayer().isInitialized());
 
         // set player info
         Point points[] = new Point[] { new Point(0, 0), new Point(2, 1) };
-        gameState2.setPlayerInfo("blue", points);
+        gameState2.setPlayerInfo(Color.BLUE, points);
 
         // check final state
-        String finalColors[] = new String[] {"red", "green", "orange", "purple"};
+        Color finalColors[] = new Color[Color.values().length - 1];
+        int i = 0;
+        for (Color c : Color.values()) {
+            if (!c.equals(Color.BLUE)) {
+                finalColors[i] = c;
+                i++;
+            }
+        }
+
         assertArrayEquals(finalColors, gameState2.getAvailableColors().toArray());
 
         assertTrue(gameState2.getCurrentPlayer().isInitialized());
 
         Worker w1 = gameState2.getCurrentPlayer().getWorker(0);
         assertEquals(points[0], w1.getPosition().getLocation());
-        assertEquals("blue", w1.getColor());
+        assertEquals(Color.BLUE, w1.getColor());
         assertTrue(gameState2.getGameBoard().getCell(points[0]).hasWorker());
 
         Worker w2 = gameState2.getCurrentPlayer().getWorker(1);
         assertEquals(points[1], w2.getPosition().getLocation());
-        assertEquals("blue", w2.getColor());
+        assertEquals(Color.BLUE, w2.getColor());
         assertTrue(gameState2.getGameBoard().getCell(points[1]).hasWorker());
     }
 
@@ -238,7 +249,7 @@ public class GameStateTest {
 
         // set first player info
         Point points1[] = new Point[] { new Point(0, 0), new Point(2, 1) };
-        gameState2.setPlayerInfo("blue", points1);
+        gameState2.setPlayerInfo(Color.BLUE, points1);
 
         // check intermediate state
         assertFalse(gameState2.isInitialized());
@@ -248,7 +259,7 @@ public class GameStateTest {
 
         // set second player info
         Point points2[] = new Point[] { new Point(1, 3), new Point(0, 2) };
-        gameState2.setPlayerInfo("red", points2);
+        gameState2.setPlayerInfo(Color.RED, points2);
 
         // check final state
         assertTrue(gameState2.isInitialized());

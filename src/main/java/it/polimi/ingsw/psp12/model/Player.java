@@ -1,10 +1,8 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
-import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.power.Power;
-
-import java.awt.*;
+import it.polimi.ingsw.psp12.utils.Color;
 
 /**
  * <p><b>Class</b> that represent the player</p>
@@ -80,7 +78,7 @@ public class Player
      * @param color color of the workers
      * @param cells positions of the workers
      */
-    public void initialize(String color, Cell cells[]) {
+    public void initialize(Color color, Cell cells[]) {
         for (int i = 0; i < 2; i++) {
             // set worker color
             workers[i].setColor(color);

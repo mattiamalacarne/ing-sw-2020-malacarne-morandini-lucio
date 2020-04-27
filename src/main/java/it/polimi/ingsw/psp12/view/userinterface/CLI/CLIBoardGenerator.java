@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.view.userinterface.CLI;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.utils.Color;
 
 /**
  * Class used to generate a string representation of the board for the CLI

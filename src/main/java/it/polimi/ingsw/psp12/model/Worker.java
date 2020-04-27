@@ -1,9 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
-import it.polimi.ingsw.psp12.view.userinterface.CLI.Color;
-
-import java.awt.*;
+import it.polimi.ingsw.psp12.utils.Color;
 
 /**
  * <p><b>Class</b> that represent a worker</p>

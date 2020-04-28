@@ -1,7 +1,7 @@
 package it.polimi.ingsw.psp12.server;
 
 import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
-import it.polimi.ingsw.psp12.server.acceptance.Constants;
+import it.polimi.ingsw.psp12.utils.Constants;
 
 import java.io.IOException;
 import java.util.Scanner;

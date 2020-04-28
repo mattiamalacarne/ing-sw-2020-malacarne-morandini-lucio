@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp12.server.acceptance;
+package it.polimi.ingsw.psp12.utils;
 
 /**
  * Server constants

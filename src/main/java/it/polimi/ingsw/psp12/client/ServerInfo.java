@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp12.client;
 
+import it.polimi.ingsw.psp12.utils.Constants;
+
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
@@ -13,7 +15,7 @@ public class ServerInfo
 {
     // default ip localhost
     public Inet4Address serverIp = (Inet4Address) Inet4Address.getByName("127.0.0.1");
-    public int serverPort = 55555; // default server port
+    public int serverPort = Constants.ACCEPTANCE_PORT; // default acceptance server port
 
     public ServerInfo(Inet4Address customIp, int customPort) throws UnknownHostException
     {

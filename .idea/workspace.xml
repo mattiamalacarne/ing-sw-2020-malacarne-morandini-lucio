@@ -3,11 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c7a39f35-6ee3-4862-90ab-fe464927d696" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/client/MessageHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/enumeration/MsgCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/CellRequestMsg.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/ChangeTurnStateMsg.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/CLInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/CLInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/UserInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/UserInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/exceptions/MessageTypeNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/exceptions/MessageTypeNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/BuildMsg.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/network/messages/MoveMsg.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUISetup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUItestElem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUinterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimi/ingsw/psp12/view/userinterface/GUinterface.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +67,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\malac\Documents\Workspace\ing-sw-2020-malacarne-morandini-lucio\src\main\resources" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
   </component>
@@ -209,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587665956376</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Edited in message the ChangeTurnStateMsg (old CellRequestMsg.java), the cell list is retrived when a turn change state.&#10;Added method for draw the gameBoard on the screen">
+      <created>1587995394955</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1587995394955</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,7 +236,8 @@
     <MESSAGE value="Setup the messages, created the message handler class.&#10;N.B. Not completed, missing documentation and a possibile singleton implementation." />
     <MESSAGE value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler" />
     <MESSAGE value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler, readded commands in enum" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added MessageTypeNotFoundException for preventing error during cast, it should be never called... implemented the exception in MessageHandler, readded commands in enum" />
+    <MESSAGE value="Edited in message the ChangeTurnStateMsg (old CellRequestMsg.java), the cell list is retrived when a turn change state.&#10;Added method for draw the gameBoard on the screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited in message the ChangeTurnStateMsg (old CellRequestMsg.java), the cell list is retrived when a turn change state.&#10;Added method for draw the gameBoard on the screen" />
   </component>
   <component name="WindowStateProjectService">
     <state x="677" y="177" key="#ClientLauncher" timestamp="1586875490848">
@@ -246,12 +256,12 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585324972181" />
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1587994865884">
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser" timestamp="1587996290049">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="638" y="190" key="#com.intellij.ide.util.MemberChooser/0.0.1600.843@0.0.1600.843" timestamp="1585906889820" />
     <state x="766" y="231" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1023@0.0.1920.1023" timestamp="1586171084302" />
-    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587994865884" />
+    <state x="765" y="235" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587996290049" />
     <state x="789" y="398" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1585747130171">
       <screen x="0" y="23" width="1920" height="1000" />
     </state>
@@ -261,12 +271,12 @@
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585325383356" />
     <state x="575" y="233" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1600.820@0.23.1600.820" timestamp="1585850215916" />
-    <state x="473" y="112" key="CommitChangelistDialog2" timestamp="1587665953859">
+    <state x="265" y="112" key="CommitChangelistDialog2" timestamp="1587995392220">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="373" y="48" key="CommitChangelistDialog2/0.0.1600.843@0.0.1600.843" timestamp="1585753561017" />
     <state x="448" y="58" key="CommitChangelistDialog2/0.0.1920.1023@0.0.1920.1023" timestamp="1586171102246" />
-    <state x="473" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587665953859" />
+    <state x="265" y="112" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1587995392220" />
     <state x="434" y="185" width="440" height="525" key="FileChooserDialogImpl" timestamp="1585321476471">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -322,11 +332,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="730" y="227" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1587485402915" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587993974884">
+    <state x="622" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588081299058">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="747" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1023@0.0.1920.1023" timestamp="1586168429237" />
-    <state x="747" y="385" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1587993974884" />
+    <state x="622" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1588081299058" />
     <state x="656" y="125" width="737" height="789" key="find.popup" timestamp="1586260817157">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

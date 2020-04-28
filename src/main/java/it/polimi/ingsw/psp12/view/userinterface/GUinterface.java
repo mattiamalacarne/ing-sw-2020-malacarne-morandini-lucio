@@ -1,6 +1,10 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.network.messages.CellListMsg;
+import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
+import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIMainWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,32 +12,24 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class GUinterface extends JFrame implements UserInterface
+/**
+ * Class for the GUI interface of the game
+ * @author Mattia Malacarne
+ */
+public class GUinterface implements UserInterface
 {
 
     private Scanner cmdIn;
 
-    JPanel setup;
-    JPanel test;
+    GUIMainWindow window;
 
-    GUinterface main;
 
+    /**
+     * Init the UI starting the mainWindow and populate it with the necessary panel
+     */
     public GUinterface()
     {
-       super("Santorini gruppo 12");
-       this.setSize(300,300);
-       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-       main = this;
-
-       test = new GUItestElem();
-       setup = new GUISetup(this);
-
-
-       this.add(setup);
-
-       System.out.println("GUI START");
-       this.setVisible(true);
+       // Start mainwindow
     }
 
 
@@ -49,11 +45,7 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
-    public String setClientName()
-    {
-        System.out.println("Reomoving");
-        main.add(test);
-        setup.setVisible(false);
+    public String setClientName() {
         return null;
     }
 
@@ -61,4 +53,41 @@ public class GUinterface extends JFrame implements UserInterface
     public int getGamePort(ServerInfo serverInfo) throws IOException {
         return 0;
     }
+
+    @Override
+    public void roomCreatedMessage() throws IOException {
+
+    }
+
+    @Override
+    public void selectGamePort(RoomsMsg roomList) throws IOException {
+
+    }
+
+    @Override
+    public void joinPlayerNameConfirmation() throws IOException {
+
+    }
+
+    @Override
+    public void joinPlayerNameAlreadyUsed() throws IOException {
+
+    }
+
+    @Override
+    public void move(CellListMsg cellListMsg) throws IOException {
+
+    }
+
+    @Override
+    public void build(CellListMsg cellListMsg) throws IOException {
+
+    }
+
+    @Override
+    public void drawBoard(UpdateBoardMsg boardMsg) {
+
+    }
+
+
 }

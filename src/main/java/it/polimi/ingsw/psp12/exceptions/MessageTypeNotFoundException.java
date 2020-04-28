@@ -8,7 +8,6 @@ package it.polimi.ingsw.psp12.exceptions;
  */
 public class MessageTypeNotFoundException extends Exception
 {
-
     public MessageTypeNotFoundException()
     {
         super("Message type not found, impossible to cast the message");

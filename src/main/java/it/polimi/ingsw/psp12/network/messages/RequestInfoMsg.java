@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+import it.polimi.ingsw.psp12.utils.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class RequestInfoMsg extends Message {
     /**
      * List of available colors
      */
-    List<String> availableColors;
+    List<Color> availableColors;
 
     /**
      * List of available positions
@@ -30,11 +31,11 @@ public class RequestInfoMsg extends Message {
         availablePositions = new ArrayList<>();
     }
 
-    public void setAvailableColors(List<String> availableColors) {
+    public void setAvailableColors(List<Color> availableColors) {
         this.availableColors = availableColors;
     }
 
-    public List<String> getAvailableColors() {
+    public List<Color> getAvailableColors() {
         return availableColors;
     }
 

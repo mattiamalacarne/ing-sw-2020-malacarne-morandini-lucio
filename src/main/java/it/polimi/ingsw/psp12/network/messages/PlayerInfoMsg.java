@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+import it.polimi.ingsw.psp12.utils.Color;
 
 /**
  * Class used by the client to send initialization information
@@ -12,7 +13,7 @@ public class PlayerInfoMsg extends Message {
     /**
      * Color selected by the user
      */
-    String color;
+    Color color;
 
     /**
      * Positions of the workers
@@ -25,7 +26,7 @@ public class PlayerInfoMsg extends Message {
      * @param w1 position of the first worker
      * @param w2 position of the second worker
      */
-    public PlayerInfoMsg(String color, Point w1, Point w2) {
+    public PlayerInfoMsg(Color color, Point w1, Point w2) {
         // TODO: throw exception if points are not different?
         super(MsgCommand.PLAYER_INFO);
         this.color = color;
@@ -35,7 +36,7 @@ public class PlayerInfoMsg extends Message {
         this.workers[1] = new Point(w2.getX(), w2.getY());
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 

@@ -123,21 +123,20 @@ public class Controller implements Observer<Message> {
         // update model with the
         model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions());
 
-        // switch to the next player
-        model.nextTurn();
-
-        // TODO: change strategy to determine if every player has been initialized
         // check if all players have been initialized
-        if (model.getTurn() == 0) {
-            // all players are ready, the game can start
-            model.initGame();
+        if (!model.isInitialized()) {
+            // not all players are ready, switch to the next one
+            model.nextTurn();
 
-            // TODO: start playing process
-        }
-        else {
             // request to the next player to send its information
             requestPlayerInfo();
+            return;
         }
+
+        // all players are ready, the game can start
+        model.initGame();
+
+        // TODO: start playing process
     }
 
     /**

@@ -7,14 +7,18 @@ import it.polimi.ingsw.psp12.model.board.Tower;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class BoardTest {
     private Board testBoard;
+    private Board testEmptyBoard;
 
     @Before
     public void setUp() {
         testBoard = new Board();
+        testEmptyBoard = new Board();
 
         // add test worker
         testBoard.getCell(new Point(1, 2)).addWorker(new Worker());
@@ -98,5 +102,20 @@ public class BoardTest {
 
         // TODO: search how to manage exception in tests
         fail();
+    }
+
+    @Test
+    public void getCellsWithoutWorker_ShouldReturnAvailableCells() {
+        // initialize state
+        testEmptyBoard.getCell(new Point(0, 0)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(1, 1)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(2, 3)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(4, 3)).addWorker(new Worker());
+
+        List<Cell> availableCells = testEmptyBoard.getCellsWithoutWorker();
+        assertEquals(21, availableCells.size());
+        for (Cell c : availableCells) {
+            assertFalse(c.hasWorker());
+        }
     }
 }

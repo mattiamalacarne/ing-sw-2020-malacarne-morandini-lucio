@@ -1,4 +1,4 @@
-package it.polimi.ingsw.psp12.view.userinterface.CLI;
+package it.polimi.ingsw.psp12.utils;
 
 public enum Color {
     RED,

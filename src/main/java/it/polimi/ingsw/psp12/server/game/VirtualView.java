@@ -51,7 +51,7 @@ public class VirtualView extends Observable<Message> implements Observer<Message
     }
 
     @Override
-    public void update(Message message) {
+    public void update(Object sender, Message message) {
         // send message from model to client
         clientHandler.send(message);
     }

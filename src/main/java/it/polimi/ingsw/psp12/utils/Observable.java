@@ -22,7 +22,7 @@ public abstract class Observable<T> {
 
     public void notifyObservers(T message){
         for (Observer<T> observer: observers) {
-            observer.update(message);
+            observer.update(this, message);
         }
     }
 

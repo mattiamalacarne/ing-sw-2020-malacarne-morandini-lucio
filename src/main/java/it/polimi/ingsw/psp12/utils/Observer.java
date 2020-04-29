@@ -7,6 +7,6 @@ package it.polimi.ingsw.psp12.utils;
  */
 public interface Observer<T> {
 
-    void update(T message);
+    void update(Object sender, T message);
 
 }

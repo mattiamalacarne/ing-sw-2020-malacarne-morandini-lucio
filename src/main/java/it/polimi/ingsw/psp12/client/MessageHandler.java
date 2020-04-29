@@ -78,7 +78,7 @@ public class MessageHandler implements Observer<Message>
     }
 
     @Override
-    public void update(Message message) {
+    public void update(Object sender, Message message) {
         try {
             genericMessageToSpec(message);
         } catch (MessageTypeNotFoundException e) {

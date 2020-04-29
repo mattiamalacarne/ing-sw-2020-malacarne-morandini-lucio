@@ -14,6 +14,7 @@ public enum MsgCommand {
     INVALID_NICKNAME(MsgType.SYSTEM), // nickname provided by the user is already taken
     ROOM_FULL(MsgType.SYSTEM), // user can not subscribe because the room is already full
     DISCONNECTED(MsgType.SYSTEM), // client has disconnected from the server
+    NOT_YOUR_TURN(MsgType.SYSTEM), // the client sent a message not in its turn
 
     /** Game commands **/
     REQUEST_INFO(MsgType.GAME),

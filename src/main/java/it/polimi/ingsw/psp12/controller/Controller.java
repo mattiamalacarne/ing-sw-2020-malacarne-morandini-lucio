@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.network.ClientHandler;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.CellListMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.messages.PlayerInfoMsg;
@@ -63,7 +64,15 @@ public class Controller implements Observer<Message> {
     }
 
     @Override
-    public void update(Message message) {
+    public void update(Object sender, Message message) {
+        VirtualView vv = (VirtualView)sender;
+
+        // check if the sender of the message can play
+        if (!checkActivePlayer(vv)) {
+            vv.sendCommand(new Message(MsgCommand.NOT_YOUR_TURN));
+            return;
+        }
+
         // process incoming command from client
         switch (message.getCommand())
         {
@@ -83,6 +92,15 @@ public class Controller implements Observer<Message> {
             case CELL_REQUEST:
                 break;
         }
+    }
+
+    /**
+     * Check if the player that has sent a message is the current player
+     * @param view virtual view of the player
+     * @return true if the player is the current one
+     */
+    public boolean checkActivePlayer(VirtualView view) {
+        return view.getPlayer().equals(model.getCurrentPlayer());
     }
 
     /**
@@ -145,7 +163,7 @@ public class Controller implements Observer<Message> {
      * @param message message to be sent
      */
     private void sendToPlayer(Player player, Message message) {
-        Optional<VirtualView> vv = clients.stream().filter(v -> v.getPlayer().getId() == player.getId()).findFirst();
+        Optional<VirtualView> vv = clients.stream().filter(v -> v.getPlayer().equals(player)).findFirst();
 
         if (!vv.isPresent()) {
             System.out.println("no virtual view associated with the requested player");

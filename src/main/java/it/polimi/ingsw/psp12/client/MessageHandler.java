@@ -20,9 +20,65 @@ public class MessageHandler implements Observer<Message>
      */
     private UserInterface userInterface;
 
-    public MessageHandler(UserInterface userInterface)
-    {
+    /**
+     * Server information for build the socket
+     */
+    private ServerInfo serverInfo;
+
+    /**
+     * Connection to the server
+     */
+    private ClientHandlerConnection clientHandlerConnection;
+
+    /**
+     * The real game port, obtained from the server after the first connection
+     */
+    private int gamePort;
+
+    public MessageHandler(UserInterface userInterface) throws IOException {
+
         this.userInterface = userInterface;
+
+        this.serverInfo = userInterface.getServerByIp();
+
+        clientHandlerConnection = new ClientHandlerConnection(serverInfo);
+        clientHandlerConnection.addObserver(this);
+        Thread thread = new Thread(clientHandlerConnection);
+        thread.start();
+
+    }
+
+    /**
+     * Start the game communication with the user interface
+     * @throws IOException IO Exception
+     */
+    public void startGame() throws IOException {
+        userInterface.getGamePort();
+    }
+
+    /**
+     * Update the current game port (the port by which the client communicates with the server)
+     * @param gamePort the port of the game server
+     * @throws IOException IO Exception
+     */
+    public void setGamePort(int gamePort) throws IOException {
+
+        //ServerInfo of the selected room
+        ServerInfo updatedServerInfo = new ServerInfo(this.serverInfo.serverIp, gamePort);
+
+        //Closes the socket of the lobby (Acceptance room)
+        clientHandlerConnection.getClientSocket().close();
+
+        //New ClientHandlerConnection that opens a new socket on the port of the new room
+        clientHandlerConnection = new ClientHandlerConnection(updatedServerInfo);
+        clientHandlerConnection.addObserver(this);
+
+        Thread thread = new Thread(clientHandlerConnection);
+        thread.start();
+
+        serverInfo = updatedServerInfo;
+
+        this.gamePort = gamePort;
     }
 
     /**
@@ -53,28 +109,48 @@ public class MessageHandler implements Observer<Message>
             case ROOMS:
                 userInterface.selectGamePort( (RoomsMsg) message );
                 break;
-            case JOINED:
-                userInterface.joinPlayerNameConfirmation();
+            case ROOM_FULL:
+                userInterface.roomFull();
                 break;
             case INVALID_NICKNAME:
                 userInterface.joinPlayerNameAlreadyUsed();
                 break;
+            case JOINED:
+                userInterface.joinPlayerNameConfirmation();
+                break;
+            case REQUEST_INFO:
+                userInterface.requestStartInfo( (RequestInfoMsg) message );
+                break;
 
             //Game commands
             case MOVE:
-                userInterface.move( (CellListMsg) message);
+                userInterface.move( (CellListMsg) message );
                 break;
             case BUILD:
                 userInterface.build( (CellListMsg) message );
                 break;
 
             case CELL_REQUEST:  /*(CellRequestMsg) message;*/
+                break;
             case CELL_LIST:  /*(CellListMsg) message;*/
+                break;
 
             case SELECTED_CELL:  /*(SelectCellMsg) message;*/
-            case BOARD_UPDATE:  /*(UpdateBoardMsg) message;*/
+                break;
+            case BOARD_UPDATE:
+                userInterface.updateBoard( (UpdateBoardMsg) message );
+                break;
             default: throw new MessageTypeNotFoundException();
         }
+    }
+
+    /**
+     * Send a message to clientHandlerConnection that will send it to the server
+     * @param message the message to send to the server
+     * @throws IOException IO Exception
+     */
+    public void sendToServer(Message message) throws IOException {
+        clientHandlerConnection.sendRequestToServer(message);
     }
 
     @Override

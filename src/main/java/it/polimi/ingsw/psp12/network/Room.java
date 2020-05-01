@@ -2,11 +2,13 @@ package it.polimi.ingsw.psp12.network;
 
 import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
 
+import java.io.Serializable;
+
 /**
  * Room that holds information about a game
  * @author Luca Morandini
  */
-public class Room {
+public class Room implements Serializable{
     /**
      * Port of the server that manages the game
      */
@@ -35,7 +37,8 @@ public class Room {
     /**
      * Server that has created the room and is responsible for closing
      */
-    private AcceptanceServer creator;
+    //FIXME: uncomment transient to not cause the serialization problem of socket
+    /*transient */private AcceptanceServer creator;
 
     public Room(String name, int maxPlayersCount, AcceptanceServer creator) {
         this.name = name;
@@ -81,6 +84,14 @@ public class Room {
      */
     public int getMaxPlayersCount() {
         return maxPlayersCount;
+    }
+
+    /**
+     * Returns the number of players that has joined the game
+     * @return number of players that has joined the game
+     */
+    public int getPlayersCount() {
+        return playersCount;
     }
 
     /**

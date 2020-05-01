@@ -2,7 +2,9 @@ package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.ServerInfo;
 import it.polimi.ingsw.psp12.network.messages.CellListMsg;
+import it.polimi.ingsw.psp12.network.messages.RequestInfoMsg;
 import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
+import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -20,53 +22,75 @@ public interface UserInterface
      * Write a string on the standard output
      * @param s the string to write
      */
-    public void writeOnStream(String s);
+    void writeOnStream(String s);
 
     /**
-     * Setup the information for connect the client to the server
+     * The user chooses the IP of the to server to which it wants to connect
      * @return Data for create the socket
-     * @throws UnknownHostException
+     * @throws UnknownHostException Unknown Host Exception
      */
-    public ServerInfo setUpServerInfo() throws UnknownHostException;
+    ServerInfo getServerByIp() throws UnknownHostException;
 
     /**
-     * Setup the client information, for identify the client in the server
-     * @return the client name
+     * The user chooses to create or to join an available room
+     * @throws IOException IO Exception
      */
-    public String setClientName();
-
-    public int getGamePort(ServerInfo serverInfo) throws IOException;
+    void getGamePort() throws IOException;
 
     /**
      * Communicates to the user the correct creation of the room
+     * @throws IOException IO Exception
      */
-    public void roomCreatedMessage() throws IOException;
+    void roomCreatedMessage() throws IOException;
 
     /**
      * The user chooses the port of game room where to enter
-     * @param roomList
+     * @param roomList The list of available room/s
+     * @throws IOException IO Exception
      */
-    public void selectGamePort(RoomsMsg roomList) throws IOException;
+    void selectGamePort(RoomsMsg roomList) throws IOException;
+
+    /**
+     * Communicates to the user that the chosen room is already full
+     * @throws IOException IO Exception
+     */
+    void roomFull() throws IOException;
 
     /**
      * Communicates to the user the correct entry in the room
      */
-    public void joinPlayerNameConfirmation() throws IOException;
+    void joinPlayerNameConfirmation();
 
     /**
      * The user insert the name again, because the previous one is already used
+     * @throws IOException IO Exception
      */
-    public void joinPlayerNameAlreadyUsed() throws IOException;
+    void joinPlayerNameAlreadyUsed() throws IOException;
+
+    /**
+     * The user chooses the color and the position of its workers
+     * @param requestInfoMsg The list of available color and the available positions to choose
+     * @throws IOException IO Exception
+     */
+    void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
     /**
      * The user chooses the cell where to move
-     * @param cellListMsg
+     * @param cellListMsg The list of available cell/s where it's possible to move
+     * @throws IOException IO Exception
      */
-    public void move(CellListMsg cellListMsg) throws IOException;
+    void move(CellListMsg cellListMsg) throws IOException;
 
     /**
      * The user chooses the cell where to build
-     * @param cellListMsg
+     * @param cellListMsg The list of available cell/s where it's possible to build
+     * @throws IOException IO Exception
      */
-    public void build(CellListMsg cellListMsg) throws IOException;
+    void build(CellListMsg cellListMsg) throws IOException;
+
+    /**
+     * Update the shown information of the board
+     */
+    void updateBoard(UpdateBoardMsg updateBoardMsg);
+
 }

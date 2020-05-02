@@ -21,6 +21,8 @@ public class ClientHandler implements Runnable {
 
     private ObjectOutputStream outgoing;
 
+    private boolean running;
+
     /**
      * Handler of game commands
      */
@@ -34,6 +36,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket client)
     {
         this.socket = client;
+        this.running = true;
 
         try {
             this.incoming = new ObjectInputStream(client.getInputStream());
@@ -55,7 +58,7 @@ public class ClientHandler implements Runnable {
     @Override
     public void run()
     {
-        while (true) {
+        while (running) {
             try {
                 Message msg = (Message)incoming.readObject();
 
@@ -73,11 +76,14 @@ public class ClientHandler implements Runnable {
             }
             catch (IOException e) {
                 // TODO: manage exception
-                System.out.println("client " + socket.getInetAddress() + " connection dropped");
-                e.printStackTrace();
+                //System.out.println("client " + socket.getInetAddress() + " connection dropped");
+                //e.printStackTrace();
 
                 // notify the server that the client has disconnected
                 server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
+
+                // close socket
+                close();
             }
             catch (ClassNotFoundException e) {
                 // TODO: manage exception
@@ -106,13 +112,15 @@ public class ClientHandler implements Runnable {
      */
     public void close()
     {
-        try {
-            incoming.close();
-            outgoing.close();
-            socket.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        if (running) {
+            running = false; // TODO: handle multi threading
+            try {
+                incoming.close();
+                outgoing.close();
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp12.network.messages.CellListMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.messages.PlayerInfoMsg;
 import it.polimi.ingsw.psp12.network.messages.RequestInfoMsg;
+import it.polimi.ingsw.psp12.server.game.GameServer;
 import it.polimi.ingsw.psp12.server.game.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
@@ -31,9 +32,15 @@ public class Controller implements Observer<Message> {
      */
     private List<VirtualView> clients;
 
-    public Controller(GameState gameState) {
-        model = gameState;
-        clients = new ArrayList<>();
+    /**
+     * Server that has created the game
+     */
+    private GameServer server;
+
+    public Controller(GameState gameState, GameServer server) {
+        this.model = gameState;
+        this.server = server;
+        this.clients = new ArrayList<>();
     }
 
     public void addClient(ClientHandler client, String name) {
@@ -61,6 +68,13 @@ public class Controller implements Observer<Message> {
 
         // send request to the first user
         requestPlayerInfo();
+    }
+
+    /**
+     * Notify the server responsible for closing the room when the game ended
+     */
+    public void endGame() {
+        server.gameEnded();
     }
 
     @Override

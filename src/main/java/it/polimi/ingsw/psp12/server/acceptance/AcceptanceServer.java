@@ -118,6 +118,9 @@ public class AcceptanceServer implements Runnable, Server {
 
                 client.send(new Message(MsgCommand.CREATED));
                 break;
+            case DISCONNECTED:
+                System.out.println("client disconnected from acceptance server");
+                break;
         }
     }
 
@@ -139,14 +142,14 @@ public class AcceptanceServer implements Runnable, Server {
         int port = Constants.MATCHES_STARTING_PORT + rooms.size();
 
         // create room and assign port
-        Room room = new Room(name, maxPlayers, this);
+        Room room = new Room(name, maxPlayers);
         room.setAssignedPort(port);
         rooms.add(room);
 
         GameServer gameServer;
         try {
             // create game server
-            gameServer = new GameServer(room);
+            gameServer = new GameServer(room, this);
         }
         catch (IOException e) {
             System.out.println("failed to start game server on port " + port);
@@ -159,15 +162,20 @@ public class AcceptanceServer implements Runnable, Server {
         Thread thread = new Thread(gameServer, threadName);
         thread.start();
 
-        System.out.printf("game server started on port " + Constants.MATCHES_STARTING_PORT + "\n");
+        System.out.println("game created on port " + room.getAssignedPort() +
+                " [0/" + room.getMaxPlayersCount() + "]");
     }
 
     /**
      * Close the room of an ended game and remove it from the list of active rooms
-     * @param port port of the room to be removed
+     * @param room room to be removed
      */
-    public void gameEnded(int port) {
-        // remove the room with the specified port
-        rooms.removeIf(room -> (room.getAssignedPort() == port));
+    public void gameEnded(Room room) {
+        if (rooms.remove(room)) {
+            System.out.println("game " + room.getAssignedPort() + " closed successfully");
+        }
+        else {
+            System.out.printf("no game found on port " + room.getAssignedPort());
+        }
     }
 }

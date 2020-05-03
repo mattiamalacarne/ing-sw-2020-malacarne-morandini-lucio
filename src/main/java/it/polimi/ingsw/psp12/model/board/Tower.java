@@ -1,7 +1,5 @@
 package it.polimi.ingsw.psp12.model.board;
 
-import java.awt.*;
-
 /**
  * <p><b>Class</b> that represent a tower</p>
  *

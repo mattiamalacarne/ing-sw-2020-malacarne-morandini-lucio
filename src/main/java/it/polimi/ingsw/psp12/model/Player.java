@@ -33,7 +33,7 @@ public class Player
     /**
      * Get the selected worker
      * @param index the index in the list of the current player's worker
-     * @return the corrisponding worker in the list
+     * @return the corresponding worker in the list
      */
     public Worker getWorker(int index) {
         return workers[index];
@@ -42,7 +42,7 @@ public class Player
     /**
      * update the position of the moved worker
      * @param index the worker that is moving
-     * @param pos new worler position in the board
+     * @param pos new worker position in the board
      */
     public void updateWorkerPosition(int index, Cell pos) {
         workers[index].move(pos);
@@ -66,7 +66,7 @@ public class Player
 
     /**
      * set the player power depending of his card
-     * @param pow the new poer of the player
+     * @param pow the new power of the player
      */
     public void setPower(Power pow) {
         this.power = pow;

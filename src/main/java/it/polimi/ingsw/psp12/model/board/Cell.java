@@ -2,8 +2,6 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
-import java.util.Objects;
-
 /**
  * Class that represents a cell of the board
  * Holds references to the tower and worker positioned on it

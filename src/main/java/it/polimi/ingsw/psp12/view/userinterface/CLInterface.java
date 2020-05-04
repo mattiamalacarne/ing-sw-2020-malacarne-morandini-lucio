@@ -131,7 +131,6 @@ public class CLInterface implements UserInterface
                     messageHandler.setGamePort(roomList.getRooms().get(choice).getAssignedPort());
 
                     System.out.println("What's you name: ");
-                    //FIXME: senza il new scanner dà errore
                     cmdIn= new Scanner(System.in);
                     String playerName = cmdIn.nextLine();
                     messageHandler.sendToServer(new JoinMsg(playerName));
@@ -180,7 +179,7 @@ public class CLInterface implements UserInterface
 
         System.out.println("Choose the position of the first worker:");
         for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-            System.out.println(c+ "]" + requestInfoMsg.getAvailablePositions().get(c).toString());
+            System.out.printf("%2d] %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
         }
         int worker1Position;
         do {
@@ -193,7 +192,7 @@ public class CLInterface implements UserInterface
         //FIXME: va bene fare qui il controllo sulla scelta della stessa cella da parte dell'utente? (worker1Position==worker2Position)
         System.out.println("Choose the position of the second worker:");
         for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-            System.out.println(c+ "]" + requestInfoMsg.getAvailablePositions().get(c).toString());
+            System.out.printf("%2d] %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
         }
         int worker2Position;
         do {

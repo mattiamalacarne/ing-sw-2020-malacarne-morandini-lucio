@@ -123,6 +123,9 @@ public class MessageHandler implements Observer<Message>
                 break;
 
             //Game commands
+            case BOARD_UPDATE:
+                userInterface.updateBoard( (UpdateBoardMsg) message );
+                break;
             case MOVE:
                 userInterface.move( (CellListMsg) message );
                 break;
@@ -134,11 +137,7 @@ public class MessageHandler implements Observer<Message>
                 break;
             case CELL_LIST:  /*(CellListMsg) message;*/
                 break;
-
             case SELECTED_CELL:  /*(SelectCellMsg) message;*/
-                break;
-            case BOARD_UPDATE:
-                userInterface.updateBoard( (UpdateBoardMsg) message );
                 break;
             default: throw new MessageTypeNotFoundException();
         }

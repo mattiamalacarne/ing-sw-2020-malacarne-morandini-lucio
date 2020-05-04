@@ -19,8 +19,8 @@ public class CLIBoardGenerator {
     /**
      * Strings used to format text
      */
-    static String upperStringFormat = "%-24s";
-    static String innerStringFormat = " %-20s ";
+    static String cellFormat = "# %-20s "; // meglio █ ?
+    static String testLastCellFormat = "# %-20s #";
 
     public CLIBoardGenerator(Board board) {
         this.board = board;
@@ -36,6 +36,7 @@ public class CLIBoardGenerator {
     private String colorString(String string, Color color){
 
         final String ANSI_RESET   = "\u001B[0m";
+        final String ANSI_WHITE   = "\u001B[37m";
         final String ANSI_RED     = "\u001B[31m";
         final String ANSI_YELLOW  = "\u001B[33m";
         final String ANSI_GREEN   = "\u001B[32m";
@@ -43,13 +44,13 @@ public class CLIBoardGenerator {
 
         switch (color){
             case RED:
-                return  ANSI_RED + string + ANSI_RESET;
+                return  ANSI_RED + string + ANSI_RESET      + "              ";
             case GREEN:
-                return  ANSI_GREEN + string + ANSI_RESET;
+                return  ANSI_GREEN + string + ANSI_RESET    + "              ";
             case YELLOW:
-                return  ANSI_YELLOW + string + ANSI_RESET;
+                return  ANSI_YELLOW + string + ANSI_RESET   + "              ";
             case BLUE:
-                return  ANSI_BLUE + string + ANSI_RESET;
+                return  ANSI_BLUE + string + ANSI_RESET     + "              ";
             default:
                 return string;
         }
@@ -57,7 +58,10 @@ public class CLIBoardGenerator {
 
     //Upper_Bottom border
     private void makeBorder(StringBuilder boardString){
-        boardString.append(String.format(upperStringFormat,"#"));
+//        boardString.append(String.format(upperStringFormat,"#"));
+        for (int c=0; c<23; c++){
+            boardString.append('#'); //meglio ■ ?
+        }
     }
 
     //INFO LEVEL: coordinate
@@ -66,9 +70,7 @@ public class CLIBoardGenerator {
         int x = cell.getLocation().getX();
         int y = cell.getLocation().getY();
 
-        boardString.append("#"); //meglio ■ ?
-        boardString.append(String.format(innerStringFormat,"["+ x + "," + y + "]"));
-        boardString.append("#");
+        boardString.append(String.format(cellFormat,"["+ x + "," + y + "]"));
     }
 
     //LEVEL 3: player or cupola
@@ -78,41 +80,41 @@ public class CLIBoardGenerator {
             //there is a worker on level 3
             if (cell.hasWorker()){
                 //FIXME: nome player
-                boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
+                boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
             }
 
             //there is a dome
             else if (cell.getTower().hasDome()){
-                boardString.append(String.format(innerStringFormat,"    ^  ")); //meglio ▲ ?
+                boardString.append(String.format(cellFormat,"    ^  ")); //meglio ▲ ?
             }
 
         }else {
-            boardString.append(String.format(innerStringFormat,""));
+            boardString.append(String.format(cellFormat,""));
         }
+
     }
 
     //LEVEL 2: player or build
     private void makeLine3(StringBuilder boardString, Cell cell){
-        if (cell.hasWorker() && cell.getTower().getLevel()==2){
+        if (cell.hasWorker() && cell.getTower().getLevel()==3){
             //FIXME: nome player
-            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()!=0){
-            boardString.append(String.format(innerStringFormat, "-"));
+            boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()>1){
+            boardString.append(String.format(cellFormat, "-"));
         }else {
-            boardString.append(String.format(innerStringFormat, ""));
+            boardString.append(String.format(cellFormat, ""));
         }
-
     }
 
     //LEVEL 1: player or build
     private void makeLine4(StringBuilder boardString, Cell cell){
-        if (cell.hasWorker() && cell.getTower().getLevel()==1){
+        if (cell.hasWorker() && cell.getTower().getLevel()==2){
             //FIXME: nome player
-            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()!=0){
-            boardString.append(String.format(innerStringFormat, "-"));
+            boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()>1){
+            boardString.append(String.format(cellFormat, "-"));
         }else {
-            boardString.append(String.format(innerStringFormat, ""));
+            boardString.append(String.format(cellFormat, ""));
         }
     }
 
@@ -120,11 +122,11 @@ public class CLIBoardGenerator {
     private void makeLine5(StringBuilder boardString, Cell cell){
         if (cell.hasWorker() && cell.getTower().getLevel()==0){
             //FIXME: nome player
-            boardString.append(String.format(innerStringFormat, colorString("nome player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()==0){
-            boardString.append(String.format(innerStringFormat, "-"));
+            boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
+        }else if (cell.getTower().getLevel()==1){
+            boardString.append(String.format(cellFormat, "-"));
         }else {
-            boardString.append(String.format(innerStringFormat, ""));
+            boardString.append(String.format(cellFormat, ""));
         }
     }
 
@@ -132,37 +134,58 @@ public class CLIBoardGenerator {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (int y=0; y<5; y++){
+        for (int row=0; row<5; row++){
 
-            makeBorder(stringBuilder);
-            stringBuilder.append("\n");
-
-            for (int x=0; x<5; x++){
-                makeLine1(stringBuilder, board.getCell(new Point(x,y)));
+            for (int column=0; column<5; column++){
+                makeBorder(stringBuilder);
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
             }
-            stringBuilder.append("\n");
 
-            for (int x=0; x<5; x++){
-                makeLine2(stringBuilder, board.getCell(new Point(x,y)));
+            for (int column=0; column<5; column++){
+                makeLine1(stringBuilder, board.getCell(new Point(column,row)));
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
             }
-            stringBuilder.append("\n");
 
-            for (int x=0; x<5; x++){
-                makeLine3(stringBuilder, board.getCell(new Point(x,y)));
+            for (int column=0; column<5; column++){
+                makeLine2(stringBuilder, board.getCell(new Point(column,row)));
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
             }
-            stringBuilder.append("\n");
 
-            for (int x=0; x<5; x++){
-                makeLine4(stringBuilder, board.getCell(new Point(x,y)));
+            for (int column=0; column<5; column++){
+                makeLine3(stringBuilder, board.getCell(new Point(column,row)));
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
             }
-            stringBuilder.append("\n");
 
-            for (int x=0; x<5; x++){
-                makeLine5(stringBuilder, board.getCell(new Point(x,y)));
+            for (int column=0; column<5; column++){
+                makeLine4(stringBuilder, board.getCell(new Point(column,row)));
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
             }
-            stringBuilder.append("\n");
 
-            makeBorder(stringBuilder);
+            for (int column=0; column<5; column++){
+                makeLine5(stringBuilder, board.getCell(new Point(column,row)));
+                if (column==4){
+                    stringBuilder.append("#\n"); //meglio █ ?
+                }
+            }
+
+            if (row==4){
+                for (int column=0; column<5; column++){
+                    makeBorder(stringBuilder);
+                    if (column==4){
+                        stringBuilder.append("#\n"); //meglio ■ ?
+                    }
+                }
+            }
 
         }
 

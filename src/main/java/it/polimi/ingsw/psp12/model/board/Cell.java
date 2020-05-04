@@ -2,12 +2,14 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
+import java.io.Serializable;
+
 /**
  * Class that represents a cell of the board
  * Holds references to the tower and worker positioned on it
  * @author Luca Morandini
  */
-public class Cell
+public class Cell implements Serializable
 {
     /**
      * Reference to the tower on the cell

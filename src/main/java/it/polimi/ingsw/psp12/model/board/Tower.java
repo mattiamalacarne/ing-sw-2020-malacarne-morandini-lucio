@@ -1,12 +1,14 @@
 package it.polimi.ingsw.psp12.model.board;
 
+import java.io.Serializable;
+
 /**
  * <p><b>Class</b> that represent a tower</p>
  *
  * @author Mattia Malacarne
  */
 
-public class Tower
+public class Tower implements Serializable
 {
     private int level;
     private boolean dome;

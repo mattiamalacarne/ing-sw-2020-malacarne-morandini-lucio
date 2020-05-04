@@ -3,13 +3,15 @@ package it.polimi.ingsw.psp12.model;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.utils.Color;
 
+import java.io.Serializable;
+
 /**
  * <p><b>Class</b> that represent a worker</p>
  *
  * @author Mattia Malacarne
  */
 
-public class Worker
+public class Worker implements Serializable
 {
     private Cell position;
 

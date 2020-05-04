@@ -9,10 +9,10 @@ public class MoveAgainDecorator extends ExtendedPowerDecorator {
         this.power = power;
     }
 
-    @Override
+    /*@Override
     public int getMovesCount() {
         //It's possible to do a second move action
         return power.getMovesCount() + 1;
-    }
+    }*/
 
 }

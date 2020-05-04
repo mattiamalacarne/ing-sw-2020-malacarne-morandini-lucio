@@ -20,12 +20,15 @@ public enum MsgCommand {
     /** Game commands **/
     REQUEST_INFO(MsgType.GAME),
     PLAYER_INFO(MsgType.GAME),
-    MOVE(MsgType.GAME),
-    BUILD(MsgType.GAME),
+    ACTIONS_LIST(MsgType.GAME),
+    SELECT_ACTION(MsgType.GAME),
+    TURN_ENDED(MsgType.GAME),
+    MOVE(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
+    BUILD(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
     CELL_LIST(MsgType.GAME),
     SELECTED_CELL(MsgType.GAME),
     BOARD_UPDATE(MsgType.GAME),
-    CELL_REQUEST(MsgType.GAME);
+    CELL_REQUEST(MsgType.GAME); // TODO: remove
 
     /** Determine if this is a system or game message **/
     private MsgType type;

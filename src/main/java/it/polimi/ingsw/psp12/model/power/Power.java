@@ -24,10 +24,10 @@ public abstract class Power {
      */
     int maxClimbLevel;
 
-    /**
+    /*/**
      * max number of possible movement distance in cells
      */
-    int maxMoves;
+    //int maxMoves; // TODO: can be removed? the dedicated power can work with just 'movesCount'
 
     /**
      * max possible building levels to build
@@ -40,19 +40,19 @@ public abstract class Power {
     int minDomeLevel;
 
     /**
-     * max number of possible movements action
+     * number of move actions that the player performed in the current turn
      */
     int movesCount;
 
     /**
-     * max number of possible build action
+     * number of build actions that the player performed in the current turn
      */
     int buildsCount;
 
     /**
      * cell of the last occupied position
      */
-    Cell lastPosition;
+    Cell lastPosition; // TODO: store last two positions?
 
     /**
      * cell of the last build
@@ -76,12 +76,20 @@ public abstract class Power {
     }
 
     /**
+     * Setter of the max level to climb in move
+     * @param maxClimbLevel max level to climb in move
+     */
+    public void setMaxClimbLevel(int maxClimbLevel) {
+        this.maxClimbLevel = maxClimbLevel;
+    }
+
+    /*/**
      * Getter of the max number of possible movement distance in cells
      * @return max number of possible movement distance in cells
      */
-    public int getMaxMoves() {
+    /*public int getMaxMoves() {
         return maxMoves;
-    }
+    }*/
 
     /**
      * Getter of the max possible building levels to build
@@ -100,16 +108,16 @@ public abstract class Power {
     }
 
     /**
-     * Getter of the max number of possible movements action
-     * @return max number of possible movements action
+     * Getter of the move actions that the player performed in the current turn
+     * @return count of move actions
      */
     public int getMovesCount() {
         return movesCount;
     }
 
     /**
-     * Getter of the max number of possible build action
-     * @return max number of possible build action
+     * Getter of the build actions that the player performed in the current turn
+     * @return count of build actions
      */
     public int getBuildsCount() {
         return buildsCount;
@@ -121,44 +129,31 @@ public abstract class Power {
      */
     public int getNextPlayerMaxClimb(){
         return 1;
-    };
+    }
 
     /**
      * Checks victory condition
      * @return true if player has won
      */
-    public boolean checkVictory(){
-        //FIXME: controllare condizione di vittoria
-        return false;
-    };
+    public boolean checkVictory() { return false; }
 
-    public void moved(Cell newPosition){
+    //public void moved(Cell newPosition) { }
 
+    public List<Cell> getPossibleMoves(Board b, Worker w) { return null; }
+
+    public List<Cell> getPossibleBuilds(Board b, Worker w) { return null; }
+
+    public List<Action> nextActions(TurnState turnState) { return null; }
+
+    public void updateLastPosition(Cell position) {
+        this.lastPosition = position;
+        movesCount++;
     }
 
-    public Cell[] getPossibleMoves(Board b, Worker w){
-        //TODO: temp return
-        return null;
-    };
-
-    public Cell[] getPossibleBuilds(Board b, Worker w){
-        //TODO: temp return
-        return null;
-    };
-
-    public List<Action> nextAction(TurnState turnState){
-        //TODO: temp return
-        return null;
-    };
-
-    public void updateLastPosition(Cell position){
-
+    public void updateLastBuild(Cell position) {
+        this.lastBuild = position;
+        buildsCount++;
     }
 
-    public void updateLastBuild(Cell position){
-
-    }
-
-
-
+    public void reset() { }
 }

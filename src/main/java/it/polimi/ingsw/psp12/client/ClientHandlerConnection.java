@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * <p><b>Class</b> responsable for the connection with the main server</p>
+ * <p><b>Class</b> responsible for the connection with the main server</p>
  *
  * @author Mattia Malacarne
  */
@@ -20,6 +20,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     private Socket clientSocket;
     private ObjectOutputStream output_stream;
     private ObjectInputStream input_stream;
+    private Boolean running;
 
 
     /**
@@ -29,6 +30,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     public ClientHandlerConnection(ServerInfo server)
     {
         this.serverInfo = server;
+        running = true;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
 
             input_stream = new ObjectInputStream(clientSocket.getInputStream());
 
-            while (true){
+            while (running){
 
                 Message msg = (Message) input_stream.readObject();
                 notifyObservers(msg);
@@ -58,13 +60,24 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
 
     }
 
+    /**
+     * Send a message through the socket connection
+     * @param msg The message to be sent
+     * @throws IOException IO Exception
+     */
     public void sendRequestToServer(Message msg) throws IOException
     {
         output_stream.writeObject(msg);
         output_stream.flush();
     }
 
-    public Socket getClientSocket() {
-        return clientSocket;
+    /**
+     * Closes the active socket
+     * @throws IOException IO Exception
+     */
+    public void close() throws IOException {
+        running = false;
+        clientSocket.close();
     }
+
 }

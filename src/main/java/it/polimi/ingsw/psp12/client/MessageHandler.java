@@ -67,7 +67,7 @@ public class MessageHandler implements Observer<Message>
         ServerInfo updatedServerInfo = new ServerInfo(this.serverInfo.serverIp, gamePort);
 
         //Closes the socket of the lobby (Acceptance room)
-        clientHandlerConnection.getClientSocket().close();
+        clientHandlerConnection.close();
 
         //New ClientHandlerConnection that opens a new socket on the port of the new room
         clientHandlerConnection = new ClientHandlerConnection(updatedServerInfo);

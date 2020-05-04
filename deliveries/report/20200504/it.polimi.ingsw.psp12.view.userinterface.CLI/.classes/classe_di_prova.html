@@ -1,0 +1,110 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: classe_di_prova</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.CLI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: classe_di_prova (it.polimi.ingsw.psp12.view.userinterface.CLI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">classe_di_prova</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.CLI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Board;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Point;
+<i>5</i>&nbsp;
+<b class="nc"><i>6</i>&nbsp;public class classe_di_prova {</b>
+<i>7</i>&nbsp;    public static void main(String[] args) {
+<i>8</i>&nbsp;
+<b class="nc"><i>9</i>&nbsp;        Board board = new Board();</b>
+<i>10</i>&nbsp;
+<b class="nc"><i>11</i>&nbsp;        board.getCell(new Point(1,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>12</i>&nbsp;        board.getCell(new Point(1,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>13</i>&nbsp;        board.getCell(new Point(1,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>14</i>&nbsp;        board.getCell(new Point(1,1)).getTower().incrementLevel();</b>
+<i>15</i>&nbsp;
+<b class="nc"><i>16</i>&nbsp;        board.getCell(new Point(2,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>17</i>&nbsp;        board.getCell(new Point(2,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>18</i>&nbsp;        board.getCell(new Point(2,1)).getTower().incrementLevel();</b>
+<b class="nc"><i>19</i>&nbsp;        board.getCell(new Point(2,1)).getTower().incrementLevel();</b>
+<i>20</i>&nbsp;
+<b class="nc"><i>21</i>&nbsp;        CLIBoardGenerator cliBoardGenerator = new CLIBoardGenerator(board);</b>
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;        System.out.println(cliBoardGenerator.toString());</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-04 23:15</div>
+</div>
+</body>
+</html>

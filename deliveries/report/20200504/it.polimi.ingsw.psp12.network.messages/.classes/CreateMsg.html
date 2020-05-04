@@ -1,0 +1,121 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CreateMsg</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CreateMsg (it.polimi.ingsw.psp12.network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CreateMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * Class used to pass information to the server for creating a new room
+<i>7</i>&nbsp; * @author Luca Morandini
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class CreateMsg extends Message {
+<i>10</i>&nbsp;    /**
+<i>11</i>&nbsp;     * Name of the room
+<i>12</i>&nbsp;     */
+<i>13</i>&nbsp;    String roomName;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * Max number of players that can join the game
+<i>17</i>&nbsp;     */
+<i>18</i>&nbsp;    int maxPlayersCount;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * Construct the message
+<i>22</i>&nbsp;     * @param roomName name of the room
+<i>23</i>&nbsp;     * @param maxPlayersCount max number of players of the game
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public CreateMsg(String roomName, int maxPlayersCount) {
+<b class="nc"><i>26</i>&nbsp;        super(MsgCommand.CREATE);</b>
+<b class="nc"><i>27</i>&nbsp;        this.roomName = roomName;</b>
+<b class="nc"><i>28</i>&nbsp;        this.maxPlayersCount = maxPlayersCount;</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public String getRoomName() {
+<b class="nc"><i>32</i>&nbsp;        return roomName;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public int getMaxPlayersCount() {
+<b class="nc"><i>36</i>&nbsp;        return maxPlayersCount;</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-04 23:15</div>
+</div>
+</body>
+</html>

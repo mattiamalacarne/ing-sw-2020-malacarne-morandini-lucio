@@ -100,7 +100,7 @@ public class CLIBoardGenerator {
             //FIXME: nome player
             boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
         }else if (cell.getTower().getLevel()>1){
-            boardString.append(String.format(cellFormat, "-"));
+            boardString.append(String.format(cellFormat, "-").replace(" ","-"));
         }else {
             boardString.append(String.format(cellFormat, ""));
         }
@@ -112,7 +112,7 @@ public class CLIBoardGenerator {
             //FIXME: nome player
             boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
         }else if (cell.getTower().getLevel()>1){
-            boardString.append(String.format(cellFormat, "-"));
+            boardString.append(String.format(cellFormat, "-").replace(" ","-"));
         }else {
             boardString.append(String.format(cellFormat, ""));
         }
@@ -123,8 +123,8 @@ public class CLIBoardGenerator {
         if (cell.hasWorker() && cell.getTower().getLevel()==0){
             //FIXME: nome player
             boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()==1){
-            boardString.append(String.format(cellFormat, "-"));
+        }else if (cell.getTower().getLevel()>=1){
+            boardString.append(String.format(cellFormat, "-").replace(" ","-"));
         }else {
             boardString.append(String.format(cellFormat, ""));
         }

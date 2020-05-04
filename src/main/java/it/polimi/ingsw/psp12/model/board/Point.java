@@ -1,10 +1,12 @@
 package it.polimi.ingsw.psp12.model.board;
 
+import java.io.Serializable;
+
 /**
  * Class that is used to hold information of a coordinate on the map
  * @author Luca Morandini
  */
-public class Point
+public class Point implements Serializable
 {
     /**
      * Column index

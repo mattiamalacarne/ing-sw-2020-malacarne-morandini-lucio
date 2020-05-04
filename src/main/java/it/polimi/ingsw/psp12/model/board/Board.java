@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Class that manages the game board and gives access to the cells
  * @author Luca Morandini
  */
-public class Board
+public class Board implements Serializable
 {
     /**
      * Matrix of cells that compose the game board

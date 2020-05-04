@@ -9,6 +9,7 @@ public enum MsgCommand {
     ROOMS(MsgType.SYSTEM), // response with a list of available rooms
     CREATE(MsgType.SYSTEM), // create a new room
     CREATED(MsgType.SYSTEM), // confirm creation of a new room
+    CREATE_FAILED(MsgType.SYSTEM), // notify user that a room has not been created
     JOIN(MsgType.SYSTEM), // join an existing room
     JOINED(MsgType.SYSTEM), // confirm that user has joined a game
     INVALID_NICKNAME(MsgType.SYSTEM), // nickname provided by the user is already taken

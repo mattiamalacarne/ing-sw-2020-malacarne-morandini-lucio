@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.power.Power;
 import it.polimi.ingsw.psp12.utils.Color;
 
@@ -44,7 +45,7 @@ public class Player
      * @param index the worker that is moving
      * @param pos new worker position in the board
      */
-    public void updateWorkerPosition(int index, Cell pos) {
+    public void updateWorkerPosition(int index, Point pos) {
         workers[index].move(pos);
     }
 
@@ -84,7 +85,7 @@ public class Player
             workers[i].setColor(color);
 
             // place worker on the board
-            updateWorkerPosition(i, cells[i]);
+            updateWorkerPosition(i, cells[i].getLocation());
             cells[i].addWorker(workers[i]);
         }
 

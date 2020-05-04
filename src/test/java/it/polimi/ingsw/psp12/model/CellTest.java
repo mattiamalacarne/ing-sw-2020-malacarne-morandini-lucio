@@ -114,7 +114,7 @@ public class CellTest {
     public void addWorker_ShouldAddWorker() {
         Cell c1 = new Cell(1, 1);
         Worker w1 = new Worker();
-        w1.move(c1);
+        w1.move(c1.getLocation());
 
         // check initial state
         assertFalse(c1.hasWorker());
@@ -130,7 +130,7 @@ public class CellTest {
     public void removeWorker_ShouldRemoveAndReturnWorker() {
         Cell c1 = new Cell(1, 1);
         Worker w1 = new Worker();
-        w1.move(c1);
+        w1.move(c1.getLocation());
         c1.addWorker(w1);
 
         // check initial state

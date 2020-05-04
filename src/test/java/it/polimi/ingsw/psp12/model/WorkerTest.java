@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp12.model;
 
-import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,29 +13,29 @@ public class WorkerTest {
     @Before
     public void setUp() {
         w1 = new Worker();
-        w1.move(new Cell(0, 2));
+        w1.move(new Point(0, 2));
     }
 
     @Test
     public void getPosition_ShouldReturnCurrentCell() {
-        Cell c1 = w1.getPosition();
+        Point c1 = w1.getPosition();
 
         assertNotNull(c1);
-        assertEquals(0, c1.getLocation().getX());
-        assertEquals(2, c1.getLocation().getY());
+        assertEquals(0, c1.getX());
+        assertEquals(2, c1.getY());
     }
 
     @Test
     public void move_ShouldUpdateCurrentCell() {
-        Cell newCell = new Cell(3, 1);
+        Point newPoint = new Point(3, 1);
         // check initial state
-        assertEquals(0, w1.getPosition().getLocation().getX());
-        assertEquals(2, w1.getPosition().getLocation().getY());
+        assertEquals(0, w1.getPosition().getX());
+        assertEquals(2, w1.getPosition().getY());
 
-        w1.move(newCell);
+        w1.move(newPoint);
 
         // check final state
-        assertEquals(3, w1.getPosition().getLocation().getX());
-        assertEquals(1, w1.getPosition().getLocation().getY());
+        assertEquals(3, w1.getPosition().getX());
+        assertEquals(1, w1.getPosition().getY());
     }
 }

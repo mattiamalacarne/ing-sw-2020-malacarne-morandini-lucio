@@ -48,4 +48,17 @@ public class Worker implements Serializable
     public Color getColor() {
         return color;
     }
+
+    /**
+     * Returns a clone of the worker
+     * @return worker clone
+     */
+    public Worker clone() {
+        Worker w = new Worker();
+        w.color = this.color;
+        if (this.position != null) {
+            w.position = this.position.clone();
+        }
+        return w;
+    }
 }

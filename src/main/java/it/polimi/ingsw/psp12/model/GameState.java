@@ -69,7 +69,7 @@ public class GameState extends Observable<Message>
      * @return game board
      */
     public Board getGameBoard() {
-        return gameBoard;
+        return gameBoard.clone();
     }
 
     /**

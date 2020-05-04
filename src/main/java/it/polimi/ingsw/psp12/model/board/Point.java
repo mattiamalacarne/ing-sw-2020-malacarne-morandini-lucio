@@ -72,4 +72,12 @@ public class Point implements Serializable
         return  "x = " + x +
                 ", y = " + y ;
     }
+
+    /**
+     * Returns a clone of the point
+     * @return point clone
+     */
+    public Point clone() {
+        return new Point(this.x, this.y);
+    }
 }

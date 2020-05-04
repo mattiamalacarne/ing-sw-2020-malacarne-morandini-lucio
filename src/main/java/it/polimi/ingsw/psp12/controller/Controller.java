@@ -145,6 +145,8 @@ public class Controller implements Observer<Message> {
 
         // send request to the current user
         sendToPlayer(model.getCurrentPlayer(), request);
+
+        System.out.println("requested info to player " + model.getCurrentPlayer().getId());
     }
 
     /**
@@ -154,6 +156,8 @@ public class Controller implements Observer<Message> {
     void processPlayerInfo(PlayerInfoMsg msg) {
         // update model with the
         model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions());
+
+        System.out.println("player " + model.getCurrentPlayer().getId() + " initialized");
 
         // check if all players have been initialized
         if (!model.isInitialized()) {
@@ -169,6 +173,7 @@ public class Controller implements Observer<Message> {
         model.initGame();
 
         // TODO: start playing process
+        System.out.println("players initialized, the game can start");
     }
 
     /**

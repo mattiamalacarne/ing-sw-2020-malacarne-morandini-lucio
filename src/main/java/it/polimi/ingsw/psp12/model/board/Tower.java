@@ -45,4 +45,15 @@ public class Tower implements Serializable
     public boolean hasDome() {
         return dome;
     }
+
+    /**
+     * Returns a clone of the tower
+     * @return tower clone
+     */
+    public Tower clone() {
+        Tower t = new Tower();
+        t.level = this.level;
+        t.dome = this.dome;
+        return t;
+    }
 }

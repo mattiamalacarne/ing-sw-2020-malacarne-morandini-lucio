@@ -94,4 +94,18 @@ public class Board implements Serializable
 
         return cells;
     }
+
+    /**
+     * Returns a clone of the board
+     * @return board clone
+     */
+    public Board clone() {
+        Board b = new Board();
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                b.boardCells[x][y] = this.boardCells[x][y].clone();
+            }
+        }
+        return b;
+    }
 }

@@ -86,7 +86,7 @@ public class Cell implements Serializable
      * @return the location
      */
     public Point getLocation() {
-        return new Point(location.getX(), location.getY());
+        return location.clone();
     }
 
     /**
@@ -117,5 +117,18 @@ public class Cell implements Serializable
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
         return location.equals(cell.location);
+    }
+
+    /**
+     * Returns a clone of the cell
+     * @return cell clone
+     */
+    public Cell clone() {
+        Cell c = new Cell(this.location.getX(), this.location.getY());
+        c.tower = this.tower.clone();
+        if (this.worker != null) {
+            c.worker = this.worker.clone();
+        }
+        return c;
     }
 }

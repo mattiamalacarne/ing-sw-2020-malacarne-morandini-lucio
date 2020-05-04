@@ -116,9 +116,10 @@ public class CLInterface implements UserInterface
             //TODO: inserire possibilità di ritornare alla creazione stanze
             System.out.println("Choose a room where to enter:");
             for (int c=0; c< roomList.getRooms().size(); c++){
-                System.out.println(c + "] " + roomList.getRooms().get(c).getName() +
-                        " [" + roomList.getRooms().get(c).getPlayersCount() + "/" +
-                               roomList.getRooms().get(c).getMaxPlayersCount() + "]");
+                System.out.printf("%d) %s [%d/%d] \n" , c , roomList.getRooms().get(c).getName() ,
+                                                            roomList.getRooms().get(c).getPlayersCount() ,
+                                                            roomList.getRooms().get(c).getMaxPlayersCount()
+                );
             }
 
             int choice;
@@ -167,7 +168,7 @@ public class CLInterface implements UserInterface
 
         System.out.println("Choose a color:");
         for (int c=0; c<requestInfoMsg.getAvailableColors().size();c++){
-            System.out.println(c + "] " + requestInfoMsg.getAvailableColors().get(c).toString());
+            System.out.printf("%d) %s\n", c, requestInfoMsg.getAvailableColors().get(c).toString());
         }
         int colorChoice;
         do {
@@ -179,7 +180,7 @@ public class CLInterface implements UserInterface
 
         System.out.println("Choose the position of the first worker:");
         for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-            System.out.printf("%2d] %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
+            System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
         }
         int worker1Position;
         do {
@@ -212,7 +213,7 @@ public class CLInterface implements UserInterface
 
         System.out.println("Where do you want to move?");
         for (int c=0; c< cellListMsg.getCellList().size(); c++){
-            System.out.println(c + "] " + cellListMsg.getCellList().get(c).getLocation().toString());
+            System.out.printf("%d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
         }
 
         int choice;
@@ -232,7 +233,7 @@ public class CLInterface implements UserInterface
 
         System.out.println("Where do you want to build?");
         for (int c=0; c< cellListMsg.getCellList().size(); c++){
-            System.out.println(c + "] " + cellListMsg.getCellList().get(c).getLocation().toString());
+            System.out.printf("%d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
         }
 
         int choice;

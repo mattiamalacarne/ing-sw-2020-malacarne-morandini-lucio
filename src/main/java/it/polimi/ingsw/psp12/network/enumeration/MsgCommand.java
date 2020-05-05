@@ -21,7 +21,7 @@ public enum MsgCommand {
     REQUEST_INFO(MsgType.GAME),
     PLAYER_INFO(MsgType.GAME),
     ACTIONS_LIST(MsgType.GAME),
-    SELECT_ACTION(MsgType.GAME),
+    SELECTED_ACTION(MsgType.GAME),
     TURN_ENDED(MsgType.GAME),
     MOVE(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
     BUILD(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL

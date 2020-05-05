@@ -45,15 +45,28 @@ public class Player
     /**
      * update the position of the moved worker
      * @param pos new worker position in the board
+     * @return old position of the worker
      */
-    public void updateWorkerPosition(Point pos) {
+    public Point updateWorkerPosition(Point pos) {
+        // store the old position that will be returned after the update
+        Point oldPoint = workers[currentWorker].getPosition();
+
         workers[currentWorker].move(pos);
+        return oldPoint;
     }
 
+    /**
+     * Select the worker that will be used during the current turn
+     * @param index index of the worker
+     */
     public void selectCurrentWorker(int index) {
         currentWorker = index;
     }
 
+    /**
+     * Return the worker that is used during the current turn
+     * @return current worker
+     */
     public Worker getCurrentWorker() {
         return workers[currentWorker];
     }

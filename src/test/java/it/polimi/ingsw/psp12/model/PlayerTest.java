@@ -61,16 +61,28 @@ public class PlayerTest {
 
     @Test
     public void updateWorkerPosition_ShouldMoveWorker() {
+        // init
+        player.selectCurrentWorker(0);
+
         // check initial state
         assertNull(player.getWorker(0).getPosition());
         assertNull(player.getWorker(1).getPosition());
 
         // move
         Point p1 = new Point(0, 1);
-        player.updateWorkerPosition(0, p1);
+        player.updateWorkerPosition(p1);
+
+        // check intermediate state
+        assertEquals(p1, player.getWorker(0).getPosition());
+        assertNull(player.getWorker(1).getPosition());
+
+        // move
+        Point p2 = new Point(2, 3);
+        Point old = player.updateWorkerPosition(p2);
 
         // check final state
-        assertEquals(p1, player.getWorker(0).getPosition());
+        assertEquals(old, p1);
+        assertEquals(p2, player.getWorker(0).getPosition());
         assertNull(player.getWorker(1).getPosition());
     }
 }

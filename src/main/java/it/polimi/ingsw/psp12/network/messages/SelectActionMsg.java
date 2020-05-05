@@ -24,10 +24,18 @@ public class SelectActionMsg extends Message{
      * @param worker selected worker
      */
     public SelectActionMsg(Action action, int worker) {
-        super(MsgCommand.SELECT_ACTION);
+        super(MsgCommand.SELECTED_ACTION);
 
         this.action = action;
         this.worker = worker;
+    }
+
+    /**
+     * Create the message with the action selected by the user
+     * @param action selected action
+     */
+    public SelectActionMsg(Action action) {
+        this(action, -1);
     }
 
     public Action getAction() {

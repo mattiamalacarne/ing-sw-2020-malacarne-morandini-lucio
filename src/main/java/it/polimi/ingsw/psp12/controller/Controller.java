@@ -4,6 +4,7 @@ import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
@@ -92,20 +93,23 @@ public class Controller implements Observer<Message> {
                 // update model with the information provided by the user
                 processPlayerInfo((PlayerInfoMsg)message);
                 break;
-            case SELECT_ACTION:
-                actionSelected((SelectActionMsg)message);
+            case SELECTED_ACTION:
+                SelectActionMsg msg = (SelectActionMsg)message;
+
+                // select the worker at the start of the turn
+                if (model.getCurrentState() == TurnState.INIT) {
+                    model.selectCurrentWorker(msg.getWorker());
+
+                    System.out.println("player " + model.getCurrentPlayer().getId() + " selected worker " + msg.getWorker());
+                }
+
+                // manage the action selected by the user
+                actionSelected(msg.getAction());
                 break;
             case SELECTED_CELL:
+                // update model performing the action on the cell selected by the user
                 performAction((SelectCellMsg)message);
                 break;
-            //case MOVE:
-            //    move();
-            //    break;
-            //case BUILD:
-            //    //update after build
-            //    break;
-            //case CELL_REQUEST:
-            //    break;
         }
     }
 
@@ -117,17 +121,6 @@ public class Controller implements Observer<Message> {
     boolean checkActivePlayer(VirtualView view) {
         return view.getPlayer().equals(model.getCurrentPlayer());
     }
-
-    /**
-     * Generates the cells where it's possible to move
-     */
-    /*void move(){
-        ArrayList<Cell> possibleCells;
-        //TODO: initialize with possible cells where to move
-        possibleCells = new ArrayList<>(); //
-
-        new CellListMsg(possibleCells);
-    }*/
 
     /**
      * Requests to the current user to select a color and the initial position of the workers
@@ -173,9 +166,9 @@ public class Controller implements Observer<Message> {
         // all players are ready, the game can start
         model.initGame();
 
-        // TODO: start playing process
         System.out.println("players initialized, the game can start");
 
+        // initialize the turn for the current player and notify the client
         beginTurn();
     }
 
@@ -196,15 +189,18 @@ public class Controller implements Observer<Message> {
         vv.get().sendCommand(message);
     }
 
-
-
-
-
-
+    /**
+     * Send a message to the VirtualView associated with the current player
+     * @param message message to be sent
+     */
     void sendToCurrentPlayer(Message message) {
         sendToPlayer(model.getCurrentPlayer(), message);
     }
 
+    /**
+     * Initialize the turn for the current player
+     * and send to the client the list of actions that can be performed
+     */
     void beginTurn() {
         model.initTurn();
 
@@ -213,87 +209,129 @@ public class Controller implements Observer<Message> {
         sendToCurrentPlayer(new ActionsListMsg(model.nextActions()));
     }
 
-    void actionSelected(SelectActionMsg message) {
-        // activate the worker selected by the user
-        model.getCurrentPlayer().selectCurrentWorker(message.getWorker());
+    /**
+     * Execute the next action
+     * or end the current turn if there are no more action to be executed
+     * @param action current action to be executed
+     */
+    void actionSelected(Action action) {
+        if (action == Action.END) {
+            // no more action to be executed or
+            // user does not want to perform the extra action provided by the power
+            endCurrentTurn();
+            return;
+        }
 
-        System.out.println("player " + model.getCurrentPlayer().getId() + " selected worker " +
-                message.getWorker());
-
-        generateCellList(message.getAction());
-    }
-
-    void generateCellList(Action action) {
         // update the current state
         model.updateCurrentState(action);
 
-        // get list of cells for the current action
-        List<Cell> cells = model.getActionCellList();
+        // execute the next action and send to the user a list of possible cells
+        generateCellList();
+    }
 
-        System.out.println("generating possible moves [" + cells.size() + "] for player " +
-                model.getCurrentPlayer().getId());
+    /**
+     * Generate a list of possible cells for the current action and send the list to the client
+     * or determine if the current player has lost when can not perform the action
+     */
+    void generateCellList() {
+        // get list of cells for the current action
+        List<Cell> cells = null;
+        String act = "";
+        switch (model.getCurrentState()) {
+            case MOVE:
+                act = "move";
+                cells = model.getPossibleMoves();
+                break;
+            case BUILD:
+                act = "build";
+                cells = model.getPossibleBuilds();
+                break;
+        }
+
+        System.out.printf("generated cells for %s action [%d] for player %d\n",
+                act, cells.size(), model.getCurrentPlayer().getId());
 
         // check if the current player has lost
         // player has lost if can not perform an action
         if (cells.size() == 0) {
             System.out.println("player " + model.getCurrentPlayer().getId() + " has lost");
             // TODO: manage exit of a player
+            return;
         }
 
         // send list of cells to the current player
         sendToCurrentPlayer(new CellListMsg(cells));
     }
 
+    /**
+     * Update the model performing the action on the cell selected by the user
+     * and determine if the current player has won the game
+     * @param message
+     */
     void performAction(SelectCellMsg message) {
         // perform action based on current turn state
+        String act = "";
         switch (model.getCurrentState()) {
             case MOVE:
+                act = "moved";
                 model.move(message.getSelectedCell().getLocation());
                 break;
             case BUILD:
+                act = "has built";
                 model.build(message.getSelectedCell().getLocation());
                 break;
         }
 
-        // check if the current player has win
+        System.out.printf("player %d %s on cell %s\n",
+                model.getCurrentPlayer().getId(), act,
+                message.getSelectedCell().getLocation().toString());
+
+        // check if the current player has won
         if (model.checkVictory()) {
-            System.out.println("player " + model.getCurrentPlayer().getId() + " has win");
+            System.out.println("player " + model.getCurrentPlayer().getId() + " has won");
             // TODO: manage end of the game
             //endGame();
+            return;
         }
 
-        // determine what the current player can do
+        // determine what the current player can do next
         determineNextAction();
     }
 
+    /**
+     * Determine the next action that the current player can execute
+     * and ask to the client what to do if there are more than one choice
+     */
     void determineNextAction() {
         List<Action> actions = model.nextActions();
-        System.out.println("checking next possible actions [" + actions.size() + "] for player " +
-                model.getCurrentPlayer().getId());
 
-        // check if turn ended
-        if (actions.size() == 0) {
-            // no more action to do
-            endCurrentTurn();
+        System.out.printf("checking next possible actions [%d] for player %d\n",
+                actions.size(), model.getCurrentPlayer().getId());
+
+        // ask user what to do next if there are more than one action that can be executed
+        if (actions.size() > 1) {
+            System.out.println("more than one action possible, asking to the player " +
+                    model.getPreviousPlayer().getId() + " what to do next");
+
+            sendToCurrentPlayer(new ActionsListMsg(actions));
+            return;
         }
-        else if (actions.size() == 1) {
-            // process the next action
-            generateCellList(actions.get(0));
-        }
-        else {
-            // FIXME: remove after test, should never arrive here
-            // if there are more than one action, ask user what to do?
-            System.out.println("ehm... and now? what we have to do?");
-        }
+
+        // execute the next action or end the turn
+        actionSelected(actions.get(0));
     }
 
+    /**
+     * Notify the current player that the turn ended
+     * and initialize the turn of the next player
+     */
     void endCurrentTurn() {
         System.out.println("player " + model.getCurrentPlayer().getId() + " ended the turn");
 
         // notify the player that the turn ended
         sendToCurrentPlayer(new Message(MsgCommand.TURN_ENDED));
 
-        // go to the next turn
+        // go to the next player
         model.nextTurn();
 
         // initialize turn for the next player

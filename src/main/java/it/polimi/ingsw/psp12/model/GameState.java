@@ -151,20 +151,15 @@ public class GameState extends Observable<Message>
 
     /**
      * Updates the turn state
-     * @param s new state to be saved
+     * @param action action that determine the new state to be saved
      */
-    // TODO: this method can be removed and replaced with 'updateCurrentState'?
-    public void setCurrentState(TurnState s) {
-        state = s;
-    }
-
     public void updateCurrentState(Action action) {
         switch (action) {
             case MOVE:
-                setCurrentState(TurnState.MOVE);
+                state = TurnState.MOVE;
                 break;
             case BUILD:
-                setCurrentState(TurnState.BUILD);
+                state = TurnState.BUILD;
                 break;
         }
     }
@@ -183,20 +178,14 @@ public class GameState extends Observable<Message>
      * @param newPoint new position of the worker after the move
      */
     public void move(Point newPoint) {
-        // get current player
-        Player player = getCurrentPlayer();
-
-        // get position of the current worker
-        Point oldPoint = player.getCurrentWorker().getPosition();
+        // update position of the current worker and get the old position
+        Point oldPoint = getCurrentPlayer().updateWorkerPosition(newPoint);
 
         // update board
         gameBoard.move(oldPoint, newPoint);
 
-        // update position of the worker
-        player.getCurrentWorker().move(newPoint);
-
         // save last move in the power
-        player.getPower().updateLastPosition(gameBoard.getCell(newPoint));
+        getCurrentPlayer().getPower().moved(gameBoard.getCell(newPoint));
 
         // update board on the client
         notifyObservers(new UpdateBoardMsg(getGameBoard()));
@@ -211,7 +200,7 @@ public class GameState extends Observable<Message>
         gameBoard.build(pos);
 
         // save last build in the power
-        getCurrentPlayer().getPower().updateLastBuild(gameBoard.getCell(pos));
+        getCurrentPlayer().getPower().hasBuilt(gameBoard.getCell(pos));
 
         // update board on the client
         notifyObservers(new UpdateBoardMsg(getGameBoard()));
@@ -277,8 +266,13 @@ public class GameState extends Observable<Message>
     }
 
 
-
+    /**
+     * Initialize the turn for the current player and reset power parameters
+     */
     public void initTurn() {
+        // reset turn state
+        state = TurnState.INIT;
+
         // reset parameters before the current turn starts
         getCurrentPlayer().getPower().reset();
 
@@ -287,6 +281,19 @@ public class GameState extends Observable<Message>
         getCurrentPlayer().getPower().setMaxClimbLevel(maxClimb);
     }
 
+    /**
+     * Select the worker that will be used during the current turn
+     * @param worker index of the selected worker
+     */
+    public void selectCurrentWorker(int worker) {
+        // activate the worker selected by the user
+        getCurrentPlayer().selectCurrentWorker(worker);
+    }
+
+    /**
+     * Determines the list of next possible actions based on the current turn state
+     * @return list of possible actions
+     */
     public List<Action> nextActions() {
         // determine next possible actions based on
         // - the current turn state
@@ -294,23 +301,28 @@ public class GameState extends Observable<Message>
         return getCurrentPlayer().getPower().nextActions(state);
     }
 
-    public List<Cell> getActionCellList() {
-        List<Cell> cells = null;
+    /**
+     * Generates a list of possible cells for move action
+     * @return list of cells to move on
+     */
+    public List<Cell> getPossibleMoves() {
         Player player = getCurrentPlayer();
-
-        // get the possible cells for the current action that a user is going to perform
-        switch (state) {
-            case MOVE:
-                cells = player.getPower().getPossibleMoves(gameBoard, player.getCurrentWorker());
-                break;
-            case BUILD:
-                cells = player.getPower().getPossibleBuilds(gameBoard, player.getCurrentWorker());
-                break;
-        }
-
-        return cells;
+        return player.getPower().getPossibleMoves(gameBoard, player.getCurrentWorker());
     }
 
+    /**
+     * Generates a list of possible cells for build action
+     * @return list of cells to build on
+     */
+    public List<Cell> getPossibleBuilds() {
+        Player player = getCurrentPlayer();
+        return player.getPower().getPossibleBuilds(gameBoard, player.getCurrentWorker());
+    }
+
+    /**
+     * Check if the current player has won the game
+     * @return true if player has won
+     */
     public boolean checkVictory() {
         // check victory only after a move action
         if (state != TurnState.MOVE) {

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class GameStateTest {
         // check initial state
         assertEquals(TurnState.INIT, gameState2.getCurrentState());
 
-        gameState2.setCurrentState(TurnState.MOVE);
+        gameState2.updateCurrentState(Action.MOVE);
 
         // check final state
         assertEquals(TurnState.MOVE, gameState2.getCurrentState());

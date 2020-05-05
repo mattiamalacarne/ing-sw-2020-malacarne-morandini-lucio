@@ -17,9 +17,9 @@ public class BuildAgainDecoratorTest {
         basicPowerDecorated = new BuildAgainDecorator(basicPower);
     }
 
-    @Test
+    /*@Test
     public void getBuildsCount() {
         assertEquals(2, basicPowerDecorated.getBuildsCount());
-    }
+    }*/
 
 }

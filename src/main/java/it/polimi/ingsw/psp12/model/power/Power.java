@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +30,10 @@ public abstract class Power {
      */
     //int maxMoves; // TODO: can be removed? the dedicated power can work with just 'movesCount'
 
-    /**
+    /*/**
      * max possible building levels to build
      */
-    int maxBuildsLevel;
+    //int maxBuildsLevel;
 
     /**
      * min level where it's possible to build a dome
@@ -50,9 +51,9 @@ public abstract class Power {
     int buildsCount;
 
     /**
-     * cell of the last occupied position
+     * cells of the current and previous positions [current, previous]
      */
-    Cell lastPosition; // TODO: store last two positions?
+    Cell lastPositions[];
 
     /**
      * cell of the last build
@@ -91,13 +92,13 @@ public abstract class Power {
         return maxMoves;
     }*/
 
-    /**
+    /*/**
      * Getter of the max possible building levels to build
      * @return max possible building levels to build
      */
-    public int getMaxBuildsLevel() {
+    /*public int getMaxBuildsLevel() {
         return maxBuildsLevel;
-    }
+    }*/
 
     /**
      * Getter of the min level where it's possible to build a dome
@@ -137,20 +138,46 @@ public abstract class Power {
      */
     public boolean checkVictory() { return false; }
 
-    //public void moved(Cell newPosition) { }
+    /**
+     * Generates a list of possible moves for the provided worker
+     * @param b game board
+     * @param w worker that has to be moved
+     * @return list of cells
+     */
+    public List<Cell> getPossibleMoves(Board b, Worker w) { return new ArrayList<>(); }
 
-    public List<Cell> getPossibleMoves(Board b, Worker w) { return null; }
+    /**
+     * Generates a list os possible builds for the provided worker
+     * @param b game board
+     * @param w worker that has to build
+     * @return list of cells
+     */
+    public List<Cell> getPossibleBuilds(Board b, Worker w) { return new ArrayList<>(); }
 
-    public List<Cell> getPossibleBuilds(Board b, Worker w) { return null; }
+    /**
+     * Determines the list of next possible actions based on the current turn state
+     * @param turnState current turn state
+     * @return list of actions that can be performed next
+     */
+    public List<Action> nextActions(TurnState turnState) { return new ArrayList<>(); }
 
-    public List<Action> nextActions(TurnState turnState) { return null; }
-
-    public void updateLastPosition(Cell position) {
-        this.lastPosition = position;
+    /**
+     * Save the last move position after the worker moved
+     * @param position current cell
+     */
+    public void moved(Cell position) {
+        // store at index 1 the previous position
+        this.lastPositions[1] = this.lastPositions[0];
+        // store at index 0 the current position
+        this.lastPositions[0] = position;
         movesCount++;
     }
 
-    public void updateLastBuild(Cell position) {
+    /**
+     * Save the last build position after the worker has built
+     * @param position build cell
+     */
+    public void hasBuilt(Cell position) {
         this.lastBuild = position;
         buildsCount++;
     }

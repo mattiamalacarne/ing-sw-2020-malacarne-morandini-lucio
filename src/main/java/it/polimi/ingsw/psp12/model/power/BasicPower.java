@@ -31,10 +31,12 @@ public class BasicPower extends Power {
         powerId = 0;
         maxClimbLevel = 1;
         //maxMoves = 1;
-        maxBuildsLevel = 1;
-        minDomeLevel = 4;
+        //maxBuildsLevel = 1;
+        minDomeLevel = 3;
         movesCount = 0;
         buildsCount = 0;
+        lastPositions = new Cell[2];
+        lastBuild = null;
 
     }
 
@@ -49,6 +51,8 @@ public class BasicPower extends Power {
             case MOVE:
                 actions.add(Action.BUILD);
                 break;
+            case BUILD:
+                actions.add(Action.END);
         }
 
         return actions;

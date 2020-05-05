@@ -34,6 +34,7 @@ public class ClientLauncher
         while (choosedInterface.hasNextInt())
         {
             int interfaceSelected = choosedInterface.nextInt();
+
             if (interfaceSelected < 1 || interfaceSelected > 2)
             {
                 System.out.println("Selection not possible, please choose one of the listed interface");
@@ -57,7 +58,11 @@ public class ClientLauncher
     public static void main (String[] args) throws IOException {
 
         ClientLauncher client = new ClientLauncher();
-        UserInterface ui = client.chooseUserInterface();
+        //UserInterface ui = client.chooseUserInterface();
+        //TODO: Toglimi alla fine (serve solo per testare la GUI
+        UserInterface ui = InterfaceSelector.setInterface(2);
+        //TODO: Fine cosa da rimuovere
+
 
     }
 

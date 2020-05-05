@@ -242,7 +242,7 @@ public class CLInterface implements UserInterface
             if (choice<0 || choice>=cellListMsg.getCellList().size() ){
                 System.out.println("Choice not allowed, retry");
             }else{
-                messageHandler.sendToServer(new BuildMsg(cellListMsg.getCellList().get(choice)));
+                //messageHandler.sendToServer(new BuildMsg(cellListMsg.getCellList().get(choice)));
             }
         }while (choice<0 || choice>=cellListMsg.getCellList().size() );
 

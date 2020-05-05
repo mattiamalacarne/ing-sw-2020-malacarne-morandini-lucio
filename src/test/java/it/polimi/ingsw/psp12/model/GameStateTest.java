@@ -230,12 +230,12 @@ public class GameStateTest {
         assertTrue(gameState2.getCurrentPlayer().isInitialized());
 
         Worker w1 = gameState2.getCurrentPlayer().getWorker(0);
-        assertEquals(points[0], w1.getPosition().getLocation());
+        assertEquals(points[0], w1.getPosition());
         assertEquals(Color.BLUE, w1.getColor());
         assertTrue(gameState2.getGameBoard().getCell(points[0]).hasWorker());
 
         Worker w2 = gameState2.getCurrentPlayer().getWorker(1);
-        assertEquals(points[1], w2.getPosition().getLocation());
+        assertEquals(points[1], w2.getPosition());
         assertEquals(Color.BLUE, w2.getColor());
         assertTrue(gameState2.getGameBoard().getCell(points[1]).hasWorker());
     }

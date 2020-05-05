@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.server.acceptance;
 
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.messages.CreateMsg;
+import it.polimi.ingsw.psp12.network.messages.CreatedMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
@@ -45,9 +46,6 @@ public class AcceptanceServer implements Runnable, Server {
     @Override
     public void run() {
         running = true;
-
-        // TODO: to be removed, create test game for testing purposes
-        createRoom("Test room 1", 2);
 
         while (running) {
             try {
@@ -112,11 +110,11 @@ public class AcceptanceServer implements Runnable, Server {
                 break;
             case CREATE:
                 CreateMsg msg = (CreateMsg)message;
-
                 // create room and the corresponding game server
-                createRoom(msg.getRoomName(), msg.getMaxPlayersCount());
-
-                client.send(new Message(MsgCommand.CREATED));
+                createRoom(msg.getRoomName(), msg.getMaxPlayersCount(), client);
+                break;
+            case DISCONNECTED:
+                System.out.println("client disconnected from acceptance server");
                 break;
         }
     }
@@ -125,7 +123,7 @@ public class AcceptanceServer implements Runnable, Server {
      * Returns a list of available rooms that are not full and the game has not started
      * @return active rooms
      */
-    List<Room> listAvailableRooms() {
+    private List<Room> listAvailableRooms() {
         return rooms.stream().filter(room -> !room.isFull()).collect(Collectors.toList());
     }
 
@@ -134,23 +132,28 @@ public class AcceptanceServer implements Runnable, Server {
      * @param name name of the room
      * @param maxPlayers max number of players that can join the game
      */
-    void createRoom(String name, int maxPlayers) {
+    private void createRoom(String name, int maxPlayers, ClientHandler client) {
         // TODO: change port assignment strategy
         int port = Constants.MATCHES_STARTING_PORT + rooms.size();
 
+        // TODO: check that maxPlayers is 2 or 3
+
         // create room and assign port
-        Room room = new Room(name, maxPlayers, this);
+        Room room = new Room(name, maxPlayers);
         room.setAssignedPort(port);
         rooms.add(room);
 
         GameServer gameServer;
         try {
             // create game server
-            gameServer = new GameServer(room);
+            gameServer = new GameServer(room, this);
         }
         catch (IOException e) {
             System.out.println("failed to start game server on port " + port);
             e.printStackTrace();
+
+            // notify the user that the creation of the room has failed
+            client.send(new Message(MsgCommand.CREATE_FAILED));
             return;
         }
 
@@ -159,15 +162,23 @@ public class AcceptanceServer implements Runnable, Server {
         Thread thread = new Thread(gameServer, threadName);
         thread.start();
 
-        System.out.printf("game server started on port " + Constants.MATCHES_STARTING_PORT + "\n");
+        System.out.println("game created on port " + room.getAssignedPort() +
+                " [0/" + room.getMaxPlayersCount() + "]");
+
+        // send to the user the room that has been created
+        client.send(new CreatedMsg(room));
     }
 
     /**
      * Close the room of an ended game and remove it from the list of active rooms
-     * @param port port of the room to be removed
+     * @param room room to be removed
      */
-    public void gameEnded(int port) {
-        // remove the room with the specified port
-        rooms.removeIf(room -> (room.getAssignedPort() == port));
+    public void gameEnded(Room room) {
+        if (rooms.remove(room)) {
+            System.out.println("game " + room.getAssignedPort() + " closed successfully");
+        }
+        else {
+            System.out.printf("no game found on port " + room.getAssignedPort());
+        }
     }
 }

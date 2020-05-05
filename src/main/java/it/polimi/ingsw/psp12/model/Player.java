@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.power.BasicPower;
 import it.polimi.ingsw.psp12.model.power.Power;
 import it.polimi.ingsw.psp12.utils.Color;
 
@@ -14,6 +16,7 @@ public class Player
 {
     private int id;
     private Worker workers[];
+    private int currentWorker;
     private String name;
     private Power power;
     private boolean initialized;
@@ -33,7 +36,7 @@ public class Player
     /**
      * Get the selected worker
      * @param index the index in the list of the current player's worker
-     * @return the corrisponding worker in the list
+     * @return the corresponding worker in the list
      */
     public Worker getWorker(int index) {
         return workers[index];
@@ -41,11 +44,18 @@ public class Player
 
     /**
      * update the position of the moved worker
-     * @param index the worker that is moving
-     * @param pos new worler position in the board
+     * @param pos new worker position in the board
      */
-    public void updateWorkerPosition(int index, Cell pos) {
-        workers[index].move(pos);
+    public void updateWorkerPosition(Point pos) {
+        workers[currentWorker].move(pos);
+    }
+
+    public void selectCurrentWorker(int index) {
+        currentWorker = index;
+    }
+
+    public Worker getCurrentWorker() {
+        return workers[currentWorker];
     }
 
     /**
@@ -66,10 +76,14 @@ public class Player
 
     /**
      * set the player power depending of his card
-     * @param pow the new poer of the player
+     * @param pow the new power of the player
      */
     public void setPower(Power pow) {
         this.power = pow;
+    }
+
+    public Power getPower() {
+        return this.power;
     }
 
 
@@ -84,9 +98,12 @@ public class Player
             workers[i].setColor(color);
 
             // place worker on the board
-            updateWorkerPosition(i, cells[i]);
+            workers[i].move(cells[i].getLocation());
             cells[i].addWorker(workers[i]);
         }
+
+        // set default power
+        setPower(new BasicPower());
 
         initialized = true;
     }

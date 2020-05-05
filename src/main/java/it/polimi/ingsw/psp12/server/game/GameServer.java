@@ -8,6 +8,7 @@ import it.polimi.ingsw.psp12.network.messages.JoinMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.Room;
 import it.polimi.ingsw.psp12.server.Server;
+import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -29,6 +30,11 @@ public class GameServer implements Runnable, Server {
     private Room room;
 
     /**
+     * Server that has created the room and is responsible for closing
+     */
+    private AcceptanceServer creator;
+
+    /**
      * Controller of the game managed by the server
      */
     private Controller controller;
@@ -38,12 +44,13 @@ public class GameServer implements Runnable, Server {
      */
     private GameState model;
 
-    public GameServer(Room room) throws IOException {
+    public GameServer(Room room, AcceptanceServer creator) throws IOException {
         this.room = room;
+        this.creator = creator;
 
         socket = new ServerSocket(room.getAssignedPort());
         model = new GameState(room.getMaxPlayersCount());
-        controller = new Controller(model);
+        controller = new Controller(model, this);
     }
 
     @Override
@@ -97,12 +104,13 @@ public class GameServer implements Runnable, Server {
 
                 if (room.isFull()) {
                     // if all client have joined the game can start
+                    System.out.println("room full, the game " + room.getAssignedPort() + " can start");
                     controller.initGame();
                 }
                 break;
             case DISCONNECTED:
-                // remove client from game
-                // and if necessary terminate game
+                // TODO: remove client from game
+                System.out.println("client disconnected from game server");
                 break;
         }
     }
@@ -118,6 +126,7 @@ public class GameServer implements Runnable, Server {
             // notify the client that the user is already full and close connection
             client.send(new Message(MsgCommand.ROOM_FULL));
             client.close();
+            System.out.println("client tried to subscribe to a full room");
             return;
         }
 
@@ -125,6 +134,7 @@ public class GameServer implements Runnable, Server {
         if (model.alreadyRegistered(name)) {
             // ask user for another name
             client.send(new Message(MsgCommand.INVALID_NICKNAME));
+            System.out.println("name already taken");
             return;
         }
 
@@ -136,5 +146,16 @@ public class GameServer implements Runnable, Server {
 
         // send subscription confirmation to the client
         client.send(new Message(MsgCommand.JOINED));
+
+        System.out.println("client subscribed to the game " + room.getAssignedPort() +
+                " [" + room.getPlayersCount() + "/" + room.getMaxPlayersCount() + "]");
+    }
+
+    /**
+     * Removes the room from the active rooms when the game ended
+     */
+    public void gameEnded() {
+        System.out.println("game " + room.getAssignedPort() + " ended");
+        creator.gameEnded(room);
     }
 }

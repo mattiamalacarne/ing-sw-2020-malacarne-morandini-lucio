@@ -9,10 +9,10 @@ public class BuildAgainDecorator extends ExtendedPowerDecorator{
         this.power = power;
     }
 
-    @Override
+    /*@Override
     public int getBuildsCount() {
         //It's possible to do a second build action
         return power.getBuildsCount() + 1;
-    }
+    }*/
 
 }

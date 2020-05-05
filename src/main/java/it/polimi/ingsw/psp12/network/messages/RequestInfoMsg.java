@@ -43,7 +43,7 @@ public class RequestInfoMsg extends Message {
         availablePositions.add(new Point(p.getX(), p.getY()));
     }
 
-    public List<Point> availablePositions() {
+    public List<Point> getAvailablePositions() {
         return availablePositions;
     }
 }

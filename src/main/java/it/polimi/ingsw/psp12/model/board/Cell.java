@@ -2,14 +2,14 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 /**
  * Class that represents a cell of the board
  * Holds references to the tower and worker positioned on it
  * @author Luca Morandini
  */
-public class Cell
+public class Cell implements Serializable
 {
     /**
      * Reference to the tower on the cell
@@ -86,7 +86,7 @@ public class Cell
      * @return the location
      */
     public Point getLocation() {
-        return new Point(location.getX(), location.getY());
+        return location.clone();
     }
 
     /**
@@ -117,5 +117,18 @@ public class Cell
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
         return location.equals(cell.location);
+    }
+
+    /**
+     * Returns a clone of the cell
+     * @return cell clone
+     */
+    public Cell clone() {
+        Cell c = new Cell(this.location.getX(), this.location.getY());
+        c.tower = this.tower.clone();
+        if (this.worker != null) {
+            c.worker = this.worker.clone();
+        }
+        return c;
     }
 }

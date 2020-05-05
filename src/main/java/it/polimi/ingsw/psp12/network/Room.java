@@ -1,12 +1,12 @@
 package it.polimi.ingsw.psp12.network;
 
-import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
+import java.io.Serializable;
 
 /**
  * Room that holds information about a game
  * @author Luca Morandini
  */
-public class Room {
+public class Room implements Serializable{
     /**
      * Port of the server that manages the game
      */
@@ -32,15 +32,9 @@ public class Room {
      */
     private boolean active;
 
-    /**
-     * Server that has created the room and is responsible for closing
-     */
-    private AcceptanceServer creator;
-
-    public Room(String name, int maxPlayersCount, AcceptanceServer creator) {
+    public Room(String name, int maxPlayersCount) {
         this.name = name;
         this.maxPlayersCount = maxPlayersCount;
-        this.creator = creator;
         this.active = true;
     }
 
@@ -84,6 +78,14 @@ public class Room {
     }
 
     /**
+     * Returns the number of players that has joined the game
+     * @return number of players that has joined the game
+     */
+    public int getPlayersCount() {
+        return playersCount;
+    }
+
+    /**
      * Checks if the all clients have joined the game and so the room is full
      * @return true if room is full
      */
@@ -104,12 +106,5 @@ public class Room {
      */
     public void close() {
         active = false;
-    }
-
-    /**
-     * Removes the room from the active rooms when the game ended
-     */
-    public void gameEnded() {
-        creator.gameEnded(assignedPort);
     }
 }

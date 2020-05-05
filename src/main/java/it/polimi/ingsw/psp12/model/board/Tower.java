@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp12.model.board;
 
-import java.awt.*;
+import java.io.Serializable;
 
 /**
  * <p><b>Class</b> that represent a tower</p>
@@ -8,7 +8,7 @@ import java.awt.*;
  * @author Mattia Malacarne
  */
 
-public class Tower
+public class Tower implements Serializable
 {
     private int level;
     private boolean dome;
@@ -44,5 +44,16 @@ public class Tower
      */
     public boolean hasDome() {
         return dome;
+    }
+
+    /**
+     * Returns a clone of the tower
+     * @return tower clone
+     */
+    public Tower clone() {
+        Tower t = new Tower();
+        t.level = this.level;
+        t.dome = this.dome;
+        return t;
     }
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.model;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
@@ -69,7 +70,7 @@ public class GameState extends Observable<Message>
      * @return game board
      */
     public Board getGameBoard() {
-        return gameBoard;
+        return gameBoard.clone();
     }
 
     /**
@@ -152,8 +153,20 @@ public class GameState extends Observable<Message>
      * Updates the turn state
      * @param s new state to be saved
      */
+    // TODO: this method can be removed and replaced with 'updateCurrentState'?
     public void setCurrentState(TurnState s) {
         state = s;
+    }
+
+    public void updateCurrentState(Action action) {
+        switch (action) {
+            case MOVE:
+                setCurrentState(TurnState.MOVE);
+                break;
+            case BUILD:
+                setCurrentState(TurnState.BUILD);
+                break;
+        }
     }
 
     /**
@@ -167,13 +180,26 @@ public class GameState extends Observable<Message>
 
     /**
      * Moves the position of a worker on the map
-     * @param oldPoint current position of the worker
      * @param newPoint new position of the worker after the move
      */
-    public void move(Point oldPoint, Point newPoint) {
+    public void move(Point newPoint) {
+        // get current player
+        Player player = getCurrentPlayer();
+
+        // get position of the current worker
+        Point oldPoint = player.getCurrentWorker().getPosition();
+
+        // update board
         gameBoard.move(oldPoint, newPoint);
 
-        //notifyObservers(new Message());
+        // update position of the worker
+        player.getCurrentWorker().move(newPoint);
+
+        // save last move in the power
+        player.getPower().updateLastPosition(gameBoard.getCell(newPoint));
+
+        // update board on the client
+        notifyObservers(new UpdateBoardMsg(getGameBoard()));
     }
 
     /**
@@ -181,9 +207,14 @@ public class GameState extends Observable<Message>
      * @param pos coordinates of the tower
      */
     public void build(Point pos) {
+        // update board
         gameBoard.build(pos);
 
-        //notifyObservers(new Message());
+        // save last build in the power
+        getCurrentPlayer().getPower().updateLastBuild(gameBoard.getCell(pos));
+
+        // update board on the client
+        notifyObservers(new UpdateBoardMsg(getGameBoard()));
     }
 
     /**
@@ -243,5 +274,49 @@ public class GameState extends Observable<Message>
      */
     public List<Color> getAvailableColors() {
         return new ArrayList<>(colors);
+    }
+
+
+
+    public void initTurn() {
+        // reset parameters before the current turn starts
+        getCurrentPlayer().getPower().reset();
+
+        // get max climb level of the current player from the previous player (NextCannotMoveUpDecorator)
+        int maxClimb = getPreviousPlayer().getPower().getNextPlayerMaxClimb();
+        getCurrentPlayer().getPower().setMaxClimbLevel(maxClimb);
+    }
+
+    public List<Action> nextActions() {
+        // determine next possible actions based on
+        // - the current turn state
+        // - the power of the player
+        return getCurrentPlayer().getPower().nextActions(state);
+    }
+
+    public List<Cell> getActionCellList() {
+        List<Cell> cells = null;
+        Player player = getCurrentPlayer();
+
+        // get the possible cells for the current action that a user is going to perform
+        switch (state) {
+            case MOVE:
+                cells = player.getPower().getPossibleMoves(gameBoard, player.getCurrentWorker());
+                break;
+            case BUILD:
+                cells = player.getPower().getPossibleBuilds(gameBoard, player.getCurrentWorker());
+                break;
+        }
+
+        return cells;
+    }
+
+    public boolean checkVictory() {
+        // check victory only after a move action
+        if (state != TurnState.MOVE) {
+            return false;
+        }
+
+        return getCurrentPlayer().getPower().checkVictory();
     }
 }

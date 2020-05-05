@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * <p><b>Class</b> responsable for the connection with the main server</p>
+ * <p><b>Class</b> responsible for the connection with the main server</p>
  *
  * @author Mattia Malacarne
  */
@@ -20,20 +20,17 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     private Socket clientSocket;
     private ObjectOutputStream output_stream;
     private ObjectInputStream input_stream;
+    private Boolean running;
 
-    /**
-     * Identifier of the client in the connection;
-     */
-    private String clientName;
 
     /**
      * prepare the client for connect to the server
      * @param server the server info containing ip and port
      */
-    public ClientHandlerConnection(ServerInfo server, String clientName)
+    public ClientHandlerConnection(ServerInfo server)
     {
         this.serverInfo = server;
-        this.clientName = clientName;
+        running = true;
     }
 
     @Override
@@ -42,16 +39,15 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
         // Connect to the server
         try {
             clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
-            System.out.println("Connesso al server!");
+            System.out.println("Connected to server on port " + serverInfo.serverPort);
 
             // Init the stream after connection
             output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
             output_stream.flush();
 
             input_stream = new ObjectInputStream(clientSocket.getInputStream());
-            System.out.println("55555");
 
-            while (true){
+            while (running){
 
                 Message msg = (Message) input_stream.readObject();
                 notifyObservers(msg);
@@ -64,11 +60,24 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
 
     }
 
+    /**
+     * Send a message through the socket connection
+     * @param msg The message to be sent
+     * @throws IOException IO Exception
+     */
     public void sendRequestToServer(Message msg) throws IOException
     {
         output_stream.writeObject(msg);
         output_stream.flush();
     }
 
+    /**
+     * Closes the active socket
+     * @throws IOException IO Exception
+     */
+    public void close() throws IOException {
+        running = false;
+        clientSocket.close();
+    }
 
 }

@@ -1,7 +1,9 @@
 package it.polimi.ingsw.psp12.model;
 
-import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.utils.Color;
+
+import java.io.Serializable;
 
 /**
  * <p><b>Class</b> that represent a worker</p>
@@ -9,9 +11,9 @@ import it.polimi.ingsw.psp12.utils.Color;
  * @author Mattia Malacarne
  */
 
-public class Worker
+public class Worker implements Serializable
 {
-    private Cell position;
+    private Point position;
 
     private Color color;
 
@@ -19,16 +21,16 @@ public class Worker
      * get the selected worker position
      * @return the worker position in the board
      */
-    public Cell getPosition() {
+    public Point getPosition() {
         return position;
     }
 
     /**
      * move the worker from a cell to another
-     * @param cell where to move the worker
+     * @param pos where to move the worker
      */
-    public void move(Cell cell) {
-        position = cell;
+    public void move(Point pos) {
+        position = pos;
     }
 
     /**
@@ -45,5 +47,18 @@ public class Worker
      */
     public Color getColor() {
         return color;
+    }
+
+    /**
+     * Returns a clone of the worker
+     * @return worker clone
+     */
+    public Worker clone() {
+        Worker w = new Worker();
+        w.color = this.color;
+        if (this.position != null) {
+            w.position = this.position.clone();
+        }
+        return w;
     }
 }

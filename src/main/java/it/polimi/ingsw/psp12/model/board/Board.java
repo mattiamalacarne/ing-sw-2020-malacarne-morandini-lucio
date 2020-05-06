@@ -87,7 +87,7 @@ public class Board implements Serializable
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 if (!boardCells[x][y].hasWorker()) {
-                    cells.add(boardCells[x][y]);
+                    cells.add(boardCells[x][y].clone());
                 }
             }
         }

@@ -236,20 +236,20 @@ public class Controller implements Observer<Message> {
     void generateCellList() {
         // get list of cells for the current action
         List<Cell> cells = null;
-        String act = "";
+        Action action = null;
         switch (model.getCurrentState()) {
             case MOVE:
-                act = "move";
+                action = Action.MOVE;
                 cells = model.getPossibleMoves();
                 break;
             case BUILD:
-                act = "build";
+                action = Action.BUILD;
                 cells = model.getPossibleBuilds();
                 break;
         }
 
         System.out.printf("generated cells for %s action [%d] for player %d\n",
-                act, cells.size(), model.getCurrentPlayer().getId());
+                model.getCurrentState().toString(), cells.size(), model.getCurrentPlayer().getId());
 
         // check if the current player has lost
         // player has lost if can not perform an action
@@ -260,7 +260,7 @@ public class Controller implements Observer<Message> {
         }
 
         // send list of cells to the current player
-        sendToCurrentPlayer(new CellListMsg(cells));
+        sendToCurrentPlayer(new CellListMsg(cells, action));
     }
 
     /**
@@ -270,20 +270,17 @@ public class Controller implements Observer<Message> {
      */
     void performAction(SelectCellMsg message) {
         // perform action based on current turn state
-        String act = "";
         switch (model.getCurrentState()) {
             case MOVE:
-                act = "moved";
                 model.move(message.getSelectedCell().getLocation());
                 break;
             case BUILD:
-                act = "has built";
                 model.build(message.getSelectedCell().getLocation());
                 break;
         }
 
         System.out.printf("player %d %s on cell %s\n",
-                model.getCurrentPlayer().getId(), act,
+                model.getCurrentPlayer().getId(), model.getCurrentState().toString(),
                 message.getSelectedCell().getLocation().toString());
 
         // check if the current player has won

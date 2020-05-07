@@ -1,12 +1,14 @@
 package it.polimi.ingsw.psp12.client;
 
 
+import it.polimi.ingsw.psp12.network.messages.CreateMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.utils.Observable;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -37,6 +39,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     public void run()
     {
         // Connect to the server
+
         try {
             clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
             System.out.println("Connected to server on port " + serverInfo.serverPort);
@@ -65,10 +68,16 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      * @param msg The message to be sent
      * @throws IOException IO Exception
      */
-    public void sendRequestToServer(Message msg) throws IOException
+    public void sendRequestToServer(Message msg)
     {
-        output_stream.writeObject(msg);
-        output_stream.flush();
+
+        try {
+            output_stream.writeObject(msg);
+            output_stream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

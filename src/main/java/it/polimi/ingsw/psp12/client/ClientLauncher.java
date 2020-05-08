@@ -19,7 +19,7 @@ public class ClientLauncher
     private ServerInfo serverInfo;
 
     /**
-     * Ask user wich interface the game has to load
+     * Ask user which interface the game has to load
      * @return reference of the selected interface
      */
     private UserInterface chooseUserInterface()  {

@@ -1,10 +1,7 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.ServerInfo;
-import it.polimi.ingsw.psp12.network.messages.CellListMsg;
-import it.polimi.ingsw.psp12.network.messages.RequestInfoMsg;
-import it.polimi.ingsw.psp12.network.messages.RoomsMsg;
-import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
+import it.polimi.ingsw.psp12.network.messages.*;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -75,10 +72,31 @@ public interface UserInterface
     void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
     /**
+     * The user chooses the action to perform
+     * @param actionsListMsg The list of possible action to perform
+     * @throws IOException IO Exception
+     */
+    void chooseAction(ActionsListMsg actionsListMsg) throws IOException;
+
+    /**
+     * The user chooses the cell where to perform the action
+     * @param cellListMsg The list of cell where to perform the action, and the action to perform
+     * @throws IOException IO Exception
+     */
+    void chooseCell(CellListMsg cellListMsg) throws  IOException;
+
+    /**
+     * Communicates to the user the end of the own turn
+     */
+    void endTurnMessage();
+
+
+    /**
      * The user chooses the cell where to move
      * @param cellListMsg The list of available cell/s where it's possible to move
      * @throws IOException IO Exception
      */
+    @Deprecated
     void move(CellListMsg cellListMsg) throws IOException;
 
     /**
@@ -86,6 +104,7 @@ public interface UserInterface
      * @param cellListMsg The list of available cell/s where it's possible to build
      * @throws IOException IO Exception
      */
+    @Deprecated
     void build(CellListMsg cellListMsg) throws IOException;
 
     /**

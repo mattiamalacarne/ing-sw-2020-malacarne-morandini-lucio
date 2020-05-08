@@ -85,7 +85,7 @@ public class CLIBoardGenerator {
 
             //there is a dome
             else if (cell.getTower().hasDome()){
-                boardString.append(String.format(cellFormat,"    ^  ")); //meglio ▲ ?
+                boardString.append(String.format(cellFormat,"        ^  ")); //meglio ▲ ?
             }
 
         }else {
@@ -96,10 +96,10 @@ public class CLIBoardGenerator {
 
     //LEVEL 2: player or build
     private void makeLine3(StringBuilder boardString, Cell cell){
-        if (cell.hasWorker() && cell.getTower().getLevel()==3){
+        if (cell.hasWorker() && cell.getTower().getLevel()==2){
             //FIXME: nome player
             boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()>1){
+        }else if (cell.getTower().getLevel()>=3){
             boardString.append(String.format(cellFormat, "-").replace(" ","-"));
         }else {
             boardString.append(String.format(cellFormat, ""));
@@ -108,10 +108,10 @@ public class CLIBoardGenerator {
 
     //LEVEL 1: player or build
     private void makeLine4(StringBuilder boardString, Cell cell){
-        if (cell.hasWorker() && cell.getTower().getLevel()==2){
+        if (cell.hasWorker() && cell.getTower().getLevel()==1){
             //FIXME: nome player
             boardString.append(String.format(cellFormat, colorString("player", cell.getWorker().getColor()) ));
-        }else if (cell.getTower().getLevel()>1){
+        }else if (cell.getTower().getLevel()>=2){
             boardString.append(String.format(cellFormat, "-").replace(" ","-"));
         }else {
             boardString.append(String.format(cellFormat, ""));

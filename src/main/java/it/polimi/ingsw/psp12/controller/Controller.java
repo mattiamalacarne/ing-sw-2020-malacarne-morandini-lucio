@@ -13,6 +13,7 @@ import it.polimi.ingsw.psp12.server.game.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -206,7 +207,8 @@ public class Controller implements Observer<Message> {
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " started the turn");
 
-        sendToCurrentPlayer(new ActionsListMsg(model.nextActions()));
+        //FIXME: controllare se Arrays.asList non crea problemi
+        sendToCurrentPlayer(new ActionsListMsg(model.nextActions(), Arrays.asList(model.getCurrentPlayer().getWorkers())));
     }
 
     /**
@@ -310,7 +312,8 @@ public class Controller implements Observer<Message> {
             System.out.println("more than one action possible, asking to the player " +
                     model.getPreviousPlayer().getId() + " what to do next");
 
-            sendToCurrentPlayer(new ActionsListMsg(actions));
+            //FIXME: passare solo il worker corrente o tutti?
+            sendToCurrentPlayer(new ActionsListMsg(actions, Arrays.asList(model.getCurrentPlayer().getCurrentWorker())));
             return;
         }
 

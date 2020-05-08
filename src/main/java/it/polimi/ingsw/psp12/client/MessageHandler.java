@@ -126,6 +126,17 @@ public class MessageHandler implements Observer<Message>
             case BOARD_UPDATE:
                 userInterface.updateBoard( (UpdateBoardMsg) message );
                 break;
+            case ACTIONS_LIST:
+                userInterface.chooseAction( (ActionsListMsg) message );
+                break;
+            case CELL_LIST:
+                userInterface.chooseCell( (CellListMsg) message );
+                break;
+            case TURN_ENDED:
+                userInterface.endTurnMessage();
+                break;
+
+
             case MOVE:
                 userInterface.move( (CellListMsg) message );
                 break;
@@ -134,8 +145,6 @@ public class MessageHandler implements Observer<Message>
                 break;
 
             case CELL_REQUEST:  /*(CellRequestMsg) message;*/
-                break;
-            case CELL_LIST:  /*(CellListMsg) message;*/
                 break;
             case SELECTED_CELL:  /*(SelectCellMsg) message;*/
                 break;

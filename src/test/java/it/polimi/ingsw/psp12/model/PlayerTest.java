@@ -37,11 +37,11 @@ public class PlayerTest {
         assertEquals("Test", player.getName());
         assertFalse(player.isInitialized());
 
-        assertNull(player.getWorker(0).getColor());
-        assertNull(player.getWorker(0).getPosition());
+        assertNull(player.getWorkerByIndex(0).getColor());
+        assertNull(player.getWorkerByIndex(0).getPosition());
 
-        assertNull(player.getWorker(1).getColor());
-        assertNull(player.getWorker(1).getPosition());
+        assertNull(player.getWorkerByIndex(1).getColor());
+        assertNull(player.getWorkerByIndex(1).getPosition());
 
         // initialize player
         Cell cells[] = new Cell[] { new Cell(1, 2), new Cell(3, 4) };
@@ -50,13 +50,13 @@ public class PlayerTest {
         // check final state
         assertTrue(player.isInitialized());
 
-        assertEquals(Color.RED, player.getWorker(0).getColor());
-        assertEquals(cells[0].getLocation(), player.getWorker(0).getPosition());
-        assertEquals(player.getWorker(0), cells[0].getWorker());
+        assertEquals(Color.RED, player.getWorkerByIndex(0).getColor());
+        assertEquals(cells[0].getLocation(), player.getWorkerByIndex(0).getPosition());
+        assertEquals(player.getWorkerByIndex(0), cells[0].getWorker());
 
-        assertEquals(Color.RED, player.getWorker(1).getColor());
-        assertEquals(cells[1].getLocation(), player.getWorker(1).getPosition());
-        assertEquals(player.getWorker(1), cells[1].getWorker());
+        assertEquals(Color.RED, player.getWorkerByIndex(1).getColor());
+        assertEquals(cells[1].getLocation(), player.getWorkerByIndex(1).getPosition());
+        assertEquals(player.getWorkerByIndex(1), cells[1].getWorker());
     }
 
     @Test
@@ -65,16 +65,16 @@ public class PlayerTest {
         player.selectCurrentWorker(0);
 
         // check initial state
-        assertNull(player.getWorker(0).getPosition());
-        assertNull(player.getWorker(1).getPosition());
+        assertNull(player.getWorkerByIndex(0).getPosition());
+        assertNull(player.getWorkerByIndex(1).getPosition());
 
         // move
         Point p1 = new Point(0, 1);
         player.updateWorkerPosition(p1);
 
         // check intermediate state
-        assertEquals(p1, player.getWorker(0).getPosition());
-        assertNull(player.getWorker(1).getPosition());
+        assertEquals(p1, player.getWorkerByIndex(0).getPosition());
+        assertNull(player.getWorkerByIndex(1).getPosition());
 
         // move
         Point p2 = new Point(2, 3);
@@ -82,7 +82,7 @@ public class PlayerTest {
 
         // check final state
         assertEquals(old, p1);
-        assertEquals(p2, player.getWorker(0).getPosition());
-        assertNull(player.getWorker(1).getPosition());
+        assertEquals(p2, player.getWorkerByIndex(0).getPosition());
+        assertNull(player.getWorkerByIndex(1).getPosition());
     }
 }

@@ -38,8 +38,16 @@ public class Player
      * @param index the index in the list of the current player's worker
      * @return the corresponding worker in the list
      */
-    public Worker getWorker(int index) {
+    public Worker getWorkerByIndex(int index) {
         return workers[index];
+    }
+
+    /**
+     * Get all the workers of the player
+     * @return the list of the workers
+     */
+    public Worker[] getWorkers() {
+        return workers;
     }
 
     /**

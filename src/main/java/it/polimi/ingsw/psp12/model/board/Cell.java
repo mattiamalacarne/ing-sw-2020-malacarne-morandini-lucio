@@ -95,7 +95,7 @@ public class Cell implements Serializable
      * @return true if tower.level - currentLevel <= 1
      */
     public boolean canMoveOn(int currentLevel) {
-        return (tower.getLevel() - currentLevel) <= 1;
+        return (tower.getLevel() - currentLevel) <= 1 && !tower.hasDome();
     }
 
     /**

@@ -45,6 +45,13 @@ public class CellTest {
     }
 
     @Test
+    public void canMoveOn_From0To0_WithDome_ShouldReturnFalse() {
+        Cell c1 = new Cell(0, 0);
+        c1.getTower().buildDome();
+        assertFalse(c1.canMoveOn(0));
+    }
+
+    @Test
     public void canBuildOn_WithoutDome_ShouldReturnTrue() {
         Cell c1 = new Cell(0, 0);
         assertTrue(c1.canBuildOn());

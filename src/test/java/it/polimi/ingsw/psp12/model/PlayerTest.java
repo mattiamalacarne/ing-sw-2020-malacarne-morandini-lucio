@@ -6,6 +6,8 @@ import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class PlayerTest {
@@ -36,6 +38,7 @@ public class PlayerTest {
         assertEquals(0, player.getId());
         assertEquals("Test", player.getName());
         assertFalse(player.isInitialized());
+        assertNull(player.getPower());
 
         assertNull(player.getWorkerByIndex(0).getColor());
         assertNull(player.getWorkerByIndex(0).getPosition());
@@ -49,6 +52,7 @@ public class PlayerTest {
 
         // check final state
         assertTrue(player.isInitialized());
+        assertNotNull(player.getPower());
 
         assertEquals(Color.RED, player.getWorkerByIndex(0).getColor());
         assertEquals(cells[0].getLocation(), player.getWorkerByIndex(0).getPosition());
@@ -84,5 +88,19 @@ public class PlayerTest {
         assertEquals(old, p1);
         assertEquals(p2, player.getWorkerByIndex(0).getPosition());
         assertNull(player.getWorkerByIndex(1).getPosition());
+    }
+
+    @Test
+    public void getWorkers_ShouldReturnWorkersInCorrectOrder() {
+        Cell cells[] = new Cell[] { new Cell(1, 2), new Cell(3, 4) };
+        player.initialize(Color.RED, cells);
+
+        List<Worker> workers = player.getWorkers();
+
+        assertEquals(2, workers.size());
+        assertNotEquals(player.getWorkerByIndex(0), workers.get(0));
+        assertEquals(player.getWorkerByIndex(0).getPosition(), workers.get(0).getPosition());
+        assertNotEquals(player.getWorkerByIndex(1), workers.get(1));
+        assertEquals(player.getWorkerByIndex(1).getPosition(), workers.get(1).getPosition());
     }
 }

@@ -13,7 +13,6 @@ import it.polimi.ingsw.psp12.server.game.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

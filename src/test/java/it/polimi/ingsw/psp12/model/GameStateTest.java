@@ -1,11 +1,15 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
+import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -34,7 +38,7 @@ public class GameStateTest {
     }
 
     @Test
-    public void setCurrentState_ShouldUpdateState() {
+    public void updateCurrentState_ActionMove_ShouldSetStateMove() {
         // initialize state
         gameState2.initGame();
         // check initial state
@@ -44,6 +48,19 @@ public class GameStateTest {
 
         // check final state
         assertEquals(TurnState.MOVE, gameState2.getCurrentState());
+    }
+
+    @Test
+    public void updateCurrentState_ActionBuild_ShouldSetStateBuild() {
+        // initialize state
+        gameState2.initGame();
+        // check initial state
+        assertEquals(TurnState.INIT, gameState2.getCurrentState());
+
+        gameState2.updateCurrentState(Action.BUILD);
+
+        // check final state
+        assertEquals(TurnState.BUILD, gameState2.getCurrentState());
     }
 
     @Test
@@ -59,15 +76,6 @@ public class GameStateTest {
         assertEquals(0, gameState2.getPlayers()[0].getId());
         assertEquals("P1", gameState2.getPlayers()[0].getName());
         assertNull(gameState2.getPlayers()[1]);
-    }
-
-    @Test
-    public void addPlayer_ArrayFull_ShouldThrowException() {
-        gameState2.addPlayer("P1");
-        gameState2.addPlayer("P2");
-
-        // TODO: search how to manage exception in tests
-        fail();
     }
 
     @Test
@@ -123,6 +131,19 @@ public class GameStateTest {
 
         assertEquals(1, ps[1].getId());
         assertEquals("P2", ps[1].getName());
+    }
+
+    @Test
+    public void getCurrentPlayer_ShouldReturnCurrentPlayer() {
+        Player p1 = gameState2.addPlayer("P1");
+        Player p2 = gameState2.addPlayer("P2");
+        gameState2.initGame();
+
+        assertEquals(p1, gameState2.getCurrentPlayer());
+
+        gameState2.nextTurn();
+
+        assertEquals(p2, gameState2.getCurrentPlayer());
     }
 
     @Test
@@ -210,6 +231,7 @@ public class GameStateTest {
         Color initialColors[] = Color.values();
         assertArrayEquals(initialColors, gameState2.getAvailableColors().toArray());
 
+        assertNull(gameState2.getCurrentPlayer().getPower());
         assertFalse(gameState2.getCurrentPlayer().isInitialized());
 
         // set player info
@@ -228,7 +250,10 @@ public class GameStateTest {
 
         assertArrayEquals(finalColors, gameState2.getAvailableColors().toArray());
 
+        assertNotNull(gameState2.getCurrentPlayer().getPower());
         assertTrue(gameState2.getCurrentPlayer().isInitialized());
+        assertEquals(1, gameState2.getCurrentPlayer().getPower().getMaxClimbLevel());
+        assertEquals(3, gameState2.getCurrentPlayer().getPower().getMinDomeLevel());
 
         Worker w1 = gameState2.getCurrentPlayer().getWorkerByIndex(0);
         assertEquals(points[0], w1.getPosition());
@@ -264,5 +289,148 @@ public class GameStateTest {
 
         // check final state
         assertTrue(gameState2.isInitialized());
+    }
+
+    @Test
+    public void selectCurrentWorker_ShouldReturnSelectedWorker() {
+        Player p = gameState2.addPlayer("P1");
+        gameState2.selectCurrentWorker(1);
+
+        assertEquals(p.getWorkerByIndex(1), p.getCurrentWorker());
+    }
+
+    @Test
+    public void initTurn_ShouldInitTurn() {
+        // initialize player and game
+        gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 0), new Point(2, 3)});
+        gameState2.initGame();
+
+        // init turn
+        gameState2.initTurn();
+
+        // check final state
+        assertEquals(TurnState.INIT, gameState2.getCurrentState());
+        assertEquals(1, gameState2.getCurrentPlayer().getPower().getMaxClimbLevel());
+    }
+
+    @Test
+    public void nextActions_ShouldReturnPossibleActions() {
+        gameState2.addPlayer("P1");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.initGame();
+
+        List<Action> actions = gameState2.nextActions();
+        assertEquals(1, actions.size());
+        assertEquals(Action.MOVE, actions.get(0));
+    }
+
+    @Test
+    public void checkVictory_BuildState_ShouldReturnFalse() {
+        gameState2.updateCurrentState(Action.BUILD);
+        assertFalse(gameState2.checkVictory());
+    }
+
+    @Test
+    public void checkVictory_MoveState_ShouldCheckVictory() {
+        gameState2.addPlayer("P1");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.selectCurrentWorker(0);
+        gameState2.initGame();
+
+        gameState2.move(new Point(0, 1));
+        gameState2.updateCurrentState(Action.MOVE);
+        assertFalse(gameState2.checkVictory());
+    }
+
+    @Test
+    public void move_ShouldMoveWorker() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(0);
+
+        Point oldP = new Point(0, 0);
+        Point newP = new Point(0, 1);
+
+        // check initial state
+        assertEquals(oldP, p1.getWorkerByIndex(0).getPosition());
+        assertTrue(gameState2.getGameBoard().getCell(oldP).hasWorker());
+        assertFalse(gameState2.getGameBoard().getCell(newP).hasWorker());
+
+        // move
+        gameState2.move(newP);
+
+        // check final state
+        assertEquals(newP, p1.getWorkerByIndex(0).getPosition());
+        assertTrue(gameState2.getGameBoard().getCell(newP).hasWorker());
+        assertFalse(gameState2.getGameBoard().getCell(oldP).hasWorker());
+    }
+
+    @Test
+    public void build_ShouldBuildWorker() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(0);
+
+        Point p = new Point(3, 2);
+
+        // check initial state
+        assertEquals(0, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+
+        // build
+        gameState2.build(p);
+
+        // check final state
+        assertEquals(1, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+    }
+
+    @Test
+    public void getPossibleMoves_ShouldReturnCurrentPlayerMoves() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)});
+
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(1);
+
+        List<Cell> moves = gameState2.getPossibleMoves();
+
+        List<Cell> expected = p1.getPower().getPossibleMoves(gameState2.getGameBoard(), p1.getWorkerByIndex(1));
+
+        assertEquals(expected.size(), moves.size());
+        assertTrue(expected.containsAll(moves));
+        assertTrue(moves.containsAll(expected));
+    }
+
+    @Test
+    public void getPossibleBuilds_ShouldReturnCurrentPlayerBuilds() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)});
+
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(1);
+
+        List<Cell> moves = gameState2.getPossibleBuilds();
+
+        List<Cell> expected = p1.getPower().getPossibleBuilds(gameState2.getGameBoard(), p1.getWorkerByIndex(1));
+
+        assertEquals(expected.size(), moves.size());
+        assertTrue(expected.containsAll(moves));
+        assertTrue(moves.containsAll(expected));
     }
 }

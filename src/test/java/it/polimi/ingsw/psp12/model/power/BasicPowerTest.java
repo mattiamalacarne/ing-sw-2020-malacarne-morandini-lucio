@@ -1,8 +1,11 @@
 package it.polimi.ingsw.psp12.model.power;
 
+import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -172,6 +175,123 @@ public class BasicPowerTest {
         List<Point> expected = new ArrayList<>(Arrays.asList(
                 new Point(0, 3), new Point(1, 3),
                 /*   center point   */ new Point(1, 4)
+        ));
+
+        assertEquals(expected.size(), points.size());
+        assertTrue(expected.containsAll(points));
+        assertTrue(points.containsAll(expected));
+    }
+
+    @Test
+    public void nextActions_InitState_ShouldReturnMove() {
+        List<Action> actions = basicPower.nextActions(TurnState.INIT);
+        assertEquals(1, actions.size());
+        assertEquals(Action.MOVE, actions.get(0));
+    }
+
+    @Test
+    public void nextActions_MoveState_ShouldReturnBuild() {
+        List<Action> actions = basicPower.nextActions(TurnState.MOVE);
+        assertEquals(1, actions.size());
+        assertEquals(Action.BUILD, actions.get(0));
+    }
+
+    @Test
+    public void nextActions_BuildState_ShouldReturnEnd() {
+        List<Action> actions = basicPower.nextActions(TurnState.BUILD);
+        assertEquals(1, actions.size());
+        assertEquals(Action.END, actions.get(0));
+    }
+
+    @Test
+    public void checkVictory_NotThirdLevel_ShouldReturnFalse() {
+        Cell c = new Cell(0, 0);
+        c.getTower().incrementLevel();
+        basicPower.lastPositions[0] = c;
+
+        assertFalse(basicPower.checkVictory());
+    }
+
+    @Test
+    public void checkVictory_ThirdLevel_ShouldReturnTrue() {
+        Cell c = new Cell(0, 0);
+        c.getTower().incrementLevel();
+        c.getTower().incrementLevel();
+        c.getTower().incrementLevel();
+        basicPower.lastPositions[0] = c;
+
+        assertTrue(basicPower.checkVictory());
+    }
+
+    @Test
+    public void getPossibleMoves_ShouldReturnValidCells() {
+        Point center = new Point(2, 2);
+        Worker w = new Worker();
+        w.move(center);
+        // place worker on the board
+        gameBoard.getCell(center).addWorker(w);
+
+        // place neighbors workers
+        gameBoard.getCell(new Point(1, 2)).addWorker(new Worker());
+        gameBoard.getCell(new Point(3, 3)).addWorker(new Worker());
+
+        // build towers levels
+        gameBoard.getCell(new Point(1, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+
+        // build domes
+        gameBoard.getCell(new Point(3, 1)).getTower().buildDome();
+
+        // get possible moves
+        List<Cell> cells = basicPower.getPossibleMoves(gameBoard, w);
+
+        // convert cells to points
+        List<Point> points = cells.stream().map(c -> c.getLocation()).collect(Collectors.toList());
+
+        List<Point> expected = new ArrayList<>(Arrays.asList(
+                new Point(1, 1), new Point(2, 1), /*      dome      */
+                /*      worker      */ /*   center point   */ new Point(3, 2),
+                new Point(1, 3) /*    two levels    */ /*      worker      */
+        ));
+
+        assertEquals(expected.size(), points.size());
+        assertTrue(expected.containsAll(points));
+        assertTrue(points.containsAll(expected));
+    }
+
+    @Test
+    public void getPossibleBuilds_ShouldReturnValidCells() {
+        Point center = new Point(2, 2);
+        Worker w = new Worker();
+        w.move(center);
+        // place worker on the board
+        gameBoard.getCell(center).addWorker(w);
+
+        // place neighbors workers
+        gameBoard.getCell(new Point(1, 2)).addWorker(new Worker());
+        gameBoard.getCell(new Point(3, 3)).addWorker(new Worker());
+
+        // build towers levels
+        gameBoard.getCell(new Point(1, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+
+        // build domes
+        gameBoard.getCell(new Point(3, 1)).getTower().buildDome();
+
+        // get possible moves
+        List<Cell> cells = basicPower.getPossibleBuilds(gameBoard, w);
+
+        // convert cells to points
+        List<Point> points = cells.stream().map(c -> c.getLocation()).collect(Collectors.toList());
+
+        List<Point> expected = new ArrayList<>(Arrays.asList(
+                new Point(1, 1), new Point(2, 1), /*      dome      */
+                /*      worker      */ /*   center point   */ new Point(3, 2),
+                new Point(1, 3) /*       dome       */ /*      worker      */
         ));
 
         assertEquals(expected.size(), points.size());

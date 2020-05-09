@@ -82,11 +82,10 @@ public class GameState extends Observable<Message>
      * @return created player
      */
     public Player addPlayer(String name) {
-        // TODO: throw exception if players array is full
-        players[playersCount] = new Player(playersCount, name);
+        Player player = new Player(playersCount, name);
+        players[playersCount] = player;
         playersCount++;
-
-        return players[playersCount - 1];
+        return player;
     }
 
     /**

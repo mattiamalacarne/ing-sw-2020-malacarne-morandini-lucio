@@ -37,12 +37,6 @@ public class Board implements Serializable
      * @return cell with the requested coordinates
      */
     public Cell getCell(Point pos) {
-        // TODO: throw exception if pos is invalid
-        if (!pos.isOnBoard()) {
-            // throw new NameToBeDefinedException();
-            return null;
-        }
-
         return boardCells[pos.getX()][pos.getY()];
     }
 
@@ -52,12 +46,6 @@ public class Board implements Serializable
      * @param newPoint new position of the worker after the move
      */
     public void move(Point oldPoint, Point newPoint) {
-        // TODO: throw exception if oldPoint or newPoint are invalid
-        if (!oldPoint.isOnBoard() || !newPoint.isOnBoard()) {
-            // throw new NameToBeDefinedException();
-            return;
-        }
-
         Worker worker = boardCells[oldPoint.getX()][oldPoint.getY()].removeWorker();
 
         boardCells[newPoint.getX()][newPoint.getY()].addWorker(worker);
@@ -68,12 +56,6 @@ public class Board implements Serializable
      * @param pos coordinates of the tower
      */
     public void build(Point pos) {
-        // TODO: throw exception if pos is invalid
-        if (!pos.isOnBoard()) {
-            // throw new NameToBeDefinedException();
-            return;
-        }
-
         boardCells[pos.getX()][pos.getY()].getTower().incrementLevel();
     }
 

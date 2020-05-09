@@ -43,14 +43,6 @@ public class BoardTest {
     }
 
     @Test
-    public void getCell_InvalidPoint_ShouldThrowException() {
-        Cell cell = testBoard.getCell(new Point(0, 5));
-
-        // TODO: search how to manage exception in tests
-        fail();
-    }
-
-    @Test
     public void move_ValidPoints_ShouldUpdateBoard() {
         Point oldPoint = new Point(1, 2);
         Point newPoint = new Point(1, 3);
@@ -68,18 +60,6 @@ public class BoardTest {
     }
 
     @Test
-    public void move_InvalidPoints_ShouldThrowException() {
-        Point oldPoint = new Point(1, 5); // invalid point
-        Point newPoint = new Point(1, 3);
-
-        // move
-        testBoard.move(oldPoint, newPoint);
-
-        // TODO: search how to manage exception in tests
-        fail();
-    }
-
-    @Test
     public void build_ValidPoint_ShouldUpdateBoard() {
         Point pos = new Point(0, 1);
 
@@ -91,17 +71,6 @@ public class BoardTest {
 
         // check final state
         assertEquals(1, testBoard.getCell(pos).getTower().getLevel());
-    }
-
-    @Test
-    public void build_InvalidPoints_ShouldThrowException() {
-        Point pos = new Point(5, 1); // invalid point
-
-        // build
-        testBoard.build(pos);
-
-        // TODO: search how to manage exception in tests
-        fail();
     }
 
     @Test

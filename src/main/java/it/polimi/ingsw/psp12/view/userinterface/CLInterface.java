@@ -289,26 +289,31 @@ public class CLInterface implements UserInterface
             }
         }while (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size());
 
+        if (actionsListMsg.mustSelectWorker()) {
 
-        System.out.println("Choose the worker you want to move:");
-        for (int c=0; c<actionsListMsg.getWorkers().size(); c++){
-            System.out.printf("%d) Worker at position %s\n", c, actionsListMsg.getWorkers().get(c).getPosition().toString());
+            System.out.println("Choose the worker you want to move:");
+            for (int c=0; c<actionsListMsg.getWorkers().size(); c++){
+                System.out.printf("%d) Worker at position %s\n", c, actionsListMsg.getWorkers().get(c).getPosition().toString());
+            }
+
+            int workerChoice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    workerChoice = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    workerChoice = -1;
+                }
+                if (workerChoice<0 || workerChoice>=actionsListMsg.getWorkers().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (workerChoice<0 || workerChoice>=actionsListMsg.getWorkers().size());
+
+            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice), workerChoice) );
+
+        } else {
+            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );
         }
-
-        int workerChoice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                workerChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                workerChoice = -1;
-            }
-            if (workerChoice<0 || workerChoice>=actionsListMsg.getWorkers().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (workerChoice<0 || workerChoice>=actionsListMsg.getWorkers().size());
-
-        messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice), workerChoice) );
 
     }
 

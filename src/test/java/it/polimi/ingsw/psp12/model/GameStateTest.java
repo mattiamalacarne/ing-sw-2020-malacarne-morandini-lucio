@@ -14,16 +14,18 @@ public class GameStateTest {
 
     @Before
     public void setUp() {
-        gameState2 = new GameState(2);
-        gameState3 = new GameState(3);
+        try {
+            gameState2 = new GameState(2);
+            gameState3 = new GameState(3);
+        }
+        catch (InvalidMaxPlayersException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Test
-    public void Board_InvalidCount_ShouldThrowException() {
+    @Test(expected = InvalidMaxPlayersException.class)
+    public void Board_InvalidCount_ShouldThrowException() throws InvalidMaxPlayersException {
         GameState gameState4 = new GameState(4);
-
-        // TODO: search how to manage exception in tests
-        fail();
     }
 
     @Test

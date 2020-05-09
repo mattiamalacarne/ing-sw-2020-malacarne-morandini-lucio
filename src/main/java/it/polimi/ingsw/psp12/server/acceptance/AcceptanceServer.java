@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.server.acceptance;
 
+import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.messages.CreateMsg;
 import it.polimi.ingsw.psp12.network.messages.CreatedMsg;
@@ -136,12 +137,9 @@ public class AcceptanceServer implements Runnable, Server {
         // TODO: change port assignment strategy
         int port = Constants.MATCHES_STARTING_PORT + rooms.size();
 
-        // TODO: check that maxPlayers is 2 or 3
-
         // create room and assign port
         Room room = new Room(name, maxPlayers);
         room.setAssignedPort(port);
-        rooms.add(room);
 
         GameServer gameServer;
         try {
@@ -156,6 +154,15 @@ public class AcceptanceServer implements Runnable, Server {
             client.send(new Message(MsgCommand.CREATE_FAILED));
             return;
         }
+        catch (InvalidMaxPlayersException e) {
+            System.out.println("invalid max players count: " + room.getMaxPlayersCount());
+
+            // notify the user that the room can not be created
+            client.send(new Message(MsgCommand.INVALID_MAX_PLAYERS));
+            return;
+        }
+
+        rooms.add(room);
 
         // TODO: change bare Thread class with Executor/ThreadPool?
         String threadName = "game_server_" + port;

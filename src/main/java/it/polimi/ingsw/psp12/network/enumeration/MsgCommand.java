@@ -10,6 +10,7 @@ public enum MsgCommand {
     CREATE(MsgType.SYSTEM), // create a new room
     CREATED(MsgType.SYSTEM), // confirm creation of a new room
     CREATE_FAILED(MsgType.SYSTEM), // notify user that a room has not been created
+    INVALID_MAX_PLAYERS(MsgType.SYSTEM), // max players count for a new room is invalid
     JOIN(MsgType.SYSTEM), // join an existing room
     JOINED(MsgType.SYSTEM), // confirm that user has joined a game
     INVALID_NICKNAME(MsgType.SYSTEM), // nickname provided by the user is already taken

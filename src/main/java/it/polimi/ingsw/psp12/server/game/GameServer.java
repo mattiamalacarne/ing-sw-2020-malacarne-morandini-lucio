@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.server.game;
 
 import it.polimi.ingsw.psp12.controller.Controller;
+import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
@@ -44,7 +45,7 @@ public class GameServer implements Runnable, Server {
      */
     private GameState model;
 
-    public GameServer(Room room, AcceptanceServer creator) throws IOException {
+    public GameServer(Room room, AcceptanceServer creator) throws IOException, InvalidMaxPlayersException {
         this.room = room;
         this.creator = creator;
 
@@ -123,7 +124,7 @@ public class GameServer implements Runnable, Server {
     private void subscribeClient(String name, ClientHandler client) {
         // subscribe the client only if the room is not full
         if (room.isFull()) {
-            // notify the client that the user is already full and close connection
+            // notify the client that the game is already full and close connection
             client.send(new Message(MsgCommand.ROOM_FULL));
             client.close();
             System.out.println("client tried to subscribe to a full room");

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.model;
 
+import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
@@ -56,8 +57,10 @@ public class GameState extends Observable<Message>
      * Constructor of the class
      * @param maxPlayersCount max number of players allowed in the game
      */
-    public GameState(int maxPlayersCount) {
-        // TODO: throw exception if count not in [2,3]
+    public GameState(int maxPlayersCount) throws InvalidMaxPlayersException {
+        // throw exception if max players count is invalid
+        if (maxPlayersCount < 2 || maxPlayersCount > 3) throw new InvalidMaxPlayersException();
+
         gameBoard = new Board();
         players = new Player[maxPlayersCount];
         playersCount = 0;

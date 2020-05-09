@@ -207,8 +207,7 @@ public class Controller implements Observer<Message> {
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " started the turn");
 
-        //FIXME: controllare se Arrays.asList non crea problemi
-        sendToCurrentPlayer(new ActionsListMsg(model.nextActions(), Arrays.asList(model.getCurrentPlayer().getWorkers())));
+        sendToCurrentPlayer(new ActionsListMsg(model.nextActions(), model.getCurrentPlayer().getWorkers()));
     }
 
     /**
@@ -310,10 +309,9 @@ public class Controller implements Observer<Message> {
         // ask user what to do next if there are more than one action that can be executed
         if (actions.size() > 1) {
             System.out.println("more than one action possible, asking to the player " +
-                    model.getPreviousPlayer().getId() + " what to do next");
+                    model.getCurrentPlayer().getId() + " what to do next");
 
-            //FIXME: passare solo il worker corrente o tutti?
-            sendToCurrentPlayer(new ActionsListMsg(actions, Arrays.asList(model.getCurrentPlayer().getCurrentWorker())));
+            sendToCurrentPlayer(new ActionsListMsg(actions));
             return;
         }
 

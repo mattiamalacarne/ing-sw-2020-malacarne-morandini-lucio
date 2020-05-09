@@ -22,8 +22,10 @@ public class ActionsListMsg extends Message {
     private List<Worker> workers;
 
     /**
-     * Create the message with the list of actions that can be performed, and the worker that will perform the action
+     * Create the message with the list of actions that can be performed
+     * and the worker that will perform the action
      * @param actions the list of actions
+     * @param workers workers to be selected
      */
     public ActionsListMsg(List<Action> actions, List<Worker> workers) {
         super(MsgCommand.ACTIONS_LIST);
@@ -32,11 +34,27 @@ public class ActionsListMsg extends Message {
         this.workers = workers;
     }
 
+    /**
+     * Create the message with the list of actions that can be performed
+     * @param actions the list of actions
+     */
+    public ActionsListMsg(List<Action> actions) {
+        this(actions, null);
+    }
+
     public List<Action> getActions() {
         return actions;
     }
 
     public List<Worker> getWorkers() {
         return workers;
+    }
+
+    /**
+     * Determine if the client must select the worker in addition to the action
+     * @return true if client must select the worker
+     */
+    public boolean mustSelectWorker() {
+        return workers != null;
     }
 }

@@ -6,6 +6,10 @@ import it.polimi.ingsw.psp12.model.power.BasicPower;
 import it.polimi.ingsw.psp12.model.power.Power;
 import it.polimi.ingsw.psp12.utils.Color;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * <p><b>Class</b> that represent the player</p>
  * <p>This class store the information for the game state</p>
@@ -46,8 +50,10 @@ public class Player
      * Get all the workers of the player
      * @return the list of the workers
      */
-    public Worker[] getWorkers() {
-        return workers;
+    public List<Worker> getWorkers() {
+        return new ArrayList<>(
+                Arrays.asList(workers[0].clone(), workers[1].clone())
+        );
     }
 
     /**

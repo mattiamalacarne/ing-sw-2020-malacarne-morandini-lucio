@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Point</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model.board</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Point (it.polimi.ingsw.psp12.model.board)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Point</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85,7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92,3%
+  </span>
+  <span class="absValue">
+    (12/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model.board;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.io.Serializable;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * Class that is used to hold information of a coordinate on the map
+<i>7</i>&nbsp; * @author Luca Morandini
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class Point implements Serializable
+<i>10</i>&nbsp;{
+<i>11</i>&nbsp;    /**
+<i>12</i>&nbsp;     * Column index
+<i>13</i>&nbsp;     */
+<i>14</i>&nbsp;    private int x;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Row index
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    private int y;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Constructor
+<i>24</i>&nbsp;     * @param x x position
+<i>25</i>&nbsp;     * @param y y position
+<i>26</i>&nbsp;     */
+<b class="fc"><i>27</i>&nbsp;    public Point(int x, int y) {</b>
+<b class="fc"><i>28</i>&nbsp;        this.x = x;</b>
+<b class="fc"><i>29</i>&nbsp;        this.y = y;</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Getter of x value
+<i>34</i>&nbsp;     * @return x value
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public int getX() {
+<b class="fc"><i>37</i>&nbsp;        return x;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Getter of y value
+<i>42</i>&nbsp;     * @return y value
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public int getY() {
+<b class="fc"><i>45</i>&nbsp;        return y;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Check if the current point is valid
+<i>50</i>&nbsp;     * @return true if the point represents a valid point on the map
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public boolean isOnBoard() {
+<b class="fc"><i>53</i>&nbsp;        return (x &gt;= 0 &amp;&amp; x &lt;= 4 &amp;&amp; y &gt;= 0 &amp;&amp; y &lt;= 4);</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Determines if two points are equal
+<i>58</i>&nbsp;     * @param o point to compare
+<i>59</i>&nbsp;     * @return true if this point equals the parameter
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    @Override
+<i>62</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i>63</i>&nbsp;        if (this == o) return true;</b>
+<b class="fc"><i>64</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="fc"><i>65</i>&nbsp;        Point point = (Point) o;</b>
+<b class="fc"><i>66</i>&nbsp;        return x == point.x &amp;&amp;</b>
+<i>67</i>&nbsp;                y == point.y;
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    @Override
+<i>71</i>&nbsp;    public String toString() {
+<b class="nc"><i>72</i>&nbsp;        return  &quot;x = &quot; + x +</b>
+<i>73</i>&nbsp;                &quot;, y = &quot; + y ;
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Returns a clone of the point
+<i>78</i>&nbsp;     * @return point clone
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public Point clone() {
+<b class="fc"><i>81</i>&nbsp;        return new Point(this.x, this.y);</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-11 23:54</div>
+</div>
+</body>
+</html>

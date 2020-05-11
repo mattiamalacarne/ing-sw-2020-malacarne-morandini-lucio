@@ -29,6 +29,9 @@ public enum MsgCommand {
     CELL_LIST(MsgType.GAME),
     SELECTED_CELL(MsgType.GAME),
     BOARD_UPDATE(MsgType.GAME),
+    YOU_WON(MsgType.GAME),
+    YOU_LOST(MsgType.GAME),
+    OTHER_LOST(MsgType.GAME),
     CELL_REQUEST(MsgType.GAME); // TODO: remove
 
     /** Determine if this is a system or game message **/

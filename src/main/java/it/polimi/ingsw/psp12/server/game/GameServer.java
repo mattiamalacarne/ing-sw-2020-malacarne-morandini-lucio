@@ -70,21 +70,14 @@ public class GameServer implements Runnable, Server {
                 thread.start();
             }
             catch (IOException e) {
+                if (!room.isRunning()) {
+                    System.out.println("game server closed");
+                    return;
+                }
+
                 System.out.println("client connection failed");
                 e.printStackTrace();
             }
-        }
-
-        // TODO: terminate game and kick off clients
-
-        try {
-            socket.close();
-            System.out.println("game server closed");
-        }
-        catch (IOException e) {
-            System.out.println("error while shutting down server");
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 
@@ -157,6 +150,22 @@ public class GameServer implements Runnable, Server {
      */
     public void gameEnded() {
         System.out.println("game " + room.getAssignedPort() + " ended");
+
+        // remove room from the list of available rooms
         creator.gameEnded(room);
+
+        // close the room to disconnect clients
+        room.close();
+
+        System.out.println("shutting down game server...");
+
+        try {
+            socket.close();
+        }
+        catch (IOException e) {
+            System.out.println("error while shutting down server");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }

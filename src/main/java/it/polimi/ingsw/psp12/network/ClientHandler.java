@@ -79,8 +79,10 @@ public class ClientHandler implements Runnable {
                 //System.out.println("client " + socket.getInetAddress() + " connection dropped");
                 //e.printStackTrace();
 
-                // notify the server that the client has disconnected
-                server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
+                if (running) {
+                    // notify the server that the client has disconnected
+                    server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
+                }
 
                 // close socket
                 close();

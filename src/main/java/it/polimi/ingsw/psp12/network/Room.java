@@ -97,14 +97,14 @@ public class Room implements Serializable{
      * Checks if the game is currently active
      * @return true if game is active
      */
-    public boolean isRunning() {
+    public synchronized boolean isRunning() {
         return active;
     }
 
     /**
      * Interrupts the game and marks it as not active
      */
-    public void close() {
+    public synchronized void close() {
         active = false;
     }
 }

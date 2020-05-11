@@ -45,6 +45,13 @@ public class VirtualView extends Observable<Message> implements Observer<Message
         return player;
     }
 
+    /**
+     * Close socket connection
+     */
+    public void close() {
+        clientHandler.close();
+    }
+
     @Override
     public void processCommand(Message message) {
         notifyObservers(message);

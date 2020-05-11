@@ -69,13 +69,6 @@ public class Controller implements Observer<Message> {
         requestPlayerInfo();
     }
 
-    /**
-     * Notify the server responsible for closing the room when the game ended
-     */
-    void endGame() {
-        server.gameEnded();
-    }
-
     @Override
     public void update(Object sender, Message message) {
         VirtualView vv = (VirtualView)sender;
@@ -255,7 +248,35 @@ public class Controller implements Observer<Message> {
         // player has lost if can not perform an action
         if (cells.size() == 0) {
             System.out.println("player " + model.getCurrentPlayer().getId() + " has lost");
-            // TODO: manage exit of a player
+
+            // notify current player that has lost
+            sendToCurrentPlayer(new Message(MsgCommand.YOU_LOST));
+
+            // check if there the game can continue (remain at least two players)
+            if ((model.getPlayersCount() - 1) >= 2) {
+                // disconnect current client
+                disconnectClient(model.getCurrentPlayer());
+
+                System.out.println("removing player " + model.getCurrentPlayer().getId() + " and the workers");
+                // remove current player
+                model.removeCurrentPlayer();
+
+                // notify other players that the current player has lost
+                for (Player waitingPlayer : model.getPlayers()) {
+                    sendToPlayer(waitingPlayer, new OtherLostMsg(model.getCurrentPlayer().getName()));
+                }
+
+                // start the next turn
+                beginTurn();
+            }
+            else {
+                // notify other player that has won
+                sendToPlayer(model.getWaitingPlayers()[0], new Message(MsgCommand.YOU_WON));
+
+                // disconnect all clients and close room
+                endGame();
+            }
+
             return;
         }
 
@@ -286,8 +307,17 @@ public class Controller implements Observer<Message> {
         // check if the current player has won
         if (model.checkVictory()) {
             System.out.println("player " + model.getCurrentPlayer().getId() + " has won");
-            // TODO: manage end of the game
-            //endGame();
+
+            // notify the current player that has won
+            sendToCurrentPlayer(new Message(MsgCommand.YOU_WON));
+
+            // notify other players that have lost
+            for (Player waitingPlayer : model.getWaitingPlayers()) {
+                sendToPlayer(waitingPlayer, new Message(MsgCommand.YOU_LOST));
+            }
+
+            // disconnect all clients and close room
+            endGame();
             return;
         }
 
@@ -333,5 +363,46 @@ public class Controller implements Observer<Message> {
 
         // initialize turn for the next player
         beginTurn();
+    }
+
+    /**
+     * Disconnect clients and notify the server responsible for closing the room when the game ended
+     */
+    void endGame() {
+        System.out.println("closing the game...");
+
+        // disconnect clients
+        for (Player player : model.getPlayers()) {
+            disconnectClient(player);
+        }
+
+        // close room
+        server.gameEnded();
+    }
+
+    /**
+     * Disconnect client and close socket connection
+     * @param player player associated to the client to disconnect
+     */
+    void disconnectClient(Player player) {
+        Optional<VirtualView> vv = clients.stream().filter(v -> v.getPlayer().equals(player)).findFirst();
+
+        if (!vv.isPresent()) {
+            System.out.println("no virtual view associated with the requested player");
+            return;
+        }
+
+        VirtualView view = vv.get();
+
+        System.out.println("disconnecting player " + player.getId());
+
+        // remove virtual view from the clients list
+        clients.remove(view);
+
+        // unsubscribe view from model events
+        model.removeObserver(view);
+
+        // close virtual view
+        view.close();
     }
 }

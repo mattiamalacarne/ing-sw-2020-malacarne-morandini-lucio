@@ -77,6 +77,14 @@ public class GameState extends Observable<Message>
     }
 
     /**
+     * Return the number of players that are currently playing the game
+     * @return players count
+     */
+    public int getPlayersCount() {
+        return playersCount;
+    }
+
+    /**
      * Add the player to the game
      * @param name nickname of the player
      * @return created player
@@ -86,6 +94,39 @@ public class GameState extends Observable<Message>
         players[playersCount] = player;
         playersCount++;
         return player;
+    }
+
+    /**
+     * Remove the current player after losing the game
+     */
+    public void removeCurrentPlayer() {
+        // remove workers from the board
+        for (int w = 0; w < 2; w++) {
+            Worker worker = getCurrentPlayer().getWorkerByIndex(w);
+            gameBoard.getCell(worker.getPosition()).removeWorker();
+        }
+
+        // remove player
+        playersCount -= 1;
+
+        Player tmp[] = players;
+        players = new Player[playersCount];
+
+        int i = 0;
+        // iterate over all players
+        for (int p = 0; p <= playersCount; p++) {
+            // keep only players that are not the current one
+            if (p != turn) {
+                players[i] = tmp[p];
+                i++;
+            }
+        }
+
+        // move to the next player
+        turn = turn % playersCount;
+
+        // update board on the client
+        notifyObservers(new UpdateBoardMsg(getGameBoard()));
     }
 
     /**

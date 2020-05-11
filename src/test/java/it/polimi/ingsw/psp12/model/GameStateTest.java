@@ -433,4 +433,166 @@ public class GameStateTest {
         assertTrue(expected.containsAll(moves));
         assertTrue(moves.containsAll(expected));
     }
+
+    @Test
+    public void removeCurrentPlayer_TwoPlayersNotLast_ShouldRemovePlayer() {
+        Player p1 = gameState2.addPlayer("P1");
+        Player p2 = gameState2.addPlayer("P2");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+
+        gameState2.initGame();
+
+        // check initial state
+        assertEquals(2, gameState2.getPlayersCount());
+        assertEquals(p1, gameState2.getCurrentPlayer());
+        assertEquals(2, gameState2.getPlayers().length);
+        assertEquals(p1, gameState2.getPlayers()[0]);
+        assertEquals(p2, gameState2.getPlayers()[1]);
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+
+        // remove player
+        gameState2.removeCurrentPlayer();
+
+        // check final state
+        assertEquals(1, gameState2.getPlayersCount());
+        assertEquals(p2, gameState2.getCurrentPlayer());
+        assertEquals(1, gameState2.getPlayers().length);
+        assertEquals(p2, gameState2.getPlayers()[0]);
+        assertFalse(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertFalse(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+    }
+
+    @Test
+    public void removeCurrentPlayer_TwoPlayersLast_ShouldRemovePlayer() {
+        Player p1 = gameState2.addPlayer("P1");
+        Player p2 = gameState2.addPlayer("P2");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+
+        gameState2.initGame();
+        gameState2.nextTurn();
+
+        // check initial state
+        assertEquals(2, gameState2.getPlayersCount());
+        assertEquals(p2, gameState2.getCurrentPlayer());
+        assertEquals(2, gameState2.getPlayers().length);
+        assertEquals(p1, gameState2.getPlayers()[0]);
+        assertEquals(p2, gameState2.getPlayers()[1]);
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+
+        // remove player
+        gameState2.removeCurrentPlayer();
+
+        // check final state
+        assertEquals(1, gameState2.getPlayersCount());
+        assertEquals(p1, gameState2.getCurrentPlayer());
+        assertEquals(1, gameState2.getPlayers().length);
+        assertEquals(p1, gameState2.getPlayers()[0]);
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertFalse(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertFalse(gameState2.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+    }
+
+    @Test
+    public void removeCurrentPlayer_ThreePlayersNotLast_ShouldRemovePlayer() {
+        Player p1 = gameState3.addPlayer("P1");
+        Player p2 = gameState3.addPlayer("P2");
+        Player p3 = gameState3.addPlayer("P3");
+        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState3.nextTurn();
+        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState3.nextTurn();
+        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)});
+
+        gameState3.initGame();
+        gameState3.nextTurn();
+
+        // check initial state
+        assertEquals(3, gameState3.getPlayersCount());
+        assertEquals(p2, gameState3.getCurrentPlayer());
+        assertEquals(3, gameState3.getPlayers().length);
+        assertEquals(p1, gameState3.getPlayers()[0]);
+        assertEquals(p2, gameState3.getPlayers()[1]);
+        assertEquals(p3, gameState3.getPlayers()[2]);
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(1).getPosition()).hasWorker());
+
+        // remove player
+        gameState3.removeCurrentPlayer();
+
+        // check final state
+        assertEquals(2, gameState3.getPlayersCount());
+        assertEquals(p3, gameState3.getCurrentPlayer());
+        assertEquals(2, gameState3.getPlayers().length);
+        assertEquals(p1, gameState3.getPlayers()[0]);
+        assertEquals(p3, gameState3.getPlayers()[1]);
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertFalse(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertFalse(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(1).getPosition()).hasWorker());
+    }
+
+    @Test
+    public void removeCurrentPlayer_ThreePlayersLast_ShouldRemovePlayer() {
+        Player p1 = gameState3.addPlayer("P1");
+        Player p2 = gameState3.addPlayer("P2");
+        Player p3 = gameState3.addPlayer("P3");
+        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState3.nextTurn();
+        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState3.nextTurn();
+        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)});
+
+        gameState3.initGame();
+        gameState3.nextTurn();
+        gameState3.nextTurn();
+
+        // check initial state
+        assertEquals(3, gameState3.getPlayersCount());
+        assertEquals(p3, gameState3.getCurrentPlayer());
+        assertEquals(3, gameState3.getPlayers().length);
+        assertEquals(p1, gameState3.getPlayers()[0]);
+        assertEquals(p2, gameState3.getPlayers()[1]);
+        assertEquals(p3, gameState3.getPlayers()[2]);
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(1).getPosition()).hasWorker());
+
+        // remove player
+        gameState3.removeCurrentPlayer();
+
+        // check final state
+        assertEquals(2, gameState3.getPlayersCount());
+        assertEquals(p1, gameState3.getCurrentPlayer());
+        assertEquals(2, gameState3.getPlayers().length);
+        assertEquals(p1, gameState3.getPlayers()[0]);
+        assertEquals(p2, gameState3.getPlayers()[1]);
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p1.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
+        assertFalse(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(0).getPosition()).hasWorker());
+        assertFalse(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(1).getPosition()).hasWorker());
+    }
 }

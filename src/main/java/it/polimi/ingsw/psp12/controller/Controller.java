@@ -247,36 +247,7 @@ public class Controller implements Observer<Message> {
         // check if the current player has lost
         // player has lost if can not perform an action
         if (cells.size() == 0) {
-            System.out.println("player " + model.getCurrentPlayer().getId() + " has lost");
-
-            // notify current player that has lost
-            sendToCurrentPlayer(new Message(MsgCommand.YOU_LOST));
-
-            // check if there the game can continue (remain at least two players)
-            if ((model.getPlayersCount() - 1) >= 2) {
-                // disconnect current client
-                disconnectClient(model.getCurrentPlayer());
-
-                System.out.println("removing player " + model.getCurrentPlayer().getId() + " and the workers");
-                // remove current player
-                model.removeCurrentPlayer();
-
-                // notify other players that the current player has lost
-                for (Player waitingPlayer : model.getPlayers()) {
-                    sendToPlayer(waitingPlayer, new OtherLostMsg(model.getCurrentPlayer().getName()));
-                }
-
-                // start the next turn
-                beginTurn();
-            }
-            else {
-                // notify other player that has won
-                sendToPlayer(model.getWaitingPlayers()[0], new Message(MsgCommand.YOU_WON));
-
-                // disconnect all clients and close room
-                endGame();
-            }
-
+            handleCurrentPlayerLoss();
             return;
         }
 
@@ -306,18 +277,7 @@ public class Controller implements Observer<Message> {
 
         // check if the current player has won
         if (model.checkVictory()) {
-            System.out.println("player " + model.getCurrentPlayer().getId() + " has won");
-
-            // notify the current player that has won
-            sendToCurrentPlayer(new Message(MsgCommand.YOU_WON));
-
-            // notify other players that have lost
-            for (Player waitingPlayer : model.getWaitingPlayers()) {
-                sendToPlayer(waitingPlayer, new Message(MsgCommand.YOU_LOST));
-            }
-
-            // disconnect all clients and close room
-            endGame();
+            handleCurrentPlayerVictory();
             return;
         }
 
@@ -366,9 +326,65 @@ public class Controller implements Observer<Message> {
     }
 
     /**
+     * Handle the loss of the current player
+     * and end the game if only one player remains
+     * or disconnect the current player and continue the game
+     */
+    void handleCurrentPlayerLoss() {
+        System.out.println("player " + model.getCurrentPlayer().getId() + " has lost");
+
+        // notify current player that has lost
+        sendToCurrentPlayer(new Message(MsgCommand.YOU_LOST));
+
+        // check if there the game can continue (at least two players remain)
+        if ((model.getPlayersCount() - 1) >= 2) {
+            // disconnect current client
+            disconnectClient(model.getCurrentPlayer());
+
+            System.out.println("removing player " + model.getCurrentPlayer().getId() + " and the workers");
+            // remove current player
+            model.removeCurrentPlayer();
+
+            // notify other players that the current player has lost
+            for (Player waitingPlayer : model.getPlayers()) {
+                sendToPlayer(waitingPlayer, new OtherLostMsg(model.getCurrentPlayer().getName()));
+            }
+
+            // start the next turn
+            beginTurn();
+        }
+        else {
+            // notify other player that has won
+            sendToPlayer(model.getWaitingPlayers()[0], new Message(MsgCommand.YOU_WON));
+
+            // disconnect all clients and close room
+            endGame();
+        }
+    }
+
+    /**
+     * Handle the victory of the current player
+     * and end the game
+     */
+    void handleCurrentPlayerVictory() {
+        System.out.println("player " + model.getCurrentPlayer().getId() + " has won");
+
+        // notify the current player that has won
+        sendToCurrentPlayer(new Message(MsgCommand.YOU_WON));
+
+        // notify other players that have lost
+        for (Player waitingPlayer : model.getWaitingPlayers()) {
+            sendToPlayer(waitingPlayer, new Message(MsgCommand.YOU_LOST));
+        }
+
+        // disconnect all clients and close room
+        endGame();
+    }
+
+    /**
      * Disconnect clients and notify the server responsible for closing the room when the game ended
      */
-    void endGame() {
+    public void endGame() {
         System.out.println("closing the game...");
 
         // disconnect clients

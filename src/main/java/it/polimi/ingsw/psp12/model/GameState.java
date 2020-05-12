@@ -56,6 +56,7 @@ public class GameState extends Observable<Message>
     /**
      * Constructor of the class
      * @param maxPlayersCount max number of players allowed in the game
+     * @throws InvalidMaxPlayersException if max players count is not between 2 and 3
      */
     public GameState(int maxPlayersCount) throws InvalidMaxPlayersException {
         // throw exception if max players count is invalid

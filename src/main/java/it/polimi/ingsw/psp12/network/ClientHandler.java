@@ -4,11 +4,14 @@ import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.server.game.CommandHandler;
 import it.polimi.ingsw.psp12.server.Server;
+import it.polimi.ingsw.psp12.utils.Constants;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Class that handles socket connection with a client
@@ -22,6 +25,11 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream outgoing;
 
     private boolean running;
+
+    /**
+     * Timer used to periodically send ping to keep the connection open
+     */
+    private Timer ping;
 
     /**
      * Handler of game commands
@@ -50,6 +58,22 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
 
+        ping = new Timer();
+        ping.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // TODO: handle multi threading
+                send(new Message(MsgCommand.PING));
+            }
+        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL);
+    }
+
+    /**
+     * Determine if the socket is open
+     * @return true if socket is open
+     */
+    public boolean isRunning() { // TODO: handle multi threading
+        return running;
     }
 
     /**
@@ -116,6 +140,7 @@ public class ClientHandler implements Runnable {
     {
         if (running) {
             running = false; // TODO: handle multi threading
+            ping.cancel();
             try {
                 incoming.close();
                 outgoing.close();

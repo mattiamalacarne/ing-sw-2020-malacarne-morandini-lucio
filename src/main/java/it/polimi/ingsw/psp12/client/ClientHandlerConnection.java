@@ -1,15 +1,17 @@
 package it.polimi.ingsw.psp12.client;
 
 
-import it.polimi.ingsw.psp12.network.messages.CreateMsg;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.Message;
+import it.polimi.ingsw.psp12.utils.Constants;
 import it.polimi.ingsw.psp12.utils.Observable;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * <p><b>Class</b> responsible for the connection with the main server</p>
@@ -24,6 +26,11 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     private ObjectInputStream input_stream;
     private Boolean running;
 
+    /**
+     * Timer used to periodically send ping to keep the connection open
+     */
+    private Timer ping;
+
 
     /**
      * prepare the client for connect to the server
@@ -33,6 +40,15 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     {
         this.serverInfo = server;
         running = true;
+
+        ping = new Timer();
+        ping.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // TODO: handle multi threading
+                sendRequestToServer(new Message(MsgCommand.PING));
+            }
+        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL);
     }
 
     @Override
@@ -42,6 +58,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
 
         try {
             clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
+            clientSocket.setSoTimeout(Constants.SOCKET_TIMEOUT);
             System.out.println("Connected to server on port " + serverInfo.serverPort);
 
             // Init the stream after connection
@@ -86,6 +103,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      */
     public void close() throws IOException {
         running = false;
+        ping.cancel();
         clientSocket.close();
     }
 

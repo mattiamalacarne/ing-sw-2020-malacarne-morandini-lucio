@@ -17,6 +17,8 @@ public enum MsgCommand {
     ROOM_FULL(MsgType.SYSTEM), // user can not subscribe because the room is already full
     DISCONNECTED(MsgType.SYSTEM), // client has disconnected from the server
     NOT_YOUR_TURN(MsgType.SYSTEM), // the client sent a message not in its turn
+    PING(MsgType.SYSTEM), // ping to keep the connection open and prevent socket timeout
+    CLOSE(MsgType.SYSTEM), // notify the client to close the socket
 
     /** Game commands **/
     REQUEST_INFO(MsgType.GAME),

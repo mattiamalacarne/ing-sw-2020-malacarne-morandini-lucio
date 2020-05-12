@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.server.game;
 
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.network.ClientHandler;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.utils.Observable;
 import it.polimi.ingsw.psp12.utils.Observer;
@@ -49,7 +50,10 @@ public class VirtualView extends Observable<Message> implements Observer<Message
      * Close socket connection
      */
     public void close() {
-        clientHandler.close();
+        if (clientHandler.isRunning()) {
+            clientHandler.send(new Message(MsgCommand.CLOSE));
+            clientHandler.close();
+        }
     }
 
     @Override

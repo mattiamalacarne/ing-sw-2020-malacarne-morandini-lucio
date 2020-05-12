@@ -10,6 +10,7 @@ import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.Room;
 import it.polimi.ingsw.psp12.server.Server;
 import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
+import it.polimi.ingsw.psp12.utils.Constants;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -59,6 +60,7 @@ public class GameServer implements Runnable, Server {
         while (room.isRunning()) {
             try {
                 Socket client = socket.accept();
+                client.setSoTimeout(Constants.SOCKET_TIMEOUT);
 
                 // create client handler
                 ClientHandler clientHandler = new ClientHandler(client);
@@ -105,6 +107,14 @@ public class GameServer implements Runnable, Server {
             case DISCONNECTED:
                 // TODO: remove client from game
                 System.out.println("client disconnected from game server");
+                // close socket to avoid sending close message
+                client.close();
+
+                // TODO: handle multi threading
+                controller.endGame();
+                break;
+            case PING:
+                //System.out.println("ping received");
                 break;
         }
     }

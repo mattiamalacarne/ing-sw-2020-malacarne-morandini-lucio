@@ -15,6 +15,7 @@ public class Room implements Serializable{
     /**
      * Name of the room
      */
+    // TODO: remove!!!!
     private String name;
 
     /**
@@ -27,14 +28,36 @@ public class Room implements Serializable{
      */
     private int playersCount;
 
+    private int subscribedCount;
+
     /**
      * Determines if the game is currently active
      */
     private boolean active;
 
+    /**
+     * @deprecated
+     * @param name
+     * @param maxPlayersCount
+     */
+    // TODO: remove!!!!
     public Room(String name, int maxPlayersCount) {
         this.name = name;
         this.maxPlayersCount = maxPlayersCount;
+        this.active = true;
+    }
+
+    public Room() {
+        this.active = false;
+        this.playersCount = 0;
+        this.subscribedCount = 0;
+    }
+
+    public void setMaxPlayersCount(int maxPlayersCount) {
+        this.maxPlayersCount = maxPlayersCount;
+    }
+
+    public void activate() {
         this.active = true;
     }
 
@@ -59,6 +82,20 @@ public class Room implements Serializable{
      */
     public void clientJoined() {
         playersCount++;
+    }
+
+    public void subscribe() {
+        subscribedCount++;
+    }
+
+    public void unsubscribe() {
+        if (subscribedCount > 0) {
+            subscribedCount--;
+        }
+    }
+
+    public boolean isReady() {
+        return (subscribedCount >= maxPlayersCount);
     }
 
     /**

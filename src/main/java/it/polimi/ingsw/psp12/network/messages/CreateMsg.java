@@ -21,6 +21,7 @@ public class CreateMsg extends Message {
      * Construct the message
      * @param roomName name of the room
      * @param maxPlayersCount max number of players of the game
+     * @deprecated
      */
     public CreateMsg(String roomName, int maxPlayersCount) {
         super(MsgCommand.CREATE);
@@ -28,6 +29,16 @@ public class CreateMsg extends Message {
         this.maxPlayersCount = maxPlayersCount;
     }
 
+    /**
+     * Construct the message
+     * @param maxPlayersCount max number of players of the game
+     */
+    public CreateMsg(int maxPlayersCount) {
+        super(MsgCommand.CREATE);
+        this.maxPlayersCount = maxPlayersCount;
+    }
+
+    /** @deprecated */
     public String getRoomName() {
         return roomName;
     }

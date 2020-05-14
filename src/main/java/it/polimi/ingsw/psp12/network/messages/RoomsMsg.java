@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Class that holds a list of available (not full) rooms on the server
  * @author Luca Morandini
+ * @deprecated
  */
 public class RoomsMsg extends Message {
     /**

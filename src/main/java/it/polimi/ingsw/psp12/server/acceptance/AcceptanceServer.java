@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp12.network.messages.CreatedMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.Room;
+import it.polimi.ingsw.psp12.server.PortsManager;
 import it.polimi.ingsw.psp12.server.Server;
 import it.polimi.ingsw.psp12.server.game.GameServer;
 import it.polimi.ingsw.psp12.utils.Constants;
@@ -14,8 +15,8 @@ import it.polimi.ingsw.psp12.utils.Constants;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Server that accepts clients, creates new rooms (games) and redirects clients to the specific game server
@@ -25,7 +26,7 @@ public class AcceptanceServer implements Runnable, Server {
     /**
      * Socket used to accept clients
      */
-    private ServerSocket socket;
+    private final ServerSocket socket;
 
     /**
      * Determines if the acceptance server is currently running
@@ -36,18 +37,29 @@ public class AcceptanceServer implements Runnable, Server {
      * List of currently active rooms
      */
     // TODO: remove!!!
-    private List<Room> rooms;
+    //private List<Room> rooms;
 
-
+    /**
+     * Room currently in the creation and clients subscription phases
+     */
     private Room waitingRoom;
-    private List<ClientHandler> waitingClients;
+    //private List<ClientHandler> waitingClientsList;
+
+    /**
+     * List of connected clients that are waiting to be assigned to a room
+     */
+    private final Queue<ClientHandler> waitingClients;
 
     public AcceptanceServer(int port) throws IOException {
         socket = new ServerSocket(port);
-        rooms = new ArrayList<>();
+        //rooms = new ArrayList<>();
 
-        waitingClients = new ArrayList<>();
+        //waitingClientsList = new ArrayList<>();
+        waitingClients = new ConcurrentLinkedQueue<>();
         waitingRoom = null;
+
+        // initialize ports manager for game servers
+        PortsManager.init(Constants.GAME_PORTS);
     }
 
     @Override
@@ -68,7 +80,8 @@ public class AcceptanceServer implements Runnable, Server {
                 Thread thread = new Thread(clientHandler);
                 thread.start();
 
-                waitingClients.add(clientHandler);
+                //waitingClientsList.add(clientHandler);
+                waitingClients.offer(clientHandler);
                 handleClient(clientHandler);
             }
             catch (IOException e) {
@@ -94,6 +107,13 @@ public class AcceptanceServer implements Runnable, Server {
      */
     public void close() {
         running = false;
+
+        System.out.println("disconnecting clients...");
+
+        // disconnect clients
+        while (!waitingClients.isEmpty()) {
+            waitingClients.poll().close();
+        }
 
         System.out.println("shutting down acceptance server...");
 
@@ -148,8 +168,14 @@ public class AcceptanceServer implements Runnable, Server {
         }
     }
 
+    /**
+     * Handle the provided client and determine the message thas has to be sent
+     * @param client client to be processed
+     */
     private void handleClient(ClientHandler client) {
+        // check if there is a room in the creation process
         if (waitingRoom == null) {
+            // create new room
             waitingRoom = new Room();
 
             // ask client to create a game
@@ -157,6 +183,7 @@ public class AcceptanceServer implements Runnable, Server {
             return;
         }
 
+        // check if room has been initialized
         if (!waitingRoom.isRunning()) {
             // send to client wait command
             client.send(new Message(MsgCommand.WAIT));
@@ -168,23 +195,33 @@ public class AcceptanceServer implements Runnable, Server {
         client.send(new CreatedMsg(waitingRoom));
         client.close();
 
+        //waitingClientsList.remove(client);
+        // remove processed client from the list of waiting clients
         waitingClients.remove(client);
+
+        // register that a new client subscribed the room
         waitingRoom.subscribe();
 
+        // reset current room if all the clients have joined
         if (waitingRoom.isReady()) {
             waitingRoom = null;
         }
     }
 
+    /**
+     * Process the list of waiting clients after the room has been initialized
+     */
     private void processWaitingClients() {
-        while (waitingClients.size() > 0) {
-            ClientHandler client = waitingClients.get(0);
+        boolean stop = false;
+
+        //while (waitingClientsList.size() > 0) {
+        while (!waitingClients.isEmpty() && !stop) {
+            //ClientHandler client = waitingClientsList.get(0);
+            ClientHandler client = waitingClients.peek();
             handleClient(client);
 
-            // if room created but not active, stop processing clients
-            if (waitingRoom != null && !waitingRoom.isRunning()) {
-                return;
-            }
+            // stop processing clients if room has been created but not initialized
+            stop = (waitingRoom != null && !waitingRoom.isRunning());
         }
     }
 
@@ -200,25 +237,33 @@ public class AcceptanceServer implements Runnable, Server {
 
     /**
      * Creates room for a new game and the server that handles the game
-     * //@param name name of the room
      * @param maxPlayers max number of players that can join the game
      */
     private void createRoom(int maxPlayers, ClientHandler client) {
-        // TODO: change port assignment strategy
-        //int port = Constants.MATCHES_STARTING_PORT + rooms.size();
-        int port = Constants.MATCHES_STARTING_PORT;
+        // check if there is a port available for the game server
+        if (!PortsManager.available()) {
+            waitingRoom = null;
+
+            // notify the user that the creation of the room has failed
+            client.send(new Message(MsgCommand.CREATE_FAILED));
+            return;
+        }
+
+        // get the assigned port
+        int port = PortsManager.assign();
 
         // create room and assign port
         //Room room = new Room();
         waitingRoom.setAssignedPort(port);
 
+        // initialize and activate current room
         waitingRoom.setMaxPlayersCount(maxPlayers);
         waitingRoom.activate();
 
         GameServer gameServer;
         try {
             // create game server
-            gameServer = new GameServer(waitingRoom, this);
+            gameServer = new GameServer(waitingRoom);
         }
         catch (IOException e) {
             System.out.println("failed to start game server on port " + port);
@@ -257,13 +302,15 @@ public class AcceptanceServer implements Runnable, Server {
     /**
      * Close the room of an ended game and remove it from the list of active rooms
      * @param room room to be removed
+     * @deprecated
      */
+    // TODO: remove!!!
     public void gameEnded(Room room) {
-        if (rooms.remove(room)) {
+        /*if (rooms.remove(room)) {
             System.out.println("game " + room.getAssignedPort() + " closed successfully");
         }
         else {
             System.out.printf("no game found on port " + room.getAssignedPort());
-        }
+        }*/
     }
 }

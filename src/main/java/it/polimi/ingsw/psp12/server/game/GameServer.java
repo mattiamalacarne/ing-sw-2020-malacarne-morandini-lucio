@@ -8,8 +8,8 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.JoinMsg;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.Room;
+import it.polimi.ingsw.psp12.server.PortsManager;
 import it.polimi.ingsw.psp12.server.Server;
-import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
 import it.polimi.ingsw.psp12.utils.Constants;
 
 import java.io.IOException;
@@ -24,31 +24,25 @@ public class GameServer implements Runnable, Server {
     /**
      * Socket used to accept clients
      */
-    private ServerSocket socket;
+    private final ServerSocket socket;
 
     /**
      * Room that host the current game
      */
-    private Room room;
-
-    /**
-     * Server that has created the room and is responsible for closing
-     */
-    private AcceptanceServer creator;
+    private final Room room;
 
     /**
      * Controller of the game managed by the server
      */
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * Model of the game managed by the server
      */
-    private GameState model;
+    private final GameState model;
 
-    public GameServer(Room room, AcceptanceServer creator) throws IOException, InvalidMaxPlayersException {
+    public GameServer(Room room) throws IOException, InvalidMaxPlayersException {
         this.room = room;
-        this.creator = creator;
 
         socket = new ServerSocket(room.getAssignedPort());
         model = new GameState(room.getMaxPlayersCount());
@@ -161,8 +155,8 @@ public class GameServer implements Runnable, Server {
     public void gameEnded() {
         System.out.println("game " + room.getAssignedPort() + " ended");
 
-        // remove room from the list of available rooms
-        creator.gameEnded(room);
+        // release assigned port
+        PortsManager.release(room.getAssignedPort());
 
         // close the room to disconnect clients
         room.close();

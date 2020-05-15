@@ -7,9 +7,13 @@ package it.polimi.ingsw.psp12.utils;
 public class Constants {
     static public final int ACCEPTANCE_PORT = 10000;
 
-    static public final int MATCHES_STARTING_PORT = 20000;
-
-    static public final int MAX_GAMES_COUNT = 10;
+    static public final int[] GAME_PORTS = new int[] {
+            20000,
+            20001,
+            20002,
+            20003,
+            20004
+    };
 
     static public final int SOCKET_TIMEOUT = 20 * 1000; // 20 seconds
 

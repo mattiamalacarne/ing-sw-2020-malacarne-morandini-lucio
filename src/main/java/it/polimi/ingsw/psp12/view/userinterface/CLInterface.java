@@ -33,14 +33,14 @@ public class CLInterface implements UserInterface
 
     /**
      * CLI constructor
-     * @throws UnknownHostException Unknown Host Exception
      */
     public CLInterface() throws IOException {
 
         System.out.println("Starting CLI, Setup server and client");
         cmdIn = new Scanner(System.in);
         messageHandler = new MessageHandler(this);
-        messageHandler.startGame();
+
+//        messageHandler.startGame();
 
     }
 
@@ -51,7 +51,7 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public ServerInfo getServerByIp() throws UnknownHostException {
+    public ServerInfo getServerByIp() {
 
         System.out.println("(IP) Hostname: ");
         ServerInfo serverInfo;
@@ -72,66 +72,111 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void getGamePort() throws IOException {
+    public void createsNewRoom() {
 
-        System.out.println("\nDo you want to create or join a room?");
-        System.out.println( "1) Create\n2) Join");
+        System.out.println("\nThere are no available room to join!\nCreate a new room to start playing");
 
-        int choice;
+        //Room player number
+        System.out.println("Player number [2-3]:");
+        int playerNumber;
         do {
-
-            cmdIn = new Scanner(System.in);
+            cmdIn=new Scanner(System.in);
             try {
-                choice = cmdIn.nextInt();
+                playerNumber = cmdIn.nextInt();
             } catch (InputMismatchException e) {
-                choice = 0;
+                playerNumber=0;
             }
-
-            switch (choice){
-
-                //Creates a new Room
-                case 1:
-                    //Room Name
-                    System.out.println("Room name: ");
-                    cmdIn=new Scanner(System.in);
-                    String roomName = cmdIn.nextLine();
-
-                    //Room player number
-                    System.out.println("Player number [2-3]: ");
-                    int playerNumber;
-                    do {
-                        cmdIn=new Scanner(System.in);
-                        try {
-                            playerNumber = cmdIn.nextInt();
-                        } catch (InputMismatchException e) {
-                            playerNumber=0;
-                        }
-                        if (playerNumber<2 || playerNumber>3){
-                            System.out.println("Choice not allowed, retry");
-                        }
-                    }while (playerNumber<2 || playerNumber>3);
-
-                    messageHandler.sendToServer( new CreateMsg(roomName, playerNumber)  );
-                    break;
-
-                //Requests list of available room/s
-                case 2:
-                    messageHandler.sendToServer( new Message(MsgCommand.LIST) );
-                    break;
-
-                default:
-                    System.out.println("Choice not allowed, retry");
-                    break;
+            if (playerNumber<2 || playerNumber>3){
+                System.out.println("Choice not allowed, retry");
             }
+        }while (playerNumber<2 || playerNumber>3);
 
-        }while (choice<1 || choice>2);
+        messageHandler.sendToServer( new CreateMsg(playerNumber)  );
+
+
+//        System.out.println("\nDo you want to create or join a room?");
+//        System.out.println( "1) Create\n2) Join");
+
+//        int choice;
+//        do {
+//
+//            cmdIn = new Scanner(System.in);
+//            try {
+//                choice = cmdIn.nextInt();
+//            } catch (InputMismatchException e) {
+//                choice = 0;
+//            }
+//
+//            switch (choice){
+//
+//                //Creates a new Room
+//                case 1:
+//                    //Room Name
+//                    System.out.println("Room name: ");
+//                    cmdIn=new Scanner(System.in);
+//                    String roomName = cmdIn.nextLine();
+//
+//                    //Room player number
+//                    System.out.println("Player number [2-3]: ");
+//                    int playerNumber;
+//                    do {
+//                        cmdIn=new Scanner(System.in);
+//                        try {
+//                            playerNumber = cmdIn.nextInt();
+//                        } catch (InputMismatchException e) {
+//                            playerNumber=0;
+//                        }
+//                        if (playerNumber<2 || playerNumber>3){
+//                            System.out.println("Choice not allowed, retry");
+//                        }
+//                    }while (playerNumber<2 || playerNumber>3);
+//
+//                    messageHandler.sendToServer( new CreateMsg(roomName, playerNumber)  );
+//                    break;
+//
+//                //Requests list of available room/s
+//                case 2:
+//                    messageHandler.sendToServer( new Message(MsgCommand.LIST) );
+//                    break;
+//
+//                default:
+//                    System.out.println("Choice not allowed, retry");
+//                    break;
+//            }
+//
+//        }while (choice<1 || choice>2);
 
     }
 
     @Override
-    public void roomCreatedMessage() throws IOException {
-        System.out.println("Room created!");
-        getGamePort();
+    public void waitMessage() {
+        System.out.println("Wait while all the players joined the room");
+    }
+
+    @Override
+    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException {
+//        System.out.printf("Room \"%s\" for %d players created!\n",
+//                createdMsg.getRoom().getName(), createdMsg.getRoom().getMaxPlayersCount());
+//        getGamePort();
+        System.out.printf("Room for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
+
+        //New port is updated
+        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());
+
+        System.out.println("What's you name: ");
+        cmdIn= new Scanner(System.in);
+        String playerName = cmdIn.nextLine();
+        messageHandler.sendToServer(new JoinMsg(playerName));
+    }
+
+    @Override
+    public void roomCreatedFailedMessage() {
+        System.out.println("Room creation failed!");
+    }
+
+    @Override
+    public void invalidMaxPlayerMessage() {
+        System.out.println("Invalid player number!");
     }
 
     @Override
@@ -160,7 +205,7 @@ public class CLInterface implements UserInterface
                 }else {
 
                     if (choice == 0) {
-                        getGamePort();
+                        createsNewRoom();
                     } else {
                         //New port is updated
                         messageHandler.setGamePort(roomList.getRooms().get(choice-1).getAssignedPort());
@@ -175,7 +220,7 @@ public class CLInterface implements UserInterface
 
         } else {
             System.out.println("There are no available room to join");
-            getGamePort();
+            createsNewRoom();
         }
 
     }
@@ -392,6 +437,21 @@ public class CLInterface implements UserInterface
     @Override
     public void updateBoard(UpdateBoardMsg updateBoardMsg) {
         System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard()) ).toString() );
+    }
+
+    @Override
+    public void youWonMessage() {
+        System.out.println("********** You are the winner! **********");
+    }
+
+    @Override
+    public void youLostMessage() {
+        System.out.println("You lost :(");
+    }
+
+    @Override
+    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
+        System.out.printf("The player %s has lost\n", otherLostMsg.getPlayer());
     }
 
 }

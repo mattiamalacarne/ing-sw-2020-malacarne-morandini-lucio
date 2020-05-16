@@ -83,7 +83,6 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     /**
      * Send a message through the socket connection
      * @param msg The message to be sent
-     * @throws IOException IO Exception
      */
     public void sendRequestToServer(Message msg)
     {

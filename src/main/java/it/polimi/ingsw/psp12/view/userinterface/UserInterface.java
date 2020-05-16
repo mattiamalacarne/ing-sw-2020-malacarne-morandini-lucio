@@ -24,21 +24,35 @@ public interface UserInterface
     /**
      * The user chooses the IP of the to server to which it wants to connect
      * @return Data for create the socket
-     * @throws UnknownHostException Unknown Host Exception
      */
     ServerInfo getServerByIp() throws UnknownHostException;
 
     /**
-     * The user chooses to create or to join an available room
-     * @throws IOException IO Exception
+     * The user creates a new room
      */
-    void getGamePort() throws IOException;
+    void createsNewRoom() throws IOException;
+
+    /**
+     * Communicates to the user to wait while the room is full
+     */
+    void waitMessage();
 
     /**
      * Communicates to the user the correct creation of the room
+     * @param createdMsg The created room
      * @throws IOException IO Exception
      */
-    void roomCreatedMessage() throws IOException;
+    void roomCreatedMessage(CreatedMsg createdMsg) throws IOException;
+
+    /**
+     * Communicates to the user the incorrect creation of the room
+     */
+    void roomCreatedFailedMessage();
+
+    /**
+     * Communicates to the user the incorrect selection of the player number for the room
+     */
+    void invalidMaxPlayerMessage();
 
     /**
      * The user chooses the port of game room where to enter
@@ -111,5 +125,21 @@ public interface UserInterface
      * Update the shown information of the board
      */
     void updateBoard(UpdateBoardMsg updateBoardMsg);
+
+    /**
+     * Communicates to the user the that has won the game
+     */
+    void youWonMessage();
+
+    /**
+     * Communicates to the user the that has lost the game
+     */
+    void youLostMessage();
+
+    /**
+     * Communicates to the user that a player in the room has lost
+     * @param otherLostMsg The player that has lost
+     */
+    void otherPlayerLostMessage(OtherLostMsg otherLostMsg);
 
 }

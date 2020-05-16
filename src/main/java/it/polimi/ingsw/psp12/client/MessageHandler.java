@@ -48,13 +48,13 @@ public class MessageHandler implements Observer<Message>
 
     }
 
-    /**
-     * Start the game communication with the user interface
-     * @throws IOException IO Exception
-     */
-    public void startGame() throws IOException {
-        userInterface.getGamePort();
-    }
+//    /**
+//     * Start the game communication with the user interface
+//     * @throws IOException IO Exception
+//     */
+//    public void startGame() throws IOException {
+//        userInterface.getGamePort();
+//    }
 
     /**
      * Update the current game port (the port by which the client communicates with the server)
@@ -103,11 +103,22 @@ public class MessageHandler implements Observer<Message>
         switch (cmd)
         {
             //System commands
-            case CREATED:
-                userInterface.roomCreatedMessage();
+            case REQUEST_CREATE:
+                userInterface.createsNewRoom();
                 break;
-            case ROOMS:
-                userInterface.selectGamePort( (RoomsMsg) message );
+            case WAIT:
+                userInterface.waitMessage();
+                break;
+            case CREATED:
+                userInterface.roomCreatedMessage((CreatedMsg) message );
+                break;
+            case CREATE_FAILED:
+                //should never be here
+                userInterface.roomCreatedFailedMessage();
+                break;
+            case INVALID_MAX_PLAYERS:
+                //should never be here
+                userInterface.invalidMaxPlayerMessage();
                 break;
             case ROOM_FULL:
                 userInterface.roomFull();
@@ -120,6 +131,8 @@ public class MessageHandler implements Observer<Message>
                 break;
             case REQUEST_INFO:
                 userInterface.requestStartInfo( (RequestInfoMsg) message );
+                break;
+            case PING:
                 break;
 
             //Game commands
@@ -135,19 +148,33 @@ public class MessageHandler implements Observer<Message>
             case TURN_ENDED:
                 userInterface.endTurnMessage();
                 break;
+            case YOU_WON:
+                userInterface.youWonMessage();
+                break;
+            case YOU_LOST:
+                userInterface.youLostMessage();
+                break;
+            case OTHER_LOST:
+                userInterface.otherPlayerLostMessage( (OtherLostMsg) message );
+                break;
 
 
+
+            //FIXME: Deprecati
+            case ROOMS:
+                userInterface.selectGamePort( (RoomsMsg) message );
+                break;
             case MOVE:
                 userInterface.move( (CellListMsg) message );
                 break;
             case BUILD:
                 userInterface.build( (CellListMsg) message );
                 break;
-
             case CELL_REQUEST:  /*(CellRequestMsg) message;*/
                 break;
             case SELECTED_CELL:  /*(SelectCellMsg) message;*/
                 break;
+
             default: throw new MessageTypeNotFoundException();
         }
     }
@@ -155,9 +182,8 @@ public class MessageHandler implements Observer<Message>
     /**
      * Send a message to clientHandlerConnection that will send it to the server
      * @param message the message to send to the server
-     * @throws IOException IO Exception
      */
-    public void sendToServer(Message message) throws IOException {
+    public void sendToServer(Message message)  {
         clientHandlerConnection.sendRequestToServer(message);
     }
 

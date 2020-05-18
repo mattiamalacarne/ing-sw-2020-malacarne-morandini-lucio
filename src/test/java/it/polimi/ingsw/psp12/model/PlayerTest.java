@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class PlayerTest {
 
         // initialize player
         Cell cells[] = new Cell[] { new Cell(1, 2), new Cell(3, 4) };
-        player.initialize(Color.RED, cells);
+        player.initialize(Color.RED, cells, Card.getNoPowers().getPower());
 
         // check final state
         assertTrue(player.isInitialized());
@@ -93,7 +94,7 @@ public class PlayerTest {
     @Test
     public void getWorkers_ShouldReturnWorkersInCorrectOrder() {
         Cell cells[] = new Cell[] { new Cell(1, 2), new Cell(3, 4) };
-        player.initialize(Color.RED, cells);
+        player.initialize(Color.RED, cells, Card.getNoPowers().getPower());
 
         List<Worker> workers = player.getWorkers();
 

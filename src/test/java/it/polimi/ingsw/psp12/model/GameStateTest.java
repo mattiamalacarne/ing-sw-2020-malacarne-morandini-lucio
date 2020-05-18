@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.model;
 import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.utils.Color;
@@ -236,7 +237,7 @@ public class GameStateTest {
 
         // set player info
         Point points[] = new Point[] { new Point(0, 0), new Point(2, 1) };
-        gameState2.setPlayerInfo(Color.BLUE, points);
+        gameState2.setPlayerInfo(Color.BLUE, points, Card.getNoPowers());
 
         // check final state
         Color finalColors[] = new Color[Color.values().length - 1];
@@ -275,7 +276,7 @@ public class GameStateTest {
 
         // set first player info
         Point points1[] = new Point[] { new Point(0, 0), new Point(2, 1) };
-        gameState2.setPlayerInfo(Color.BLUE, points1);
+        gameState2.setPlayerInfo(Color.BLUE, points1, Card.getNoPowers());
 
         // check intermediate state
         assertFalse(gameState2.isInitialized());
@@ -285,7 +286,7 @@ public class GameStateTest {
 
         // set second player info
         Point points2[] = new Point[] { new Point(1, 3), new Point(0, 2) };
-        gameState2.setPlayerInfo(Color.RED, points2);
+        gameState2.setPlayerInfo(Color.RED, points2, Card.getNoPowers());
 
         // check final state
         assertTrue(gameState2.isInitialized());
@@ -305,9 +306,9 @@ public class GameStateTest {
         gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
         gameState2.initGame();
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.nextTurn();
-        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 0), new Point(2, 3)});
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 0), new Point(2, 3)}, Card.getNoPowers());
         gameState2.initGame();
 
         // init turn
@@ -321,7 +322,7 @@ public class GameStateTest {
     @Test
     public void nextActions_ShouldReturnPossibleActions() {
         gameState2.addPlayer("P1");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.initGame();
 
         List<Action> actions = gameState2.nextActions();
@@ -338,7 +339,7 @@ public class GameStateTest {
     @Test
     public void checkVictory_MoveState_ShouldCheckVictory() {
         gameState2.addPlayer("P1");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.selectCurrentWorker(0);
         gameState2.initGame();
 
@@ -352,7 +353,7 @@ public class GameStateTest {
         Player p1 = gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
         gameState2.initGame();
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.initGame();
         gameState2.selectCurrentWorker(0);
 
@@ -378,7 +379,7 @@ public class GameStateTest {
         Player p1 = gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
         gameState2.initGame();
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.initGame();
         gameState2.selectCurrentWorker(0);
 
@@ -398,9 +399,9 @@ public class GameStateTest {
     public void getPossibleMoves_ShouldReturnCurrentPlayerMoves() {
         Player p1 = gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.nextTurn();
-        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)});
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)}, Card.getNoPowers());
 
         gameState2.initGame();
         gameState2.selectCurrentWorker(1);
@@ -418,9 +419,9 @@ public class GameStateTest {
     public void getPossibleBuilds_ShouldReturnCurrentPlayerBuilds() {
         Player p1 = gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.nextTurn();
-        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)});
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(1, 3), new Point(3, 0)}, Card.getNoPowers());
 
         gameState2.initGame();
         gameState2.selectCurrentWorker(1);
@@ -438,9 +439,9 @@ public class GameStateTest {
     public void removeCurrentPlayer_TwoPlayersNotLast_ShouldRemovePlayer() {
         Player p1 = gameState2.addPlayer("P1");
         Player p2 = gameState2.addPlayer("P2");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.nextTurn();
-        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)}, Card.getNoPowers());
 
         gameState2.initGame();
 
@@ -473,9 +474,9 @@ public class GameStateTest {
     public void removeCurrentPlayer_TwoPlayersLast_ShouldRemovePlayer() {
         Player p1 = gameState2.addPlayer("P1");
         Player p2 = gameState2.addPlayer("P2");
-        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.nextTurn();
-        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)}, Card.getNoPowers());
 
         gameState2.initGame();
         gameState2.nextTurn();
@@ -510,11 +511,11 @@ public class GameStateTest {
         Player p1 = gameState3.addPlayer("P1");
         Player p2 = gameState3.addPlayer("P2");
         Player p3 = gameState3.addPlayer("P3");
-        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState3.nextTurn();
-        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)}, Card.getNoPowers());
         gameState3.nextTurn();
-        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)});
+        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)}, Card.getNoPowers());
 
         gameState3.initGame();
         gameState3.nextTurn();
@@ -555,11 +556,11 @@ public class GameStateTest {
         Player p1 = gameState3.addPlayer("P1");
         Player p2 = gameState3.addPlayer("P2");
         Player p3 = gameState3.addPlayer("P3");
-        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)});
+        gameState3.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState3.nextTurn();
-        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)});
+        gameState3.setPlayerInfo(Color.BLUE, new Point[] { new Point(2, 0), new Point(2, 3)}, Card.getNoPowers());
         gameState3.nextTurn();
-        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)});
+        gameState3.setPlayerInfo(Color.GREEN, new Point[] { new Point(1, 1), new Point(4, 0)}, Card.getNoPowers());
 
         gameState3.initGame();
         gameState3.nextTurn();
@@ -594,5 +595,19 @@ public class GameStateTest {
         assertTrue(gameState3.getGameBoard().getCell(p2.getWorkerByIndex(1).getPosition()).hasWorker());
         assertFalse(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(0).getPosition()).hasWorker());
         assertFalse(gameState3.getGameBoard().getCell(p3.getWorkerByIndex(1).getPosition()).hasWorker());
+    }
+
+    @Test
+    public void getAvailableCards_TwoPlayers_ShouldIncludeNoPowers() {
+        List<Card> cards = gameState2.getAvailableCards();
+
+        assertTrue(cards.contains(Card.getNoPowers()));
+    }
+
+    @Test
+    public void getAvailableCards_ThreePlayers_ShouldNotIncludeNoPowers() {
+        List<Card> cards = gameState3.getAvailableCards();
+
+        assertFalse(cards.contains(Card.getNoPowers()));
     }
 }

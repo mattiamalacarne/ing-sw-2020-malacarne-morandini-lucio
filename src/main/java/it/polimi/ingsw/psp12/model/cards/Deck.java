@@ -12,27 +12,13 @@ public class Deck {
     /**
      * List of cards loaded from file
      */
-    private static List<Card> cards;
-
-    /**
-     * Card that represent the basic game without god powers
-     */
-    private static Card noPowers;
+    private static final List<Card> cards = new ArrayList<>();
 
     /**
      * Loads cards from file on startup
      * @throws IOException
      */
     public static void loadCards() throws IOException {
-        // define the no powers card
-        noPowers = new Card(-1,
-                "No card",
-                "Play without powers",
-                "Play the game without using god powers",
-                new ArrayList<>());
-
-        cards = new ArrayList<>();
-
         // TODO: load cards from files
     }
 
@@ -51,7 +37,7 @@ public class Deck {
         // if there are two players
         // the game can be played without cards
         if (maxPlayersCount < 3) {
-            this.availableCards.add(noPowers);
+            this.availableCards.add(Card.getNoPowers());
         }
 
         this.availableCards.addAll(cards);
@@ -70,15 +56,15 @@ public class Deck {
      * @param card card selected by the player
      */
     public void cardSelected(Card card) {
-        if (card.equals(noPowers)) {
+        if (card.equals(Card.getNoPowers())) {
             // if the selected card is noPowers
             // the other player can only select the noPowers card
-            this.availableCards.removeIf(c -> !c.equals(noPowers));
+            this.availableCards.removeIf(c -> !c.equals(Card.getNoPowers()));
         }
         else {
             // if the selected card is different from noPowers
             // the other player must select another god power card
-            this.availableCards.removeIf(c -> c.equals(card) || c.equals(noPowers));
+            this.availableCards.removeIf(c -> c.equals(card) || c.equals(Card.getNoPowers()));
         }
     }
 }

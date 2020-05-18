@@ -13,6 +13,19 @@ import java.util.List;
  * @author Luca Morandini
  */
 public class Card implements Serializable {
+    /**
+     * Default card that represent the basic game without god powers
+     */
+    private static final Card noPowers = new Card();
+
+    /**
+     * Getter for the default card without powers
+     * @return no powers card
+     */
+    public static Card getNoPowers() {
+        return noPowers;
+    }
+
     private final int id;
 
     private final String name;
@@ -23,12 +36,31 @@ public class Card implements Serializable {
 
     private final List<Integer> powers;
 
+    /**
+     * Constructor for cards loaded from file
+     * @param id id of the card
+     * @param name name of the card
+     * @param shortDesc short description
+     * @param desc full description
+     * @param powers powers provided by the card
+     */
     public Card(int id, String name, String shortDesc, String desc, List<Integer> powers) {
         this.id = id;
         this.name = name;
         this.shortDescription = shortDesc;
         this.description = desc;
         this.powers = new ArrayList<>(powers);
+    }
+
+    /**
+     * Constructor for the default card without powers
+     */
+    private Card() {
+        this.id = -1;
+        this.name = "No cards";
+        this.shortDescription = "Play without powers";
+        this.description = "Play the game without using god powers";
+        this.powers = new ArrayList<>();
     }
 
     public String getName() {

@@ -1,0 +1,134 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MsgCommand</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.network.enumeration</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MsgCommand (it.polimi.ingsw.psp12.network.enumeration)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MsgCommand</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,1%
+  </span>
+  <span class="absValue">
+    (34/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.network.enumeration;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Enumeration of every possible commands that servers and clients can exchange
+<i>5</i>&nbsp; */
+<b class="fc"><i>6</i>&nbsp;public enum MsgCommand {</b>
+<i>7</i>&nbsp;    /** System commands **/
+<b class="fc"><i>8</i>&nbsp;    /**@deprecated **/ LIST(MsgType.SYSTEM), // request list of available rooms</b>
+<b class="fc"><i>9</i>&nbsp;    /**@deprecated **/ ROOMS(MsgType.SYSTEM), // response with a list of available rooms</b>
+<b class="fc"><i>10</i>&nbsp;    CREATE(MsgType.SYSTEM), // create a new room</b>
+<b class="fc"><i>11</i>&nbsp;    CREATED(MsgType.SYSTEM), // confirm creation of a new room</b>
+<b class="fc"><i>12</i>&nbsp;    CREATE_FAILED(MsgType.SYSTEM), // notify user that a room has not been created</b>
+<b class="fc"><i>13</i>&nbsp;    INVALID_MAX_PLAYERS(MsgType.SYSTEM), // max players count for a new room is invalid</b>
+<b class="fc"><i>14</i>&nbsp;    JOIN(MsgType.SYSTEM), // join an existing room</b>
+<b class="fc"><i>15</i>&nbsp;    JOINED(MsgType.SYSTEM), // confirm that user has joined a game</b>
+<b class="fc"><i>16</i>&nbsp;    INVALID_NICKNAME(MsgType.SYSTEM), // nickname provided by the user is already taken</b>
+<b class="fc"><i>17</i>&nbsp;    ROOM_FULL(MsgType.SYSTEM), // user can not subscribe because the room is already full</b>
+<b class="fc"><i>18</i>&nbsp;    DISCONNECTED(MsgType.SYSTEM), // client has disconnected from the server</b>
+<b class="fc"><i>19</i>&nbsp;    NOT_YOUR_TURN(MsgType.SYSTEM), // the client sent a message not in its turn</b>
+<b class="fc"><i>20</i>&nbsp;    PING(MsgType.SYSTEM), // ping to keep the connection open and prevent socket timeout</b>
+<b class="fc"><i>21</i>&nbsp;    CLOSE(MsgType.SYSTEM), // notify the client to close the socket</b>
+<b class="fc"><i>22</i>&nbsp;    WAIT(MsgType.SYSTEM),</b>
+<b class="fc"><i>23</i>&nbsp;    REQUEST_CREATE(MsgType.SYSTEM),</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /** Game commands **/
+<b class="fc"><i>26</i>&nbsp;    REQUEST_INFO(MsgType.GAME),</b>
+<b class="fc"><i>27</i>&nbsp;    PLAYER_INFO(MsgType.GAME),</b>
+<b class="fc"><i>28</i>&nbsp;    ACTIONS_LIST(MsgType.GAME),</b>
+<b class="fc"><i>29</i>&nbsp;    SELECTED_ACTION(MsgType.GAME),</b>
+<b class="fc"><i>30</i>&nbsp;    TURN_ENDED(MsgType.GAME),</b>
+<b class="fc"><i>31</i>&nbsp;    /**@deprecated **/ MOVE(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL</b>
+<b class="fc"><i>32</i>&nbsp;    /**@deprecated **/ BUILD(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL</b>
+<b class="fc"><i>33</i>&nbsp;    CELL_LIST(MsgType.GAME),</b>
+<b class="fc"><i>34</i>&nbsp;    SELECTED_CELL(MsgType.GAME),</b>
+<b class="fc"><i>35</i>&nbsp;    BOARD_UPDATE(MsgType.GAME),</b>
+<b class="fc"><i>36</i>&nbsp;    YOU_WON(MsgType.GAME),</b>
+<b class="fc"><i>37</i>&nbsp;    YOU_LOST(MsgType.GAME),</b>
+<b class="fc"><i>38</i>&nbsp;    OTHER_LOST(MsgType.GAME),</b>
+<b class="fc"><i>39</i>&nbsp;    /**@deprecated **/ CELL_REQUEST(MsgType.GAME); // TODO: remove</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /** Determine if this is a system or game message **/
+<i>42</i>&nbsp;    private MsgType type;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    public MsgType getType() {
+<b class="nc"><i>45</i>&nbsp;        return type;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;    MsgCommand(MsgType type) {</b>
+<b class="fc"><i>49</i>&nbsp;        this.type = type;</b>
+<b class="fc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 00:02</div>
+</div>
+</body>
+</html>

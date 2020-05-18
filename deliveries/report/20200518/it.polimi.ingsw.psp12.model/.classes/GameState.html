@@ -1,0 +1,520 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameState (it.polimi.ingsw.psp12.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/ 27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (100/ 100)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameState$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/ 28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (101/ 101)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Board;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Point;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Deck;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.Action;
+<i>9</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+<i>10</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Card;
+<i>11</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.Message;
+<i>12</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
+<i>13</i>&nbsp;import it.polimi.ingsw.psp12.utils.Color;
+<i>14</i>&nbsp;import it.polimi.ingsw.psp12.utils.Observable;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.Arrays;
+<i>18</i>&nbsp;import java.util.List;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Class that manages games instances, the board, the players and the current turn
+<i>22</i>&nbsp; * @author Luca Morandini
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public class GameState extends Observable&lt;Message&gt;
+<i>25</i>&nbsp;{
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * The game board where the game is played
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private Board gameBoard;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * List of players of the game
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    private Player players[];
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Deck of cards that provide god powers
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    private Deck deck;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Number of players subscribed to the game
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    private int playersCount;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Index of the player that is currently playing
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    private int turn;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     *  State of the current turn that indicates if the player is moving or building
+<i>53</i>&nbsp;     *  The typical flow can be changed by the powers of the cards
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    private TurnState state;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Available colors that a user can choose
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    private List&lt;Color&gt; colors;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Constructor of the class
+<i>65</i>&nbsp;     * @param maxPlayersCount max number of players allowed in the game
+<i>66</i>&nbsp;     * @throws InvalidMaxPlayersException if max players count is not between 2 and 3
+<i>67</i>&nbsp;     */
+<b class="fc"><i>68</i>&nbsp;    public GameState(int maxPlayersCount) throws InvalidMaxPlayersException {</b>
+<i>69</i>&nbsp;        // throw exception if max players count is invalid
+<b class="fc"><i>70</i>&nbsp;        if (maxPlayersCount &lt; 2 || maxPlayersCount &gt; 3) throw new InvalidMaxPlayersException();</b>
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;        gameBoard = new Board();</b>
+<b class="fc"><i>73</i>&nbsp;        players = new Player[maxPlayersCount];</b>
+<b class="fc"><i>74</i>&nbsp;        playersCount = 0;</b>
+<b class="fc"><i>75</i>&nbsp;        deck = new Deck(maxPlayersCount);</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        initColors();</b>
+<b class="fc"><i>78</i>&nbsp;    }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Getter for the board game
+<i>82</i>&nbsp;     * @return game board
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    public Board getGameBoard() {
+<b class="fc"><i>85</i>&nbsp;        return gameBoard.clone();</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Return the number of players that are currently playing the game
+<i>90</i>&nbsp;     * @return players count
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public int getPlayersCount() {
+<b class="fc"><i>93</i>&nbsp;        return playersCount;</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * Add the player to the game
+<i>98</i>&nbsp;     * @param name nickname of the player
+<i>99</i>&nbsp;     * @return created player
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    public Player addPlayer(String name) {
+<b class="fc"><i>102</i>&nbsp;        Player player = new Player(playersCount, name);</b>
+<b class="fc"><i>103</i>&nbsp;        players[playersCount] = player;</b>
+<b class="fc"><i>104</i>&nbsp;        playersCount++;</b>
+<b class="fc"><i>105</i>&nbsp;        return player;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * Remove the current player after losing the game
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    public void removeCurrentPlayer() {
+<i>112</i>&nbsp;        // remove workers from the board
+<b class="fc"><i>113</i>&nbsp;        for (int w = 0; w &lt; 2; w++) {</b>
+<b class="fc"><i>114</i>&nbsp;            Worker worker = getCurrentPlayer().getWorkerByIndex(w);</b>
+<b class="fc"><i>115</i>&nbsp;            gameBoard.getCell(worker.getPosition()).removeWorker();</b>
+<i>116</i>&nbsp;        }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;        // remove player
+<b class="fc"><i>119</i>&nbsp;        playersCount -= 1;</b>
+<i>120</i>&nbsp;
+<b class="fc"><i>121</i>&nbsp;        Player tmp[] = players;</b>
+<b class="fc"><i>122</i>&nbsp;        players = new Player[playersCount];</b>
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;        int i = 0;</b>
+<i>125</i>&nbsp;        // iterate over all players
+<b class="fc"><i>126</i>&nbsp;        for (int p = 0; p &lt;= playersCount; p++) {</b>
+<i>127</i>&nbsp;            // keep only players that are not the current one
+<b class="fc"><i>128</i>&nbsp;            if (p != turn) {</b>
+<b class="fc"><i>129</i>&nbsp;                players[i] = tmp[p];</b>
+<b class="fc"><i>130</i>&nbsp;                i++;</b>
+<i>131</i>&nbsp;            }
+<i>132</i>&nbsp;        }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;        // move to the next player
+<b class="fc"><i>135</i>&nbsp;        turn = turn % playersCount;</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;        // update board on the client
+<b class="fc"><i>138</i>&nbsp;        notifyObservers(new UpdateBoardMsg(getGameBoard()));</b>
+<b class="fc"><i>139</i>&nbsp;    }</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Returns the player that is currently playing
+<i>143</i>&nbsp;     * @return current player
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public Player getCurrentPlayer() {
+<b class="fc"><i>146</i>&nbsp;        return players[turn];</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Returns the player that has played in the previous turn
+<i>151</i>&nbsp;     * @return previous player
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public Player getPreviousPlayer() {
+<b class="fc"><i>154</i>&nbsp;        int index = (turn + playersCount - 1) % playersCount;</b>
+<b class="fc"><i>155</i>&nbsp;        return players[index];</b>
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    /**
+<i>159</i>&nbsp;     * Returns the players that are not currently playing
+<i>160</i>&nbsp;     * @return waiting players
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public Player[] getWaitingPlayers() {
+<b class="fc"><i>163</i>&nbsp;        Player waitingPlayers[] = new Player[playersCount - 1];</b>
+<b class="fc"><i>164</i>&nbsp;        int j = 0;</b>
+<b class="fc"><i>165</i>&nbsp;        for (int i = 0; i &lt; playersCount; i++) {</b>
+<b class="fc"><i>166</i>&nbsp;            if (i != turn) {</b>
+<b class="fc"><i>167</i>&nbsp;                waitingPlayers[j] = players[i];</b>
+<b class="fc"><i>168</i>&nbsp;                j++;</b>
+<i>169</i>&nbsp;            }
+<i>170</i>&nbsp;        }
+<b class="fc"><i>171</i>&nbsp;        return waitingPlayers;</b>
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * Returns all the players subscribed to the game
+<i>176</i>&nbsp;     * @return all the players
+<i>177</i>&nbsp;     */
+<i>178</i>&nbsp;    public Player[] getPlayers() {
+<b class="fc"><i>179</i>&nbsp;        return players.clone();</b>
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Determines if a user is already registered with the name passed
+<i>184</i>&nbsp;     * @param name name of the user that is trying to register
+<i>185</i>&nbsp;     * @return true if user is already registered
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    public boolean alreadyRegistered(String name) {
+<b class="fc"><i>188</i>&nbsp;        for (int i = 0; i &lt; playersCount; i++) {</b>
+<b class="fc"><i>189</i>&nbsp;            if (players[i].getName().equals(name)) {</b>
+<b class="fc"><i>190</i>&nbsp;                return true;</b>
+<i>191</i>&nbsp;            }
+<i>192</i>&nbsp;        }
+<b class="fc"><i>193</i>&nbsp;        return false;</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Returns the current state of the turn
+<i>198</i>&nbsp;     * @return turn state
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public TurnState getCurrentState() {
+<b class="fc"><i>201</i>&nbsp;        return state;</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Updates the turn state
+<i>206</i>&nbsp;     * @param action action that determine the new state to be saved
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    public void updateCurrentState(Action action) {
+<b class="fc"><i>209</i>&nbsp;        switch (action) {</b>
+<i>210</i>&nbsp;            case MOVE:
+<b class="fc"><i>211</i>&nbsp;                state = TurnState.MOVE;</b>
+<b class="fc"><i>212</i>&nbsp;                break;</b>
+<i>213</i>&nbsp;            case BUILD:
+<b class="fc"><i>214</i>&nbsp;                state = TurnState.BUILD;</b>
+<i>215</i>&nbsp;                break;
+<i>216</i>&nbsp;        }
+<b class="fc"><i>217</i>&nbsp;    }</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    /**
+<i>220</i>&nbsp;     * Selects the next player that can play
+<i>221</i>&nbsp;     */
+<i>222</i>&nbsp;    public void nextTurn() {
+<i>223</i>&nbsp;        // go back to zero
+<i>224</i>&nbsp;        // when the current turn overflows the number of players
+<b class="fc"><i>225</i>&nbsp;        turn = (turn + 1) % playersCount;</b>
+<b class="fc"><i>226</i>&nbsp;    }</b>
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * Moves the position of a worker on the map
+<i>230</i>&nbsp;     * @param newPoint new position of the worker after the move
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    public void move(Point newPoint) {
+<i>233</i>&nbsp;        // update position of the current worker and get the old position
+<b class="fc"><i>234</i>&nbsp;        Point oldPoint = getCurrentPlayer().updateWorkerPosition(newPoint);</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;        // check if there is another worker in the new position
+<b class="fc"><i>237</i>&nbsp;        if (gameBoard.getCell(newPoint).hasWorker()) {</b>
+<i>238</i>&nbsp;            // get the new position for the other worker
+<b class="fc"><i>239</i>&nbsp;            Point otherNewPoint = getCurrentPlayer().getPower().getOtherWorkerMove(oldPoint, newPoint);</b>
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;            // update board moving two workers
+<b class="fc"><i>242</i>&nbsp;            gameBoard.move(oldPoint, newPoint, otherNewPoint);</b>
+<b class="fc"><i>243</i>&nbsp;        }</b>
+<i>244</i>&nbsp;        else {
+<i>245</i>&nbsp;            // update board moving one worker
+<b class="fc"><i>246</i>&nbsp;            gameBoard.move(oldPoint, newPoint);</b>
+<i>247</i>&nbsp;        }
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;        // save last move in the power
+<b class="fc"><i>250</i>&nbsp;        getCurrentPlayer().getPower().moved(gameBoard.getCell(newPoint));</b>
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;        // update board on the client
+<b class="fc"><i>253</i>&nbsp;        notifyObservers(new UpdateBoardMsg(getGameBoard()));</b>
+<b class="fc"><i>254</i>&nbsp;    }</b>
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    /**
+<i>257</i>&nbsp;     * Increments the level of a tower on the map
+<i>258</i>&nbsp;     * @param pos coordinates of the tower
+<i>259</i>&nbsp;     */
+<i>260</i>&nbsp;    public void build(Point pos) {
+<i>261</i>&nbsp;        // update board
+<b class="fc"><i>262</i>&nbsp;        gameBoard.build(pos);</b>
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;        // save last build in the power
+<b class="fc"><i>265</i>&nbsp;        getCurrentPlayer().getPower().hasBuilt(gameBoard.getCell(pos));</b>
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;        // update board on the client
+<b class="fc"><i>268</i>&nbsp;        notifyObservers(new UpdateBoardMsg(getGameBoard()));</b>
+<b class="fc"><i>269</i>&nbsp;    }</b>
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Initialize the game
+<i>273</i>&nbsp;     */
+<i>274</i>&nbsp;    public void initGame() {
+<b class="fc"><i>275</i>&nbsp;        state = TurnState.INIT;</b>
+<b class="fc"><i>276</i>&nbsp;        turn = 0;</b>
+<b class="fc"><i>277</i>&nbsp;    }</b>
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Determine if all the players have completed their initialization process
+<i>281</i>&nbsp;     * @return true if all the players have been initialized
+<i>282</i>&nbsp;     */
+<i>283</i>&nbsp;    public boolean isInitialized() {
+<b class="fc"><i>284</i>&nbsp;        for (int i = 0; i &lt; playersCount; i++) {</b>
+<b class="fc"><i>285</i>&nbsp;            if (!players[i].isInitialized()) {</b>
+<b class="fc"><i>286</i>&nbsp;                return false;</b>
+<i>287</i>&nbsp;            }
+<i>288</i>&nbsp;        }
+<i>289</i>&nbsp;
+<b class="fc"><i>290</i>&nbsp;        return true;</b>
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Update the player with the selected information
+<i>295</i>&nbsp;     * @param color color of the workers
+<i>296</i>&nbsp;     * @param points positions of the workers
+<i>297</i>&nbsp;     */
+<i>298</i>&nbsp;    public void setPlayerInfo(Color color, Point points[], Card card) {
+<i>299</i>&nbsp;        // get the cells associated to the points selected by the user
+<b class="fc"><i>300</i>&nbsp;        Cell cells[] = new Cell[2];</b>
+<b class="fc"><i>301</i>&nbsp;        for (int i = 0; i &lt; 2; i++) {</b>
+<b class="fc"><i>302</i>&nbsp;            cells[i] = gameBoard.getCell(points[i]);</b>
+<i>303</i>&nbsp;        }
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;        // initialize player
+<b class="fc"><i>306</i>&nbsp;        players[turn].initialize(color, cells, card.getPower());</b>
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;        // update the deck after a card has been selected
+<b class="fc"><i>309</i>&nbsp;        deck.cardSelected(card);</b>
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;        // remove color from available colors
+<b class="fc"><i>312</i>&nbsp;        colors.remove(color);</b>
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;        // update clients with the new board
+<b class="fc"><i>315</i>&nbsp;        notifyObservers(new UpdateBoardMsg(getGameBoard()));</b>
+<b class="fc"><i>316</i>&nbsp;    }</b>
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    /**
+<i>319</i>&nbsp;     * Initialize the list of available colors
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    private void initColors() {
+<b class="fc"><i>322</i>&nbsp;        colors = new ArrayList&lt;&gt;(Arrays.asList(Color.values()));</b>
+<b class="fc"><i>323</i>&nbsp;    }</b>
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;    /**
+<i>326</i>&nbsp;     * Return the list of available colors that a user can select
+<i>327</i>&nbsp;     * @return available colors
+<i>328</i>&nbsp;     */
+<i>329</i>&nbsp;    public List&lt;Color&gt; getAvailableColors() {
+<b class="fc"><i>330</i>&nbsp;        return new ArrayList&lt;&gt;(colors);</b>
+<i>331</i>&nbsp;    }
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    /**
+<i>335</i>&nbsp;     * Initialize the turn for the current player and reset power parameters
+<i>336</i>&nbsp;     */
+<i>337</i>&nbsp;    public void initTurn() {
+<i>338</i>&nbsp;        // reset turn state
+<b class="fc"><i>339</i>&nbsp;        state = TurnState.INIT;</b>
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;        // reset parameters before the current turn starts
+<b class="fc"><i>342</i>&nbsp;        getCurrentPlayer().getPower().reset();</b>
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;        // get max climb level of the current player from the previous player (NextCannotMoveUpDecorator)
+<b class="fc"><i>345</i>&nbsp;        int maxClimb = getPreviousPlayer().getPower().getNextPlayerMaxClimb();</b>
+<b class="fc"><i>346</i>&nbsp;        getCurrentPlayer().getPower().setMaxClimbLevel(maxClimb);</b>
+<b class="fc"><i>347</i>&nbsp;    }</b>
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    /**
+<i>350</i>&nbsp;     * Select the worker that will be used during the current turn
+<i>351</i>&nbsp;     * @param worker index of the selected worker
+<i>352</i>&nbsp;     */
+<i>353</i>&nbsp;    public void selectCurrentWorker(int worker) {
+<i>354</i>&nbsp;        // activate the worker selected by the user
+<b class="fc"><i>355</i>&nbsp;        getCurrentPlayer().selectCurrentWorker(worker);</b>
+<i>356</i>&nbsp;
+<i>357</i>&nbsp;        // set the initial position of the current worker in the power
+<b class="fc"><i>358</i>&nbsp;        Point pos = getCurrentPlayer().getCurrentWorker().getPosition();</b>
+<b class="fc"><i>359</i>&nbsp;        getCurrentPlayer().getPower().setInitialPosition(gameBoard.getCell(pos));</b>
+<b class="fc"><i>360</i>&nbsp;    }</b>
+<i>361</i>&nbsp;
+<i>362</i>&nbsp;    /**
+<i>363</i>&nbsp;     * Determines the list of next possible actions based on the current turn state
+<i>364</i>&nbsp;     * @return list of possible actions
+<i>365</i>&nbsp;     */
+<i>366</i>&nbsp;    public List&lt;Action&gt; nextActions() {
+<i>367</i>&nbsp;        // determine next possible actions based on
+<i>368</i>&nbsp;        // - the current turn state
+<i>369</i>&nbsp;        // - the power of the player
+<b class="fc"><i>370</i>&nbsp;        return getCurrentPlayer().getPower().nextActions(state);</b>
+<i>371</i>&nbsp;    }
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;    /**
+<i>374</i>&nbsp;     * Generates a list of possible cells for move action
+<i>375</i>&nbsp;     * @return list of cells to move on
+<i>376</i>&nbsp;     */
+<i>377</i>&nbsp;    public List&lt;Cell&gt; getPossibleMoves() {
+<b class="fc"><i>378</i>&nbsp;        Player player = getCurrentPlayer();</b>
+<b class="fc"><i>379</i>&nbsp;        return player.getPower().getPossibleMoves(gameBoard, player.getCurrentWorker());</b>
+<i>380</i>&nbsp;    }
+<i>381</i>&nbsp;
+<i>382</i>&nbsp;    /**
+<i>383</i>&nbsp;     * Generates a list of possible cells for build action
+<i>384</i>&nbsp;     * @return list of cells to build on
+<i>385</i>&nbsp;     */
+<i>386</i>&nbsp;    public List&lt;Cell&gt; getPossibleBuilds() {
+<b class="fc"><i>387</i>&nbsp;        Player player = getCurrentPlayer();</b>
+<b class="fc"><i>388</i>&nbsp;        return player.getPower().getPossibleBuilds(gameBoard, player.getCurrentWorker());</b>
+<i>389</i>&nbsp;    }
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;    /**
+<i>392</i>&nbsp;     * Check if the current player has won the game
+<i>393</i>&nbsp;     * @return true if player has won
+<i>394</i>&nbsp;     */
+<i>395</i>&nbsp;    public boolean checkVictory() {
+<i>396</i>&nbsp;        // check victory only after a move action
+<b class="fc"><i>397</i>&nbsp;        if (state != TurnState.MOVE) {</b>
+<b class="fc"><i>398</i>&nbsp;            return false;</b>
+<i>399</i>&nbsp;        }
+<i>400</i>&nbsp;
+<b class="fc"><i>401</i>&nbsp;        return getCurrentPlayer().getPower().checkVictory();</b>
+<i>402</i>&nbsp;    }
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    /**
+<i>405</i>&nbsp;     * Returns a list of available cards that the player can select
+<i>406</i>&nbsp;     * @return list of available cards
+<i>407</i>&nbsp;     */
+<i>408</i>&nbsp;    public List&lt;Card&gt; getAvailableCards() {
+<b class="fc"><i>409</i>&nbsp;        return deck.getAvailableCards();</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 00:02</div>
+</div>
+</body>
+</html>

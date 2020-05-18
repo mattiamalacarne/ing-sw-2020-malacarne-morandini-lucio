@@ -1,0 +1,115 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Message</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Message (it.polimi.ingsw.psp12.network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Message</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33,3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgType;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.Serializable;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Class for general message, server-&gt;client-&gt;server
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * @author Mattia Malacarne
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class Message implements Serializable
+<i>15</i>&nbsp;{
+<i>16</i>&nbsp;    // Message header
+<i>17</i>&nbsp;    /** Encapsulate the command direct to the server **/
+<i>18</i>&nbsp;    protected MsgCommand command;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    public Message(MsgCommand cmd)
+<b class="fc"><i>21</i>&nbsp;    {</b>
+<b class="fc"><i>22</i>&nbsp;        this.command = cmd;</b>
+<b class="fc"><i>23</i>&nbsp;    }</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public MsgType getType() {
+<b class="nc"><i>26</i>&nbsp;        return command.getType();</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public MsgCommand getCommand() {
+<b class="nc"><i>30</i>&nbsp;        return command;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 00:02</div>
+</div>
+</body>
+</html>

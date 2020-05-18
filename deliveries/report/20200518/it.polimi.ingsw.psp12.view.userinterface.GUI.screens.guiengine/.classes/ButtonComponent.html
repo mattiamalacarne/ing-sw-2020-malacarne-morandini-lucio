@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ButtonComponent</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ButtonComponent (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ButtonComponent</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import javax.swing.*;
+<i>4</i>&nbsp;import java.awt.*;
+<i>5</i>&nbsp;import java.io.File;
+<i>6</i>&nbsp;import java.io.IOException;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class ButtonComponent extends JButton
+<i>9</i>&nbsp;{
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    public ButtonComponent(Color color, String text, int posX, int posY)
+<i>12</i>&nbsp;    {
+<b class="nc"><i>13</i>&nbsp;        super(text);</b>
+<b class="nc"><i>14</i>&nbsp;        String image = &quot;btn_blue.png&quot;;</b>
+<b class="nc"><i>15</i>&nbsp;        Dimension size = new Dimension(180,60);</b>
+<i>16</i>&nbsp;
+<b class="nc"><i>17</i>&nbsp;        this.setHorizontalTextPosition(JButton.CENTER);</b>
+<b class="nc"><i>18</i>&nbsp;        this.setVerticalTextPosition(JButton.CENTER);</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;        // Set transparent
+<b class="nc"><i>21</i>&nbsp;        this.setOpaque(false);</b>
+<b class="nc"><i>22</i>&nbsp;        this.setContentAreaFilled(false);</b>
+<b class="nc"><i>23</i>&nbsp;        this.setBorderPainted(false);</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;        // Load the font
+<b class="nc"><i>26</i>&nbsp;        this.setFont(new Font(&quot;dalek&quot;, Font.PLAIN, 25));</b>
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;        this.setBounds(posX,posY, size.width,size.height);</b>
+<b class="nc"><i>29</i>&nbsp;        this.setIcon(loadButtonIcon(image, size));</b>
+<b class="nc"><i>30</i>&nbsp;        this.setVisible(true);</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    private ImageIcon loadButtonIcon(String image, Dimension size)
+<i>35</i>&nbsp;    {
+<b class="nc"><i>36</i>&nbsp;        ImageIcon icon = new ImageIcon(getClass().getResource(&quot;/&quot;+image));</b>
+<b class="nc"><i>37</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>38</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    private Font loadGameFont()
+<i>42</i>&nbsp;    {
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        File font = new File(getClass().getClassLoader().getResource(&quot;dalek.ttf&quot;).getFile());</b>
+<i>45</i>&nbsp;        try {
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;            return Font.createFont(Font.TRUETYPE_FONT, font);</b>
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;        } catch (FontFormatException e) {</b>
+<b class="nc"><i>50</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>51</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>52</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>53</i>&nbsp;        }</b>
+<b class="nc"><i>54</i>&nbsp;        return null;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 00:02</div>
+</div>
+</body>
+</html>

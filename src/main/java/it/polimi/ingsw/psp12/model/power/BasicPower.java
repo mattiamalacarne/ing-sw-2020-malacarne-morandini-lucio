@@ -21,6 +21,9 @@ public class BasicPower extends Power {
      * Constructor
      */
     public BasicPower() {
+        lastPositions = new Cell[3];
+        lastBuild = new Cell[2];
+
         reset();
     }
 
@@ -29,7 +32,6 @@ public class BasicPower extends Power {
      */
     @Override
     public void reset() {
-
         powerId = 0;
         maxClimbLevel = 1;
         //maxMoves = 1;
@@ -37,9 +39,7 @@ public class BasicPower extends Power {
         minDomeLevel = 3;
         movesCount = 0;
         buildsCount = 0;
-        lastPositions = new Cell[2];
-        lastBuild = null;
-
+        nextPlayerMaxClimb = 1;
     }
 
     @Override

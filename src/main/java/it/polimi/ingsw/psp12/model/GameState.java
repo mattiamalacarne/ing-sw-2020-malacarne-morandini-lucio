@@ -353,6 +353,10 @@ public class GameState extends Observable<Message>
     public void selectCurrentWorker(int worker) {
         // activate the worker selected by the user
         getCurrentPlayer().selectCurrentWorker(worker);
+
+        // set the initial position of the current worker in the power
+        Point pos = getCurrentPlayer().getCurrentWorker().getPosition();
+        getCurrentPlayer().getPower().setInitialPosition(gameBoard.getCell(pos));
     }
 
     /**

@@ -53,14 +53,19 @@ public abstract class Power {
     int buildsCount;
 
     /**
+     * max level the next player can climb in move
+     */
+    int nextPlayerMaxClimb;
+
+    /**
      * cells of the current and previous positions [current, previous]
      */
-    Cell lastPositions[];
+    Cell[] lastPositions;
 
     /**
      * cell of the last build
      */
-    Cell lastBuild;
+    Cell[] lastBuild;
 
     /**
      * Getter of the id of the power
@@ -132,7 +137,7 @@ public abstract class Power {
      * @return max level the next player can climb in move
      */
     public int getNextPlayerMaxClimb(){
-        return 1;
+        return nextPlayerMaxClimb;
     }
 
     /**
@@ -177,6 +182,8 @@ public abstract class Power {
      * @param position current cell
      */
     public void moved(Cell position) {
+        // store at index 2 the second-last position
+        this.lastPositions[2] = this.lastPositions[1];
         // store at index 1 the previous position
         this.lastPositions[1] = this.lastPositions[0];
         // store at index 0 the current position
@@ -185,11 +192,22 @@ public abstract class Power {
     }
 
     /**
+     * Save the initial position of the current worker at the beginning of a turn
+     * @param position initial position of the worker
+     */
+    public void setInitialPosition(Cell position) {
+        this.lastPositions[0] = position;
+    }
+
+    /**
      * Save the last build position after the worker has built
      * @param position build cell
      */
     public void hasBuilt(Cell position) {
-        this.lastBuild = position;
+        // store at index 1 the previous position
+        this.lastBuild[1] = this.lastBuild[0];
+        // store at index 0 the current position
+        this.lastBuild[0] = position;
         buildsCount++;
     }
 

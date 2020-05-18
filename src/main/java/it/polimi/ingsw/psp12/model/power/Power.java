@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.model.power;
 import it.polimi.ingsw.psp12.model.*;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 
@@ -162,6 +163,14 @@ public abstract class Power {
      * @return list of actions that can be performed next
      */
     public List<Action> nextActions(TurnState turnState) { return new ArrayList<>(); }
+
+    /**
+     * Determines the new position of another worker when it is forced to move by the current worker
+     * @param currentPos current position of the current worker
+     * @param otherPos current position of the other worker
+     * @return new position of the other worker
+     */
+    public Point getOtherWorkerMove(Point currentPos, Point otherPos) { return null; }
 
     /**
      * Save the last move position after the worker moved

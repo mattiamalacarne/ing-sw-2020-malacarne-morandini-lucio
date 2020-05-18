@@ -90,6 +90,11 @@ public class BasicPower extends Power {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Point getOtherWorkerMove(Point currentPos, Point otherPos) {
+        return currentPos;
+    }
+
     /**
      * Generates the list of adjoining cells of the provided cell
      * @param b game board

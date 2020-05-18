@@ -233,8 +233,18 @@ public class GameState extends Observable<Message>
         // update position of the current worker and get the old position
         Point oldPoint = getCurrentPlayer().updateWorkerPosition(newPoint);
 
-        // update board
-        gameBoard.move(oldPoint, newPoint);
+        // check if there is another worker in the new position
+        if (gameBoard.getCell(newPoint).hasWorker()) {
+            // get the new position for the other worker
+            Point otherNewPoint = getCurrentPlayer().getPower().getOtherWorkerMove(oldPoint, newPoint);
+
+            // update board moving two workers
+            gameBoard.move(oldPoint, newPoint, otherNewPoint);
+        }
+        else {
+            // update board moving one worker
+            gameBoard.move(oldPoint, newPoint);
+        }
 
         // save last move in the power
         getCurrentPlayer().getPower().moved(gameBoard.getCell(newPoint));

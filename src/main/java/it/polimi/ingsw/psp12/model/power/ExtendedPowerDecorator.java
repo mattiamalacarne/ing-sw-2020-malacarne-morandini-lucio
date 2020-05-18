@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model.power;
 
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
@@ -39,5 +40,10 @@ public abstract class ExtendedPowerDecorator extends Power{
     @Override
     public List<Cell> getPossibleBuilds(Board b, Worker w) {
         return power.getPossibleBuilds(b, w);
+    }
+
+    @Override
+    public Point getOtherWorkerMove(Point currentPos, Point otherPos) {
+        return power.getOtherWorkerMove(currentPos, otherPos);
     }
 }

@@ -52,6 +52,25 @@ public class Board implements Serializable
     }
 
     /**
+     * Moves the positions of two workers on the map simultaneously
+     * @param oldPoint current position of the current worker
+     * @param newPoint new position of the current worker / current position of the other worker
+     * @param otherNewPoint new position of the other worker
+     */
+    public void move(Point oldPoint, Point newPoint, Point otherNewPoint) {
+        // save the other worker before moving the current worker
+        Worker otherWorker = boardCells[newPoint.getX()][newPoint.getY()].getWorker();
+
+        // move the current worker
+        move(oldPoint, newPoint);
+
+        // move the other worker to the new position
+        otherWorker.move(otherNewPoint);
+        // place on the board the other worker
+        boardCells[otherNewPoint.getX()][otherNewPoint.getY()].addWorker(otherWorker);
+    }
+
+    /**
      * Increments the level of a tower on the map
      * @param pos coordinates of the tower
      */

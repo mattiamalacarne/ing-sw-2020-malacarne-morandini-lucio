@@ -1,7 +1,7 @@
-package it.polimi.ingsw.psp12.model;
+package it.polimi.ingsw.psp12.model.board;
 
-import it.polimi.ingsw.psp12.model.board.Cell;
-import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.Worker;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

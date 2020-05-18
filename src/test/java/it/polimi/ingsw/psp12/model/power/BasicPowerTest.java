@@ -86,6 +86,7 @@ public class BasicPowerTest {
         assertEquals(0, basicPower.movesCount);
         assertEquals(null, basicPower.lastPositions[0]);
         assertEquals(null, basicPower.lastPositions[1]);
+        assertEquals(null, basicPower.lastPositions[2]);
 
         // move
         Cell c1 = new Cell(0, 0);
@@ -95,6 +96,7 @@ public class BasicPowerTest {
         assertEquals(1, basicPower.movesCount);
         assertEquals(c1, basicPower.lastPositions[0]);
         assertEquals(null, basicPower.lastPositions[1]);
+        assertEquals(null, basicPower.lastPositions[2]);
 
         // move again
         Cell c2 = new Cell(1, 1);
@@ -104,13 +106,34 @@ public class BasicPowerTest {
         assertEquals(2, basicPower.movesCount);
         assertEquals(c2, basicPower.lastPositions[0]);
         assertEquals(c1, basicPower.lastPositions[1]);
+        assertEquals(null, basicPower.lastPositions[2]);
+    }
+
+    @Test
+    public void setInitialPosition_ShouldSetPosition() {
+        // check initial state
+        assertEquals(0, basicPower.movesCount);
+        assertEquals(null, basicPower.lastPositions[0]);
+        assertEquals(null, basicPower.lastPositions[1]);
+        assertEquals(null, basicPower.lastPositions[2]);
+
+        // set initial position
+        Cell c1 = new Cell(0, 0);
+        basicPower.setInitialPosition(c1);
+
+        // check final state
+        assertEquals(0, basicPower.movesCount);
+        assertEquals(c1, basicPower.lastPositions[0]);
+        assertEquals(null, basicPower.lastPositions[1]);
+        assertEquals(null, basicPower.lastPositions[2]);
     }
 
     @Test
     public void hasBuilt_Should_ShouldUpdateBuildsCountAndPosition() {
         // check initial state
         assertEquals(0, basicPower.buildsCount);
-        assertEquals(null, basicPower.lastBuild);
+        assertEquals(null, basicPower.lastBuild[0]);
+        assertEquals(null, basicPower.lastBuild[1]);
 
         // build
         Cell c1 = new Cell(2, 3);
@@ -118,7 +141,8 @@ public class BasicPowerTest {
 
         // check final state
         assertEquals(1, basicPower.buildsCount);
-        assertEquals(c1, basicPower.lastBuild);
+        assertEquals(c1, basicPower.lastBuild[0]);
+        assertEquals(null, basicPower.lastBuild[1]);
     }
 
     @Test

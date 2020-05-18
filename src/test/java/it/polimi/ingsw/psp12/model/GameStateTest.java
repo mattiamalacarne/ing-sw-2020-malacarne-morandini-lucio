@@ -295,6 +295,7 @@ public class GameStateTest {
     @Test
     public void selectCurrentWorker_ShouldReturnSelectedWorker() {
         Player p = gameState2.addPlayer("P1");
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
         gameState2.selectCurrentWorker(1);
 
         assertEquals(p.getWorkerByIndex(1), p.getCurrentWorker());
@@ -372,6 +373,37 @@ public class GameStateTest {
         assertEquals(newP, p1.getWorkerByIndex(0).getPosition());
         assertTrue(gameState2.getGameBoard().getCell(newP).hasWorker());
         assertFalse(gameState2.getGameBoard().getCell(oldP).hasWorker());
+    }
+
+    @Test
+    public void move_NewCellNotEmpty_ShouldMoveTwoWorkers() {
+        Player p1 = gameState2.addPlayer("P1");
+        Player p2 = gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
+        gameState2.nextTurn();
+        gameState2.setPlayerInfo(Color.BLUE, new Point[] { new Point(0, 1), new Point(3, 1)}, Card.getNoPowers());
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(0);
+
+        Point oldP = new Point(0, 0);
+        Point newP = new Point(0, 1);
+
+        // check initial state
+        assertEquals(oldP, p1.getWorkerByIndex(0).getPosition());
+        assertEquals(newP, p2.getWorkerByIndex(0).getPosition());
+        assertTrue(gameState2.getGameBoard().getCell(oldP).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(newP).hasWorker());
+
+        // move
+        gameState2.move(newP);
+
+        // check final state
+        assertEquals(newP, p1.getWorkerByIndex(0).getPosition());
+        // NOTE: default behavior swap workers
+        assertEquals(oldP, p2.getWorkerByIndex(0).getPosition());
+        assertTrue(gameState2.getGameBoard().getCell(newP).hasWorker());
+        assertTrue(gameState2.getGameBoard().getCell(oldP).hasWorker());
     }
 
     @Test

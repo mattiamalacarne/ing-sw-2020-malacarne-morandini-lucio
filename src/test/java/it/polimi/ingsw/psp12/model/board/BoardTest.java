@@ -1,9 +1,7 @@
-package it.polimi.ingsw.psp12.model;
+package it.polimi.ingsw.psp12.model.board;
 
-import it.polimi.ingsw.psp12.model.board.Board;
-import it.polimi.ingsw.psp12.model.board.Cell;
-import it.polimi.ingsw.psp12.model.board.Point;
-import it.polimi.ingsw.psp12.model.board.Tower;
+import it.polimi.ingsw.psp12.model.Worker;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,8 +18,10 @@ public class BoardTest {
         testBoard = new Board();
         testEmptyBoard = new Board();
 
-        // add test worker
+        // add test workers
         testBoard.getCell(new Point(1, 2)).addWorker(new Worker());
+        testBoard.getCell(new Point(4, 2)).addWorker(new Worker());
+        testBoard.getCell(new Point(4, 3)).addWorker(new Worker());
     }
 
     @Test
@@ -57,6 +57,58 @@ public class BoardTest {
         // check final state
         assertFalse(testBoard.getCell(oldPoint).hasWorker());
         assertTrue(testBoard.getCell(newPoint).hasWorker());
+    }
+
+    @Test
+    public void move_TwoWorkers_ShouldMoveWorkers() {
+        Point oldPoint = new Point(4, 2);
+        Point newPoint = new Point(4, 3);
+        Point otherNewPoint = new Point(4, 4);
+
+        Worker w1 = testBoard.getCell(oldPoint).getWorker();
+        Worker w2 = testBoard.getCell(newPoint).getWorker();
+
+        // check initial state
+        assertTrue(testBoard.getCell(oldPoint).hasWorker());
+        assertTrue(testBoard.getCell(newPoint).hasWorker());
+        assertFalse(testBoard.getCell(otherNewPoint).hasWorker());
+        assertEquals(w1, testBoard.getCell(oldPoint).getWorker());
+        assertEquals(w2, testBoard.getCell(newPoint).getWorker());
+
+        // move
+        testBoard.move(oldPoint, newPoint, otherNewPoint);
+
+        // check final state
+        assertFalse(testBoard.getCell(oldPoint).hasWorker());
+        assertTrue(testBoard.getCell(newPoint).hasWorker());
+        assertTrue(testBoard.getCell(otherNewPoint).hasWorker());
+        assertEquals(w1, testBoard.getCell(newPoint).getWorker());
+        assertEquals(w2, testBoard.getCell(otherNewPoint).getWorker());
+    }
+
+    @Test
+    public void move_TwoWorkers_ShouldSwapWorkers() {
+        Point oldPoint = new Point(4, 2);
+        Point newPoint = new Point(4, 3);
+        Point otherNewPoint = new Point(4, 2);
+
+        Worker w1 = testBoard.getCell(oldPoint).getWorker();
+        Worker w2 = testBoard.getCell(newPoint).getWorker();
+
+        // check initial state
+        assertTrue(testBoard.getCell(oldPoint).hasWorker());
+        assertTrue(testBoard.getCell(newPoint).hasWorker());
+        assertEquals(w1, testBoard.getCell(oldPoint).getWorker());
+        assertEquals(w2, testBoard.getCell(newPoint).getWorker());
+
+        // move
+        testBoard.move(oldPoint, newPoint, otherNewPoint);
+
+        // check final state
+        assertTrue(testBoard.getCell(newPoint).hasWorker());
+        assertTrue(testBoard.getCell(otherNewPoint).hasWorker());
+        assertEquals(w1, testBoard.getCell(newPoint).getWorker());
+        assertEquals(w2, testBoard.getCell(otherNewPoint).getWorker());
     }
 
     @Test

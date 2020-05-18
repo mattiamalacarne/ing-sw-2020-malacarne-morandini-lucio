@@ -119,7 +119,7 @@ public class Player
      * @param color color of the workers
      * @param cells positions of the workers
      */
-    public void initialize(Color color, Cell cells[]) {
+    public void initialize(Color color, Cell cells[], Power power) {
         for (int i = 0; i < 2; i++) {
             // set worker color
             workers[i].setColor(color);
@@ -129,8 +129,8 @@ public class Player
             cells[i].addWorker(workers[i]);
         }
 
-        // set default power
-        setPower(new BasicPower());
+        // set card power
+        setPower(power);
 
         initialized = true;
     }

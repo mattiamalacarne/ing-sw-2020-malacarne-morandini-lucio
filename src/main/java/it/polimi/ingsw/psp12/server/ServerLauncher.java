@@ -1,5 +1,6 @@
 package it.polimi.ingsw.psp12.server;
 
+import it.polimi.ingsw.psp12.model.cards.Deck;
 import it.polimi.ingsw.psp12.server.acceptance.AcceptanceServer;
 import it.polimi.ingsw.psp12.utils.Constants;
 
@@ -14,6 +15,20 @@ public class ServerLauncher
 {
     public static void main(String[] args)
     {
+        System.out.println("loading cards from file...");
+
+        try {
+            Deck.loadCards();
+        } catch (IOException e) {
+            System.out.println("failed to load cards from file, shutting down...");
+            e.printStackTrace();
+
+            System.exit(1);
+            return;
+        }
+
+        System.out.println("cards loaded");
+
         AcceptanceServer acceptanceServer;
         try {
             // create an instance of acceptance server

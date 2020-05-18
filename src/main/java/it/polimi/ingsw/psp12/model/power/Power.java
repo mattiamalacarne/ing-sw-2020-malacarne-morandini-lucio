@@ -18,6 +18,7 @@ public abstract class Power {
     /**
      * identifier of the power
      */
+    // TODO: can be removed?
     int powerId;
 
     /**
@@ -64,6 +65,7 @@ public abstract class Power {
      * Getter of the id of the power
      * @return id of the power
      */
+    // TODO: can be removed?
     public int getPowerId() {
         return powerId;
     }

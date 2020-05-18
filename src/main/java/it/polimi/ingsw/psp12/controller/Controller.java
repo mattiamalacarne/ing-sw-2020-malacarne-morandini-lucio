@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
@@ -130,6 +131,9 @@ public class Controller implements Observer<Message> {
             request.addPosition(c.getLocation());
         }
 
+        // add available cards
+        request.setAvailableCards(model.getAvailableCards());
+
         // send request to the current user
         sendToCurrentPlayer(request);
 
@@ -142,7 +146,7 @@ public class Controller implements Observer<Message> {
      */
     void processPlayerInfo(PlayerInfoMsg msg) {
         // update model with the
-        model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions());
+        model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions(), msg.getCard());
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " initialized");
 

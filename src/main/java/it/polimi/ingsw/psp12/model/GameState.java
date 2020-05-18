@@ -4,8 +4,10 @@ import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Deck;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.network.messages.Message;
 import it.polimi.ingsw.psp12.network.messages.UpdateBoardMsg;
 import it.polimi.ingsw.psp12.utils.Color;
@@ -30,6 +32,11 @@ public class GameState extends Observable<Message>
      * List of players of the game
      */
     private Player players[];
+
+    /**
+     * Deck of cards that provide god powers
+     */
+    private Deck deck;
 
     /**
      * Number of players subscribed to the game
@@ -65,6 +72,7 @@ public class GameState extends Observable<Message>
         gameBoard = new Board();
         players = new Player[maxPlayersCount];
         playersCount = 0;
+        deck = new Deck(maxPlayersCount);
 
         initColors();
     }
@@ -277,7 +285,7 @@ public class GameState extends Observable<Message>
      * @param color color of the workers
      * @param points positions of the workers
      */
-    public void setPlayerInfo(Color color, Point points[]) {
+    public void setPlayerInfo(Color color, Point points[], Card card) {
         // get the cells associated to the points selected by the user
         Cell cells[] = new Cell[2];
         for (int i = 0; i < 2; i++) {
@@ -285,7 +293,10 @@ public class GameState extends Observable<Message>
         }
 
         // initialize player
-        players[turn].initialize(color, cells);
+        players[turn].initialize(color, cells, card.getPower());
+
+        // update the deck after a card has been selected
+        deck.cardSelected(card);
 
         // remove color from available colors
         colors.remove(color);
@@ -374,5 +385,13 @@ public class GameState extends Observable<Message>
         }
 
         return getCurrentPlayer().getPower().checkVictory();
+    }
+
+    /**
+     * Returns a list of available cards that the player can select
+     * @return list of available cards
+     */
+    public List<Card> getAvailableCards() {
+        return deck.getAvailableCards();
     }
 }

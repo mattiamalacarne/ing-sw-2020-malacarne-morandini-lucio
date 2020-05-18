@@ -48,14 +48,6 @@ public class MessageHandler implements Observer<Message>
 
     }
 
-//    /**
-//     * Start the game communication with the user interface
-//     * @throws IOException IO Exception
-//     */
-//    public void startGame() throws IOException {
-//        userInterface.getGamePort();
-//    }
-
     /**
      * Update the current game port (the port by which the client communicates with the server)
      * @param gamePort the port of the game server
@@ -135,6 +127,10 @@ public class MessageHandler implements Observer<Message>
             case PING:
                 break;
 
+            case CLOSE:
+                //TODO
+                break;
+
             //Game commands
             case BOARD_UPDATE:
                 userInterface.updateBoard( (UpdateBoardMsg) message );
@@ -162,7 +158,7 @@ public class MessageHandler implements Observer<Message>
 
             //FIXME: Deprecati
             case ROOMS:
-                userInterface.selectGamePort( (RoomsMsg) message );
+//                userInterface.selectGamePort( (RoomsMsg) message );
                 break;
             case MOVE:
                 userInterface.move( (CellListMsg) message );

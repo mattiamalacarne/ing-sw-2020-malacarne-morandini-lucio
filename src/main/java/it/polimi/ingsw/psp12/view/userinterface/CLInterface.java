@@ -2,7 +2,6 @@ package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.MessageHandler;
 import it.polimi.ingsw.psp12.client.ServerInfo;
-import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
 
@@ -39,8 +38,6 @@ public class CLInterface implements UserInterface
         System.out.println("Starting CLI, Setup server and client");
         cmdIn = new Scanner(System.in);
         messageHandler = new MessageHandler(this);
-
-//        messageHandler.startGame();
 
     }
 
@@ -93,72 +90,16 @@ public class CLInterface implements UserInterface
 
         messageHandler.sendToServer( new CreateMsg(playerNumber)  );
 
-
-//        System.out.println("\nDo you want to create or join a room?");
-//        System.out.println( "1) Create\n2) Join");
-
-//        int choice;
-//        do {
-//
-//            cmdIn = new Scanner(System.in);
-//            try {
-//                choice = cmdIn.nextInt();
-//            } catch (InputMismatchException e) {
-//                choice = 0;
-//            }
-//
-//            switch (choice){
-//
-//                //Creates a new Room
-//                case 1:
-//                    //Room Name
-//                    System.out.println("Room name: ");
-//                    cmdIn=new Scanner(System.in);
-//                    String roomName = cmdIn.nextLine();
-//
-//                    //Room player number
-//                    System.out.println("Player number [2-3]: ");
-//                    int playerNumber;
-//                    do {
-//                        cmdIn=new Scanner(System.in);
-//                        try {
-//                            playerNumber = cmdIn.nextInt();
-//                        } catch (InputMismatchException e) {
-//                            playerNumber=0;
-//                        }
-//                        if (playerNumber<2 || playerNumber>3){
-//                            System.out.println("Choice not allowed, retry");
-//                        }
-//                    }while (playerNumber<2 || playerNumber>3);
-//
-//                    messageHandler.sendToServer( new CreateMsg(roomName, playerNumber)  );
-//                    break;
-//
-//                //Requests list of available room/s
-//                case 2:
-//                    messageHandler.sendToServer( new Message(MsgCommand.LIST) );
-//                    break;
-//
-//                default:
-//                    System.out.println("Choice not allowed, retry");
-//                    break;
-//            }
-//
-//        }while (choice<1 || choice>2);
-
     }
 
     @Override
     public void waitMessage() {
-        System.out.println("Wait while all the players joined the room");
+        System.out.println("\nWait while all the players joined the room");
     }
 
     @Override
     public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException {
-//        System.out.printf("Room \"%s\" for %d players created!\n",
-//                createdMsg.getRoom().getName(), createdMsg.getRoom().getMaxPlayersCount());
-//        getGamePort();
-        System.out.printf("Room for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
+        System.out.printf("\nRoom for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
 
         //New port is updated
         messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());
@@ -180,55 +121,8 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void selectGamePort(RoomsMsg roomList) throws IOException {
-
-        if (!roomList.getRooms().isEmpty()) {
-            System.out.println("\nChoose a room where to enter:");
-            System.out.println("0) Return to create/join room");
-            for (int c=1; c<= roomList.getRooms().size(); c++){
-                System.out.printf("%d) %s [%d/%d] \n" , c , roomList.getRooms().get(c-1).getName() ,
-                                                            roomList.getRooms().get(c-1).getPlayersCount() ,
-                                                            roomList.getRooms().get(c-1).getMaxPlayersCount()
-                );
-            }
-
-            int choice;
-            do {
-                cmdIn = new Scanner(System.in);
-                try {
-                    choice=cmdIn.nextInt();
-                } catch (InputMismatchException e) {
-                    choice=-1;
-                }
-                if (choice > roomList.getRooms().size() || choice < 0){
-                    System.out.println("Choice not allowed, retry");
-                }else {
-
-                    if (choice == 0) {
-                        createsNewRoom();
-                    } else {
-                        //New port is updated
-                        messageHandler.setGamePort(roomList.getRooms().get(choice-1).getAssignedPort());
-
-                        System.out.println("What's you name: ");
-                        cmdIn= new Scanner(System.in);
-                        String playerName = cmdIn.nextLine();
-                        messageHandler.sendToServer(new JoinMsg(playerName));
-                    }
-                }
-            }while (choice > roomList.getRooms().size() || choice < 0);
-
-        } else {
-            System.out.println("There are no available room to join");
-            createsNewRoom();
-        }
-
-    }
-
-    @Override
-    public void roomFull() throws IOException {
+    public void roomFull() {
         System.out.println("This room is already full! Choose another room");
-        messageHandler.sendToServer( new Message(MsgCommand.LIST) );
     }
 
     @Override
@@ -245,14 +139,14 @@ public class CLInterface implements UserInterface
 //    }
 
     @Override
-    public void joinPlayerNameAlreadyUsed() throws IOException {
+    public void joinPlayerNameAlreadyUsed() {
         System.out.println("That name is already used! Choose another name: ");
         String playerName = cmdIn.nextLine();
         messageHandler.sendToServer(new JoinMsg(playerName));
     }
 
     @Override
-    public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException {
+    public void requestStartInfo(RequestInfoMsg requestInfoMsg) {
 
         System.out.println("Choose a color:");
         for (int c=0; c<requestInfoMsg.getAvailableColors().size();c++){
@@ -308,13 +202,32 @@ public class CLInterface implements UserInterface
             }
         }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
 
+        //TODO: visualizzazione descrizone carte
+        System.out.println("Choose a card:");
+        for (int c=0; c<requestInfoMsg.getAvailableCards().size(); c++){
+            System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailableCards().get(c).getName());
+        }
+        int cardChoice;
+        do {
+            cmdIn = new Scanner(System.in);
+            try {
+                cardChoice = cmdIn.nextInt();
+            } catch (InputMismatchException e){
+                cardChoice = -1;
+            }
+            if (cardChoice<0 || cardChoice>=requestInfoMsg.getAvailableCards().size()){
+                System.out.println("Choice not allowed, retry");
+            }
+        }while (cardChoice<0 || cardChoice>=requestInfoMsg.getAvailableCards().size());
+
         messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
                                                         requestInfoMsg.getAvailablePositions().get(worker1Position),
-                                                        requestInfoMsg.getAvailablePositions().get(worker2Position) ) );
+                                                        requestInfoMsg.getAvailablePositions().get(worker2Position),
+                                                        requestInfoMsg.getAvailableCards().get(cardChoice)) );
     }
 
     @Override
-    public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
+    public void chooseAction(ActionsListMsg actionsListMsg) {
 
         System.out.println("Choose the next action: ");
         for (int c=0; c<actionsListMsg.getActions().size(); c++){
@@ -363,7 +276,7 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void chooseCell(CellListMsg cellListMsg) throws IOException {
+    public void chooseCell(CellListMsg cellListMsg) {
 
         System.out.printf("Choose the cell where to do the %s action\n", cellListMsg.getAction());
         for (int c=0; c<cellListMsg.getCellList().size(); c++){

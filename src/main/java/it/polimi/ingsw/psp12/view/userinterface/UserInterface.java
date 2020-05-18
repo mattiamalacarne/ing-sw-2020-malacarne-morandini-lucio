@@ -55,15 +55,7 @@ public interface UserInterface
     void invalidMaxPlayerMessage();
 
     /**
-     * The user chooses the port of game room where to enter
-     * @param roomList The list of available room/s
-     * @throws IOException IO Exception
-     */
-    void selectGamePort(RoomsMsg roomList) throws IOException;
-
-    /**
      * Communicates to the user that the chosen room is already full
-     * @throws IOException IO Exception
      */
     void roomFull() throws IOException;
 
@@ -74,30 +66,26 @@ public interface UserInterface
 
     /**
      * The user insert the name again, because the previous one is already used
-     * @throws IOException IO Exception
      */
     void joinPlayerNameAlreadyUsed() throws IOException;
 
     /**
      * The user chooses the color and the position of its workers
      * @param requestInfoMsg The list of available color and the available positions to choose
-     * @throws IOException IO Exception
      */
     void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
     /**
      * The user chooses the action to perform
      * @param actionsListMsg The list of possible action to perform
-     * @throws IOException IO Exception
      */
     void chooseAction(ActionsListMsg actionsListMsg) throws IOException;
 
     /**
      * The user chooses the cell where to perform the action
      * @param cellListMsg The list of cell where to perform the action, and the action to perform
-     * @throws IOException IO Exception
      */
-    void chooseCell(CellListMsg cellListMsg) throws  IOException;
+    void chooseCell(CellListMsg cellListMsg);
 
     /**
      * Communicates to the user the end of the own turn

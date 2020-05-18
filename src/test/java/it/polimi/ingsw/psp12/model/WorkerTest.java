@@ -17,6 +17,15 @@ public class WorkerTest {
     }
 
     @Test
+    public void Worker_WithName_ShouldInitializeName() {
+        Worker worker1 = new Worker("P1", 0);
+        Worker worker2 = new Worker("P1", 1);
+
+        assertEquals("P1.0", worker1.getName());
+        assertEquals("P1.1", worker2.getName());
+    }
+
+    @Test
     public void getPosition_ShouldReturnCurrentCell() {
         Point c1 = w1.getPosition();
 

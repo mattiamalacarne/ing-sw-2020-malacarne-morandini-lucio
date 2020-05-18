@@ -33,7 +33,7 @@ public class Player
 
         workers = new Worker[2];
         for (int i = 0; i < 2; i++) {
-            workers[i] = new Worker();
+            workers[i] = new Worker(this.name, i);
         }
     }
 

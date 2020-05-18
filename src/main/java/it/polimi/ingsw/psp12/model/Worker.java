@@ -17,6 +17,24 @@ public class Worker implements Serializable
 
     private Color color;
 
+    private String name;
+
+    public Worker() {
+        this.name = "worker";
+    }
+
+    public Worker(String player, int id) {
+        this.name = player + "." + id;
+    }
+
+    /**
+     * get the name of the worker
+     * @return worker name
+     */
+    public String getName() {
+        return name;
+    }
+
     /**
      * get the selected worker position
      * @return the worker position in the board
@@ -55,6 +73,7 @@ public class Worker implements Serializable
      */
     public Worker clone() {
         Worker w = new Worker();
+        w.name = this.name;
         w.color = this.color;
         if (this.position != null) {
             w.position = this.position.clone();

@@ -18,11 +18,16 @@ public class WorkerTest {
 
     @Test
     public void Worker_WithName_ShouldInitializeName() {
-        Worker worker1 = new Worker("P1", 0);
-        Worker worker2 = new Worker("P1", 1);
+        Worker worker1 = new Worker(1, "P1", 0);
+        Worker worker2 = new Worker(1, "P1", 1);
 
-        assertEquals("P1.0", worker1.getName());
-        assertEquals("P1.1", worker2.getName());
+        assertEquals(0, worker1.getId());
+        assertEquals(1, worker1.getPlayerId());
+        assertEquals("P1", worker1.getPlayerName());
+
+        assertEquals(1, worker2.getId());
+        assertEquals(1, worker2.getPlayerId());
+        assertEquals("P1", worker2.getPlayerName());
     }
 
     @Test

@@ -17,22 +17,44 @@ public class Worker implements Serializable
 
     private Color color;
 
-    private String name;
+    private final String playerName;
+
+    private final int playerId;
+
+    private final int workerId;
 
     public Worker() {
-        this.name = "worker";
+        this(0, "worker", 0);
     }
 
-    public Worker(String player, int id) {
-        this.name = player + "." + id;
+    public Worker(int playerId, String playerName, int workerId) {
+        this.playerId = playerId;
+        this.playerName = playerName;
+        this.workerId = workerId;
     }
 
     /**
-     * get the name of the worker
-     * @return worker name
+     * get the name of the player that holds the worker
+     * @return player name
      */
-    public String getName() {
-        return name;
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    /**
+     * get the id of the player that holds the worker
+     * @return player id
+     */
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    /**
+     * get the id of the worker
+     * @return worker id
+     */
+    public int getId() {
+        return workerId;
     }
 
     /**
@@ -72,8 +94,7 @@ public class Worker implements Serializable
      * @return worker clone
      */
     public Worker clone() {
-        Worker w = new Worker();
-        w.name = this.name;
+        Worker w = new Worker(this.playerId, this.playerName, this.workerId);
         w.color = this.color;
         if (this.position != null) {
             w.position = this.position.clone();

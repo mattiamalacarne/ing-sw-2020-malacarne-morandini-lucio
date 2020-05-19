@@ -27,14 +27,14 @@ public class BasicPowerTest {
         gameBoard = new Board();
     }
 
-    @Test
+    /*@Test
     public void getPowerId() {
         assertEquals(0, basicPower.getPowerId());
-    }
+    }*/
 
     @Test
     public void getMaxClimbLevel() {
-        assertEquals(1, basicPower.getMaxClimbLevel());
+        assertEquals(1, basicPower.maxClimbLevel);
     }
 
     /*@Test
@@ -54,12 +54,12 @@ public class BasicPowerTest {
 
     @Test
     public void getMovesCount() {
-        assertEquals(0, basicPower.getMovesCount());
+        assertEquals(0, basicPower.movesCount);
     }
 
     @Test
     public void getBuildsCount() {
-        assertEquals(0, basicPower.getBuildsCount());
+        assertEquals(0, basicPower.buildsCount);
     }
 
     @Test
@@ -69,13 +69,13 @@ public class BasicPowerTest {
 
     @Test
     public void reset() {
-        assertEquals(0, basicPower.getPowerId());
-        assertEquals(1, basicPower.getMaxClimbLevel());
+        //assertEquals(0, basicPower.getPowerId());
+        assertEquals(1, basicPower.maxClimbLevel);
         //assertEquals(1, basicPower.getMaxMoves());
         //assertEquals(1, basicPower.getMaxBuildsLevel());
         assertEquals(3, basicPower.getMinDomeLevel());
-        assertEquals(0, basicPower.getMovesCount());
-        assertEquals(0, basicPower.getBuildsCount());
+        assertEquals(0, basicPower.movesCount);
+        assertEquals(0, basicPower.buildsCount);
         assertEquals(1, basicPower.getNextPlayerMaxClimb());
 
     }
@@ -132,8 +132,8 @@ public class BasicPowerTest {
     public void hasBuilt_Should_ShouldUpdateBuildsCountAndPosition() {
         // check initial state
         assertEquals(0, basicPower.buildsCount);
-        assertEquals(null, basicPower.lastBuild[0]);
-        assertEquals(null, basicPower.lastBuild[1]);
+        assertEquals(null, basicPower.lastBuilds[0]);
+        assertEquals(null, basicPower.lastBuilds[1]);
 
         // build
         Cell c1 = new Cell(2, 3);
@@ -141,8 +141,8 @@ public class BasicPowerTest {
 
         // check final state
         assertEquals(1, basicPower.buildsCount);
-        assertEquals(c1, basicPower.lastBuild[0]);
-        assertEquals(null, basicPower.lastBuild[1]);
+        assertEquals(c1, basicPower.lastBuilds[0]);
+        assertEquals(null, basicPower.lastBuilds[1]);
     }
 
     @Test

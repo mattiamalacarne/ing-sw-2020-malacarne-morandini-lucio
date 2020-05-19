@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * Basic implementation of power class
- * @author Michele Lucio
+ * @author Michele Lucio, Luca Morandini
  */
 public class BasicPower extends Power {
 
@@ -22,42 +22,25 @@ public class BasicPower extends Power {
      */
     public BasicPower() {
         lastPositions = new Cell[3];
-        lastBuild = new Cell[2];
+        lastBuilds = new Cell[2];
+        //minDomeLevel = 3;
 
         reset();
     }
 
-    /**
-     * Reset all Power's attributes to basic power condition
-     */
     @Override
-    public void reset() {
-        powerId = 0;
-        maxClimbLevel = 1;
-        //maxMoves = 1;
-        //maxBuildsLevel = 1;
-        minDomeLevel = 3;
-        movesCount = 0;
-        buildsCount = 0;
-        nextPlayerMaxClimb = 1;
+    public void setMaxClimbLevel(int maxClimbLevel) {
+        this.maxClimbLevel = maxClimbLevel;
     }
 
     @Override
-    public List<Action> nextActions(TurnState turnState) {
-        List<Action> actions = new ArrayList<>();
+    public int getMinDomeLevel() {
+        return 3;
+    }
 
-        switch (turnState) {
-            case INIT:
-                actions.add(Action.MOVE);
-                break;
-            case MOVE:
-                actions.add(Action.BUILD);
-                break;
-            case BUILD:
-                actions.add(Action.END);
-        }
-
-        return actions;
+    @Override
+    public int getNextPlayerMaxClimb() {
+        return 1;
     }
 
     @Override
@@ -91,8 +74,63 @@ public class BasicPower extends Power {
     }
 
     @Override
+    public List<Action> nextActions(TurnState turnState) {
+        List<Action> actions = new ArrayList<>();
+
+        switch (turnState) {
+            case INIT:
+                actions.add(Action.MOVE);
+                break;
+            case MOVE:
+                actions.add(Action.BUILD);
+                break;
+            case BUILD:
+                actions.add(Action.END);
+        }
+
+        return actions;
+    }
+
+    @Override
     public Point getOtherWorkerMove(Point currentPos, Point otherPos) {
         return currentPos;
+    }
+
+    @Override
+    public void moved(Cell position) {
+        // store at index 2 the second-last position
+        this.lastPositions[2] = this.lastPositions[1];
+        // store at index 1 the previous position
+        this.lastPositions[1] = this.lastPositions[0];
+        // store at index 0 the current position
+        this.lastPositions[0] = position;
+        movesCount++;
+    }
+
+    @Override
+    public void setInitialPosition(Cell position) {
+        this.lastPositions[0] = position;
+    }
+
+    @Override
+    public void hasBuilt(Cell position) {
+        // store at index 1 the previous position
+        this.lastBuilds[1] = this.lastBuilds[0];
+        // store at index 0 the current position
+        this.lastBuilds[0] = position;
+        buildsCount++;
+    }
+
+    @Override
+    public void reset() {
+        //powerId = 0;
+        maxClimbLevel = 1;
+        //maxMoves = 1;
+        //maxBuildsLevel = 1;
+        //minDomeLevel = 3;
+        movesCount = 0;
+        buildsCount = 0;
+        //nextPlayerMaxClimb = 1;
     }
 
     /**

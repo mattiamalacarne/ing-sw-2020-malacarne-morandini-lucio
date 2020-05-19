@@ -253,7 +253,7 @@ public class GameStateTest {
 
         assertNotNull(gameState2.getCurrentPlayer().getPower());
         assertTrue(gameState2.getCurrentPlayer().isInitialized());
-        assertEquals(1, gameState2.getCurrentPlayer().getPower().getMaxClimbLevel());
+        assertEquals(1, gameState2.getPreviousPlayer().getPower().getNextPlayerMaxClimb());
         assertEquals(3, gameState2.getCurrentPlayer().getPower().getMinDomeLevel());
 
         Worker w1 = gameState2.getCurrentPlayer().getWorkerByIndex(0);
@@ -317,7 +317,7 @@ public class GameStateTest {
 
         // check final state
         assertEquals(TurnState.INIT, gameState2.getCurrentState());
-        assertEquals(1, gameState2.getCurrentPlayer().getPower().getMaxClimbLevel());
+        assertEquals(1, gameState2.getPreviousPlayer().getPower().getNextPlayerMaxClimb());
     }
 
     @Test

@@ -7,20 +7,19 @@ import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Abstract Power class that will'll be decorated whit decorator pattern
- * @author Michele Lucio
+ * @author Michele Lucio, Luca Morandini
  */
 public abstract class Power {
 
-    /**
+    /*/**
      * identifier of the power
      */
     // TODO: can be removed?
-    int powerId;
+    //int powerId;
 
     /**
      * max level to climb in move
@@ -37,10 +36,10 @@ public abstract class Power {
      */
     //int maxBuildsLevel;
 
-    /**
+    /*/**
      * min level where it's possible to build a dome
      */
-    int minDomeLevel;
+    //int minDomeLevel;
 
     /**
      * number of move actions that the player performed in the current turn
@@ -52,10 +51,10 @@ public abstract class Power {
      */
     int buildsCount;
 
-    /**
+    /*/**
      * max level the next player can climb in move
      */
-    int nextPlayerMaxClimb;
+    //int nextPlayerMaxClimb;
 
     /**
      * cells of the current and previous positions [current, previous]
@@ -65,32 +64,30 @@ public abstract class Power {
     /**
      * cell of the last build
      */
-    Cell[] lastBuild;
+    Cell[] lastBuilds;
 
-    /**
+    /*/**
      * Getter of the id of the power
      * @return id of the power
      */
     // TODO: can be removed?
-    public int getPowerId() {
+    /*public int getPowerId() {
         return powerId;
-    }
+    }*/
 
-    /**
+    /*/**
      * Getter of the max level to climb in move
      * @return max level to climb in move
      */
-    public int getMaxClimbLevel() {
+    /*public int getMaxClimbLevel() {
         return maxClimbLevel;
-    }
+    }*/
 
     /**
      * Setter of the max level to climb in move
      * @param maxClimbLevel max level to climb in move
      */
-    public void setMaxClimbLevel(int maxClimbLevel) {
-        this.maxClimbLevel = maxClimbLevel;
-    }
+    public abstract void setMaxClimbLevel(int maxClimbLevel);
 
     /*/**
      * Getter of the max number of possible movement distance in cells
@@ -112,39 +109,35 @@ public abstract class Power {
      * Getter of the min level where it's possible to build a dome
      * @return min level where it's possible to build a dome
      */
-    public int getMinDomeLevel(){
-        return minDomeLevel;
-    }
+    public abstract int getMinDomeLevel();
 
-    /**
+    /*/**
      * Getter of the move actions that the player performed in the current turn
      * @return count of move actions
      */
-    public int getMovesCount() {
+    /*public int getMovesCount() {
         return movesCount;
-    }
+    }*/
 
-    /**
+    /*/**
      * Getter of the build actions that the player performed in the current turn
      * @return count of build actions
      */
-    public int getBuildsCount() {
+    /*public int getBuildsCount() {
         return buildsCount;
-    }
+    }*/
 
     /**
      * Getter of the max level the next player can climb in move
      * @return max level the next player can climb in move
      */
-    public int getNextPlayerMaxClimb(){
-        return nextPlayerMaxClimb;
-    }
+    public abstract int getNextPlayerMaxClimb();
 
     /**
      * Checks victory condition
      * @return true if player has won
      */
-    public boolean checkVictory() { return false; }
+    public abstract boolean checkVictory();
 
     /**
      * Generates a list of possible moves for the provided worker
@@ -152,7 +145,7 @@ public abstract class Power {
      * @param w worker that has to be moved
      * @return list of cells
      */
-    public List<Cell> getPossibleMoves(Board b, Worker w) { return new ArrayList<>(); }
+    public abstract List<Cell> getPossibleMoves(Board b, Worker w);
 
     /**
      * Generates a list os possible builds for the provided worker
@@ -160,14 +153,14 @@ public abstract class Power {
      * @param w worker that has to build
      * @return list of cells
      */
-    public List<Cell> getPossibleBuilds(Board b, Worker w) { return new ArrayList<>(); }
+    public abstract List<Cell> getPossibleBuilds(Board b, Worker w);
 
     /**
      * Determines the list of next possible actions based on the current turn state
      * @param turnState current turn state
      * @return list of actions that can be performed next
      */
-    public List<Action> nextActions(TurnState turnState) { return new ArrayList<>(); }
+    public abstract List<Action> nextActions(TurnState turnState);
 
     /**
      * Determines the new position of another worker when it is forced to move by the current worker
@@ -175,41 +168,28 @@ public abstract class Power {
      * @param otherPos current position of the other worker
      * @return new position of the other worker
      */
-    public Point getOtherWorkerMove(Point currentPos, Point otherPos) { return null; }
+    public abstract Point getOtherWorkerMove(Point currentPos, Point otherPos);
 
     /**
      * Save the last move position after the worker moved
      * @param position current cell
      */
-    public void moved(Cell position) {
-        // store at index 2 the second-last position
-        this.lastPositions[2] = this.lastPositions[1];
-        // store at index 1 the previous position
-        this.lastPositions[1] = this.lastPositions[0];
-        // store at index 0 the current position
-        this.lastPositions[0] = position;
-        movesCount++;
-    }
+    public abstract void moved(Cell position);
 
     /**
      * Save the initial position of the current worker at the beginning of a turn
      * @param position initial position of the worker
      */
-    public void setInitialPosition(Cell position) {
-        this.lastPositions[0] = position;
-    }
+    public abstract void setInitialPosition(Cell position);
 
     /**
      * Save the last build position after the worker has built
      * @param position build cell
      */
-    public void hasBuilt(Cell position) {
-        // store at index 1 the previous position
-        this.lastBuild[1] = this.lastBuild[0];
-        // store at index 0 the current position
-        this.lastBuild[0] = position;
-        buildsCount++;
-    }
+    public abstract void hasBuilt(Cell position);
 
-    public void reset() { }
+    /**
+     * Reset all Power's attributes to basic power condition
+     */
+    public abstract void reset();
 }

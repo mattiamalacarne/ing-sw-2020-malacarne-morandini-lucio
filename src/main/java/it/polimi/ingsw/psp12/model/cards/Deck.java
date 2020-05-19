@@ -1,5 +1,7 @@
 package it.polimi.ingsw.psp12.model.cards;
 
+import java.beans.XMLDecoder;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,25 @@ public class Deck {
 
     /**
      * Loads cards from file on startup
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static void loadCards() throws IOException {
-        // TODO: load cards from files
+
+        List<LoadedCard> loadedCards;
+
+        FileInputStream fis = new FileInputStream("src\\main\\resources\\cards\\Cards.xml");
+        XMLDecoder decoder = new XMLDecoder(fis);
+
+        loadedCards = (List<LoadedCard>) decoder.readObject( );
+
+        decoder.close();
+        fis.close();
+
+        //Initialize the cards list
+        loadedCards.forEach(
+                n-> cards.add( new Card(n.getName(), n.getShortDescription(), n.getDescription(), n.getPowers()) )
+        );
+
     }
 
     /**

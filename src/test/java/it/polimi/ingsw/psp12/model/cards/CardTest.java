@@ -30,7 +30,7 @@ public class CardTest {
         List<Integer> powers = new ArrayList<>();
         powers.add(4);
 
-        Card card = new Card(id, name, shortDesc, desc, powers);
+        Card card = new Card(name, shortDesc, desc, powers);
 
         assertEquals(name, card.getName());
         assertEquals(shortDesc, card.getShortDescription());

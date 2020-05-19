@@ -26,8 +26,6 @@ public class Card implements Serializable {
         return noPowers;
     }
 
-    private final int id;
-
     private final String name;
 
     private final String shortDescription;
@@ -38,14 +36,12 @@ public class Card implements Serializable {
 
     /**
      * Constructor for cards loaded from file
-     * @param id id of the card
      * @param name name of the card
      * @param shortDesc short description
      * @param desc full description
      * @param powers powers provided by the card
      */
-    public Card(int id, String name, String shortDesc, String desc, List<Integer> powers) {
-        this.id = id;
+    public Card(String name, String shortDesc, String desc, List<Integer> powers) {
         this.name = name;
         this.shortDescription = shortDesc;
         this.description = desc;
@@ -56,7 +52,6 @@ public class Card implements Serializable {
      * Constructor for the default card without powers
      */
     private Card() {
-        this.id = -1;
         this.name = "No cards";
         this.shortDescription = "Play without powers";
         this.description = "Play the game without using god powers";
@@ -96,6 +91,6 @@ public class Card implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return id == card.id;
+        return name.equals(card.name);
     }
 }

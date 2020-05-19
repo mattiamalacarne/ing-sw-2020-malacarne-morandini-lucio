@@ -304,49 +304,6 @@ public class CLInterface implements UserInterface
         System.out.print("Your turn is ended!\n");
     }
 
-
-    @Deprecated
-    @Override
-    public void move(CellListMsg cellListMsg) throws IOException {
-
-        System.out.println("Where do you want to move?");
-        for (int c=0; c< cellListMsg.getCellList().size(); c++){
-            System.out.printf("%d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
-        }
-
-        int choice;
-        do {
-            choice=cmdIn.nextInt();
-            if (choice<0 || choice>=cellListMsg.getCellList().size() ){
-                System.out.println("Choice not allowed, retry");
-            }else{
-                //FIXME: dovrebe essere MoveMsg, ma il client sa dove si trova?
-                messageHandler.sendToServer(new SelectCellMsg(cellListMsg.getCellList().get(choice)));
-            }
-        }while (choice<0 || choice>=cellListMsg.getCellList().size() );
-    }
-
-    @Deprecated
-    @Override
-    public void build(CellListMsg cellListMsg) throws IOException {
-
-        System.out.println("Where do you want to build?");
-        for (int c=0; c< cellListMsg.getCellList().size(); c++){
-            System.out.printf("%d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
-        }
-
-        int choice;
-        do {
-            choice=cmdIn.nextInt();
-            if (choice<0 || choice>=cellListMsg.getCellList().size() ){
-                System.out.println("Choice not allowed, retry");
-            }else{
-                //messageHandler.sendToServer(new BuildMsg(cellListMsg.getCellList().get(choice)));
-            }
-        }while (choice<0 || choice>=cellListMsg.getCellList().size() );
-
-    }
-
     @Override
     public void updateBoard(UpdateBoardMsg updateBoardMsg) {
         System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard()) ).toString() );

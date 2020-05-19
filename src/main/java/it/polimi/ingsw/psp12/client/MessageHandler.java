@@ -155,22 +155,6 @@ public class MessageHandler implements Observer<Message>
                 break;
 
 
-
-            //FIXME: Deprecati
-            case ROOMS:
-//                userInterface.selectGamePort( (RoomsMsg) message );
-                break;
-            case MOVE:
-                userInterface.move( (CellListMsg) message );
-                break;
-            case BUILD:
-                userInterface.build( (CellListMsg) message );
-                break;
-            case CELL_REQUEST:  /*(CellRequestMsg) message;*/
-                break;
-            case SELECTED_CELL:  /*(SelectCellMsg) message;*/
-                break;
-
             default: throw new MessageTypeNotFoundException();
         }
     }

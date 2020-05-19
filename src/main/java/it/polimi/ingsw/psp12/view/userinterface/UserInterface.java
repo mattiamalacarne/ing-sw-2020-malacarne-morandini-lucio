@@ -92,23 +92,6 @@ public interface UserInterface
      */
     void endTurnMessage();
 
-
-    /**
-     * The user chooses the cell where to move
-     * @param cellListMsg The list of available cell/s where it's possible to move
-     * @throws IOException IO Exception
-     */
-    @Deprecated
-    void move(CellListMsg cellListMsg) throws IOException;
-
-    /**
-     * The user chooses the cell where to build
-     * @param cellListMsg The list of available cell/s where it's possible to build
-     * @throws IOException IO Exception
-     */
-    @Deprecated
-    void build(CellListMsg cellListMsg) throws IOException;
-
     /**
      * Update the shown information of the board
      */

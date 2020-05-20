@@ -322,4 +322,13 @@ public class BasicPowerTest {
         assertTrue(expected.containsAll(points));
         assertTrue(points.containsAll(expected));
     }
+
+    @Test
+    public void buildInProgress() {
+        Cell currentCell = new Cell(0, 0);
+
+        basicPower.setBuildInProgress(currentCell);
+
+        assertEquals(currentCell, basicPower.getBuildInProgress());
+    }
 }

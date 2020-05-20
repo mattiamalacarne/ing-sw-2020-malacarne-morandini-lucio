@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,11 +72,20 @@ public class Board implements Serializable
     }
 
     /**
-     * Increments the level of a tower on the map
+     * Increments the level of a tower on the map or builds a dome
      * @param pos coordinates of the tower
+     * @param option determines if build a block or a dome
      */
-    public void build(Point pos) {
-        boardCells[pos.getX()][pos.getY()].getTower().incrementLevel();
+    public void build(Point pos, BuildOption option) {
+        switch (option)
+        {
+            case BLOCK:
+                boardCells[pos.getX()][pos.getY()].getTower().incrementLevel();
+                break;
+            case DOME:
+                boardCells[pos.getX()][pos.getY()].getTower().buildDome();
+                break;
+        }
     }
 
     /**

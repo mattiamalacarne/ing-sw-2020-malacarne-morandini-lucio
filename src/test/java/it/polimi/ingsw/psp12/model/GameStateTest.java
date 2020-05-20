@@ -5,6 +5,7 @@ import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
@@ -407,7 +408,7 @@ public class GameStateTest {
     }
 
     @Test
-    public void build_ShouldBuildWorker() {
+    public void build_ShouldBuildTower() {
         Player p1 = gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
         gameState2.initGame();
@@ -419,12 +420,60 @@ public class GameStateTest {
 
         // check initial state
         assertEquals(0, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertFalse(gameState2.getGameBoard().getCell(p).getTower().hasDome());
 
         // build
         gameState2.build(p);
 
         // check final state
         assertEquals(1, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertFalse(gameState2.getGameBoard().getCell(p).getTower().hasDome());
+    }
+
+    @Test
+    public void build_Block_ShouldBuildTower() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(0);
+
+        Point p = new Point(3, 2);
+
+        // check initial state
+        assertEquals(0, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertFalse(gameState2.getGameBoard().getCell(p).getTower().hasDome());
+
+        // build
+        gameState2.build(p, BuildOption.BLOCK);
+
+        // check final state
+        assertEquals(1, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertFalse(gameState2.getGameBoard().getCell(p).getTower().hasDome());
+    }
+
+    @Test
+    public void build_Dome_ShouldAddDome() {
+        Player p1 = gameState2.addPlayer("P1");
+        gameState2.addPlayer("P2");
+        gameState2.initGame();
+        gameState2.setPlayerInfo(Color.RED, new Point[] { new Point(0, 0), new Point(1, 2)}, Card.getNoPowers());
+        gameState2.initGame();
+        gameState2.selectCurrentWorker(0);
+
+        Point p = new Point(3, 2);
+
+        // check initial state
+        assertEquals(0, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertFalse(gameState2.getGameBoard().getCell(p).getTower().hasDome());
+
+        // build
+        gameState2.build(p, BuildOption.DOME);
+
+        // check final state
+        assertEquals(0, gameState2.getGameBoard().getCell(p).getTower().getLevel());
+        assertTrue(gameState2.getGameBoard().getCell(p).getTower().hasDome());
     }
 
     @Test

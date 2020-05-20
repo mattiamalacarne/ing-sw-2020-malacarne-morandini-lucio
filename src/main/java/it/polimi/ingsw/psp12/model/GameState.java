@@ -6,6 +6,7 @@ import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Deck;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.network.messages.Message;
@@ -258,8 +259,17 @@ public class GameState extends Observable<Message>
      * @param pos coordinates of the tower
      */
     public void build(Point pos) {
+        build(pos, BuildOption.BLOCK);
+    }
+
+    /**
+     * Increments the level of a tower on the map or builds a dome
+     * @param pos coordinates of the tower
+     * @param option determines if build a block or a dome
+     */
+    public void build(Point pos, BuildOption option) {
         // update board
-        gameBoard.build(pos);
+        gameBoard.build(pos, option);
 
         // save last build in the power
         getCurrentPlayer().getPower().hasBuilt(gameBoard.getCell(pos));

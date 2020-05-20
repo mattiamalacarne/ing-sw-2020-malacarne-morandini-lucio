@@ -73,6 +73,16 @@ public abstract class ExtendedPowerDecorator extends Power{
     }
 
     @Override
+    public void setBuildInProgress(Cell position) {
+        power.setBuildInProgress(position);
+    }
+
+    @Override
+    public Cell getBuildInProgress() {
+        return power.getBuildInProgress();
+    }
+
+    @Override
     public void reset() {
         power.reset();
     }

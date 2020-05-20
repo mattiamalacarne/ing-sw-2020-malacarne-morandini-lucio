@@ -66,6 +66,11 @@ public abstract class Power {
      */
     Cell[] lastBuilds;
 
+    /**
+     * cell where the next build will be performed
+     */
+    Cell buildInProgress;
+
     /*/**
      * Getter of the id of the power
      * @return id of the power
@@ -187,6 +192,18 @@ public abstract class Power {
      * @param position build cell
      */
     public abstract void hasBuilt(Cell position);
+
+    /**
+     * Set the cell where the next build will be performed
+     * @param position next build cell
+     */
+    public abstract void setBuildInProgress(Cell position);
+
+    /**
+     * Get the cell where the next build will be performed
+     * @return next build cell
+     */
+    public abstract Cell getBuildInProgress();
 
     /**
      * Reset all Power's attributes to basic power condition

@@ -122,6 +122,16 @@ public class BasicPower extends Power {
     }
 
     @Override
+    public void setBuildInProgress(Cell position) {
+        this.buildInProgress = position;
+    }
+
+    @Override
+    public Cell getBuildInProgress() {
+        return this.buildInProgress;
+    }
+
+    @Override
     public void reset() {
         //powerId = 0;
         maxClimbLevel = 1;

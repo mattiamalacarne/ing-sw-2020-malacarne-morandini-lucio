@@ -3,8 +3,8 @@ package it.polimi.ingsw.psp12.controller;
 import it.polimi.ingsw.psp12.model.GameState;
 import it.polimi.ingsw.psp12.model.Player;
 import it.polimi.ingsw.psp12.model.board.Cell;
-import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.network.ClientHandler;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
@@ -14,6 +14,7 @@ import it.polimi.ingsw.psp12.server.game.VirtualView;
 import it.polimi.ingsw.psp12.utils.Observer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,8 +102,18 @@ public class Controller implements Observer<Message> {
                 actionSelected(msg.getAction());
                 break;
             case SELECTED_CELL:
-                // update model performing the action on the cell selected by the user
-                performAction((SelectCellMsg)message);
+                Cell cell = ((SelectCellMsg)message).getSelectedCell();
+
+                // update model performing the action on the selected cell based on current turn state
+                if (model.getCurrentState() == TurnState.MOVE) {
+                    performMove(cell);
+                }
+                else {
+                    performBuild(cell);
+                }
+                break;
+            case SELECTED_OPTION:
+                optionSelected((SelectOptionMsg)message);
                 break;
         }
     }
@@ -260,30 +271,67 @@ public class Controller implements Observer<Message> {
     }
 
     /**
-     * Update the model performing the action on the cell selected by the user
+     * Update the model performing the move action on the cell selected by the user
      * and determine if the current player has won the game
-     * @param message
+     * @param cell cell selected by the user
      */
-    void performAction(SelectCellMsg message) {
-        // perform action based on current turn state
-        switch (model.getCurrentState()) {
-            case MOVE:
-                model.move(message.getSelectedCell().getLocation());
-                break;
-            case BUILD:
-                model.build(message.getSelectedCell().getLocation());
-                break;
-        }
+    void performMove(Cell cell) {
+        model.move(cell.getLocation());
 
-        System.out.printf("player %d %s on cell %s\n",
-                model.getCurrentPlayer().getId(), model.getCurrentState().toString(),
-                message.getSelectedCell().getLocation().toString());
+        System.out.printf("player %d MOVE on cell %s\n",
+                model.getCurrentPlayer().getId(), cell.getLocation().toString());
 
         // check if the current player has won
         if (model.checkVictory()) {
             handleCurrentPlayerVictory();
             return;
         }
+
+        // determine what the current player can do next
+        determineNextAction();
+    }
+
+    /**
+     * Update the model performing the build action on the cell selected by the user
+     * or ask user what to do when he can build both a block and a dome
+     * @param cell cell selected by the user
+     */
+    void performBuild(Cell cell) {
+        // get the minimum level on which the player can build a dome
+        int minDomeLevel = model.getCurrentPlayer().getPower().getMinDomeLevel();
+        int currentLevel = cell.getTower().getLevel();
+
+        // check if the player can build a dome or a block and ask what to build
+        if (minDomeLevel <= currentLevel && currentLevel < 3) {
+            // save cell of the build in progress
+            model.getCurrentPlayer().getPower().setBuildInProgress(cell);
+
+            // send list of build options to the current player
+            sendToCurrentPlayer(new OptionsListMsg(Arrays.asList(BuildOption.values()), cell));
+            return;
+        }
+
+        model.build(cell.getLocation());
+
+        System.out.printf("player %d BUILD on cell %s\n",
+                model.getCurrentPlayer().getId(), cell.getLocation().toString());
+
+        // determine what the current player can do next
+        determineNextAction();
+    }
+
+    /**
+     * Update the model performing the build action after the user has selected the build option (dome or block)
+     * @param message incoming select option message
+     */
+    void optionSelected(SelectOptionMsg message) {
+        // get cell of the build in progress
+        Cell cell = model.getCurrentPlayer().getPower().getBuildInProgress();
+
+        model.build(cell.getLocation(), message.getOption());
+
+        System.out.printf("player %d BUILD %s on cell %s\n",
+                model.getCurrentPlayer().getId(), message.getOption(), cell.getLocation().toString());
 
         // determine what the current player can do next
         determineNextAction();

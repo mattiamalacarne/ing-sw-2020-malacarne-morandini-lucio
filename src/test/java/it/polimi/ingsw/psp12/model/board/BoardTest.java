@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model.board;
 
 import it.polimi.ingsw.psp12.model.Worker;
 
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -112,17 +113,35 @@ public class BoardTest {
     }
 
     @Test
-    public void build_ValidPoint_ShouldUpdateBoard() {
+    public void build_Block_ShouldUpdateBoard() {
         Point pos = new Point(0, 1);
 
         // check initial state
         assertEquals(0, testBoard.getCell(pos).getTower().getLevel());
+        assertFalse(testBoard.getCell(pos).getTower().hasDome());
 
         // build
-        testBoard.build(pos);
+        testBoard.build(pos, BuildOption.BLOCK);
 
         // check final state
         assertEquals(1, testBoard.getCell(pos).getTower().getLevel());
+        assertFalse(testBoard.getCell(pos).getTower().hasDome());
+    }
+
+    @Test
+    public void build_Dome_ShouldUpdateBoard() {
+        Point pos = new Point(0, 1);
+
+        // check initial state
+        assertEquals(0, testBoard.getCell(pos).getTower().getLevel());
+        assertFalse(testBoard.getCell(pos).getTower().hasDome());
+
+        // build
+        testBoard.build(pos, BuildOption.DOME);
+
+        // check final state
+        assertEquals(0, testBoard.getCell(pos).getTower().getLevel());
+        assertTrue(testBoard.getCell(pos).getTower().hasDome());
     }
 
     @Test

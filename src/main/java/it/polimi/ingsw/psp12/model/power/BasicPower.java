@@ -45,8 +45,16 @@ public class BasicPower extends Power {
 
     @Override
     public boolean checkVictory() {
-        // player win if it is on a tower with level == 3
-        return lastPositions[0].getTower().getLevel() == 3;
+        // check if two last positions are available
+        if (lastPositions[0] == null || lastPositions[1] == null) {
+            return false;
+        }
+
+        // calculate difference from the two last positions
+        int diff = lastPositions[0].getTower().getLevel() - lastPositions[1].getTower().getLevel();
+
+        // player win if it is on a tower with level == 3 and moved up from a lower level
+        return (lastPositions[0].getTower().getLevel() == 3 && diff >= 1);
     }
 
     @Override
@@ -56,9 +64,9 @@ public class BasicPower extends Power {
         int currentWorkerLevel = b.getCell(w.getPosition()).getTower().getLevel();
 
         // worker can move on cells without another worker and
-        // with a delta level <= 1
+        // with a delta level <= maxClimbLevel
         return cells.stream()
-                .filter(c -> !c.hasWorker() && c.canMoveOn(currentWorkerLevel))
+                .filter(c -> !c.hasWorker() && c.canMoveOn(currentWorkerLevel, this.maxClimbLevel))
                 .collect(Collectors.toList());
     }
 

@@ -228,23 +228,92 @@ public class BasicPowerTest {
     }
 
     @Test
-    public void checkVictory_NotThirdLevel_ShouldReturnFalse() {
-        Cell c = new Cell(0, 0);
-        c.getTower().incrementLevel();
-        basicPower.lastPositions[0] = c;
+    public void checkVictory_NotInitialized_ShouldReturnFalse() {
+        Cell end = new Cell(0, 1);
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
 
+        basicPower.lastPositions[0] = end;
+
+        assertNull(basicPower.lastPositions[1]);
+        assertEquals(3, basicPower.lastPositions[0].getTower().getLevel());
         assertFalse(basicPower.checkVictory());
     }
 
     @Test
-    public void checkVictory_ThirdLevel_ShouldReturnTrue() {
-        Cell c = new Cell(0, 0);
-        c.getTower().incrementLevel();
-        c.getTower().incrementLevel();
-        c.getTower().incrementLevel();
-        basicPower.lastPositions[0] = c;
+    public void checkVictory_NotThirdLevel_ShouldReturnFalse() {
+        Cell start = new Cell(0, 0);
+        start.getTower().incrementLevel();
 
+        Cell end = new Cell(0, 1);
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+
+        basicPower.lastPositions[1] = start;
+        basicPower.lastPositions[0] = end;
+
+        assertEquals(1, basicPower.lastPositions[1].getTower().getLevel());
+        assertEquals(2, basicPower.lastPositions[0].getTower().getLevel());
+        assertFalse(basicPower.checkVictory());
+    }
+
+    @Test
+    public void checkVictory_ThirdLevelNotMovedUp_ShouldReturnFalse() {
+        Cell start = new Cell(0, 0);
+        start.getTower().incrementLevel();
+        start.getTower().incrementLevel();
+        start.getTower().incrementLevel();
+
+        Cell end = new Cell(0, 1);
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+
+        basicPower.lastPositions[1] = start;
+        basicPower.lastPositions[0] = end;
+
+        assertEquals(3, basicPower.lastPositions[1].getTower().getLevel());
+        assertEquals(3, basicPower.lastPositions[0].getTower().getLevel());
+        assertFalse(basicPower.checkVictory());
+    }
+
+    @Test
+    public void checkVictory_ThirdLevelMovedUp_ShouldReturnTrue() {
+        Cell start = new Cell(0, 0);
+        start.getTower().incrementLevel();
+        start.getTower().incrementLevel();
+
+        Cell end = new Cell(0, 1);
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+
+        basicPower.lastPositions[1] = start;
+        basicPower.lastPositions[0] = end;
+
+        assertEquals(2, basicPower.lastPositions[1].getTower().getLevel());
+        assertEquals(3, basicPower.lastPositions[0].getTower().getLevel());
         assertTrue(basicPower.checkVictory());
+    }
+
+    @Test
+    public void checkVictory_ThirdLevelMovedDown_ShouldReturnFalse() {
+        Cell start = new Cell(0, 0);
+        start.getTower().incrementLevel();
+        start.getTower().incrementLevel();
+        start.getTower().incrementLevel();
+
+        Cell end = new Cell(0, 1);
+        end.getTower().incrementLevel();
+        end.getTower().incrementLevel();
+
+        basicPower.lastPositions[1] = start;
+        basicPower.lastPositions[0] = end;
+
+        assertEquals(3, basicPower.lastPositions[1].getTower().getLevel());
+        assertEquals(2, basicPower.lastPositions[0].getTower().getLevel());
+        assertFalse(basicPower.checkVictory());
     }
 
     @Test

@@ -351,8 +351,13 @@ public class GameState extends Observable<Message>
         // reset parameters before the current turn starts
         getCurrentPlayer().getPower().reset();
 
-        // get max climb level of the current player from the previous player (NextCannotMoveUpDecorator)
-        int maxClimb = getPreviousPlayer().getPower().getNextPlayerMaxClimb();
+        // get max climb level of the current player from other players (NextCannotMoveUpDecorator)
+        int maxClimb = 1;
+        for (Player p : getWaitingPlayers()) {
+            // save the most restrictive condition (minimum climb value)
+            maxClimb = Math.min(maxClimb, p.getPower().getNextPlayerMaxClimb());
+        }
+
         getCurrentPlayer().getPower().setMaxClimbLevel(maxClimb);
     }
 

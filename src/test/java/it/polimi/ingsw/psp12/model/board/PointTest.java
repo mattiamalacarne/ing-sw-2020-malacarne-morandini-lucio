@@ -55,4 +55,53 @@ public class PointTest {
         Point p2 = new Point(2, 3);
         assertFalse(p1.equals(p2));
     }
+
+    @Test
+    public void isNear_NotNear_ShouldReturnFalse() {
+        Point p1 = new Point(0, 1);
+        Point p2 = new Point(2, 3);
+        assertFalse(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnX_ShouldReturnTrue() {
+        Point p1 = new Point(2, 2);
+        Point p2 = new Point(3, 2);
+        assertTrue(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnY_ShouldReturnTrue() {
+        Point p1 = new Point(0, 2);
+        Point p2 = new Point(0, 1);
+        assertTrue(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnDiagonal1_ShouldReturnTrue() {
+        Point p1 = new Point(2, 2);
+        Point p2 = new Point(3, 3);
+        assertTrue(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnDiagonal2_ShouldReturnTrue() {
+        Point p1 = new Point(2, 2);
+        Point p2 = new Point(3, 1);
+        assertTrue(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnDiagonal3_ShouldReturnTrue() {
+        Point p1 = new Point(1, 2);
+        Point p2 = new Point(0, 1);
+        assertTrue(p1.isNear(p2));
+    }
+
+    @Test
+    public void isNear_NearOnDiagonal4_ShouldReturnTrue() {
+        Point p1 = new Point(1, 2);
+        Point p2 = new Point(0, 3);
+        assertTrue(p1.isNear(p2));
+    }
 }

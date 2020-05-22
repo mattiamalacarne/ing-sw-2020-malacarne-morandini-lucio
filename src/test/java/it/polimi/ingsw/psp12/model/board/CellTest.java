@@ -10,21 +10,21 @@ public class CellTest {
     @Test
     public void canMoveOn_From0To0_ShouldReturnTrue() {
         Cell c1 = new Cell(0, 0);
-        assertTrue(c1.canMoveOn(0));
+        assertTrue(c1.canMoveOn(0, 1));
     }
 
     @Test
     public void canMoveOn_From1To1_ShouldReturnTrue() {
         Cell c1 = new Cell(0, 0);
         c1.getTower().incrementLevel();
-        assertTrue(c1.canMoveOn(1));
+        assertTrue(c1.canMoveOn(1, 1));
     }
 
     @Test
     public void canMoveOn_From0To1_ShouldReturnTrue() {
         Cell c1 = new Cell(0, 0);
         c1.getTower().incrementLevel();
-        assertTrue(c1.canMoveOn(0));
+        assertTrue(c1.canMoveOn(0, 1));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class CellTest {
         Cell c1 = new Cell(0, 0);
         c1.getTower().incrementLevel();
         c1.getTower().incrementLevel();
-        assertFalse(c1.canMoveOn(0));
+        assertFalse(c1.canMoveOn(0, 1));
     }
 
     @Test
@@ -41,14 +41,40 @@ public class CellTest {
         c1.getTower().incrementLevel();
         c1.getTower().incrementLevel();
         c1.getTower().incrementLevel();
-        assertFalse(c1.canMoveOn(1));
+        assertFalse(c1.canMoveOn(1, 1));
     }
 
     @Test
     public void canMoveOn_From0To0_WithDome_ShouldReturnFalse() {
         Cell c1 = new Cell(0, 0);
         c1.getTower().buildDome();
-        assertFalse(c1.canMoveOn(0));
+        assertFalse(c1.canMoveOn(0, 1));
+    }
+
+    @Test
+    public void canMoveOn_From0To0_MaxClimb0_ShouldReturnTrue() {
+        Cell c1 = new Cell(0, 0);
+        assertTrue(c1.canMoveOn(0, 0));
+    }
+
+    @Test
+    public void canMoveOn_From1To1_MaxClimb0_ShouldReturnTrue() {
+        Cell c1 = new Cell(0, 0);
+        c1.getTower().incrementLevel();
+        assertTrue(c1.canMoveOn(1, 0));
+    }
+
+    @Test
+    public void canMoveOn_From1To0_MaxClimb0_ShouldReturnTrue() {
+        Cell c1 = new Cell(0, 0);
+        assertTrue(c1.canMoveOn(1, 0));
+    }
+
+    @Test
+    public void canMoveOn_From0To1_MaxClimb0_ShouldReturnFalse() {
+        Cell c1 = new Cell(0, 0);
+        c1.getTower().incrementLevel();
+        assertFalse(c1.canMoveOn(0, 0));
     }
 
     @Test

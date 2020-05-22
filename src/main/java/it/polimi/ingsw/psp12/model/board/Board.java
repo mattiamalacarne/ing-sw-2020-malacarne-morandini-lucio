@@ -107,6 +107,24 @@ public class Board implements Serializable
     }
 
     /**
+     * Returns the list of cells that are occupied by a worker
+     * @return list of cells with a worker
+     */
+    public List<Cell> getCellsWithWorker() {
+        List<Cell> cells = new ArrayList<>();
+
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (boardCells[x][y].hasWorker()) {
+                    cells.add(boardCells[x][y].clone());
+                }
+            }
+        }
+
+        return cells;
+    }
+
+    /**
      * Returns a clone of the board
      * @return board clone
      */

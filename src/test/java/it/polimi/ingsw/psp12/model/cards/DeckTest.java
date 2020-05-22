@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model.cards;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,10 +12,13 @@ import static org.junit.Assert.*;
 public class DeckTest {
     private Deck deck2, deck3;
 
-    @Before
-    public void setUp() throws IOException {
+    @BeforeClass
+    public static void init() throws IOException {
         Deck.loadCards();
+    }
 
+    @Before
+    public void setUp() {
         deck2 = new Deck(2);
         deck3 = new Deck(3);
     }
@@ -51,8 +55,7 @@ public class DeckTest {
 
     @Test
     public void cardSelected_TwoPlayersGodCard_ShouldReturnOthersCard() {
-        // TODO: remove comment when Deck.loadCards() is implemented
-        /*List<Card> initialCards = deck2.getAvailableCards();
+        List<Card> initialCards = deck2.getAvailableCards();
         Card selected = deck2.getAvailableCards().get(1);
 
         assertTrue(initialCards.contains(selected));
@@ -62,15 +65,14 @@ public class DeckTest {
 
         List<Card> finalCards = deck2.getAvailableCards();
 
-        assertEquals(initialCards.size()-1, finalCards.size());
+        assertEquals(initialCards.size()-2, finalCards.size());
         assertFalse(finalCards.contains(selected));
-        assertFalse(finalCards.contains(Card.getNoPowers()));*/
+        assertFalse(finalCards.contains(Card.getNoPowers()));
     }
 
     @Test
     public void cardSelected_ThreePlayersGodCard_ShouldReturnOthersCard() {
-        // TODO: remove comment when Deck.loadCards() is implemented
-        /*List<Card> initialCards = deck3.getAvailableCards();
+        List<Card> initialCards = deck3.getAvailableCards();
         Card selected = deck3.getAvailableCards().get(1);
 
         assertTrue(initialCards.contains(selected));
@@ -82,6 +84,6 @@ public class DeckTest {
 
         assertEquals(initialCards.size()-1, finalCards.size());
         assertFalse(finalCards.contains(selected));
-        assertFalse(finalCards.contains(Card.getNoPowers()));*/
+        assertFalse(finalCards.contains(Card.getNoPowers()));
     }
 }

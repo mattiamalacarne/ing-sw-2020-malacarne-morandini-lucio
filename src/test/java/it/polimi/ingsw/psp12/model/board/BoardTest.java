@@ -158,4 +158,19 @@ public class BoardTest {
             assertFalse(c.hasWorker());
         }
     }
+
+    @Test
+    public void getCellsWithWorker_ShouldReturnOccupiedCells() {
+        // initialize state
+        testEmptyBoard.getCell(new Point(0, 0)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(1, 1)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(2, 3)).addWorker(new Worker());
+        testEmptyBoard.getCell(new Point(4, 3)).addWorker(new Worker());
+
+        List<Cell> availableCells = testEmptyBoard.getCellsWithWorker();
+        assertEquals(4, availableCells.size());
+        for (Cell c : availableCells) {
+            assertTrue(c.hasWorker());
+        }
+    }
 }

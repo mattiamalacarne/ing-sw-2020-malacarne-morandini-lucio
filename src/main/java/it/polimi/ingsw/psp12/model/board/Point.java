@@ -54,6 +54,18 @@ public class Point implements Serializable
     }
 
     /**
+     * Determines if the provided point is near to the current point
+     * @param target point to be tested with the current point
+     * @return true if the provided point is near to the current point
+     */
+    public boolean isNear(Point target) {
+        int dx = Math.abs(this.x - target.getX());
+        int dy = Math.abs(this.y - target.getY());
+
+        return (dx <= 1 && dy <= 1);
+    }
+
+    /**
      * Determines if two points are equal
      * @param o point to compare
      * @return true if this point equals the parameter

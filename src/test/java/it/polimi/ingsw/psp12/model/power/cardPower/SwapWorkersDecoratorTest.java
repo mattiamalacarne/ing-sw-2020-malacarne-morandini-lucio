@@ -50,6 +50,8 @@ public class SwapWorkersDecoratorTest {
         gameBoard.getCell(new Point(1, 3)).getTower().incrementLevel();
         gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
         gameBoard.getCell(new Point(2, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(3, 3)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(3, 3)).getTower().incrementLevel();
 
         // build domes
         gameBoard.getCell(new Point(3, 1)).getTower().buildDome();
@@ -63,7 +65,7 @@ public class SwapWorkersDecoratorTest {
         List<Point> expected = new ArrayList<>(Arrays.asList(
                 new Point(1, 1), new Point(2, 1), /*      dome      */
                 /*     my worker    */ /*   center point   */ new Point(3, 2),
-                new Point(1, 3), /*    two levels    */ new Point(3, 3)
+                new Point(1, 3)  /*    two levels    */ /*    two levels    */
         ));
 
         assertEquals(expected.size(), points.size());

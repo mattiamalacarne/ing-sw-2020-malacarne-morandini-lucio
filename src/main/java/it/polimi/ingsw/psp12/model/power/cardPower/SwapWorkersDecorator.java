@@ -24,12 +24,16 @@ public class SwapWorkersDecorator extends ExtendedPowerDecorator {
     public List<Cell> getPossibleMoves(Board b, Worker w) {
         List<Cell> cells = super.getPossibleMoves(b, w);
 
+        int currentWorkerLevel = b.getCell(w.getPosition()).getTower().getLevel();
+
         // get list of the cells where there is a worker
         List<Cell> otherWorkers = b.getCellsWithWorker().stream()
                 // remove cells that are not near to the current cell
                 .filter(c -> c.getLocation().isNear(w.getPosition()))
                 // keep only cells with an opponent worker
                 .filter(c -> c.getWorker().getPlayerId() != w.getPlayerId())
+                // keep only cells with a delta level <= maxClimbLevel
+                .filter(c -> c.canMoveOn(currentWorkerLevel, getMaxClimbLevel()))
                 .collect(Collectors.toList());
 
         cells.addAll(otherWorkers);

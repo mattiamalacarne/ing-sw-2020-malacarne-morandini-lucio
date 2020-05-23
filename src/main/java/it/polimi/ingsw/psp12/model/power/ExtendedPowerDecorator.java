@@ -102,4 +102,12 @@ public abstract class ExtendedPowerDecorator extends Power{
     protected Cell[] getLastBuilds() {
         return power.lastBuilds;
     }
+
+    /**
+     * Getter for decorators of the max climb level in move of the basic power
+     * @return max climb level in move
+     */
+    protected int getMaxClimbLevel() {
+        return power.maxClimbLevel;
+    }
 }

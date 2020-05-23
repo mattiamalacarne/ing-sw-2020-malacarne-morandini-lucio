@@ -88,6 +88,11 @@ public interface UserInterface
     void chooseCell(CellListMsg cellListMsg) throws IOException;
 
     /**
+     * The user chooses what to build in the build action
+     */
+    void chooseBuildOption(OptionsListMsg optionsListMsg);
+
+    /**
      * Communicates to the user the end of the own turn
      */
     void endTurnMessage();

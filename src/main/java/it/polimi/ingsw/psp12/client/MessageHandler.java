@@ -141,6 +141,9 @@ public class MessageHandler implements Observer<Message>
             case CELL_LIST:
                 userInterface.chooseCell( (CellListMsg) message );
                 break;
+            case OPTIONS_LIST:
+                userInterface.chooseBuildOption( (OptionsListMsg) message );
+                break;
             case TURN_ENDED:
                 userInterface.endTurnMessage();
                 break;

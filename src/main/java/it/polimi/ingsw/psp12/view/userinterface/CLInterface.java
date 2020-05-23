@@ -202,28 +202,41 @@ public class CLInterface implements UserInterface
             }
         }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
 
-        //TODO: visualizzazione descrizone carte
-        System.out.println("Choose a card:");
-        for (int c=0; c<requestInfoMsg.getAvailableCards().size(); c++){
-            System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailableCards().get(c).getName());
-        }
+        //Card choice
         int cardChoice;
         do {
+            System.out.println("Choose a card:");
+            System.out.println(" 0) Read cards descriptions");
+            for (int c=1; c<=requestInfoMsg.getAvailableCards().size(); c++){
+                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailableCards().get(c-1).getName());
+            }
+
             cmdIn = new Scanner(System.in);
             try {
                 cardChoice = cmdIn.nextInt();
             } catch (InputMismatchException e){
                 cardChoice = -1;
             }
-            if (cardChoice<0 || cardChoice>=requestInfoMsg.getAvailableCards().size()){
-                System.out.println("Choice not allowed, retry");
+            if (cardChoice<0 || cardChoice>requestInfoMsg.getAvailableCards().size()){
+                System.out.println("Choice not allowed, retry\n");
             }
-        }while (cardChoice<0 || cardChoice>=requestInfoMsg.getAvailableCards().size());
+            if (cardChoice == 0){
+                for (int card = 0; card < requestInfoMsg.getAvailableCards().size(); card++) {
+                    //Prints cards descriptions
+                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getName());
+                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getShortDescription());
+                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getDescription() + "\n");
+                }
+
+            }
+        }while (cardChoice<=0 || cardChoice>requestInfoMsg.getAvailableCards().size());
+
+        System.out.printf("You choose %s\n\n", requestInfoMsg.getAvailableCards().get(cardChoice-1).getName());
 
         messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
                                                         requestInfoMsg.getAvailablePositions().get(worker1Position),
                                                         requestInfoMsg.getAvailablePositions().get(worker2Position),
-                                                        requestInfoMsg.getAvailableCards().get(cardChoice)) );
+                                                        requestInfoMsg.getAvailableCards().get(cardChoice-1)) );
     }
 
     @Override
@@ -296,6 +309,30 @@ public class CLInterface implements UserInterface
         }while (choice<0 || choice>=cellListMsg.getCellList().size());
 
         messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );
+
+    }
+
+    @Override
+    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
+
+        System.out.printf("Choose what to build in the %s cell\n", optionsListMsg.getCell().getLocation().toString());
+        for (int i = 0; i < optionsListMsg.getOptions().size(); i++) {
+            System.out.printf("%2d) %s\n", i, optionsListMsg.getOptions().get(i));
+        }
+        int optionChoice;
+        do {
+            cmdIn = new Scanner(System.in);
+            try {
+                optionChoice = cmdIn.nextInt();
+            } catch (InputMismatchException e) {
+                optionChoice = -1;
+            }
+            if (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size()){
+                System.out.println("Choice not allowed, retry");
+            }
+        }while (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size());
+
+        messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );
 
     }
 

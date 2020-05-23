@@ -21,8 +21,12 @@ public class Screen extends JPanel implements ScreenInterface {
     /** Label for screen bg **/
     protected JLabel screenBg;
 
+    protected GUinterface gui;
+
+
     public Screen(GUinterface gui)
     {
+        this.gui = gui;
         screenY = (int) (gui.getWindowDimY());
         screenX = (int) (screenY*gui.getAspectRatio());
     }
@@ -30,7 +34,7 @@ public class Screen extends JPanel implements ScreenInterface {
     @Override
     public void changeScreen(GUIStatus status, GUinterface gui) {
         try {
-            gui.loadNewStatusScreen(status);
+            gui.loadNewStatusScreen(status, null);
         } catch (GUIStatusErrorException e) {
             e.printStackTrace();
         }

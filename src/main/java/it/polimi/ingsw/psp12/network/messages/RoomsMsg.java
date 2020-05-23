@@ -29,4 +29,5 @@ public class RoomsMsg extends Message {
     public List<Room> getRooms() {
         return Collections.unmodifiableList(rooms);
     }
+
 }

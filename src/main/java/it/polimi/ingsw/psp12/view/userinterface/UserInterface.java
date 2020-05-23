@@ -85,7 +85,7 @@ public interface UserInterface
      * The user chooses the cell where to perform the action
      * @param cellListMsg The list of cell where to perform the action, and the action to perform
      */
-    void chooseCell(CellListMsg cellListMsg);
+    void chooseCell(CellListMsg cellListMsg) throws IOException;
 
     /**
      * Communicates to the user the end of the own turn

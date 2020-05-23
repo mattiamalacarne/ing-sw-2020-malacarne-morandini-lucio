@@ -31,6 +31,28 @@ public class ButtonComponent extends JButton
 
     }
 
+    public ButtonComponent(Color color, String text)
+    {
+        super(text);
+        String image = "btn_blue.png";
+        Dimension size = new Dimension(180,60);
+
+        this.setHorizontalTextPosition(JButton.CENTER);
+        this.setVerticalTextPosition(JButton.CENTER);
+
+        // Set transparent
+        this.setOpaque(false);
+        this.setContentAreaFilled(false);
+        this.setBorderPainted(false);
+
+        // Load the font
+        this.setFont(new Font("dalek", Font.PLAIN, 25));
+
+        this.setIcon(loadButtonIcon(image, size));
+        this.setVisible(true);
+
+    }
+
     private ImageIcon loadButtonIcon(String image, Dimension size)
     {
         ImageIcon icon = new ImageIcon(getClass().getResource("/"+image));

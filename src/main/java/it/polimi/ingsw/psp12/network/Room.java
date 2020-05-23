@@ -144,4 +144,5 @@ public class Room implements Serializable{
     public synchronized void close() {
         active = false;
     }
+
 }

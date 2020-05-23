@@ -24,18 +24,15 @@ public class SetupHelper
 
     /**
      * Setup an helper for create a new room
-     * @param hostname
-     * @param clientName
      * @param roomName
      * @param roomMaxPlayer
      */
-    public SetupHelper(String hostname, String clientName, String roomName, int roomMaxPlayer)
+    public SetupHelper(String roomName, int roomMaxPlayer)
     {
-        this.hostname = hostname;
-        this.clientName = clientName;
         this.roomMaxPlayer = roomMaxPlayer;
         this.roomName = roomName;
     }
+
 
     public String getHostname() {
         return hostname;

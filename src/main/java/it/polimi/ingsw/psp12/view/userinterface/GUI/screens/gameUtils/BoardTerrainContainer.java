@@ -1,11 +1,15 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 
+import it.polimi.ingsw.psp12.model.Worker;
+import it.polimi.ingsw.psp12.model.board.Board;
+import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.utils.Color;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.List;
 
 /**
  * Class for draw the gameterrain, bg and workers on the screen
@@ -20,12 +24,16 @@ public class BoardTerrainContainer extends JLayeredPane
     private JPanel gameGrid;
 
     /** List of cell **/
-    private CellDraw[] cells;
+    private CellDraw[][] cells;
 
-    public BoardTerrainContainer(Dimension size)
+    private GameScreen game;
+
+    public BoardTerrainContainer(Dimension size, GameScreen game)
     {
         // Set dimension of the terrain size
         this.setPreferredSize(size);
+
+        this.game = game;
 
         // Init the gameGrid
         gameGrid = new JPanel();
@@ -46,7 +54,6 @@ public class BoardTerrainContainer extends JLayeredPane
         this.add(gameBoard, JLayeredPane.DEFAULT_LAYER);
         this.add(gameGrid, JLayeredPane.DRAG_LAYER);
 
-
         this.setVisible(true);
     }
 
@@ -66,9 +73,92 @@ public class BoardTerrainContainer extends JLayeredPane
      */
     private void drawGameGrid(JPanel grid)
     {
-        cells = new CellDraw[25];
-        for (int i = 0; i < 25; i++) { cells[i] = new CellDraw(); }
-        for (int i = 0; i < 25; i++) {grid.add(cells[i]);}
+        cells = new CellDraw[5][5];
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                cells[i][j] = new CellDraw(new Point(i,j), game);
+                gameGrid.add(cells[i][j]);
+            }
+        }
+    }
+
+    /**
+     * This method remove all the border and listener to the cells
+     * prepare the board for the next update
+     */
+    public void flushBoard()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                cells[i][j].flushMe();
+            }
+        }
+    }
+
+    public void validateBoard(List<Point> validCell)
+    {
+        //System.out.println("Inizio a validare");
+        flushBoard();
+        for (Point p: validCell)
+        {
+            //System.out.println("Valido una cella");
+            cells[p.getX()][p.getY()].enablePress();
+        }
+        this.repaint();
+        this.revalidate();
+    }
+
+    /**
+     * Display the board drawing worker and tower in position
+     * @param board
+     */
+    public void updateBoard(Board board)
+    {
+        // remove all the elements in the board
+        clearBoard();
+        // draw worker on screen
+        List<Cell> cellWithWorker = board.getCellsWithWorker();
+        for (Cell cell: cellWithWorker)
+        {
+            Point cellPos = cell.getLocation();
+            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.WORKER, cell.getWorker().getColor(), 0);
+        }
+
+        // Draw tower on the screen
+        List<Cell> cellWithTower = board.getCellWithBuild();
+        for (Cell cell: cellWithTower)
+        {
+            Point cellPos = cell.getLocation();
+            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.TOWER, null, cell.getTower().getLevel());
+        }
+        //this.revalidate();
+    }
+
+    /**
+     * Remove all the worker and tower in the board, prepare the board for
+     * draw the worker in the new position
+     */
+    private void clearBoard()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                cells[i][j].setIcon(null);
+            }
+        }
+    }
+
+    /**
+     * Highlights on the board the possible selection
+     * @param possibleList
+     */
+    public void showPossibleSelections(List<Cell> possibleList)
+    {
 
     }
 }

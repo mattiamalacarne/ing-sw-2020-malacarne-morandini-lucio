@@ -110,4 +110,20 @@ public abstract class ExtendedPowerDecorator extends Power{
     protected int getMaxClimbLevel() {
         return power.maxClimbLevel;
     }
+
+    /**
+     * Getter for number of move actions that the player performed in the current turn
+     * @return number of move actions
+     */
+    protected int getMovesCount(){
+        return power.movesCount;
+    }
+
+    /**
+     * Getter for number of build actions that the player performed in the current turn
+     * @return number of build actions
+     */
+    protected int getBuildsCount() {
+        return power.buildsCount;
+    }
 }

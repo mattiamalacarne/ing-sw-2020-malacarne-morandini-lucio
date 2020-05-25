@@ -56,7 +56,7 @@ public class MoveAgainDecorator extends ExtendedPowerDecorator {
         if (getMovesCount() == 1) {
 
             possibleMoves = possibleMoves.stream()
-                    .filter(c -> !c.equals(getLastPositions()[0]))
+                    .filter(c -> !c.equals(getLastPositions()[1]))
                     .collect(Collectors.toList());
         }
         return possibleMoves;

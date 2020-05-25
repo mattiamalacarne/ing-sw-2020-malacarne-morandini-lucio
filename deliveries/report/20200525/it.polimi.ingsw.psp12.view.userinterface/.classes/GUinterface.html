@@ -1,0 +1,398 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GUinterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GUinterface (it.polimi.ingsw.psp12.view.userinterface)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUinterface</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 61)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GUinterface$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 62)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.client.MessageHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.client.ServerInfo;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.*;
+<i>9</i>&nbsp;import it.polimi.ingsw.psp12.utils.Color;
+<i>10</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
+<i>11</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.SetupHelper;
+<i>12</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
+<i>13</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.LobbyScreen;
+<i>14</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.Screen;
+<i>15</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpScreen;
+<i>16</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.CreateRoomPanel;
+<i>17</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.PlayerNamePanel;
+<i>18</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
+<i>19</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import javax.swing.*;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.net.Inet4Address;
+<i>24</i>&nbsp;import java.net.UnknownHostException;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Class for the GUI interface of the game
+<i>28</i>&nbsp; * @author Mattia Malacarne
+<i>29</i>&nbsp; */
+<i>30</i>&nbsp;public class GUinterface extends JFrame implements UserInterface
+<i>31</i>&nbsp;{
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /** The dim of the GUI **/
+<i>34</i>&nbsp;    private double aspectRatio;
+<i>35</i>&nbsp;    private int windowDimY;
+<i>36</i>&nbsp;    private int windowDimX;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    private Screen actualScreen;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    // Setup helper
+<i>41</i>&nbsp;    private SetupHelper roomHelper;
+<i>42</i>&nbsp;    private String hostname;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    private MessageHandler messageHandler;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    private GUinterface gui;
+<i>48</i>&nbsp;    private SetupDialog dialog;
+<i>49</i>&nbsp;    private GameScreen game;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Init the UI starting the mainWindow and populate it with the necessary panel
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public GUinterface() throws IOException {
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        super(&quot;Santorini&quot;);</b>
+<b class="nc"><i>57</i>&nbsp;        gui = this;</b>
+<i>58</i>&nbsp;        // Init the dimensions
+<b class="nc"><i>59</i>&nbsp;        windowDimY = 800;</b>
+<b class="nc"><i>60</i>&nbsp;        aspectRatio = 16.0/9.0;</b>
+<b class="nc"><i>61</i>&nbsp;        windowDimX = (int) (windowDimY*aspectRatio);</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;        this.setSize((int) windowDimX, (int) windowDimY + 40);</b>
+<b class="nc"><i>65</i>&nbsp;        this.setResizable(false);</b>
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<i>68</i>&nbsp;        // Load the default screen
+<i>69</i>&nbsp;        try {
+<b class="nc"><i>70</i>&nbsp;            loadNewStatusScreen(GUIStatus.SETUP, null);</b>
+<b class="nc"><i>71</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>72</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>73</i>&nbsp;        }</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;        this.setVisible(true);</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;    public double getWindowDimY() { return windowDimY; }</b>
+<b class="nc"><i>81</i>&nbsp;    public double getAspectRatio() { return aspectRatio; }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Load a new screen depending by the status of the GUI
+<i>86</i>&nbsp;     * @param status the new screen to load
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public void loadNewStatusScreen(GUIStatus status, Message msg) throws GUIStatusErrorException
+<i>89</i>&nbsp;    {
+<i>90</i>&nbsp;        Screen newScreen;
+<b class="nc"><i>91</i>&nbsp;        switch (status)</b>
+<i>92</i>&nbsp;        {
+<b class="nc"><i>93</i>&nbsp;            case GAME: actualScreen = new GameScreen(this, null); break;</b>
+<b class="nc"><i>94</i>&nbsp;            case SETUP: actualScreen = new SetUpScreen(this); break;</b>
+<b class="nc"><i>95</i>&nbsp;            case LOBBY: actualScreen = new LobbyScreen(this); break;</b>
+<b class="nc"><i>96</i>&nbsp;            case STARTING: actualScreen = new GameScreen(this, msg); break;</b>
+<b class="nc"><i>97</i>&nbsp;            default: actualScreen = new SetUpScreen(this);</b>
+<i>98</i>&nbsp;        }
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;        gui.setContentPane(actualScreen);</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;        gui.revalidate();</b>
+<b class="nc"><i>103</i>&nbsp;        gui.repaint();</b>
+<b class="nc"><i>104</i>&nbsp;        gui.setVisible(true);</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    public void connectToServer(String hostname) throws IOException {
+<b class="nc"><i>109</i>&nbsp;        System.out.println(&quot;Provo a connettermi&quot;);</b>
+<b class="nc"><i>110</i>&nbsp;        this.hostname = hostname;</b>
+<b class="nc"><i>111</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
+<i>112</i>&nbsp;        //messageHandler.startGame();
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    public void createRoom(int playerNumber) throws IOException {
+<i>116</i>&nbsp;        //TODO: Build a room with the helper
+<b class="nc"><i>117</i>&nbsp;        System.out.println(&quot;Creo la stanza&quot;);</b>
+<b class="nc"><i>118</i>&nbsp;        messageHandler.sendToServer(new CreateMsg(playerNumber));</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    public void getRoomList() throws IOException {
+<b class="nc"><i>122</i>&nbsp;        messageHandler.sendToServer(new Message(MsgCommand.LIST));</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    @Override
+<i>128</i>&nbsp;    public void writeOnStream(String s)
+<i>129</i>&nbsp;    {
+<b class="nc"><i>130</i>&nbsp;        System.out.println(&quot;GUI &quot; + s.toUpperCase());</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    @Override
+<i>134</i>&nbsp;    public ServerInfo getServerByIp() throws UnknownHostException {
+<b class="nc"><i>135</i>&nbsp;        System.out.println(&quot;Getting server ip&quot;);</b>
+<b class="nc"><i>136</i>&nbsp;        return new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    @Override
+<i>140</i>&nbsp;    public void createsNewRoom() throws IOException
+<i>141</i>&nbsp;    {
+<b class="nc"><i>142</i>&nbsp;        dialog = new SetupDialog(this, new CreateRoomPanel(this), &quot;Create new Room&quot;);</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    @Override
+<i>147</i>&nbsp;    public void waitMessage() {
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    @Override
+<i>152</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException
+<i>153</i>&nbsp;    {
+<b class="nc"><i>154</i>&nbsp;        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
+<b class="nc"><i>155</i>&nbsp;        askPlayerName(0);</b>
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    public void askPlayerName(int choosed)
+<i>159</i>&nbsp;    {
+<b class="nc"><i>160</i>&nbsp;        dialog = new SetupDialog(this, new PlayerNamePanel(this, choosed),  &quot;What&#39;s your name?&quot;);</b>
+<i>161</i>&nbsp;    }
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    public void setPlayerName(String playerName)
+<i>164</i>&nbsp;    {
+<i>165</i>&nbsp;        //System.out.println(&quot;Provo ad aggiungere il nome&quot;);
+<b class="nc"><i>166</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>167</i>&nbsp;    }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    @Override
+<i>170</i>&nbsp;    public void roomCreatedFailedMessage() {
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    @Override
+<i>175</i>&nbsp;    public void invalidMaxPlayerMessage() {
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    }
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    @Override
+<i>182</i>&nbsp;    public void roomFull() throws IOException {
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    @Override
+<i>187</i>&nbsp;    public void joinPlayerNameConfirmation()
+<i>188</i>&nbsp;    {
+<b class="nc"><i>189</i>&nbsp;        System.out.println(&quot;Room joined&quot;);</b>
+<i>190</i>&nbsp;        try {
+<i>191</i>&nbsp;            //gui.loadNewStatusScreen(GUIStatus.LOBBY, null);
+<b class="nc"><i>192</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.GAME, null);</b>
+<b class="nc"><i>193</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>194</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>195</i>&nbsp;        }</b>
+<i>196</i>&nbsp;    }
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    @Override
+<i>200</i>&nbsp;    public void joinPlayerNameAlreadyUsed() throws IOException {
+<b class="nc"><i>201</i>&nbsp;        System.out.println(&quot;Playername already used&quot;);</b>
+<b class="nc"><i>202</i>&nbsp;        askPlayerName(1);</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    @Override
+<i>206</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException
+<i>207</i>&nbsp;    {
+<i>208</i>&nbsp;        // Init empty var for color
+<i>209</i>&nbsp;        // Load the game screen in setup mode
+<i>210</i>&nbsp;        // Display a dialog for choose the color for player
+<i>211</i>&nbsp;        /*try {
+<i>212</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.GAME, (Message) requestInfoMsg);
+<i>213</i>&nbsp;        } catch (GUIStatusErrorException e) {
+<i>214</i>&nbsp;            e.printStackTrace();
+<i>215</i>&nbsp;        }*/
+<b class="nc"><i>216</i>&nbsp;         game = (GameScreen) actualScreen;</b>
+<b class="nc"><i>217</i>&nbsp;         game.setUp(requestInfoMsg);</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    public void sendStartInfo(PlayerInfoMsg msg)
+<i>222</i>&nbsp;    {
+<b class="nc"><i>223</i>&nbsp;        System.out.println(&quot;Invio i dati di prova&quot;);</b>
+<b class="nc"><i>224</i>&nbsp;        messageHandler.sendToServer(msg);</b>
+<i>225</i>&nbsp;    }
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    @Override
+<i>228</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;        // Set in the gamescreen the correct phase
+<b class="nc"><i>231</i>&nbsp;        game.setGamePhase(GamePhase.CHOOSE_ACTION);</b>
+<b class="nc"><i>232</i>&nbsp;        game.setMyWorker(actionsListMsg.getWorkers());</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    public void sendActionToServer(SelectActionMsg msg)
+<i>237</i>&nbsp;    {
+<b class="nc"><i>238</i>&nbsp;        messageHandler.sendToServer(msg);</b>
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    public void sendCellToServer(Cell sel)
+<i>242</i>&nbsp;    {
+<b class="nc"><i>243</i>&nbsp;        messageHandler.sendToServer(new SelectCellMsg(sel));</b>
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    @Override
+<i>247</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) throws IOException {
+<b class="nc"><i>248</i>&nbsp;        System.out.println(&quot;Ora devi scegliere la cella&quot;);</b>
+<b class="nc"><i>249</i>&nbsp;        game.setGamePhase(GamePhase.ACTION);</b>
+<b class="nc"><i>250</i>&nbsp;        game.displayPossibility(cellListMsg.getCellList());</b>
+<i>251</i>&nbsp;    }
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    @Override
+<i>254</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    @Override
+<i>259</i>&nbsp;    public void endTurnMessage() {
+<b class="nc"><i>260</i>&nbsp;        System.out.println(&quot;Your turn is ended&quot;);</b>
+<b class="nc"><i>261</i>&nbsp;        game.setGamePhase(GamePhase.NOT_MY_TURN);</b>
+<i>262</i>&nbsp;    }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    @Override
+<i>266</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
+<i>267</i>&nbsp;        //System.out.println(&quot;Ho ricevuto una Board&quot;);
+<i>268</i>&nbsp;
+<b class="nc"><i>269</i>&nbsp;        game = (GameScreen) actualScreen;</b>
+<b class="nc"><i>270</i>&nbsp;        game.drawBoard(updateBoardMsg);</b>
+<i>271</i>&nbsp;    }
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;    @Override
+<i>274</i>&nbsp;    public void youWonMessage() {
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    @Override
+<i>279</i>&nbsp;    public void youLostMessage() {
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    }
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    @Override
+<i>284</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-25 23:55</div>
+</div>
+</body>
+</html>

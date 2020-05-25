@@ -1,0 +1,585 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Controller</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Controller (it.polimi.ingsw.psp12.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Controller</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 132)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Controller$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 134)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.GameState;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.Player;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.Action;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+<i>9</i>&nbsp;import it.polimi.ingsw.psp12.network.ClientHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>11</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.*;
+<i>12</i>&nbsp;import it.polimi.ingsw.psp12.server.game.GameServer;
+<i>13</i>&nbsp;import it.polimi.ingsw.psp12.server.game.VirtualView;
+<i>14</i>&nbsp;import it.polimi.ingsw.psp12.utils.Observer;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.Arrays;
+<i>18</i>&nbsp;import java.util.List;
+<i>19</i>&nbsp;import java.util.Optional;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * Game controller that manages the commands from the clients, send responses and updates the game model
+<i>23</i>&nbsp; * @author Luca Morandini
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;public class Controller implements Observer&lt;Message&gt; {
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Model of the current game
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private GameState model;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * List of subscribed clients
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    private List&lt;VirtualView&gt; clients;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Server that has created the game
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    private GameServer server;
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;    public Controller(GameState gameState, GameServer server) {</b>
+<b class="nc"><i>42</i>&nbsp;        this.model = gameState;</b>
+<b class="nc"><i>43</i>&nbsp;        this.server = server;</b>
+<b class="nc"><i>44</i>&nbsp;        this.clients = new ArrayList&lt;&gt;();</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public void addClient(ClientHandler client, String name) {
+<i>48</i>&nbsp;        // create player with the provided name
+<b class="nc"><i>49</i>&nbsp;        Player player = model.addPlayer(name);</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;        // create virtual view that connects client handler with the player in the model
+<b class="nc"><i>52</i>&nbsp;        VirtualView view = new VirtualView(client, player);</b>
+<b class="nc"><i>53</i>&nbsp;        clients.add(view);</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        // subscribe view to model events
+<b class="nc"><i>56</i>&nbsp;        model.addObserver(view);</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;        // subscribe controller to view events
+<b class="nc"><i>59</i>&nbsp;        view.addObserver(this);</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * Starts the initialization process
+<i>64</i>&nbsp;     * In order asks users to select a color and the initial position of the workers
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public void initGame() {
+<i>67</i>&nbsp;        // initialize game
+<b class="nc"><i>68</i>&nbsp;        model.initGame();</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;        // send request to the first user
+<b class="nc"><i>71</i>&nbsp;        requestPlayerInfo();</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    @Override
+<i>75</i>&nbsp;    public void update(Object sender, Message message) {
+<b class="nc"><i>76</i>&nbsp;        VirtualView vv = (VirtualView)sender;</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;        // check if the sender of the message can play
+<b class="nc"><i>79</i>&nbsp;        if (!checkActivePlayer(vv)) {</b>
+<b class="nc"><i>80</i>&nbsp;            vv.sendCommand(new Message(MsgCommand.NOT_YOUR_TURN));</b>
+<i>81</i>&nbsp;            return;
+<i>82</i>&nbsp;        }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;        // process incoming command from client
+<b class="nc"><i>85</i>&nbsp;        switch (message.getCommand())</b>
+<i>86</i>&nbsp;        {
+<i>87</i>&nbsp;            case PLAYER_INFO:
+<i>88</i>&nbsp;                // update model with the information provided by the user
+<b class="nc"><i>89</i>&nbsp;                processPlayerInfo((PlayerInfoMsg)message);</b>
+<b class="nc"><i>90</i>&nbsp;                break;</b>
+<i>91</i>&nbsp;            case SELECTED_ACTION:
+<b class="nc"><i>92</i>&nbsp;                SelectActionMsg msg = (SelectActionMsg)message;</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;                // select the worker at the start of the turn
+<b class="nc"><i>95</i>&nbsp;                if (model.getCurrentState() == TurnState.INIT) {</b>
+<b class="nc"><i>96</i>&nbsp;                    model.selectCurrentWorker(msg.getWorker());</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;                    System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; selected worker &quot; + msg.getWorker());</b>
+<i>99</i>&nbsp;                }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;                // manage the action selected by the user
+<b class="nc"><i>102</i>&nbsp;                actionSelected(msg.getAction());</b>
+<b class="nc"><i>103</i>&nbsp;                break;</b>
+<i>104</i>&nbsp;            case SELECTED_CELL:
+<b class="nc"><i>105</i>&nbsp;                Cell cell = ((SelectCellMsg)message).getSelectedCell();</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;                // update model performing the action on the selected cell based on current turn state
+<b class="nc"><i>108</i>&nbsp;                if (model.getCurrentState() == TurnState.MOVE) {</b>
+<b class="nc"><i>109</i>&nbsp;                    performMove(cell);</b>
+<i>110</i>&nbsp;                }
+<i>111</i>&nbsp;                else {
+<b class="nc"><i>112</i>&nbsp;                    performBuild(cell);</b>
+<i>113</i>&nbsp;                }
+<b class="nc"><i>114</i>&nbsp;                break;</b>
+<i>115</i>&nbsp;            case SELECTED_OPTION:
+<b class="nc"><i>116</i>&nbsp;                optionSelected((SelectOptionMsg)message);</b>
+<i>117</i>&nbsp;                break;
+<i>118</i>&nbsp;        }
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Check if the player that has sent a message is the current player
+<i>123</i>&nbsp;     * @param view virtual view of the player
+<i>124</i>&nbsp;     * @return true if the player is the current one
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    boolean checkActivePlayer(VirtualView view) {
+<b class="nc"><i>127</i>&nbsp;        return view.getPlayer().equals(model.getCurrentPlayer());</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * Requests to the current user to select a color and the initial position of the workers
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    void requestPlayerInfo() {
+<b class="nc"><i>134</i>&nbsp;        RequestInfoMsg request = new RequestInfoMsg();</b>
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;        // add available colors
+<b class="nc"><i>137</i>&nbsp;        request.setAvailableColors(model.getAvailableColors());</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;        // add available positions
+<b class="nc"><i>140</i>&nbsp;        List&lt;Cell&gt; availableCells = model.getGameBoard().getCellsWithoutWorker();</b>
+<b class="nc"><i>141</i>&nbsp;        for (Cell c : availableCells) {</b>
+<b class="nc"><i>142</i>&nbsp;            request.addPosition(c.getLocation());</b>
+<b class="nc"><i>143</i>&nbsp;        }</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;        // add available cards
+<b class="nc"><i>146</i>&nbsp;        request.setAvailableCards(model.getAvailableCards());</b>
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;        // send request to the current user
+<b class="nc"><i>149</i>&nbsp;        sendToCurrentPlayer(request);</b>
+<i>150</i>&nbsp;
+<b class="nc"><i>151</i>&nbsp;        System.out.println(&quot;requested info to player &quot; + model.getCurrentPlayer().getId());</b>
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /**
+<i>155</i>&nbsp;     * Process the initialization information provided by the current user
+<i>156</i>&nbsp;     * @param msg incoming message
+<i>157</i>&nbsp;     */
+<i>158</i>&nbsp;    void processPlayerInfo(PlayerInfoMsg msg) {
+<i>159</i>&nbsp;        // update model with the
+<b class="nc"><i>160</i>&nbsp;        model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions(), msg.getCard());</b>
+<i>161</i>&nbsp;
+<b class="nc"><i>162</i>&nbsp;        System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; initialized&quot;);</b>
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;        // check if all players have been initialized
+<b class="nc"><i>165</i>&nbsp;        if (!model.isInitialized()) {</b>
+<i>166</i>&nbsp;            // not all players are ready, switch to the next one
+<b class="nc"><i>167</i>&nbsp;            model.nextTurn();</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;            // request to the next player to send its information
+<b class="nc"><i>170</i>&nbsp;            requestPlayerInfo();</b>
+<i>171</i>&nbsp;            return;
+<i>172</i>&nbsp;        }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;        // all players are ready, the game can start
+<b class="nc"><i>175</i>&nbsp;        model.initGame();</b>
+<i>176</i>&nbsp;
+<b class="nc"><i>177</i>&nbsp;        System.out.println(&quot;players initialized, the game can start&quot;);</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;        // initialize the turn for the current player and notify the client
+<b class="nc"><i>180</i>&nbsp;        beginTurn();</b>
+<i>181</i>&nbsp;    }
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;    /**
+<i>184</i>&nbsp;     * Send a message to the VirtualView associated with the specified player
+<i>185</i>&nbsp;     * @param player player to send the message
+<i>186</i>&nbsp;     * @param message message to be sent
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    void sendToPlayer(Player player, Message message) {
+<b class="nc"><i>189</i>&nbsp;        Optional&lt;VirtualView&gt; vv = clients.stream().filter(v -&gt; v.getPlayer().equals(player)).findFirst();</b>
+<i>190</i>&nbsp;
+<b class="nc"><i>191</i>&nbsp;        if (!vv.isPresent()) {</b>
+<b class="nc"><i>192</i>&nbsp;            System.out.println(&quot;no virtual view associated with the requested player&quot;);</b>
+<i>193</i>&nbsp;            return;
+<i>194</i>&nbsp;        }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;        // send message
+<b class="nc"><i>197</i>&nbsp;        vv.get().sendCommand(message);</b>
+<i>198</i>&nbsp;    }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * Send a message to the VirtualView associated with the current player
+<i>202</i>&nbsp;     * @param message message to be sent
+<i>203</i>&nbsp;     */
+<i>204</i>&nbsp;    void sendToCurrentPlayer(Message message) {
+<b class="nc"><i>205</i>&nbsp;        sendToPlayer(model.getCurrentPlayer(), message);</b>
+<i>206</i>&nbsp;    }
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Initialize the turn for the current player
+<i>210</i>&nbsp;     * and send to the client the list of actions that can be performed
+<i>211</i>&nbsp;     */
+<i>212</i>&nbsp;    void beginTurn() {
+<b class="nc"><i>213</i>&nbsp;        model.initTurn();</b>
+<i>214</i>&nbsp;
+<b class="nc"><i>215</i>&nbsp;        System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; started the turn&quot;);</b>
+<i>216</i>&nbsp;
+<b class="nc"><i>217</i>&nbsp;        sendToCurrentPlayer(new ActionsListMsg(model.nextActions(), model.getCurrentPlayer().getWorkers()));</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Execute the next action
+<i>222</i>&nbsp;     * or end the current turn if there are no more action to be executed
+<i>223</i>&nbsp;     * @param action current action to be executed
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    void actionSelected(Action action) {
+<b class="nc"><i>226</i>&nbsp;        if (action == Action.END) {</b>
+<i>227</i>&nbsp;            // no more action to be executed or
+<i>228</i>&nbsp;            // user does not want to perform the extra action provided by the power
+<b class="nc"><i>229</i>&nbsp;            endCurrentTurn();</b>
+<i>230</i>&nbsp;            return;
+<i>231</i>&nbsp;        }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;        // update the current state
+<b class="nc"><i>234</i>&nbsp;        model.updateCurrentState(action);</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;        // execute the next action and send to the user a list of possible cells
+<b class="nc"><i>237</i>&nbsp;        generateCellList();</b>
+<i>238</i>&nbsp;    }
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    /**
+<i>241</i>&nbsp;     * Generate a list of possible cells for the current action and send the list to the client
+<i>242</i>&nbsp;     * or determine if the current player has lost when can not perform the action
+<i>243</i>&nbsp;     */
+<i>244</i>&nbsp;    void generateCellList() {
+<i>245</i>&nbsp;        // get list of cells for the current action
+<b class="nc"><i>246</i>&nbsp;        List&lt;Cell&gt; cells = null;</b>
+<b class="nc"><i>247</i>&nbsp;        Action action = null;</b>
+<b class="nc"><i>248</i>&nbsp;        switch (model.getCurrentState()) {</b>
+<i>249</i>&nbsp;            case MOVE:
+<b class="nc"><i>250</i>&nbsp;                action = Action.MOVE;</b>
+<b class="nc"><i>251</i>&nbsp;                cells = model.getPossibleMoves();</b>
+<b class="nc"><i>252</i>&nbsp;                break;</b>
+<i>253</i>&nbsp;            case BUILD:
+<b class="nc"><i>254</i>&nbsp;                action = Action.BUILD;</b>
+<b class="nc"><i>255</i>&nbsp;                cells = model.getPossibleBuilds();</b>
+<i>256</i>&nbsp;                break;
+<i>257</i>&nbsp;        }
+<i>258</i>&nbsp;
+<b class="nc"><i>259</i>&nbsp;        System.out.printf(&quot;generated cells for %s action [%d] for player %d\n&quot;,</b>
+<b class="nc"><i>260</i>&nbsp;                model.getCurrentState().toString(), cells.size(), model.getCurrentPlayer().getId());</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;        // check if the current player has lost
+<i>263</i>&nbsp;        // player has lost if can not perform an action
+<b class="nc"><i>264</i>&nbsp;        if (cells.size() == 0) {</b>
+<b class="nc"><i>265</i>&nbsp;            handleCurrentPlayerLoss();</b>
+<i>266</i>&nbsp;            return;
+<i>267</i>&nbsp;        }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;        // send list of cells to the current player
+<b class="nc"><i>270</i>&nbsp;        sendToCurrentPlayer(new CellListMsg(cells, action));</b>
+<i>271</i>&nbsp;    }
+<i>272</i>&nbsp;
+<i>273</i>&nbsp;    /**
+<i>274</i>&nbsp;     * Update the model performing the move action on the cell selected by the user
+<i>275</i>&nbsp;     * and determine if the current player has won the game
+<i>276</i>&nbsp;     * @param cell cell selected by the user
+<i>277</i>&nbsp;     */
+<i>278</i>&nbsp;    void performMove(Cell cell) {
+<b class="nc"><i>279</i>&nbsp;        model.move(cell.getLocation());</b>
+<i>280</i>&nbsp;
+<b class="nc"><i>281</i>&nbsp;        System.out.printf(&quot;player %d MOVE on cell %s\n&quot;,</b>
+<b class="nc"><i>282</i>&nbsp;                model.getCurrentPlayer().getId(), cell.getLocation().toString());</b>
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;        // check if the current player has won
+<b class="nc"><i>285</i>&nbsp;        if (model.checkVictory()) {</b>
+<b class="nc"><i>286</i>&nbsp;            handleCurrentPlayerVictory();</b>
+<i>287</i>&nbsp;            return;
+<i>288</i>&nbsp;        }
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;        // determine what the current player can do next
+<b class="nc"><i>291</i>&nbsp;        determineNextAction();</b>
+<i>292</i>&nbsp;    }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    /**
+<i>295</i>&nbsp;     * Update the model performing the build action on the cell selected by the user
+<i>296</i>&nbsp;     * or ask user what to do when he can build both a block and a dome
+<i>297</i>&nbsp;     * @param cell cell selected by the user
+<i>298</i>&nbsp;     */
+<i>299</i>&nbsp;    void performBuild(Cell cell) {
+<i>300</i>&nbsp;        // get the minimum level on which the player can build a dome
+<b class="nc"><i>301</i>&nbsp;        int minDomeLevel = model.getCurrentPlayer().getPower().getMinDomeLevel();</b>
+<b class="nc"><i>302</i>&nbsp;        int currentLevel = cell.getTower().getLevel();</b>
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;        // check if the player can build a dome or a block and ask what to build
+<b class="nc"><i>305</i>&nbsp;        if (minDomeLevel &lt;= currentLevel &amp;&amp; currentLevel &lt; 3) {</b>
+<i>306</i>&nbsp;            // save cell of the build in progress
+<b class="nc"><i>307</i>&nbsp;            model.getCurrentPlayer().getPower().setBuildInProgress(cell);</b>
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;            // send list of build options to the current player
+<b class="nc"><i>310</i>&nbsp;            sendToCurrentPlayer(new OptionsListMsg(Arrays.asList(BuildOption.values()), cell));</b>
+<i>311</i>&nbsp;            return;
+<i>312</i>&nbsp;        }
+<i>313</i>&nbsp;
+<b class="nc"><i>314</i>&nbsp;        model.build(cell.getLocation());</b>
+<i>315</i>&nbsp;
+<b class="nc"><i>316</i>&nbsp;        System.out.printf(&quot;player %d BUILD on cell %s\n&quot;,</b>
+<b class="nc"><i>317</i>&nbsp;                model.getCurrentPlayer().getId(), cell.getLocation().toString());</b>
+<i>318</i>&nbsp;
+<i>319</i>&nbsp;        // determine what the current player can do next
+<b class="nc"><i>320</i>&nbsp;        determineNextAction();</b>
+<i>321</i>&nbsp;    }
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;    /**
+<i>324</i>&nbsp;     * Update the model performing the build action after the user has selected the build option (dome or block)
+<i>325</i>&nbsp;     * @param message incoming select option message
+<i>326</i>&nbsp;     */
+<i>327</i>&nbsp;    void optionSelected(SelectOptionMsg message) {
+<i>328</i>&nbsp;        // get cell of the build in progress
+<b class="nc"><i>329</i>&nbsp;        Cell cell = model.getCurrentPlayer().getPower().getBuildInProgress();</b>
+<i>330</i>&nbsp;
+<b class="nc"><i>331</i>&nbsp;        model.build(cell.getLocation(), message.getOption());</b>
+<i>332</i>&nbsp;
+<b class="nc"><i>333</i>&nbsp;        System.out.printf(&quot;player %d BUILD %s on cell %s\n&quot;,</b>
+<b class="nc"><i>334</i>&nbsp;                model.getCurrentPlayer().getId(), message.getOption(), cell.getLocation().toString());</b>
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;        // determine what the current player can do next
+<b class="nc"><i>337</i>&nbsp;        determineNextAction();</b>
+<i>338</i>&nbsp;    }
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    /**
+<i>341</i>&nbsp;     * Determine the next action that the current player can execute
+<i>342</i>&nbsp;     * and ask to the client what to do if there are more than one choice
+<i>343</i>&nbsp;     */
+<i>344</i>&nbsp;    void determineNextAction() {
+<b class="nc"><i>345</i>&nbsp;        List&lt;Action&gt; actions = model.nextActions();</b>
+<i>346</i>&nbsp;
+<b class="nc"><i>347</i>&nbsp;        System.out.printf(&quot;checking next possible actions [%d] for player %d\n&quot;,</b>
+<b class="nc"><i>348</i>&nbsp;                actions.size(), model.getCurrentPlayer().getId());</b>
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;        // ask user what to do next if there are more than one action that can be executed
+<b class="nc"><i>351</i>&nbsp;        if (actions.size() &gt; 1) {</b>
+<b class="nc"><i>352</i>&nbsp;            System.out.println(&quot;more than one action possible, asking to the player &quot; +</b>
+<b class="nc"><i>353</i>&nbsp;                    model.getCurrentPlayer().getId() + &quot; what to do next&quot;);</b>
+<i>354</i>&nbsp;
+<b class="nc"><i>355</i>&nbsp;            sendToCurrentPlayer(new ActionsListMsg(actions));</b>
+<i>356</i>&nbsp;            return;
+<i>357</i>&nbsp;        }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;        // execute the next action or end the turn
+<b class="nc"><i>360</i>&nbsp;        actionSelected(actions.get(0));</b>
+<i>361</i>&nbsp;    }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    /**
+<i>364</i>&nbsp;     * Notify the current player that the turn ended
+<i>365</i>&nbsp;     * and initialize the turn of the next player
+<i>366</i>&nbsp;     */
+<i>367</i>&nbsp;    void endCurrentTurn() {
+<b class="nc"><i>368</i>&nbsp;        System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; ended the turn&quot;);</b>
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;        // notify the player that the turn ended
+<b class="nc"><i>371</i>&nbsp;        sendToCurrentPlayer(new Message(MsgCommand.TURN_ENDED));</b>
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;        // go to the next player
+<b class="nc"><i>374</i>&nbsp;        model.nextTurn();</b>
+<i>375</i>&nbsp;
+<i>376</i>&nbsp;        // initialize turn for the next player
+<b class="nc"><i>377</i>&nbsp;        beginTurn();</b>
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * Handle the loss of the current player
+<i>382</i>&nbsp;     * and end the game if only one player remains
+<i>383</i>&nbsp;     * or disconnect the current player and continue the game
+<i>384</i>&nbsp;     */
+<i>385</i>&nbsp;    void handleCurrentPlayerLoss() {
+<b class="nc"><i>386</i>&nbsp;        System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; has lost&quot;);</b>
+<i>387</i>&nbsp;
+<i>388</i>&nbsp;        // notify current player that has lost
+<b class="nc"><i>389</i>&nbsp;        sendToCurrentPlayer(new Message(MsgCommand.YOU_LOST));</b>
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;        // check if there the game can continue (at least two players remain)
+<b class="nc"><i>392</i>&nbsp;        if ((model.getPlayersCount() - 1) &gt;= 2) {</b>
+<i>393</i>&nbsp;            // disconnect current client
+<b class="nc"><i>394</i>&nbsp;            disconnectClient(model.getCurrentPlayer());</b>
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;            System.out.println(&quot;removing player &quot; + model.getCurrentPlayer().getId() + &quot; and the workers&quot;);</b>
+<i>397</i>&nbsp;            // remove current player
+<b class="nc"><i>398</i>&nbsp;            model.removeCurrentPlayer();</b>
+<i>399</i>&nbsp;
+<i>400</i>&nbsp;            // notify other players that the current player has lost
+<b class="nc"><i>401</i>&nbsp;            for (Player waitingPlayer : model.getPlayers()) {</b>
+<b class="nc"><i>402</i>&nbsp;                sendToPlayer(waitingPlayer, new OtherLostMsg(model.getCurrentPlayer().getName()));</b>
+<i>403</i>&nbsp;            }
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;            // start the next turn
+<b class="nc"><i>406</i>&nbsp;            beginTurn();</b>
+<i>407</i>&nbsp;        }
+<i>408</i>&nbsp;        else {
+<i>409</i>&nbsp;            // notify other player that has won
+<b class="nc"><i>410</i>&nbsp;            sendToPlayer(model.getWaitingPlayers()[0], new Message(MsgCommand.YOU_WON));</b>
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;            // disconnect all clients and close room
+<b class="nc"><i>413</i>&nbsp;            endGame();</b>
+<i>414</i>&nbsp;        }
+<i>415</i>&nbsp;    }
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    /**
+<i>418</i>&nbsp;     * Handle the victory of the current player
+<i>419</i>&nbsp;     * and end the game
+<i>420</i>&nbsp;     */
+<i>421</i>&nbsp;    void handleCurrentPlayerVictory() {
+<b class="nc"><i>422</i>&nbsp;        System.out.println(&quot;player &quot; + model.getCurrentPlayer().getId() + &quot; has won&quot;);</b>
+<i>423</i>&nbsp;
+<i>424</i>&nbsp;        // notify the current player that has won
+<b class="nc"><i>425</i>&nbsp;        sendToCurrentPlayer(new Message(MsgCommand.YOU_WON));</b>
+<i>426</i>&nbsp;
+<i>427</i>&nbsp;        // notify other players that have lost
+<b class="nc"><i>428</i>&nbsp;        for (Player waitingPlayer : model.getWaitingPlayers()) {</b>
+<b class="nc"><i>429</i>&nbsp;            sendToPlayer(waitingPlayer, new Message(MsgCommand.YOU_LOST));</b>
+<i>430</i>&nbsp;        }
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;        // disconnect all clients and close room
+<b class="nc"><i>433</i>&nbsp;        endGame();</b>
+<i>434</i>&nbsp;    }
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;    /**
+<i>437</i>&nbsp;     * Disconnect clients and notify the server responsible for closing the room when the game ended
+<i>438</i>&nbsp;     */
+<i>439</i>&nbsp;    public void endGame() {
+<b class="nc"><i>440</i>&nbsp;        System.out.println(&quot;closing the game...&quot;);</b>
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;        // disconnect clients
+<b class="nc"><i>443</i>&nbsp;        for (Player player : model.getPlayers()) {</b>
+<b class="nc"><i>444</i>&nbsp;            disconnectClient(player);</b>
+<i>445</i>&nbsp;        }
+<i>446</i>&nbsp;
+<i>447</i>&nbsp;        // close room
+<b class="nc"><i>448</i>&nbsp;        server.gameEnded();</b>
+<i>449</i>&nbsp;    }
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;    /**
+<i>452</i>&nbsp;     * Disconnect client and close socket connection
+<i>453</i>&nbsp;     * @param player player associated to the client to disconnect
+<i>454</i>&nbsp;     */
+<i>455</i>&nbsp;    void disconnectClient(Player player) {
+<b class="nc"><i>456</i>&nbsp;        Optional&lt;VirtualView&gt; vv = clients.stream().filter(v -&gt; v.getPlayer().equals(player)).findFirst();</b>
+<i>457</i>&nbsp;
+<b class="nc"><i>458</i>&nbsp;        if (!vv.isPresent()) {</b>
+<b class="nc"><i>459</i>&nbsp;            System.out.println(&quot;no virtual view associated with the requested player&quot;);</b>
+<i>460</i>&nbsp;            return;
+<i>461</i>&nbsp;        }
+<i>462</i>&nbsp;
+<b class="nc"><i>463</i>&nbsp;        VirtualView view = vv.get();</b>
+<i>464</i>&nbsp;
+<b class="nc"><i>465</i>&nbsp;        System.out.println(&quot;disconnecting player &quot; + player.getId());</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;        // remove virtual view from the clients list
+<b class="nc"><i>468</i>&nbsp;        clients.remove(view);</b>
+<i>469</i>&nbsp;
+<i>470</i>&nbsp;        // unsubscribe view from model events
+<b class="nc"><i>471</i>&nbsp;        model.removeObserver(view);</b>
+<i>472</i>&nbsp;
+<i>473</i>&nbsp;        // close virtual view
+<b class="nc"><i>474</i>&nbsp;        view.close();</b>
+<i>475</i>&nbsp;    }
+<i>476</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-25 23:55</div>
+</div>
+</body>
+</html>

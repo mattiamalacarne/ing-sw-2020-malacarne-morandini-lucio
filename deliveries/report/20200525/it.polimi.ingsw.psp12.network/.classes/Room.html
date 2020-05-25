@@ -1,0 +1,231 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Room</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.network</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Room (it.polimi.ingsw.psp12.network)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Room</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 23)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.network;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.io.Serializable;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * Room that holds information about a game
+<i>7</i>&nbsp; * @author Luca Morandini
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class Room implements Serializable{
+<i>10</i>&nbsp;    /**
+<i>11</i>&nbsp;     * Port of the server that manages the game
+<i>12</i>&nbsp;     */
+<i>13</i>&nbsp;    private int assignedPort;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * Name of the room
+<i>17</i>&nbsp;     */
+<i>18</i>&nbsp;    // TODO: remove!!!!
+<i>19</i>&nbsp;    private String name;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Max number of players that can join the game
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    private int maxPlayersCount;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Number of players that has joined the game
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private int playersCount;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private int subscribedCount;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Determines if the game is currently active
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    private boolean active;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * @deprecated
+<i>40</i>&nbsp;     * @param name
+<i>41</i>&nbsp;     * @param maxPlayersCount
+<i>42</i>&nbsp;     */
+<i>43</i>&nbsp;    // TODO: remove!!!!
+<b class="nc"><i>44</i>&nbsp;    public Room(String name, int maxPlayersCount) {</b>
+<b class="nc"><i>45</i>&nbsp;        this.name = name;</b>
+<b class="nc"><i>46</i>&nbsp;        this.maxPlayersCount = maxPlayersCount;</b>
+<b class="nc"><i>47</i>&nbsp;        this.active = true;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<b class="nc"><i>50</i>&nbsp;    public Room() {</b>
+<b class="nc"><i>51</i>&nbsp;        this.active = false;</b>
+<b class="nc"><i>52</i>&nbsp;        this.playersCount = 0;</b>
+<b class="nc"><i>53</i>&nbsp;        this.subscribedCount = 0;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    public void setMaxPlayersCount(int maxPlayersCount) {
+<b class="nc"><i>57</i>&nbsp;        this.maxPlayersCount = maxPlayersCount;</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    public void activate() {
+<b class="nc"><i>61</i>&nbsp;        this.active = true;</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * Returns port on where the game server has to listen
+<i>66</i>&nbsp;     * @return assigned port for the game
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public int getAssignedPort() {
+<b class="nc"><i>69</i>&nbsp;        return assignedPort;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Set the port on where the game server has to listen
+<i>74</i>&nbsp;     * @param assignedPort port for the game
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public void setAssignedPort(int assignedPort) {
+<b class="nc"><i>77</i>&nbsp;        this.assignedPort = assignedPort;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Register that a new client joined the game
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    public void clientJoined() {
+<b class="nc"><i>84</i>&nbsp;        playersCount++;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    public void subscribe() {
+<b class="nc"><i>88</i>&nbsp;        subscribedCount++;</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    public void unsubscribe() {
+<b class="nc"><i>92</i>&nbsp;        if (subscribedCount &gt; 0) {</b>
+<b class="nc"><i>93</i>&nbsp;            subscribedCount--;</b>
+<i>94</i>&nbsp;        }
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    public boolean isReady() {
+<b class="nc"><i>98</i>&nbsp;        return (subscribedCount &gt;= maxPlayersCount);</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Get the name of the room
+<i>103</i>&nbsp;     * @return room name
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    public String getName() {
+<b class="nc"><i>106</i>&nbsp;        return name;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /**
+<i>110</i>&nbsp;     * Returns max number of players that can join the game
+<i>111</i>&nbsp;     * @return max players count
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    public int getMaxPlayersCount() {
+<b class="nc"><i>114</i>&nbsp;        return maxPlayersCount;</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * Returns the number of players that has joined the game
+<i>119</i>&nbsp;     * @return number of players that has joined the game
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    public int getPlayersCount() {
+<b class="nc"><i>122</i>&nbsp;        return playersCount;</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * Checks if the all clients have joined the game and so the room is full
+<i>127</i>&nbsp;     * @return true if room is full
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    public boolean isFull() {
+<b class="nc"><i>130</i>&nbsp;        return (playersCount &gt;= maxPlayersCount);</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /**
+<i>134</i>&nbsp;     * Checks if the game is currently active
+<i>135</i>&nbsp;     * @return true if game is active
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public synchronized boolean isRunning() {
+<b class="nc"><i>138</i>&nbsp;        return active;</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Interrupts the game and marks it as not active
+<i>143</i>&nbsp;     */
+<i>144</i>&nbsp;    public synchronized void close() {
+<b class="nc"><i>145</i>&nbsp;        active = false;</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-25 23:55</div>
+</div>
+</body>
+</html>

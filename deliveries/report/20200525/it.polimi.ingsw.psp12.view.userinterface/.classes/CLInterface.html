@@ -1,0 +1,447 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CLInterface</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CLInterface (it.polimi.ingsw.psp12.view.userinterface)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CLInterface</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 150)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.client.MessageHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.client.ServerInfo;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.*;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.IOException;
+<i>9</i>&nbsp;import java.net.Inet4Address;
+<i>10</i>&nbsp;import java.net.UnknownHostException;
+<i>11</i>&nbsp;import java.util.InputMismatchException;
+<i>12</i>&nbsp;import java.util.Scanner;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * CLI interface, manages input and output communication with the user
+<i>16</i>&nbsp; * @author Michele Lucio
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class CLInterface implements UserInterface
+<i>19</i>&nbsp;{
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * The input scanner
+<i>23</i>&nbsp;     */
+<i>24</i>&nbsp;    private Scanner cmdIn;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * MessageHandler that will manages the communication which the server
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private MessageHandler messageHandler;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;//    private Boolean isWaiting;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * CLI constructor
+<i>35</i>&nbsp;     */
+<b class="nc"><i>36</i>&nbsp;    public CLInterface() throws IOException {</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        System.out.println(&quot;Starting CLI, Setup server and client&quot;);</b>
+<b class="nc"><i>39</i>&nbsp;        cmdIn = new Scanner(System.in);</b>
+<b class="nc"><i>40</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    @Override
+<i>45</i>&nbsp;    public void writeOnStream(String s)
+<i>46</i>&nbsp;    {
+<b class="nc"><i>47</i>&nbsp;        System.out.println(s.toUpperCase());</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    @Override
+<i>51</i>&nbsp;    public ServerInfo getServerByIp() {
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;        System.out.println(&quot;(IP) Hostname: &quot;);</b>
+<i>54</i>&nbsp;        ServerInfo serverInfo;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;        //FIXME: gestire caso in cui l&#39;iserimento errato è numerico
+<i>57</i>&nbsp;        do {
+<b class="nc"><i>58</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>59</i>&nbsp;            try {
+<b class="nc"><i>60</i>&nbsp;                String hostname = cmdIn.nextLine();</b>
+<b class="nc"><i>61</i>&nbsp;                serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
+<b class="nc"><i>62</i>&nbsp;            } catch (UnknownHostException e) {</b>
+<b class="nc"><i>63</i>&nbsp;                System.out.println(&quot;Invalid host address, retry...&quot;);</b>
+<b class="nc"><i>64</i>&nbsp;                serverInfo = null;</b>
+<b class="nc"><i>65</i>&nbsp;            }</b>
+<b class="nc"><i>66</i>&nbsp;        } while (serverInfo==null);</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        return serverInfo;</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    @Override
+<i>72</i>&nbsp;    public void createsNewRoom() {
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        System.out.println(&quot;\nThere are no available room to join!\nCreate a new room to start playing&quot;);</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;        //Room player number
+<b class="nc"><i>77</i>&nbsp;        System.out.println(&quot;Player number [2-3]:&quot;);</b>
+<i>78</i>&nbsp;        int playerNumber;
+<i>79</i>&nbsp;        do {
+<b class="nc"><i>80</i>&nbsp;            cmdIn=new Scanner(System.in);</b>
+<i>81</i>&nbsp;            try {
+<b class="nc"><i>82</i>&nbsp;                playerNumber = cmdIn.nextInt();</b>
+<b class="nc"><i>83</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>84</i>&nbsp;                playerNumber=0;</b>
+<b class="nc"><i>85</i>&nbsp;            }</b>
+<b class="nc"><i>86</i>&nbsp;            if (playerNumber&lt;2 || playerNumber&gt;3){</b>
+<b class="nc"><i>87</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>88</i>&nbsp;            }
+<b class="nc"><i>89</i>&nbsp;        }while (playerNumber&lt;2 || playerNumber&gt;3);</b>
+<i>90</i>&nbsp;
+<b class="nc"><i>91</i>&nbsp;        messageHandler.sendToServer( new CreateMsg(playerNumber)  );</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    @Override
+<i>96</i>&nbsp;    public void waitMessage() {
+<b class="nc"><i>97</i>&nbsp;        System.out.println(&quot;\nWait while all the players joined the room&quot;);</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    @Override
+<i>101</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException {
+<b class="nc"><i>102</i>&nbsp;        System.out.printf(&quot;\nRoom for %d players created\n&quot;, createdMsg.getRoom().getMaxPlayersCount());</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;        //New port is updated
+<b class="nc"><i>105</i>&nbsp;        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
+<i>106</i>&nbsp;
+<b class="nc"><i>107</i>&nbsp;        System.out.println(&quot;What&#39;s you name: &quot;);</b>
+<b class="nc"><i>108</i>&nbsp;        cmdIn= new Scanner(System.in);</b>
+<b class="nc"><i>109</i>&nbsp;        String playerName = cmdIn.nextLine();</b>
+<b class="nc"><i>110</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    @Override
+<i>114</i>&nbsp;    public void roomCreatedFailedMessage() {
+<b class="nc"><i>115</i>&nbsp;        System.out.println(&quot;Room creation failed!&quot;);</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    @Override
+<i>119</i>&nbsp;    public void invalidMaxPlayerMessage() {
+<b class="nc"><i>120</i>&nbsp;        System.out.println(&quot;Invalid player number!&quot;);</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    @Override
+<i>124</i>&nbsp;    public void roomFull() {
+<b class="nc"><i>125</i>&nbsp;        System.out.println(&quot;This room is already full! Choose another room&quot;);</b>
+<i>126</i>&nbsp;    }
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    @Override
+<i>129</i>&nbsp;    public void joinPlayerNameConfirmation() {
+<b class="nc"><i>130</i>&nbsp;        System.out.println(&quot;You have joined the room!\n&quot;);</b>
+<i>131</i>&nbsp;//        isWaiting = true;
+<i>132</i>&nbsp;//        while (isWaiting){
+<i>133</i>&nbsp;//            //TODO: stampa messaggio di waiting ?
+<i>134</i>&nbsp;//        }
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;//    public void setIsWaiting(Boolean bool){
+<i>138</i>&nbsp;//        this.isWaiting = bool;
+<i>139</i>&nbsp;//    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    @Override
+<i>142</i>&nbsp;    public void joinPlayerNameAlreadyUsed() {
+<b class="nc"><i>143</i>&nbsp;        System.out.println(&quot;That name is already used! Choose another name: &quot;);</b>
+<b class="nc"><i>144</i>&nbsp;        String playerName = cmdIn.nextLine();</b>
+<b class="nc"><i>145</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    @Override
+<i>149</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) {
+<i>150</i>&nbsp;
+<b class="nc"><i>151</i>&nbsp;        System.out.println(&quot;Choose a color:&quot;);</b>
+<b class="nc"><i>152</i>&nbsp;        for (int c=0; c&lt;requestInfoMsg.getAvailableColors().size();c++){</b>
+<b class="nc"><i>153</i>&nbsp;            System.out.printf(&quot;%d) %s\n&quot;, c, requestInfoMsg.getAvailableColors().get(c).toString());</b>
+<i>154</i>&nbsp;        }
+<i>155</i>&nbsp;        int colorChoice;
+<i>156</i>&nbsp;        do {
+<b class="nc"><i>157</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>158</i>&nbsp;            try {
+<b class="nc"><i>159</i>&nbsp;                colorChoice=cmdIn.nextInt();</b>
+<b class="nc"><i>160</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>161</i>&nbsp;                colorChoice=-1;</b>
+<b class="nc"><i>162</i>&nbsp;            }</b>
+<b class="nc"><i>163</i>&nbsp;            if ( colorChoice&lt;0 || colorChoice&gt;=requestInfoMsg.getAvailableColors().size() ){</b>
+<b class="nc"><i>164</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>165</i>&nbsp;            }
+<b class="nc"><i>166</i>&nbsp;        }while ( colorChoice&lt;0 || colorChoice&gt;=requestInfoMsg.getAvailableColors().size() );</b>
+<i>167</i>&nbsp;
+<b class="nc"><i>168</i>&nbsp;        System.out.println(&quot;Choose the position of the first worker:&quot;);</b>
+<b class="nc"><i>169</i>&nbsp;        for (int c=0; c&lt;requestInfoMsg.getAvailablePositions().size(); c++){</b>
+<b class="nc"><i>170</i>&nbsp;            System.out.printf(&quot;%2d) %s\n&quot;, c, requestInfoMsg.getAvailablePositions().get(c).toString());</b>
+<i>171</i>&nbsp;        }
+<i>172</i>&nbsp;        int worker1Position;
+<i>173</i>&nbsp;        do {
+<b class="nc"><i>174</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>175</i>&nbsp;            try {
+<b class="nc"><i>176</i>&nbsp;                worker1Position = cmdIn.nextInt();</b>
+<b class="nc"><i>177</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>178</i>&nbsp;                worker1Position=-1;</b>
+<b class="nc"><i>179</i>&nbsp;            }</b>
+<b class="nc"><i>180</i>&nbsp;            if (worker1Position&lt;0 || worker1Position&gt;=requestInfoMsg.getAvailablePositions().size()){</b>
+<b class="nc"><i>181</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>182</i>&nbsp;            }
+<b class="nc"><i>183</i>&nbsp;        }while (worker1Position&lt;0 || worker1Position&gt;=requestInfoMsg.getAvailablePositions().size());</b>
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;        //TODO: rimuovere la cella scelta direttamente dalla lista
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;        //FIXME: va bene fare qui il controllo sulla scelta della stessa cella da parte dell&#39;utente? (worker1Position==worker2Position)
+<b class="nc"><i>188</i>&nbsp;        System.out.println(&quot;Choose the position of the second worker:&quot;);</b>
+<b class="nc"><i>189</i>&nbsp;        for (int c=0; c&lt;requestInfoMsg.getAvailablePositions().size(); c++){</b>
+<b class="nc"><i>190</i>&nbsp;            System.out.printf(&quot;%2d) %s\n&quot;, c, requestInfoMsg.getAvailablePositions().get(c).toString());</b>
+<i>191</i>&nbsp;        }
+<i>192</i>&nbsp;        int worker2Position;
+<i>193</i>&nbsp;        do {
+<b class="nc"><i>194</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>195</i>&nbsp;            try {
+<b class="nc"><i>196</i>&nbsp;                worker2Position = cmdIn.nextInt();</b>
+<b class="nc"><i>197</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>198</i>&nbsp;                worker2Position=-1;</b>
+<b class="nc"><i>199</i>&nbsp;            }</b>
+<b class="nc"><i>200</i>&nbsp;            if (worker2Position&lt;0 || worker2Position&gt;=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position){</b>
+<b class="nc"><i>201</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>202</i>&nbsp;            }
+<b class="nc"><i>203</i>&nbsp;        }while (worker2Position&lt;0 || worker2Position&gt;=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;        //Card choice
+<i>206</i>&nbsp;        int cardChoice;
+<i>207</i>&nbsp;        do {
+<b class="nc"><i>208</i>&nbsp;            System.out.println(&quot;Choose a card:&quot;);</b>
+<b class="nc"><i>209</i>&nbsp;            System.out.println(&quot; 0) Read cards descriptions&quot;);</b>
+<b class="nc"><i>210</i>&nbsp;            for (int c=1; c&lt;=requestInfoMsg.getAvailableCards().size(); c++){</b>
+<b class="nc"><i>211</i>&nbsp;                System.out.printf(&quot;%2d) %s\n&quot;, c, requestInfoMsg.getAvailableCards().get(c-1).getName());</b>
+<i>212</i>&nbsp;            }
+<i>213</i>&nbsp;
+<b class="nc"><i>214</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>215</i>&nbsp;            try {
+<b class="nc"><i>216</i>&nbsp;                cardChoice = cmdIn.nextInt();</b>
+<b class="nc"><i>217</i>&nbsp;            } catch (InputMismatchException e){</b>
+<b class="nc"><i>218</i>&nbsp;                cardChoice = -1;</b>
+<b class="nc"><i>219</i>&nbsp;            }</b>
+<b class="nc"><i>220</i>&nbsp;            if (cardChoice&lt;0 || cardChoice&gt;requestInfoMsg.getAvailableCards().size()){</b>
+<b class="nc"><i>221</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry\n&quot;);</b>
+<i>222</i>&nbsp;            }
+<b class="nc"><i>223</i>&nbsp;            if (cardChoice == 0){</b>
+<b class="nc"><i>224</i>&nbsp;                for (int card = 0; card &lt; requestInfoMsg.getAvailableCards().size(); card++) {</b>
+<i>225</i>&nbsp;                    //Prints cards descriptions
+<b class="nc"><i>226</i>&nbsp;                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getName());</b>
+<b class="nc"><i>227</i>&nbsp;                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getShortDescription());</b>
+<b class="nc"><i>228</i>&nbsp;                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getDescription() + &quot;\n&quot;);</b>
+<i>229</i>&nbsp;                }
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;            }
+<b class="nc"><i>232</i>&nbsp;        }while (cardChoice&lt;=0 || cardChoice&gt;requestInfoMsg.getAvailableCards().size());</b>
+<i>233</i>&nbsp;
+<b class="nc"><i>234</i>&nbsp;        System.out.printf(&quot;You choose %s\n\n&quot;, requestInfoMsg.getAvailableCards().get(cardChoice-1).getName());</b>
+<i>235</i>&nbsp;
+<b class="nc"><i>236</i>&nbsp;        messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),</b>
+<b class="nc"><i>237</i>&nbsp;                                                        requestInfoMsg.getAvailablePositions().get(worker1Position),</b>
+<b class="nc"><i>238</i>&nbsp;                                                        requestInfoMsg.getAvailablePositions().get(worker2Position),</b>
+<b class="nc"><i>239</i>&nbsp;                                                        requestInfoMsg.getAvailableCards().get(cardChoice-1)) );</b>
+<i>240</i>&nbsp;    }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    @Override
+<i>243</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) {
+<i>244</i>&nbsp;
+<b class="nc"><i>245</i>&nbsp;        System.out.println(&quot;Choose the next action: &quot;);</b>
+<b class="nc"><i>246</i>&nbsp;        for (int c=0; c&lt;actionsListMsg.getActions().size(); c++){</b>
+<b class="nc"><i>247</i>&nbsp;            System.out.printf(&quot;%d) %s\n&quot;, c, actionsListMsg.getActions().get(c));</b>
+<i>248</i>&nbsp;        }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;        int actionChoice;
+<i>251</i>&nbsp;        do {
+<b class="nc"><i>252</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>253</i>&nbsp;            try {
+<b class="nc"><i>254</i>&nbsp;                actionChoice=cmdIn.nextInt();</b>
+<b class="nc"><i>255</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>256</i>&nbsp;                actionChoice = -1;</b>
+<b class="nc"><i>257</i>&nbsp;            }</b>
+<b class="nc"><i>258</i>&nbsp;            if (actionChoice&lt;0 || actionChoice&gt;=actionsListMsg.getActions().size()){</b>
+<b class="nc"><i>259</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>260</i>&nbsp;            }
+<b class="nc"><i>261</i>&nbsp;        }while (actionChoice&lt;0 || actionChoice&gt;=actionsListMsg.getActions().size());</b>
+<i>262</i>&nbsp;
+<b class="nc"><i>263</i>&nbsp;        if (actionsListMsg.mustSelectWorker()) {</b>
+<i>264</i>&nbsp;
+<b class="nc"><i>265</i>&nbsp;            System.out.println(&quot;Choose the worker you want to move:&quot;);</b>
+<b class="nc"><i>266</i>&nbsp;            for (int c=0; c&lt;actionsListMsg.getWorkers().size(); c++){</b>
+<b class="nc"><i>267</i>&nbsp;                System.out.printf(&quot;%d) Worker at position %s\n&quot;, c, actionsListMsg.getWorkers().get(c).getPosition().toString());</b>
+<i>268</i>&nbsp;            }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;            int workerChoice;
+<i>271</i>&nbsp;            do {
+<b class="nc"><i>272</i>&nbsp;                cmdIn = new Scanner(System.in);</b>
+<i>273</i>&nbsp;                try {
+<b class="nc"><i>274</i>&nbsp;                    workerChoice = cmdIn.nextInt();</b>
+<b class="nc"><i>275</i>&nbsp;                } catch (InputMismatchException e) {</b>
+<b class="nc"><i>276</i>&nbsp;                    workerChoice = -1;</b>
+<b class="nc"><i>277</i>&nbsp;                }</b>
+<b class="nc"><i>278</i>&nbsp;                if (workerChoice&lt;0 || workerChoice&gt;=actionsListMsg.getWorkers().size()){</b>
+<b class="nc"><i>279</i>&nbsp;                    System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>280</i>&nbsp;                }
+<b class="nc"><i>281</i>&nbsp;            }while (workerChoice&lt;0 || workerChoice&gt;=actionsListMsg.getWorkers().size());</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice), workerChoice) );</b>
+<i>284</i>&nbsp;
+<b class="nc"><i>285</i>&nbsp;        } else {</b>
+<b class="nc"><i>286</i>&nbsp;            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );</b>
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    @Override
+<i>292</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) {
+<i>293</i>&nbsp;
+<b class="nc"><i>294</i>&nbsp;        System.out.printf(&quot;Choose the cell where to do the %s action\n&quot;, cellListMsg.getAction());</b>
+<b class="nc"><i>295</i>&nbsp;        for (int c=0; c&lt;cellListMsg.getCellList().size(); c++){</b>
+<b class="nc"><i>296</i>&nbsp;            System.out.printf(&quot;%2d) %s\n&quot;, c, cellListMsg.getCellList().get(c).getLocation().toString());</b>
+<i>297</i>&nbsp;        }
+<i>298</i>&nbsp;        int choice;
+<i>299</i>&nbsp;        do {
+<b class="nc"><i>300</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>301</i>&nbsp;            try {
+<b class="nc"><i>302</i>&nbsp;                choice = cmdIn.nextInt();</b>
+<b class="nc"><i>303</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>304</i>&nbsp;                choice = -1;</b>
+<b class="nc"><i>305</i>&nbsp;            }</b>
+<b class="nc"><i>306</i>&nbsp;            if (choice&lt;0 || choice&gt;=cellListMsg.getCellList().size()){</b>
+<b class="nc"><i>307</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>308</i>&nbsp;            }
+<b class="nc"><i>309</i>&nbsp;        }while (choice&lt;0 || choice&gt;=cellListMsg.getCellList().size());</b>
+<i>310</i>&nbsp;
+<b class="nc"><i>311</i>&nbsp;        messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );</b>
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;    }
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    @Override
+<i>316</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
+<i>317</i>&nbsp;
+<b class="nc"><i>318</i>&nbsp;        System.out.printf(&quot;Choose what to build in the %s cell\n&quot;, optionsListMsg.getCell().getLocation().toString());</b>
+<b class="nc"><i>319</i>&nbsp;        for (int i = 0; i &lt; optionsListMsg.getOptions().size(); i++) {</b>
+<b class="nc"><i>320</i>&nbsp;            System.out.printf(&quot;%2d) %s\n&quot;, i, optionsListMsg.getOptions().get(i));</b>
+<i>321</i>&nbsp;        }
+<i>322</i>&nbsp;        int optionChoice;
+<i>323</i>&nbsp;        do {
+<b class="nc"><i>324</i>&nbsp;            cmdIn = new Scanner(System.in);</b>
+<i>325</i>&nbsp;            try {
+<b class="nc"><i>326</i>&nbsp;                optionChoice = cmdIn.nextInt();</b>
+<b class="nc"><i>327</i>&nbsp;            } catch (InputMismatchException e) {</b>
+<b class="nc"><i>328</i>&nbsp;                optionChoice = -1;</b>
+<b class="nc"><i>329</i>&nbsp;            }</b>
+<b class="nc"><i>330</i>&nbsp;            if (optionChoice&lt;0 || optionChoice&gt;=optionsListMsg.getOptions().size()){</b>
+<b class="nc"><i>331</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>332</i>&nbsp;            }
+<b class="nc"><i>333</i>&nbsp;        }while (optionChoice&lt;0 || optionChoice&gt;=optionsListMsg.getOptions().size());</b>
+<i>334</i>&nbsp;
+<b class="nc"><i>335</i>&nbsp;        messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );</b>
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    }
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;    @Override
+<i>340</i>&nbsp;    public void endTurnMessage() {
+<b class="nc"><i>341</i>&nbsp;        System.out.print(&quot;Your turn is ended!\n&quot;);</b>
+<i>342</i>&nbsp;    }
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;    @Override
+<i>345</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
+<b class="nc"><i>346</i>&nbsp;        System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard()) ).toString() );</b>
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    @Override
+<i>350</i>&nbsp;    public void youWonMessage() {
+<b class="nc"><i>351</i>&nbsp;        System.out.println(&quot;********** You are the winner! **********&quot;);</b>
+<i>352</i>&nbsp;    }
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;    @Override
+<i>355</i>&nbsp;    public void youLostMessage() {
+<b class="nc"><i>356</i>&nbsp;        System.out.println(&quot;You lost :(&quot;);</b>
+<i>357</i>&nbsp;    }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    @Override
+<i>360</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
+<b class="nc"><i>361</i>&nbsp;        System.out.printf(&quot;The player %s has lost\n&quot;, otherLostMsg.getPlayer());</b>
+<i>362</i>&nbsp;    }
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-25 23:55</div>
+</div>
+</body>
+</html>

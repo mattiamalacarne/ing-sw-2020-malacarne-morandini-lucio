@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Power</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model.power</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Power (it.polimi.ingsw.psp12.model.power)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Power</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model.power;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Board;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Point;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.Action;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.model.enumeration.TurnState;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.util.List;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * Abstract Power class that will&#39;ll be decorated whit decorator pattern
+<i>14</i>&nbsp; * @author Michele Lucio, Luca Morandini
+<i>15</i>&nbsp; */
+<b class="fc"><i>16</i>&nbsp;public abstract class Power {</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /*/**
+<i>19</i>&nbsp;     * identifier of the power
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    // TODO: can be removed?
+<i>22</i>&nbsp;    //int powerId;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * max level to climb in move
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    int maxClimbLevel;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /*/**
+<i>30</i>&nbsp;     * max number of possible movement distance in cells
+<i>31</i>&nbsp;     */
+<i>32</i>&nbsp;    //int maxMoves; // TODO: can be removed? the dedicated power can work with just &#39;movesCount&#39;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /*/**
+<i>35</i>&nbsp;     * max possible building levels to build
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    //int maxBuildsLevel;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /*/**
+<i>40</i>&nbsp;     * min level where it&#39;s possible to build a dome
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    //int minDomeLevel;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * number of move actions that the player performed in the current turn
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    int movesCount;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * number of build actions that the player performed in the current turn
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    int buildsCount;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /*/**
+<i>55</i>&nbsp;     * max level the next player can climb in move
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    //int nextPlayerMaxClimb;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * cells of the current and previous positions [current, previous]
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    Cell[] lastPositions;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * cell of the last build
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    Cell[] lastBuilds;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * cell where the next build will be performed
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    Cell buildInProgress;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /*/**
+<i>75</i>&nbsp;     * Getter of the id of the power
+<i>76</i>&nbsp;     * @return id of the power
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    // TODO: can be removed?
+<i>79</i>&nbsp;    /*public int getPowerId() {
+<i>80</i>&nbsp;        return powerId;
+<i>81</i>&nbsp;    }*/
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /*/**
+<i>84</i>&nbsp;     * Getter of the max level to climb in move
+<i>85</i>&nbsp;     * @return max level to climb in move
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    /*public int getMaxClimbLevel() {
+<i>88</i>&nbsp;        return maxClimbLevel;
+<i>89</i>&nbsp;    }*/
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * Setter of the max level to climb in move
+<i>93</i>&nbsp;     * @param maxClimbLevel max level to climb in move
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public abstract void setMaxClimbLevel(int maxClimbLevel);
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /*/**
+<i>98</i>&nbsp;     * Getter of the max number of possible movement distance in cells
+<i>99</i>&nbsp;     * @return max number of possible movement distance in cells
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    /*public int getMaxMoves() {
+<i>102</i>&nbsp;        return maxMoves;
+<i>103</i>&nbsp;    }*/
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    /*/**
+<i>106</i>&nbsp;     * Getter of the max possible building levels to build
+<i>107</i>&nbsp;     * @return max possible building levels to build
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    /*public int getMaxBuildsLevel() {
+<i>110</i>&nbsp;        return maxBuildsLevel;
+<i>111</i>&nbsp;    }*/
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     * Getter of the min level where it&#39;s possible to build a dome
+<i>115</i>&nbsp;     * @return min level where it&#39;s possible to build a dome
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    public abstract int getMinDomeLevel();
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /*/**
+<i>120</i>&nbsp;     * Getter of the move actions that the player performed in the current turn
+<i>121</i>&nbsp;     * @return count of move actions
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    /*public int getMovesCount() {
+<i>124</i>&nbsp;        return movesCount;
+<i>125</i>&nbsp;    }*/
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /*/**
+<i>128</i>&nbsp;     * Getter of the build actions that the player performed in the current turn
+<i>129</i>&nbsp;     * @return count of build actions
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    /*public int getBuildsCount() {
+<i>132</i>&nbsp;        return buildsCount;
+<i>133</i>&nbsp;    }*/
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Getter of the max level the next player can climb in move
+<i>137</i>&nbsp;     * @return max level the next player can climb in move
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    public abstract int getNextPlayerMaxClimb();
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Checks victory condition
+<i>143</i>&nbsp;     * @return true if player has won
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public abstract boolean checkVictory();
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Generates a list of possible moves for the provided worker
+<i>149</i>&nbsp;     * @param b game board
+<i>150</i>&nbsp;     * @param w worker that has to be moved
+<i>151</i>&nbsp;     * @return list of cells
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public abstract List&lt;Cell&gt; getPossibleMoves(Board b, Worker w);
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Generates a list os possible builds for the provided worker
+<i>157</i>&nbsp;     * @param b game board
+<i>158</i>&nbsp;     * @param w worker that has to build
+<i>159</i>&nbsp;     * @return list of cells
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;    public abstract List&lt;Cell&gt; getPossibleBuilds(Board b, Worker w);
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    /**
+<i>164</i>&nbsp;     * Determines the list of next possible actions based on the current turn state
+<i>165</i>&nbsp;     * @param turnState current turn state
+<i>166</i>&nbsp;     * @return list of actions that can be performed next
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    public abstract List&lt;Action&gt; nextActions(TurnState turnState);
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Determines the new position of another worker when it is forced to move by the current worker
+<i>172</i>&nbsp;     * @param currentPos current position of the current worker
+<i>173</i>&nbsp;     * @param otherPos current position of the other worker
+<i>174</i>&nbsp;     * @return new position of the other worker
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public abstract Point getOtherWorkerMove(Point currentPos, Point otherPos);
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    /**
+<i>179</i>&nbsp;     * Save the last move position after the worker moved
+<i>180</i>&nbsp;     * @param position current cell
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public abstract void moved(Cell position);
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * Save the initial position of the current worker at the beginning of a turn
+<i>186</i>&nbsp;     * @param position initial position of the worker
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    public abstract void setInitialPosition(Cell position);
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;    /**
+<i>191</i>&nbsp;     * Save the last build position after the worker has built
+<i>192</i>&nbsp;     * @param position build cell
+<i>193</i>&nbsp;     */
+<i>194</i>&nbsp;    public abstract void hasBuilt(Cell position);
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Set the cell where the next build will be performed
+<i>198</i>&nbsp;     * @param position next build cell
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public abstract void setBuildInProgress(Cell position);
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Get the cell where the next build will be performed
+<i>204</i>&nbsp;     * @return next build cell
+<i>205</i>&nbsp;     */
+<i>206</i>&nbsp;    public abstract Cell getBuildInProgress();
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Reset all Power&#39;s attributes to basic power condition
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    public abstract void reset();
+<i>212</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-25 23:55</div>
+</div>
+</body>
+</html>

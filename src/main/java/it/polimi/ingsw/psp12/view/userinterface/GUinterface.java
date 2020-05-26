@@ -205,14 +205,7 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException
     {
-        // Init empty var for color
-        // Load the game screen in setup mode
-        // Display a dialog for choose the color for player
-        /*try {
-            gui.loadNewStatusScreen(GUIStatus.GAME, (Message) requestInfoMsg);
-        } catch (GUIStatusErrorException e) {
-            e.printStackTrace();
-        }*/
+
          game = (GameScreen) actualScreen;
          game.setUp(requestInfoMsg);
 
@@ -251,6 +244,11 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
+    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
+
+    }
+
+    @Override
     public void endTurnMessage() {
         System.out.println("Your turn is ended");
         game.setGamePhase(GamePhase.NOT_MY_TURN);
@@ -267,17 +265,17 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void youWonMessage() {
-
+        System.out.println("Hai vinto!!");
     }
 
     @Override
     public void youLostMessage() {
-
+        System.out.println("Hai perso!!");
     }
 
     @Override
     public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
-
+        System.out.println("Non hai perso tu");
     }
 
 

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 
-import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
-import it.polimi.ingsw.psp12.utils.Color;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
 
 import javax.swing.*;
@@ -99,6 +97,10 @@ public class BoardTerrainContainer extends JLayeredPane
         }
     }
 
+    /**
+     * Make the cells passed by parameter clickable
+     * @param validCell cell to be make valid
+     */
     public void validateBoard(List<Point> validCell)
     {
         //System.out.println("Inizio a validare");
@@ -129,11 +131,15 @@ public class BoardTerrainContainer extends JLayeredPane
         }
 
         // Draw tower on the screen
-        List<Cell> cellWithTower = board.getCellWithBuild();
+        List<Cell> cellWithTower = board.getCellsWithBuild();
         for (Cell cell: cellWithTower)
         {
             Point cellPos = cell.getLocation();
-            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.TOWER, null, cell.getTower().getLevel());
+            int level = cell.getTower().getLevel();
+
+            if (cell.getTower().hasDome()) level = 4;
+
+            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.TOWER, null, level);
         }
         //this.revalidate();
     }

@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This class represent a cell on the GUI gameboard
+ * @author Mattia Malacarne
+ */
 public class CellDraw extends JButton
 {
 
@@ -36,21 +40,26 @@ public class CellDraw extends JButton
 
     }
 
+    /**
+     * Make the cell clickable
+     */
     public void enablePress()
     {
-        //System.out.println("Addes listener to cell");
         this.addActionListener(prssed);
-        //this.setBackground(new java.awt.Color(213, 134, 145, 123));
         this.setBorderPainted(true);
         this.repaint();
     }
 
+    /**
+     * Reset the cell status
+     */
     public void flushMe()
     {
         this.setBorderPainted(false);
         this.removeActionListener(prssed);
     }
 
+    // TODO: Remove me
     public ImageIcon loadSelector()
     {
         ImageIcon icon = new ImageIcon(getClass().getResource("image"));
@@ -58,6 +67,11 @@ public class CellDraw extends JButton
         return new ImageIcon(scaled);
     }
 
+    /**
+     * Draw a worker in this cell
+     * @param color
+     * @return the image to render
+     */
     public ImageIcon loadWorker(Color color)
     {
         ImageIcon icon;
@@ -73,6 +87,11 @@ public class CellDraw extends JButton
         return new ImageIcon(scaled);
     }
 
+    /**
+     * Draw a tower in this cell
+     * @param level
+     * @return the image to render
+     */
     public ImageIcon loadTower(int level)
     {
         StringBuilder str = new StringBuilder();
@@ -85,6 +104,12 @@ public class CellDraw extends JButton
         return new ImageIcon(scaled);
     }
 
+    /**
+     * Draw something in this cell
+     * @param type
+     * @param color
+     * @param level
+     */
     public void updateCell(CellIcon type,Color color, int level)
     {
         switch (type)
@@ -96,6 +121,9 @@ public class CellDraw extends JButton
         this.setBorderPainted(false);
     }
 
+    /**
+     * This listener make selection on the board
+     */
     ActionListener prssed = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {

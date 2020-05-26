@@ -64,12 +64,11 @@ public class GameScreen extends Screen
        super(gui);
        me = this;
        req = null;
-       //req = (RequestInfoMsg) request;
 
 
        selectdCells = new ArrayList<Cell>();
 
-       System.out.println("Ho caricato gamescreen");
+       //System.out.println("Ho caricato gamescreen");
 
       setGamePhase(GamePhase.NOT_MY_TURN);
 
@@ -111,17 +110,25 @@ public class GameScreen extends Screen
         this.choosedColor = index;
     }
 
+    /**
+     * Tell the gameBoard to draw worker and tower
+     * @param msg
+     */
     public void drawBoard(UpdateBoardMsg msg)
     {
 
         // Reset della lista delle celle selezionate
-        System.out.println("Aggiorno la board");
+        //System.out.println("Aggiorno la board");
         actualBoard = null;
         actualBoard = msg.getBoard();
         board.updateBoard(msg.getBoard());
 
     }
 
+    /**
+     * Setup the player selecting color and the start position of the worker
+     * @param msg
+     */
     public void setUp(RequestInfoMsg msg)
     {
         setGamePhase(GamePhase.SETUP);
@@ -130,6 +137,10 @@ public class GameScreen extends Screen
         board.validateBoard(req.getAvailablePositions());
     }
 
+    /**
+     * Extract the location of the selectable cells and make it readable for validateboard
+     * @param cells
+     */
     public void displayPossibility(List<Cell> cells)
     {
         List<Point> pos = new ArrayList<Point>();
@@ -141,8 +152,10 @@ public class GameScreen extends Screen
         board.validateBoard(pos);
     }
 
-
-
+    /**
+     * Select a cell or a list of cell to pass to the server
+     * @param p the location of the cell
+     */
     public void selectCell(Point p)
     {
         if (actualBoard == null)
@@ -162,8 +175,10 @@ public class GameScreen extends Screen
         }
     }
 
-
-
+    /**
+     * Ask the user wich action would like to complete in the turn
+     *
+     */
     private void askUserForAction()
     {
         // Display an otionpanel with action
@@ -173,7 +188,9 @@ public class GameScreen extends Screen
         resetSelectedCell();
     }
 
-
+    /**
+     * Send the start position for the worker to the server
+     */
     private void sendSetupWorkerToServer()
     {
         if (selectdCells.size() == 2)
@@ -186,17 +203,19 @@ public class GameScreen extends Screen
             board.flushBoard();
             setGamePhase(GamePhase.NOT_MY_TURN);
             resetSelectedCell();
-            System.out.println("Dimension selection: "+selectdCells.size());
+            //System.out.println("Dimension selection: "+selectdCells.size());
         } else
         {
             System.out.println("Select other cell");
         }
     }
 
-
+    /**
+     * Set the selected cell list ready for the next turn
+     */
     public void resetSelectedCell()
     {
-        System.out.println("Rimuovo la selezione intera");
+        //System.out.println("Rimuovo la selezione intera");
         for(int i = 0; i < selectdCells.size(); i++)
         {
             selectdCells.remove(i);

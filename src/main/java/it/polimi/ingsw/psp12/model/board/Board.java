@@ -128,12 +128,12 @@ public class Board implements Serializable
      * Returns the list of cells that are occupied by a tower
      * @return list of cells with a tower
      */
-    public List<Cell> getCellWithBuild()
+    public List<Cell> getCellsWithBuild()
     {
         List<Cell> cells = new ArrayList<>();
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
-                if (boardCells[x][y].getTower().getLevel() > 0) {
+                if ((boardCells[x][y].getTower().getLevel() > 0) || boardCells[x][y].getTower().hasDome()) {
                     cells.add(boardCells[x][y].clone());
                 }
             }

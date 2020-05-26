@@ -165,7 +165,7 @@ public abstract class Power {
      * @param turnState current turn state
      * @return list of actions that can be performed next
      */
-    public abstract List<Action> nextActions(TurnState turnState);
+    public abstract List<Action> nextActions(TurnState turnState, Board b);
 
     /**
      * Determines the new position of another worker when it is forced to move by the current worker

@@ -82,7 +82,7 @@ public class BasicPower extends Power {
     }
 
     @Override
-    public List<Action> nextActions(TurnState turnState) {
+    public List<Action> nextActions(TurnState turnState, Board b) {
         List<Action> actions = new ArrayList<>();
 
         switch (turnState) {
@@ -94,6 +94,7 @@ public class BasicPower extends Power {
                 break;
             case BUILD:
                 actions.add(Action.END);
+                break;
         }
 
         return actions;

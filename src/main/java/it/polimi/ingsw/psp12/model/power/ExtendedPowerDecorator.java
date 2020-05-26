@@ -48,8 +48,8 @@ public abstract class ExtendedPowerDecorator extends Power{
     }
 
     @Override
-    public List<Action> nextActions(TurnState turnState) {
-        return power.nextActions(turnState);
+    public List<Action> nextActions(TurnState turnState, Board b) {
+        return power.nextActions(turnState, b);
     }
 
     @Override

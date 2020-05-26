@@ -382,7 +382,8 @@ public class GameState extends Observable<Message>
         // determine next possible actions based on
         // - the current turn state
         // - the power of the player
-        return getCurrentPlayer().getPower().nextActions(state);
+        // - the situation on the board
+        return getCurrentPlayer().getPower().nextActions(state, gameBoard);
     }
 
     /**

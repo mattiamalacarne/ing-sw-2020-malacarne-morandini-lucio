@@ -25,7 +25,7 @@ public class BuildAgainDecorator extends ExtendedPowerDecorator {
     }
 
     @Override
-    public List<Action> nextActions(TurnState turnState) {
+    public List<Action> nextActions(TurnState turnState, Board b) {
 
         List<Action> actions = new ArrayList<>();
 

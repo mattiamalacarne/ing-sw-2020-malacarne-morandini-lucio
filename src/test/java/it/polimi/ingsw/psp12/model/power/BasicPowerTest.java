@@ -208,21 +208,21 @@ public class BasicPowerTest {
 
     @Test
     public void nextActions_InitState_ShouldReturnMove() {
-        List<Action> actions = basicPower.nextActions(TurnState.INIT);
+        List<Action> actions = basicPower.nextActions(TurnState.INIT, gameBoard);
         assertEquals(1, actions.size());
         assertEquals(Action.MOVE, actions.get(0));
     }
 
     @Test
     public void nextActions_MoveState_ShouldReturnBuild() {
-        List<Action> actions = basicPower.nextActions(TurnState.MOVE);
+        List<Action> actions = basicPower.nextActions(TurnState.MOVE, gameBoard);
         assertEquals(1, actions.size());
         assertEquals(Action.BUILD, actions.get(0));
     }
 
     @Test
     public void nextActions_BuildState_ShouldReturnEnd() {
-        List<Action> actions = basicPower.nextActions(TurnState.BUILD);
+        List<Action> actions = basicPower.nextActions(TurnState.BUILD, gameBoard);
         assertEquals(1, actions.size());
         assertEquals(Action.END, actions.get(0));
     }

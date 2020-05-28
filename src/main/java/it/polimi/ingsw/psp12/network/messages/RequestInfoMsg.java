@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class used by the server to notify the user about the colors, positions and cards that a user can select
+ * Class used by the server to notify the user about the colors and positions that a user can select
  * @author Luca Morandini
  */
 public class RequestInfoMsg extends Message {
@@ -26,6 +26,7 @@ public class RequestInfoMsg extends Message {
 
     /**
      * List of available cards
+     * @deprecated
      */
     List<Card> availableCards;
 
@@ -53,10 +54,16 @@ public class RequestInfoMsg extends Message {
         return availablePositions;
     }
 
+    /**
+     * @deprecated
+     */
     public void setAvailableCards(List<Card> availableCards) {
         this.availableCards = availableCards;
     }
 
+    /**
+     * @deprecated
+     */
     public List<Card> getAvailableCards() {
         return availableCards;
     }

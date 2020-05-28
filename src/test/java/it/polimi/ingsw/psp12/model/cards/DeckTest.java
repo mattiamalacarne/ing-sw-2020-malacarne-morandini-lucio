@@ -38,28 +38,14 @@ public class DeckTest {
     }
 
     @Test
-    public void cardSelected_NoPowersCard_ShouldReturnNoPowersCard() {
-        List<Card> initialCards = deck2.getAvailableCards();
-        Card selected = Card.getNoPowers();
-
-        assertTrue(initialCards.contains(selected));
-        assertEquals(Card.getNoPowers(), selected);
-
-        deck2.cardSelected(selected);
-
-        List<Card> finalCards = deck2.getAvailableCards();
-
-        assertEquals(1, finalCards.size());
-        assertEquals(Card.getNoPowers(), finalCards.get(0));
-    }
-
-    @Test
     public void cardSelected_TwoPlayersGodCard_ShouldReturnOthersCard() {
         List<Card> initialCards = deck2.getAvailableCards();
         Card selected = deck2.getAvailableCards().get(1);
 
         assertTrue(initialCards.contains(selected));
         assertNotEquals(Card.getNoPowers(), selected);
+        assertEquals(2, deck2.getSelectionRemainingCount());
+        assertEquals(0, deck2.getAssignmentRemainingCount());
 
         deck2.cardSelected(selected);
 
@@ -68,6 +54,8 @@ public class DeckTest {
         assertEquals(initialCards.size()-2, finalCards.size());
         assertFalse(finalCards.contains(selected));
         assertFalse(finalCards.contains(Card.getNoPowers()));
+        assertEquals(1, deck2.getSelectionRemainingCount());
+        assertEquals(1, deck2.getAssignmentRemainingCount());
     }
 
     @Test
@@ -77,6 +65,8 @@ public class DeckTest {
 
         assertTrue(initialCards.contains(selected));
         assertNotEquals(Card.getNoPowers(), selected);
+        assertEquals(3, deck3.getSelectionRemainingCount());
+        assertEquals(0, deck3.getAssignmentRemainingCount());
 
         deck3.cardSelected(selected);
 
@@ -85,5 +75,56 @@ public class DeckTest {
         assertEquals(initialCards.size()-1, finalCards.size());
         assertFalse(finalCards.contains(selected));
         assertFalse(finalCards.contains(Card.getNoPowers()));
+        assertEquals(2, deck3.getSelectionRemainingCount());
+        assertEquals(1, deck3.getAssignmentRemainingCount());
+    }
+
+    @Test
+    public void cardAssigned_ShouldRemoveCardFromSelectedCards() {
+        List<Card> initialCards = deck2.getAvailableCards();
+        Card firstAssigned = initialCards.get(2);
+        Card secondAssigned = initialCards.get(4);
+
+        // first player selected first card
+        deck2.cardSelected(secondAssigned);
+
+        // check state
+        List<Card> selectedCards = deck2.getSelectedCards();
+
+        assertEquals(1, deck2.getSelectionRemainingCount());
+        assertEquals(1, deck2.getAssignmentRemainingCount());
+        assertTrue(selectedCards.contains(secondAssigned));
+        assertFalse(selectedCards.contains(firstAssigned));
+
+        // first player selected second card
+        deck2.cardSelected(firstAssigned);
+
+        // check state
+        selectedCards = deck2.getSelectedCards();
+
+        assertEquals(0, deck2.getSelectionRemainingCount());
+        assertEquals(2, deck2.getAssignmentRemainingCount());
+        assertTrue(selectedCards.contains(secondAssigned));
+        assertTrue(selectedCards.contains(firstAssigned));
+
+        // second player selected the card
+        deck2.cardAssigned(firstAssigned);
+
+        // check state
+        selectedCards = deck2.getSelectedCards();
+
+        assertEquals(1, deck2.getAssignmentRemainingCount());
+        assertTrue(selectedCards.contains(secondAssigned));
+        assertFalse(selectedCards.contains(firstAssigned));
+
+        // card setup completed
+        Card remainingCard = deck2.getRemainingCard();
+
+        selectedCards = deck2.getSelectedCards();
+
+        assertEquals(0, deck2.getAssignmentRemainingCount());
+        assertFalse(selectedCards.contains(secondAssigned));
+        assertFalse(selectedCards.contains(firstAssigned));
+        assertEquals(secondAssigned, remainingCard);
     }
 }

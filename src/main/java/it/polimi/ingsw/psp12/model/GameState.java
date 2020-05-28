@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Deck;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
+import it.polimi.ingsw.psp12.model.enumeration.SetupState;
 import it.polimi.ingsw.psp12.model.enumeration.TurnState;
 import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.network.messages.Message;
@@ -56,6 +57,11 @@ public class GameState extends Observable<Message>
     private TurnState state;
 
     /**
+     * State of the setup process
+     */
+    private SetupState setup;
+
+    /**
      * Available colors that a user can choose
      */
     private List<Color> colors;
@@ -74,6 +80,7 @@ public class GameState extends Observable<Message>
         players = new Player[maxPlayersCount];
         playersCount = 0;
         deck = new Deck(maxPlayersCount);
+        setup = SetupState.CARDS_SELECTION;
 
         initColors();
     }
@@ -305,7 +312,7 @@ public class GameState extends Observable<Message>
      * @param color color of the workers
      * @param points positions of the workers
      */
-    public void setPlayerInfo(Color color, Point points[], Card card) {
+    public void setPlayerInfo(Color color, Point points[]) {
         // get the cells associated to the points selected by the user
         Cell cells[] = new Cell[2];
         for (int i = 0; i < 2; i++) {
@@ -313,10 +320,7 @@ public class GameState extends Observable<Message>
         }
 
         // initialize player
-        players[turn].initialize(color, cells, card.getPower());
-
-        // update the deck after a card has been selected
-        deck.cardSelected(card);
+        players[turn].initialize(color, cells);
 
         // remove color from available colors
         colors.remove(color);
@@ -418,10 +422,94 @@ public class GameState extends Observable<Message>
     }
 
     /**
-     * Returns a list of available cards that the player can select
-     * @return list of available cards
+     * Returns the list of available cards that the first player can select
+     * @return available cards
      */
     public List<Card> getAvailableCards() {
         return deck.getAvailableCards();
+    }
+
+    /**
+     * Returns the list of cards selected by the first player that other players can select
+     * @return selected cards
+     */
+    public List<Card> getSelectedCards() {
+        return deck.getSelectedCards();
+    }
+
+    /**
+     * Returns the count of the cards that the first player has still to select
+     * @return selection remaining count
+     */
+    public int getRemainingCardsCount() {
+        return deck.getSelectionRemainingCount();
+    }
+
+    /**
+     * Process the card selected by the current player
+     * @param card selected card
+     */
+    public void cardSelected(Card card) {
+        switch (setup)
+        {
+            case CARDS_SELECTION:
+                processSelectedCard(card);
+                break;
+            case CARDS_ASSIGNMENT:
+                processAssignedCard(card);
+                break;
+        }
+    }
+
+    /**
+     * Build the list of selected cards with the card selected by the first user
+     * @param card selected card
+     */
+    private void processSelectedCard(Card card) {
+        // manage the case with no powers in game with two players
+        if (card.equals(Card.getNoPowers())) {
+            // skip card selection and assignment processes
+            setup = SetupState.WORKERS_PLACEMENT;
+            return;
+        }
+
+        // update deck
+        deck.cardSelected(card);
+
+        // if selection process has completed (no more card to be selected)
+        // start the assignment process where players select their own card
+        if (deck.getSelectionRemainingCount() <= 0) {
+            setup = SetupState.CARDS_ASSIGNMENT;
+        }
+    }
+
+    /**
+     * Process the card selected by the current player updating the power
+     * @param card selected card
+     */
+    private void processAssignedCard(Card card) {
+        // update deck
+        deck.cardAssigned(card);
+
+        // set the power of the current player with the selected card
+        players[turn].setPower(card.getPower());
+
+        // if assignment process has completed (only one card remained)
+        // complete the process setting the power of the first player
+        if (deck.getAssignmentRemainingCount() <= 1) {
+            // set the power of the first player with the last card remained
+            players[0].setPower(deck.getRemainingCard().getPower());
+
+            // complete card setup process
+            setup = SetupState.WORKERS_PLACEMENT;
+        }
+    }
+
+    /**
+     * Returns the current state of the setup process
+     * @return setup state
+     */
+    public SetupState getCurrentSetupState() {
+        return setup;
     }
 }

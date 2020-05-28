@@ -22,6 +22,11 @@ public class Deck {
      */
     public static void loadCards() throws IOException {
 
+        // make sure to load cards only one time
+        if (cards.size() > 0) {
+            return;
+        }
+
         List<LoadedCard> loadedCards;
 
         FileInputStream fis = new FileInputStream("src\\main\\resources\\cards\\Cards.xml");
@@ -45,11 +50,23 @@ public class Deck {
     private final List<Card> availableCards;
 
     /**
+     * List of selected cards by the first player that can be selected by the other players
+     */
+    private final List<Card> selectedCards;
+
+    /**
+     * Count of the cards that the first player has still to select
+     */
+    private int selectionRemainingCount;
+
+    /**
      * Create a deck of cards
      * @param maxPlayersCount number of players in the game
      */
     public Deck(int maxPlayersCount) {
         this.availableCards = new ArrayList<>();
+        this.selectedCards = new ArrayList<>();
+        this.selectionRemainingCount = maxPlayersCount;
 
         // if there are two players
         // the game can be played without cards
@@ -61,7 +78,7 @@ public class Deck {
     }
 
     /**
-     * Returns the list of available cards that a player can select
+     * Returns the list of available cards that the first player can select
      * @return available cards
      */
     public List<Card> getAvailableCards() {
@@ -69,19 +86,55 @@ public class Deck {
     }
 
     /**
-     * Updates the deck when a player select a card
-     * @param card card selected by the player
+     * Returns the list of cards selected by the first player that other players can select
+     * @return selected cards
+     */
+    public List<Card> getSelectedCards() {
+        return new ArrayList<>(selectedCards);
+    }
+
+    /**
+     * Updates the deck when the first player select a card
+     * @param card card selected by the first player
      */
     public void cardSelected(Card card) {
-        if (card.equals(Card.getNoPowers())) {
-            // if the selected card is noPowers
-            // the other player can only select the noPowers card
-            this.availableCards.removeIf(c -> !c.equals(Card.getNoPowers()));
-        }
-        else {
-            // if the selected card is different from noPowers
-            // the other player must select another god power card
-            this.availableCards.removeIf(c -> c.equals(card) || c.equals(Card.getNoPowers()));
-        }
+        // if the selected card is different from noPowers
+        // player must select another god power card
+        this.availableCards.removeIf(c -> c.equals(card) || c.equals(Card.getNoPowers()));
+
+        this.selectionRemainingCount--;
+        this.selectedCards.add(card);
+    }
+
+    /**
+     * Updates the deck removing the card that has been selected by a player
+     * @param card card selected by a player
+     */
+    public void cardAssigned(Card card) {
+        this.selectedCards.removeIf(c -> c.equals(card));
+    }
+
+    /**
+     * Returns the last card remained in the deck that will be assigned to the first player
+     * @return last selected card
+     */
+    public Card getRemainingCard() {
+        return this.selectedCards.remove(0);
+    }
+
+    /**
+     * Count of the cards that the first player has still to select
+     * @return selection remaining count
+     */
+    public int getSelectionRemainingCount() {
+        return this.selectionRemainingCount;
+    }
+
+    /**
+     * Count of cards that the players can select
+     * @return assignment remaining count
+     */
+    public int getAssignmentRemainingCount() {
+        return this.selectedCards.size();
     }
 }

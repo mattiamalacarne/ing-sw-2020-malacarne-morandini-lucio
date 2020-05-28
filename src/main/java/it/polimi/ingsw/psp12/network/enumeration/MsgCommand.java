@@ -38,6 +38,8 @@ public enum MsgCommand {
     OTHER_LOST(MsgType.GAME),
     OPTIONS_LIST(MsgType.GAME),
     SELECTED_OPTION(MsgType.GAME),
+    CARDS_LIST(MsgType.GAME),
+    SELECTED_CARD(MsgType.GAME),
     /**@deprecated **/ CELL_REQUEST(MsgType.GAME); // TODO: remove
 
     /** Determine if this is a system or game message **/

@@ -23,6 +23,7 @@ public class PlayerInfoMsg extends Message {
 
     /**
      * Card selected by the user
+     * @deprecated
      */
     Card card;
 
@@ -31,12 +32,28 @@ public class PlayerInfoMsg extends Message {
      * @param color color selected by the user
      * @param w1 position of the first worker
      * @param w2 position of the second worker
+     * @deprecated
      */
     public PlayerInfoMsg(Color color, Point w1, Point w2, Card card) {
         // TODO: throw exception if points are not different?
         super(MsgCommand.PLAYER_INFO);
         this.color = color;
         this.card = card;
+
+        this.workers = new Point[2];
+        this.workers[0] = new Point(w1.getX(), w1.getY());
+        this.workers[1] = new Point(w2.getX(), w2.getY());
+    }
+
+    /**
+     * Construct the message
+     * @param color color selected by the user
+     * @param w1 position of the first worker
+     * @param w2 position of the second worker
+     */
+    public PlayerInfoMsg(Color color, Point w1, Point w2) {
+        super(MsgCommand.PLAYER_INFO);
+        this.color = color;
 
         this.workers = new Point[2];
         this.workers[0] = new Point(w1.getX(), w1.getY());
@@ -51,6 +68,9 @@ public class PlayerInfoMsg extends Message {
         return workers;
     }
 
+    /**
+     * @deprecated
+     */
     public Card getCard() {
         return card;
     }

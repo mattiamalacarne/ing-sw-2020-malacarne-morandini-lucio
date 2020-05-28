@@ -67,8 +67,8 @@ public class Controller implements Observer<Message> {
         // initialize game
         model.initGame();
 
-        // send request to the first user
-        requestPlayerInfo();
+        // send card selection request to the first user
+        buildDeck();
     }
 
     @Override
@@ -115,6 +115,9 @@ public class Controller implements Observer<Message> {
             case SELECTED_OPTION:
                 optionSelected((SelectOptionMsg)message);
                 break;
+            case SELECTED_CARD:
+                cardSelected((SelectCardMsg)message);
+                break;
         }
     }
 
@@ -125,6 +128,47 @@ public class Controller implements Observer<Message> {
      */
     boolean checkActivePlayer(VirtualView view) {
         return view.getPlayer().equals(model.getCurrentPlayer());
+    }
+
+    /**
+     * Send card selection request to the first player
+     */
+    void buildDeck() {
+        sendToCurrentPlayer(new CardsListMsg(model.getAvailableCards(), model.getRemainingCardsCount()));
+    }
+
+    /**
+     * Send card assignment request to the current player
+     */
+    void requestCard() {
+        sendToCurrentPlayer(new CardsListMsg(model.getSelectedCards(), 1));
+    }
+
+    /**
+     * Process the card selected by the current player
+     * @param msg incoming message
+     */
+    void cardSelected(SelectCardMsg msg) {
+        // update model with the card selected by the player
+        model.cardSelected(msg.getCard());
+
+        switch (model.getCurrentSetupState())
+        {
+            case CARDS_SELECTION:
+                // send card selection request to the first player
+                buildDeck();
+                break;
+            case CARDS_ASSIGNMENT:
+                model.nextTurn();
+                // send card assignment request to the current player
+                requestCard();
+                break;
+            case WORKERS_PLACEMENT:
+                model.initGame();
+                // send info request to the first user
+                requestPlayerInfo();
+                break;
+        }
     }
 
     /**
@@ -142,9 +186,6 @@ public class Controller implements Observer<Message> {
             request.addPosition(c.getLocation());
         }
 
-        // add available cards
-        request.setAvailableCards(model.getAvailableCards());
-
         // send request to the current user
         sendToCurrentPlayer(request);
 
@@ -157,7 +198,7 @@ public class Controller implements Observer<Message> {
      */
     void processPlayerInfo(PlayerInfoMsg msg) {
         // update model with the
-        model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions(), msg.getCard());
+        model.setPlayerInfo(msg.getColor(), msg.getWorkersPositions());
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " initialized");
 

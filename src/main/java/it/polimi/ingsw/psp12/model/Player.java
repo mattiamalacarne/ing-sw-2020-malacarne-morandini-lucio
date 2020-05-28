@@ -30,6 +30,7 @@ public class Player
         this.id = id;
         this.name = name;
         this.initialized = false;
+        this.power = new BasicPower();
 
         workers = new Worker[2];
         for (int i = 0; i < 2; i++) {
@@ -119,7 +120,7 @@ public class Player
      * @param color color of the workers
      * @param cells positions of the workers
      */
-    public void initialize(Color color, Cell cells[], Power power) {
+    public void initialize(Color color, Cell cells[]) {
         for (int i = 0; i < 2; i++) {
             // set worker color
             workers[i].setColor(color);
@@ -128,9 +129,6 @@ public class Player
             workers[i].move(cells[i].getLocation());
             cells[i].addWorker(workers[i]);
         }
-
-        // set card power
-        setPower(power);
 
         initialized = true;
     }

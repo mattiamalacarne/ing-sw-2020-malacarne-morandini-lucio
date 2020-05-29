@@ -1,6 +1,7 @@
 package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
+import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Card;
@@ -897,5 +898,52 @@ public class GameStateTest {
         assertEquals(SetupState.WORKERS_PLACEMENT, gameState2.getCurrentSetupState());
         assertTrue(gameState2.getPlayers()[0].getPower() instanceof BasicPower);
         assertTrue(gameState2.getPlayers()[1].getPower() instanceof BasicPower);
+    }
+
+    @Test
+    public void undo_ShouldRestoreGameBoard() {
+        // initialize state with a player
+        gameState2.addPlayer("P1");
+        gameState2.initGame();
+        Point points[] = new Point[] { new Point(0, 2), new Point(3, 1) };
+        gameState2.setPlayerInfo(Color.BLUE, points);
+
+        // initialize board
+        gameState2.build(new Point(0, 0));
+        gameState2.build(new Point(0, 0));
+
+        // check initial state
+        Board gameBoard = gameState2.getGameBoard();
+        assertEquals(2, gameBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertFalse(gameBoard.getCell(new Point(2, 2)).getTower().hasDome());
+        assertTrue(gameBoard.getCell(new Point(0, 2)).hasWorker());
+        assertFalse(gameBoard.getCell(new Point(0, 3)).hasWorker());
+        assertTrue(gameBoard.getCell(new Point(3, 1)).hasWorker());
+
+        // begin turn
+        gameState2.initTurn();
+        gameState2.selectCurrentWorker(0);
+        gameState2.build(new Point(0, 0));
+        gameState2.build(new Point(2, 2), BuildOption.DOME);
+        gameState2.move(new Point(0, 3));
+
+        // check state
+        gameBoard = gameState2.getGameBoard();
+        assertEquals(3, gameBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertTrue(gameBoard.getCell(new Point(2, 2)).getTower().hasDome());
+        assertFalse(gameBoard.getCell(new Point(0, 2)).hasWorker());
+        assertTrue(gameBoard.getCell(new Point(0, 3)).hasWorker());
+        assertTrue(gameBoard.getCell(new Point(3, 1)).hasWorker());
+
+        // undo turn
+        gameState2.undo();
+
+        // check final state
+        gameBoard = gameState2.getGameBoard();
+        assertEquals(2, gameBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertFalse(gameBoard.getCell(new Point(2, 2)).getTower().hasDome());
+        assertTrue(gameBoard.getCell(new Point(0, 2)).hasWorker());
+        assertFalse(gameBoard.getCell(new Point(0, 3)).hasWorker());
+        assertTrue(gameBoard.getCell(new Point(3, 1)).hasWorker());
     }
 }

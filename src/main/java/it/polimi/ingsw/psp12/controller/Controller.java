@@ -11,12 +11,10 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.server.game.GameServer;
 import it.polimi.ingsw.psp12.server.game.VirtualView;
+import it.polimi.ingsw.psp12.utils.Constants;
 import it.polimi.ingsw.psp12.utils.Observer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Game controller that manages the commands from the clients, send responses and updates the game model
@@ -38,10 +36,16 @@ public class Controller implements Observer<Message> {
      */
     private GameServer server;
 
+    /**
+     * Timer to end the turn when the player does not send confirm/undo command in time
+     */
+    private Timer undo;
+
     public Controller(GameState gameState, GameServer server) {
         this.model = gameState;
         this.server = server;
         this.clients = new ArrayList<>();
+        this.undo = new Timer();
     }
 
     public void addClient(ClientHandler client, String name) {
@@ -117,6 +121,12 @@ public class Controller implements Observer<Message> {
                 break;
             case SELECTED_CARD:
                 cardSelected((SelectCardMsg)message);
+                break;
+            case CONFIRM_TURN:
+                endCurrentTurn();
+                break;
+            case UNDO_TURN:
+                undoTurn();
                 break;
         }
     }
@@ -267,7 +277,7 @@ public class Controller implements Observer<Message> {
         if (action == Action.END) {
             // no more action to be executed or
             // user does not want to perform the extra action provided by the power
-            endCurrentTurn();
+            turnCompleted();
             return;
         }
 
@@ -402,11 +412,39 @@ public class Controller implements Observer<Message> {
     }
 
     /**
+     * Notify the current player that the turn is completed
+     * and start undo timer to wait for a confirm/undo command
+     */
+    void turnCompleted() {
+        System.out.println("player " + model.getCurrentPlayer().getId() + " completed the turn");
+
+        sendToCurrentPlayer(new Message(MsgCommand.TURN_DONE));
+
+        // start undo timer
+        undo.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // TODO: handle multi threading
+                // end the turn if the timer expired
+                endCurrentTurn();
+            }
+        }, Constants.UNDO_INTERVAL);
+    }
+
+    /**
      * Notify the current player that the turn ended
      * and initialize the turn of the next player
      */
     void endCurrentTurn() {
+        // do nothing if the turn has been already initialized
+        if (model.getCurrentState() == TurnState.INIT) {
+            return;
+        }
+
         System.out.println("player " + model.getCurrentPlayer().getId() + " ended the turn");
+
+        // stop undo timer
+        undo.cancel();
 
         // notify the player that the turn ended
         sendToCurrentPlayer(new Message(MsgCommand.TURN_ENDED));
@@ -415,6 +453,28 @@ public class Controller implements Observer<Message> {
         model.nextTurn();
 
         // initialize turn for the next player
+        beginTurn();
+    }
+
+    /**
+     * When the current player send undo command
+     * restore board state and re-initialize the turn
+     */
+    void undoTurn() {
+        // do nothing if the turn has been already initialized
+        if (model.getCurrentState() == TurnState.INIT) {
+            return;
+        }
+
+        System.out.println("player " + model.getCurrentPlayer().getId() + " undo the turn");
+
+        // stop undo timer
+        undo.cancel();
+
+        // restore board state
+        model.undo();
+
+        // re-initialize the turn for the current player and notify the client
         beginTurn();
     }
 

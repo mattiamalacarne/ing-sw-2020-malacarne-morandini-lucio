@@ -18,4 +18,6 @@ public class Constants {
     static public final int SOCKET_TIMEOUT = 20 * 1000; // 20 seconds
 
     static public final int PING_INTERVAL = SOCKET_TIMEOUT / 2;
+
+    static public final int UNDO_INTERVAL = 5 * 1000; // 5 seconds
 }

@@ -38,4 +38,37 @@ public class TowerTest {
         t1.incrementLevel();
         assertEquals(3, t1.getLevel());
     }
+
+    @Test
+    public void restoreSimulation_ShouldResetTower() {
+        Tower tower = new Tower();
+        tower.incrementLevel();
+
+        // check initial state
+        assertEquals(1, tower.getLevel());
+        assertFalse(tower.hasDome());
+
+        // save tower snapshot
+        Tower snap = new Tower();
+        snap.setLevel(tower.getLevel());
+        snap.setDome(tower.hasDome());
+
+        // update tower
+        tower.buildDome();
+        tower.incrementLevel();
+
+        // check state
+        assertEquals(2, tower.getLevel());
+        assertTrue(tower.hasDome());
+        assertEquals(1, snap.getLevel());
+        assertFalse(snap.hasDome());
+
+        // restore tower snapshot
+        tower.setLevel(snap.getLevel());
+        tower.setDome(snap.hasDome());
+
+        // check final state
+        assertEquals(1, tower.getLevel());
+        assertFalse(tower.hasDome());
+    }
 }

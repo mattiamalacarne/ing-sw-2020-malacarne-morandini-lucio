@@ -352,6 +352,9 @@ public class GameState extends Observable<Message>
         // reset turn state
         state = TurnState.INIT;
 
+        // save board snapshot at the beginning of the current turn
+        gameBoard.saveSnapshot();
+
         // reset parameters before the current turn starts
         getCurrentPlayer().getPower().reset();
 
@@ -511,5 +514,16 @@ public class GameState extends Observable<Message>
      */
     public SetupState getCurrentSetupState() {
         return setup;
+    }
+
+    /**
+     * Undo the current turn and restore board to the state at the beginning of the turn
+     */
+    public void undo() {
+        // restore board to the state at the beginning of the current turn
+        gameBoard.restoreSnapshot();
+
+        // update board on the client
+        notifyObservers(new UpdateBoardMsg(getGameBoard()));
     }
 }

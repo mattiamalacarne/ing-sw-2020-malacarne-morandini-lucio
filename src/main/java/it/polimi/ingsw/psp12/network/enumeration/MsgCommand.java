@@ -28,6 +28,9 @@ public enum MsgCommand {
     ACTIONS_LIST(MsgType.GAME),
     SELECTED_ACTION(MsgType.GAME),
     TURN_ENDED(MsgType.GAME),
+    TURN_DONE(MsgType.GAME),
+    CONFIRM_TURN(MsgType.GAME),
+    UNDO_TURN(MsgType.GAME),
     /**@deprecated **/ MOVE(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
     /**@deprecated **/ BUILD(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
     CELL_LIST(MsgType.GAME),

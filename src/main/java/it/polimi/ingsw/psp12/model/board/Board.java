@@ -18,16 +18,62 @@ public class Board implements Serializable
      */
     private Cell boardCells[][];
 
+    /**
+     * Matrix of cells that store the snapshot of the real game board
+     */
+    private final Cell[][] boardSnapshot;
+
 
     /**
      * Constructor of the board
      */
     public Board() {
         boardCells = new Cell[5][5];
+        boardSnapshot = new Cell[5][5];
 
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
                 boardCells[x][y] = new Cell(x, y);
+                boardSnapshot[x][y] = new Cell(x, y);
+            }
+        }
+    }
+
+    /**
+     * Save the snapshot of the current state of the game board
+     */
+    public void saveSnapshot() {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                // save reference of the worker
+                boardSnapshot[x][y].addWorker(boardCells[x][y].getWorker());
+
+                // save state of the tower (level and dome)
+                Tower t = boardCells[x][y].getTower();
+                boardSnapshot[x][y].getTower().setLevel(t.getLevel());
+                boardSnapshot[x][y].getTower().setDome(t.hasDome());
+            }
+        }
+    }
+
+    /**
+     * Restore the state of the board to the last snapshot
+     */
+    public void restoreSnapshot() {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                // restore reference to the worker
+                Worker w = boardSnapshot[x][y].getWorker();
+                boardCells[x][y].addWorker(w);
+                // move the worker to the cell saved in the snapshot
+                if (w != null) {
+                    w.move(new Point(x, y));
+                }
+
+                // restore state of the tower (level and dome)
+                Tower t = boardSnapshot[x][y].getTower();
+                boardCells[x][y].getTower().setLevel(t.getLevel());
+                boardCells[x][y].getTower().setDome(t.hasDome());
             }
         }
     }

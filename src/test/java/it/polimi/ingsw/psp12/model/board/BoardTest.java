@@ -173,4 +173,101 @@ public class BoardTest {
             assertTrue(c.hasWorker());
         }
     }
+
+    @Test
+    public void getCellsWithBuild_ShouldReturnCellsWithTower() {
+        // initialize state
+        testEmptyBoard.getCell(new Point(1, 1)).getTower().incrementLevel();
+
+        testEmptyBoard.getCell(new Point(0, 2)).getTower().incrementLevel();
+
+        testEmptyBoard.getCell(new Point(3, 0)).getTower().incrementLevel();
+        testEmptyBoard.getCell(new Point(3, 0)).getTower().incrementLevel();
+        testEmptyBoard.getCell(new Point(3, 0)).getTower().incrementLevel();
+
+        testEmptyBoard.getCell(new Point(2, 2)).getTower().buildDome();
+
+        List<Cell> availableCells = testEmptyBoard.getCellsWithBuild();
+        assertEquals(4, availableCells.size());
+        for (Cell c : availableCells) {
+            assertTrue(c.getTower().getLevel() > 0 || c.getTower().hasDome());
+        }
+    }
+
+    @Test
+    public void restoreSimulation_ShouldRestoreBoardState() {
+        testEmptyBoard.build(new Point(0, 0), BuildOption.BLOCK);
+        testEmptyBoard.build(new Point(0, 0), BuildOption.BLOCK);
+
+        testEmptyBoard.build(new Point(1, 1), BuildOption.BLOCK);
+        testEmptyBoard.build(new Point(1, 1), BuildOption.DOME);
+
+        Worker w1 = new Worker(0, "P1", 0);
+        Worker w2 = new Worker(0, "P1", 1);
+        Point w1pos = new Point(2, 2);
+        Point w1pos1 = new Point(2, 3);
+        Point w2pos = new Point(3, 3);
+
+        w1.move(w1pos);
+        w2.move(w2pos);
+        testEmptyBoard.getCell(w1pos).addWorker(w1);
+        testEmptyBoard.getCell(w2pos).addWorker(w2);
+
+        // check initial state
+        assertEquals(2, testEmptyBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertFalse(testEmptyBoard.getCell(new Point(0, 0)).getTower().hasDome());
+        assertEquals(1, testEmptyBoard.getCell(new Point(1, 1)).getTower().getLevel());
+        assertTrue(testEmptyBoard.getCell(new Point(1, 1)).getTower().hasDome());
+        assertEquals(0, testEmptyBoard.getCell(new Point(1, 2)).getTower().getLevel());
+        assertFalse(testEmptyBoard.getCell(new Point(1, 2)).getTower().hasDome());
+        assertTrue(testEmptyBoard.getCell(w1pos).hasWorker());
+        assertFalse(testEmptyBoard.getCell(w1pos1).hasWorker());
+        assertTrue(testEmptyBoard.getCell(w2pos).hasWorker());
+        assertSame(w1, testEmptyBoard.getCell(w1pos).getWorker());
+        assertSame(w2, testEmptyBoard.getCell(w2pos).getWorker());
+        assertEquals(w1pos, w1.getPosition());
+        assertEquals(w2pos, w2.getPosition());
+
+        // save snapshot
+        testEmptyBoard.saveSnapshot();
+
+        // update board
+        w1.move(w1pos1);
+        testEmptyBoard.move(w1pos, w1pos1);
+        testEmptyBoard.build(new Point(0, 0), BuildOption.BLOCK);
+        testEmptyBoard.build(new Point(1, 2), BuildOption.DOME);
+
+        // check state
+        assertEquals(3, testEmptyBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertFalse(testEmptyBoard.getCell(new Point(0, 0)).getTower().hasDome());
+        assertEquals(1, testEmptyBoard.getCell(new Point(1, 1)).getTower().getLevel());
+        assertTrue(testEmptyBoard.getCell(new Point(1, 1)).getTower().hasDome());
+        assertEquals(0, testEmptyBoard.getCell(new Point(1, 2)).getTower().getLevel());
+        assertTrue(testEmptyBoard.getCell(new Point(1, 2)).getTower().hasDome());
+        assertFalse(testEmptyBoard.getCell(w1pos).hasWorker());
+        assertTrue(testEmptyBoard.getCell(w1pos1).hasWorker());
+        assertTrue(testEmptyBoard.getCell(w2pos).hasWorker());
+        assertSame(w1, testEmptyBoard.getCell(w1pos1).getWorker());
+        assertSame(w2, testEmptyBoard.getCell(w2pos).getWorker());
+        assertEquals(w1pos1, w1.getPosition());
+        assertEquals(w2pos, w2.getPosition());
+
+        // restore snapshot
+        testEmptyBoard.restoreSnapshot();
+
+        // check final state
+        assertEquals(2, testEmptyBoard.getCell(new Point(0, 0)).getTower().getLevel());
+        assertFalse(testEmptyBoard.getCell(new Point(0, 0)).getTower().hasDome());
+        assertEquals(1, testEmptyBoard.getCell(new Point(1, 1)).getTower().getLevel());
+        assertTrue(testEmptyBoard.getCell(new Point(1, 1)).getTower().hasDome());
+        assertEquals(0, testEmptyBoard.getCell(new Point(1, 2)).getTower().getLevel());
+        assertFalse(testEmptyBoard.getCell(new Point(1, 2)).getTower().hasDome());
+        assertTrue(testEmptyBoard.getCell(w1pos).hasWorker());
+        assertFalse(testEmptyBoard.getCell(w1pos1).hasWorker());
+        assertTrue(testEmptyBoard.getCell(w2pos).hasWorker());
+        assertSame(w1, testEmptyBoard.getCell(w1pos).getWorker());
+        assertSame(w2, testEmptyBoard.getCell(w2pos).getWorker());
+        assertEquals(w1pos, w1.getPosition());
+        assertEquals(w2pos, w2.getPosition());
+    }
 }

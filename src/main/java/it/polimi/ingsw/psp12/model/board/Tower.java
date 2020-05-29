@@ -56,4 +56,20 @@ public class Tower implements Serializable
         t.dome = this.dome;
         return t;
     }
+
+    /**
+     * Set the level of the tower
+     * @param level new level
+     */
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    /**
+     * Set if the tower has the dome
+     * @param dome true if has dome
+     */
+    public void setDome(boolean dome) {
+        this.dome = dome;
+    }
 }

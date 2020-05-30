@@ -57,7 +57,7 @@ public interface UserInterface
     /**
      * Communicates to the user that the chosen room is already full
      */
-    void roomFull() throws IOException;
+    void roomFullMessage() throws IOException;
 
     /**
      * Communicates to the user the correct entry in the room
@@ -68,6 +68,12 @@ public interface UserInterface
      * The user insert the name again, because the previous one is already used
      */
     void joinPlayerNameAlreadyUsed() throws IOException;
+
+    /**
+     * The user chooses the card/s for the game
+     * @param cardsListMsg The list of available card/s to choose
+     */
+    void chooseCard(CardsListMsg cardsListMsg);
 
     /**
      * The user chooses the color and the position of its workers
@@ -91,6 +97,11 @@ public interface UserInterface
      * The user chooses what to build in the build action
      */
     void chooseBuildOption(OptionsListMsg optionsListMsg);
+
+    /**
+     * The user chooses if to use the undo option to undo the turn
+     */
+    void chooseUndo();
 
     /**
      * Communicates to the user the end of the own turn

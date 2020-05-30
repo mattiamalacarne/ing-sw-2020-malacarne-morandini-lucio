@@ -113,7 +113,7 @@ public class MessageHandler implements Observer<Message>
                 userInterface.invalidMaxPlayerMessage();
                 break;
             case ROOM_FULL:
-                userInterface.roomFull();
+                userInterface.roomFullMessage();
                 break;
             case INVALID_NICKNAME:
                 userInterface.joinPlayerNameAlreadyUsed();
@@ -132,6 +132,9 @@ public class MessageHandler implements Observer<Message>
                 break;
 
             //Game commands
+            case CARDS_LIST:
+                userInterface.chooseCard( (CardsListMsg) message );
+                break;
             case BOARD_UPDATE:
                 userInterface.updateBoard( (UpdateBoardMsg) message );
                 break;
@@ -143,6 +146,9 @@ public class MessageHandler implements Observer<Message>
                 break;
             case OPTIONS_LIST:
                 userInterface.chooseBuildOption( (OptionsListMsg) message );
+                break;
+            case TURN_DONE:
+                userInterface.chooseUndo();
                 break;
             case TURN_ENDED:
                 userInterface.endTurnMessage();

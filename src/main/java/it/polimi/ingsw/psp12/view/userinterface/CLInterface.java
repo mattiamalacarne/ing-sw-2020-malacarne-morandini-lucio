@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.MessageHandler;
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
 
@@ -29,6 +30,10 @@ public class CLInterface implements UserInterface
     private MessageHandler messageHandler;
 
 //    private Boolean isWaiting;
+
+    private Thread scannerThread;
+
+    private Thread timerThread;
 
     /**
      * CLI constructor
@@ -121,7 +126,7 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void roomFull() {
+    public void roomFullMessage() {
         System.out.println("This room is already full! Choose another room");
     }
 
@@ -143,6 +148,44 @@ public class CLInterface implements UserInterface
         System.out.println("That name is already used! Choose another name: ");
         String playerName = cmdIn.nextLine();
         messageHandler.sendToServer(new JoinMsg(playerName));
+    }
+
+    @Override
+    public void chooseCard(CardsListMsg cardsListMsg) {
+
+        //Card choice
+        int cardChoice;
+        do {
+            System.out.println("Choose a card:");
+            System.out.println(" 0) Read cards descriptions");
+            for (int c=1; c<=cardsListMsg.getCards().size(); c++){
+                System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
+            }
+
+            cmdIn = new Scanner(System.in);
+            try {
+                cardChoice = cmdIn.nextInt();
+            } catch (InputMismatchException e){
+                cardChoice = -1;
+            }
+            if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
+                System.out.println("Choice not allowed, retry\n");
+            }
+            if (cardChoice == 0){
+                for (int card = 0; card < cardsListMsg.getCards().size(); card++) {
+                    //Prints cards descriptions
+                    System.out.println(cardsListMsg.getCards().get(card).getName());
+                    System.out.println(cardsListMsg.getCards().get(card).getShortDescription());
+                    System.out.println(cardsListMsg.getCards().get(card).getDescription() + "\n");
+                }
+
+            }
+        }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
+
+        System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
+
+        messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
+
     }
 
     @Override
@@ -202,41 +245,10 @@ public class CLInterface implements UserInterface
             }
         }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
 
-        //Card choice
-        int cardChoice;
-        do {
-            System.out.println("Choose a card:");
-            System.out.println(" 0) Read cards descriptions");
-            for (int c=1; c<=requestInfoMsg.getAvailableCards().size(); c++){
-                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailableCards().get(c-1).getName());
-            }
-
-            cmdIn = new Scanner(System.in);
-            try {
-                cardChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e){
-                cardChoice = -1;
-            }
-            if (cardChoice<0 || cardChoice>requestInfoMsg.getAvailableCards().size()){
-                System.out.println("Choice not allowed, retry\n");
-            }
-            if (cardChoice == 0){
-                for (int card = 0; card < requestInfoMsg.getAvailableCards().size(); card++) {
-                    //Prints cards descriptions
-                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getName());
-                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getShortDescription());
-                    System.out.println(requestInfoMsg.getAvailableCards().get(card).getDescription() + "\n");
-                }
-
-            }
-        }while (cardChoice<=0 || cardChoice>requestInfoMsg.getAvailableCards().size());
-
-        System.out.printf("You choose %s\n\n", requestInfoMsg.getAvailableCards().get(cardChoice-1).getName());
-
         messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
                                                         requestInfoMsg.getAvailablePositions().get(worker1Position),
-                                                        requestInfoMsg.getAvailablePositions().get(worker2Position),
-                                                        requestInfoMsg.getAvailableCards().get(cardChoice-1)) );
+                                                        requestInfoMsg.getAvailablePositions().get(worker2Position) ) );
+
     }
 
     @Override
@@ -337,8 +349,44 @@ public class CLInterface implements UserInterface
     }
 
     @Override
+    public void chooseUndo() {
+
+        scannerThread = new Thread( () -> {
+
+            System.out.println("Do you want to undo your turn?");
+            System.out.println("You have 5 seconds to chose");
+            System.out.println("0) No\n1) Yes");
+
+            int choice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    choice = cmdIn.nextInt();
+                }catch (InputMismatchException e){
+                    choice = -1;
+                }
+                if (choice<0 || choice>=2){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (choice<0 || choice>=2);
+
+            if (choice == 0){
+                messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );
+            }else {
+                messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );
+            }
+
+
+        } );
+
+        scannerThread.start();
+
+    }
+
+    @Override
     public void endTurnMessage() {
-        System.out.print("Your turn is ended!\n");
+        scannerThread.interrupt();
+        System.out.print("\nYour turn is ended!\n");
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -126,5 +127,20 @@ public class DeckTest {
         assertFalse(selectedCards.contains(secondAssigned));
         assertFalse(selectedCards.contains(firstAssigned));
         assertEquals(secondAssigned, remainingCard);
+    }
+
+    @Test
+    public void LoadedCard_Test(){
+        LoadedCard loadedCard = new LoadedCard(
+                "God Card",
+                "Short description test",
+                "Description test",
+                Arrays.asList(0)
+        );
+
+        assertEquals(loadedCard.getName(),"God Card");
+        assertEquals(loadedCard.getShortDescription(),"Short description test");
+        assertEquals(loadedCard.getDescription(),"Description test");
+        assertEquals(loadedCard.getPowers(),Arrays.asList(0));
     }
 }

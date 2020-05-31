@@ -104,4 +104,11 @@ public class PointTest {
         Point p2 = new Point(0, 3);
         assertTrue(p1.isNear(p2));
     }
+
+    @Test
+    public void toString_Test(){
+        Point point = new Point(2,2);
+        assertEquals(point.toString(),"x = 2, y = 2");
+    }
+
 }

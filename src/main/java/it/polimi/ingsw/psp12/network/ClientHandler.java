@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that handles socket connection with a client
@@ -29,7 +30,7 @@ public class ClientHandler implements Runnable {
     /**
      * Timer used to periodically send ping to keep the connection open
      */
-    private Timer ping;
+    private ScheduledExecutorService pingTimer;
 
     /**
      * Handler of game commands
@@ -58,14 +59,11 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
 
-        ping = new Timer();
-        ping.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // TODO: handle multi threading
-                send(new Message(MsgCommand.PING));
-            }
-        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL);
+        this.pingTimer = Executors.newSingleThreadScheduledExecutor();
+        this.pingTimer.scheduleAtFixedRate(() -> {
+            // TODO: handle multi threading
+            send(new Message(MsgCommand.PING));
+        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -140,7 +138,7 @@ public class ClientHandler implements Runnable {
     {
         if (running) {
             running = false; // TODO: handle multi threading
-            ping.cancel();
+            pingTimer.shutdownNow();
             try {
                 incoming.close();
                 outgoing.close();

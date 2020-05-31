@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p><b>Class</b> responsible for the connection with the main server</p>
@@ -29,7 +30,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     /**
      * Timer used to periodically send ping to keep the connection open
      */
-    private Timer ping;
+    private ScheduledExecutorService pingTimer;
 
 
     /**
@@ -41,14 +42,11 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
         this.serverInfo = server;
         running = true;
 
-        ping = new Timer();
-        ping.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // TODO: handle multi threading
-                sendRequestToServer(new Message(MsgCommand.PING));
-            }
-        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL);
+        this.pingTimer = Executors.newSingleThreadScheduledExecutor();
+        this.pingTimer.scheduleAtFixedRate(() -> {
+            // TODO: handle multi threading
+            sendRequestToServer(new Message(MsgCommand.PING));
+        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -102,7 +100,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      */
     public void close() throws IOException {
         running = false;
-        ping.cancel();
+        pingTimer.shutdownNow();
         clientSocket.close();
     }
 

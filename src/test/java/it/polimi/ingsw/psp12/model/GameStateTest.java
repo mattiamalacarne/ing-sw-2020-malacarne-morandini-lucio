@@ -77,6 +77,19 @@ public class GameStateTest {
     }
 
     @Test
+    public void updateCurrentState_ActionEnd_ShouldSetStateEnd() {
+        // initialize state
+        gameState2.initGame();
+        // check initial state
+        assertEquals(TurnState.INIT, gameState2.getCurrentState());
+
+        gameState2.updateCurrentState(Action.END);
+
+        // check final state
+        assertEquals(TurnState.END, gameState2.getCurrentState());
+    }
+
+    @Test
     public void addPlayer_ArrayNotFull_ShouldAddPlayer() {
         // check initial state
         assertNull(gameState2.getPlayers()[0]);

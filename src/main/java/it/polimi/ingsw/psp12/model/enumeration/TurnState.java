@@ -4,6 +4,7 @@ public enum TurnState {
 
     INIT,
     MOVE,
-    BUILD
+    BUILD,
+    END
 
 }

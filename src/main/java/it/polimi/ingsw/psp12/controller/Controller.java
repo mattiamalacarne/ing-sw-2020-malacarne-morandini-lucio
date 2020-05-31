@@ -15,6 +15,9 @@ import it.polimi.ingsw.psp12.utils.Constants;
 import it.polimi.ingsw.psp12.utils.Observer;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Game controller that manages the commands from the clients, send responses and updates the game model
@@ -39,13 +42,12 @@ public class Controller implements Observer<Message> {
     /**
      * Timer to end the turn when the player does not send confirm/undo command in time
      */
-    private Timer undo;
+    private ScheduledExecutorService undoTimer;
 
     public Controller(GameState gameState, GameServer server) {
         this.model = gameState;
         this.server = server;
         this.clients = new ArrayList<>();
-        this.undo = new Timer();
     }
 
     public void addClient(ClientHandler client, String name) {
@@ -145,6 +147,8 @@ public class Controller implements Observer<Message> {
      */
     void buildDeck() {
         sendToCurrentPlayer(new CardsListMsg(model.getAvailableCards(), model.getRemainingCardsCount()));
+
+        System.out.println("requested card selection to player " + model.getCurrentPlayer().getId());
     }
 
     /**
@@ -152,6 +156,8 @@ public class Controller implements Observer<Message> {
      */
     void requestCard() {
         sendToCurrentPlayer(new CardsListMsg(model.getSelectedCards(), 1));
+
+        System.out.println("requested card assignment to player " + model.getCurrentPlayer().getId());
     }
 
     /**
@@ -161,6 +167,8 @@ public class Controller implements Observer<Message> {
     void cardSelected(SelectCardMsg msg) {
         // update model with the card selected by the player
         model.cardSelected(msg.getCard());
+
+        System.out.println("player " + model.getCurrentPlayer().getId() + " selected card " + msg.getCard().getName());
 
         switch (model.getCurrentSetupState())
         {
@@ -274,15 +282,15 @@ public class Controller implements Observer<Message> {
      * @param action current action to be executed
      */
     void actionSelected(Action action) {
+        // update the current state
+        model.updateCurrentState(action);
+
         if (action == Action.END) {
             // no more action to be executed or
             // user does not want to perform the extra action provided by the power
             turnCompleted();
             return;
         }
-
-        // update the current state
-        model.updateCurrentState(action);
 
         // execute the next action and send to the user a list of possible cells
         generateCellList();
@@ -421,14 +429,13 @@ public class Controller implements Observer<Message> {
         sendToCurrentPlayer(new Message(MsgCommand.TURN_DONE));
 
         // start undo timer
-        undo.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // TODO: handle multi threading
-                // end the turn if the timer expired
-                endCurrentTurn();
-            }
-        }, Constants.UNDO_INTERVAL);
+        this.undoTimer = Executors.newSingleThreadScheduledExecutor();
+        undoTimer.schedule(() -> {
+            // TODO: handle multi threading
+            System.out.println("undo timer expired");
+            // end the turn if the timer expired
+            endCurrentTurn();
+        }, Constants.UNDO_INTERVAL, TimeUnit.SECONDS);
     }
 
     /**
@@ -437,14 +444,15 @@ public class Controller implements Observer<Message> {
      */
     void endCurrentTurn() {
         // do nothing if the turn has been already initialized
-        if (model.getCurrentState() == TurnState.INIT) {
+        if (model.getCurrentState() != TurnState.END) {
+            System.out.println("turn already ended");
             return;
         }
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " ended the turn");
 
         // stop undo timer
-        undo.cancel();
+        undoTimer.shutdownNow();
 
         // notify the player that the turn ended
         sendToCurrentPlayer(new Message(MsgCommand.TURN_ENDED));
@@ -462,14 +470,15 @@ public class Controller implements Observer<Message> {
      */
     void undoTurn() {
         // do nothing if the turn has been already initialized
-        if (model.getCurrentState() == TurnState.INIT) {
+        if (model.getCurrentState() != TurnState.END) {
+            System.out.println("turn already ended");
             return;
         }
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " undo the turn");
 
         // stop undo timer
-        undo.cancel();
+        undoTimer.shutdownNow();
 
         // restore board state
         model.undo();

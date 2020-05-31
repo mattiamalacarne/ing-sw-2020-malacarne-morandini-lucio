@@ -221,6 +221,9 @@ public class GameState extends Observable<Message>
             case BUILD:
                 state = TurnState.BUILD;
                 break;
+            case END:
+                state = TurnState.END;
+                break;
         }
     }
 

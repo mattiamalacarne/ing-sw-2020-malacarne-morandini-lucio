@@ -18,6 +18,7 @@ public class ActionsListMsg extends Message {
 
     /**
      * Workers that the player can select
+     * @deprecated
      */
     private List<Worker> workers;
 
@@ -26,6 +27,7 @@ public class ActionsListMsg extends Message {
      * and the worker that will perform the action
      * @param actions the list of actions
      * @param workers workers to be selected
+     * @deprecated
      */
     public ActionsListMsg(List<Action> actions, List<Worker> workers) {
         super(MsgCommand.ACTIONS_LIST);
@@ -46,6 +48,9 @@ public class ActionsListMsg extends Message {
         return actions;
     }
 
+    /**
+     * @deprecated
+     */
     public List<Worker> getWorkers() {
         return workers;
     }
@@ -53,6 +58,7 @@ public class ActionsListMsg extends Message {
     /**
      * Determine if the client must select the worker in addition to the action
      * @return true if client must select the worker
+     * @deprecated
      */
     public boolean mustSelectWorker() {
         return workers != null;

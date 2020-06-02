@@ -43,6 +43,8 @@ public enum MsgCommand {
     SELECTED_OPTION(MsgType.GAME),
     CARDS_LIST(MsgType.GAME),
     SELECTED_CARD(MsgType.GAME),
+    WORKERS_LIST(MsgType.GAME),
+    SELECTED_WORKER(MsgType.GAME),
     /**@deprecated **/ CELL_REQUEST(MsgType.GAME); // TODO: remove
 
     /** Determine if this is a system or game message **/

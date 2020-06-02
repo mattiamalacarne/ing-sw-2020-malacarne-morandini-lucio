@@ -52,9 +52,7 @@ public class Player
      * @return the list of the workers
      */
     public List<Worker> getWorkers() {
-        return new ArrayList<>(
-                Arrays.asList(workers[0].clone(), workers[1].clone())
-        );
+        return Arrays.asList(workers[0].clone(), workers[1].clone());
     }
 
     /**

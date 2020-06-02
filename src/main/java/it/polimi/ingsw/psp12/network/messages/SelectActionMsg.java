@@ -15,6 +15,7 @@ public class SelectActionMsg extends Message{
 
     /**
      * Selected worker for the current turn
+     * @deprecated
      */
     private int worker;
 
@@ -22,6 +23,7 @@ public class SelectActionMsg extends Message{
      * Create the message with the action and worker selected by the user
      * @param action selected action
      * @param worker selected worker
+     * @deprecated
      */
     public SelectActionMsg(Action action, int worker) {
         super(MsgCommand.SELECTED_ACTION);
@@ -42,6 +44,9 @@ public class SelectActionMsg extends Message{
         return action;
     }
 
+    /**
+     * @deprecated
+     */
     public int getWorker() {
         return worker;
     }

@@ -94,18 +94,14 @@ public class Controller implements Observer<Message> {
                 // update model with the information provided by the user
                 processPlayerInfo((PlayerInfoMsg)message);
                 break;
+            case SELECTED_WORKER:
+                workerSelected((SelectWorkerMsg)message);
+                break;
             case SELECTED_ACTION:
-                SelectActionMsg msg = (SelectActionMsg)message;
-
-                // select the worker at the start of the turn
-                if (model.getCurrentState() == TurnState.INIT) {
-                    model.selectCurrentWorker(msg.getWorker());
-
-                    System.out.println("player " + model.getCurrentPlayer().getId() + " selected worker " + msg.getWorker());
-                }
+                Action action = ((SelectActionMsg)message).getAction();
 
                 // manage the action selected by the user
-                actionSelected(msg.getAction());
+                actionSelected(action);
                 break;
             case SELECTED_CELL:
                 Cell cell = ((SelectCellMsg)message).getSelectedCell();
@@ -273,7 +269,7 @@ public class Controller implements Observer<Message> {
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " started the turn");
 
-        sendToCurrentPlayer(new ActionsListMsg(model.nextActions(), model.getCurrentPlayer().getWorkers()));
+        sendToCurrentPlayer(new WorkersListMsg(model.getCurrentPlayer().getWorkers()));
     }
 
     /**
@@ -391,6 +387,24 @@ public class Controller implements Observer<Message> {
 
         System.out.printf("player %d BUILD %s on cell %s\n",
                 model.getCurrentPlayer().getId(), message.getOption(), cell.getLocation().toString());
+
+        // determine what the current player can do next
+        determineNextAction();
+    }
+
+    /**
+     * Update the model selecting the worker at the beginning of the turn
+     * @param message incoming select worker message
+     */
+    void workerSelected(SelectWorkerMsg message) {
+        int worker = message.getWorker();
+
+        // select the worker at the beginning of the turn
+        if (model.getCurrentState() == TurnState.INIT) {
+            model.selectCurrentWorker(worker);
+
+            System.out.println("player " + model.getCurrentPlayer().getId() + " selected worker " + worker);
+        }
 
         // determine what the current player can do next
         determineNextAction();

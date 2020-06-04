@@ -82,6 +82,12 @@ public interface UserInterface
     void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
     /**
+     * The user chooses the worker that will perform the action
+     * @param workersListMsg The list of possible worker to choose
+     */
+    void chooseWorker(WorkersListMsg workersListMsg);
+
+    /**
      * The user chooses the action to perform
      * @param actionsListMsg The list of possible action to perform
      */
@@ -128,5 +134,13 @@ public interface UserInterface
      * @param otherLostMsg The player that has lost
      */
     void otherPlayerLostMessage(OtherLostMsg otherLostMsg);
+
+    /**
+     * Communicates to the user that the game is ended
+     * and the connection with the game server is closing,
+     * return then to the Play-Exit menu
+     * @throws IOException IO Exception
+     */
+    void closeGameMessage() throws IOException;
 
 }

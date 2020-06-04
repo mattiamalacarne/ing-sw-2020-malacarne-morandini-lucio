@@ -128,7 +128,7 @@ public class MessageHandler implements Observer<Message>
                 break;
 
             case CLOSE:
-                //TODO
+                userInterface.closeGameMessage();
                 break;
 
             //Game commands
@@ -137,6 +137,9 @@ public class MessageHandler implements Observer<Message>
                 break;
             case BOARD_UPDATE:
                 userInterface.updateBoard( (UpdateBoardMsg) message );
+                break;
+            case WORKERS_LIST:
+                userInterface.chooseWorker( (WorkersListMsg) message );
                 break;
             case ACTIONS_LIST:
                 userInterface.chooseAction( (ActionsListMsg) message );

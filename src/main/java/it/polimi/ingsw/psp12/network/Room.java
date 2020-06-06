@@ -13,52 +13,37 @@ public class Room implements Serializable{
     private int assignedPort;
 
     /**
-     * Name of the room
-     */
-    // TODO: remove!!!!
-    private String name;
-
-    /**
      * Max number of players that can join the game
      */
     private int maxPlayersCount;
 
     /**
-     * Number of players that has joined the game
+     * Number of players that have joined the game
      */
     private int playersCount;
 
-    private int subscribedCount;
+    /*/**
+     * Number of clients that have subscribed to the room but not joined
+     */
+    //private int subscribedCount;
 
     /**
-     * Determines if the game is currently active
+     * Determines if the game is currently active and initialized
      */
     private boolean active;
-
-    /**
-     * @deprecated
-     * @param name
-     * @param maxPlayersCount
-     */
-    // TODO: remove!!!!
-    public Room(String name, int maxPlayersCount) {
-        this.name = name;
-        this.maxPlayersCount = maxPlayersCount;
-        this.active = true;
-    }
 
     public Room() {
         this.active = false;
         this.playersCount = 0;
-        this.subscribedCount = 0;
+        //this.subscribedCount = 0;
     }
 
+    /**
+     * Set the max number of player that can join the room
+     * @param maxPlayersCount max number of players
+     */
     public void setMaxPlayersCount(int maxPlayersCount) {
         this.maxPlayersCount = maxPlayersCount;
-    }
-
-    public void activate() {
-        this.active = true;
     }
 
     /**
@@ -77,34 +62,29 @@ public class Room implements Serializable{
         this.assignedPort = assignedPort;
     }
 
-    /**
-     * Register that a new client joined the game
+    /*/**
+     * Register that a new client subscribed to the game
      */
-    public void clientJoined() {
-        playersCount++;
-    }
-
-    public void subscribe() {
+    /*public void subscribe() {
         subscribedCount++;
-    }
+    }*/
 
-    public void unsubscribe() {
+    /*/**
+     * Register that a new client unsubscribed from the game
+     */
+    /*public void unsubscribe() {
         if (subscribedCount > 0) {
             subscribedCount--;
         }
-    }
+    }*/
 
-    public boolean isReady() {
-        return (subscribedCount >= maxPlayersCount);
-    }
-
-    /**
-     * Get the name of the room
-     * @return room name
+    /*/**
+     * Checks if the all clients have subscribed the game and so the initialization process is completed
+     * @return true if all clients have subscribed
      */
-    public String getName() {
-        return name;
-    }
+    /*public boolean isReady() {
+        return (subscribedCount >= maxPlayersCount);
+    }*/
 
     /**
      * Returns max number of players that can join the game
@@ -112,6 +92,13 @@ public class Room implements Serializable{
      */
     public int getMaxPlayersCount() {
         return maxPlayersCount;
+    }
+
+    /**
+     * Register that a new client joined the game
+     */
+    public void clientJoined() {
+        playersCount++;
     }
 
     /**
@@ -131,6 +118,13 @@ public class Room implements Serializable{
     }
 
     /**
+     * Activate the room after the initialization process
+     */
+    public synchronized void activate() {
+        active = true;
+    }
+
+    /**
      * Checks if the game is currently active
      * @return true if game is active
      */
@@ -144,5 +138,4 @@ public class Room implements Serializable{
     public synchronized void close() {
         active = false;
     }
-
 }

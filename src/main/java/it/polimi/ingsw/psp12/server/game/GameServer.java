@@ -15,6 +15,10 @@ import it.polimi.ingsw.psp12.utils.Constants;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Server that manages a single game on the provided port
@@ -41,12 +45,25 @@ public class GameServer implements Runnable, Server {
      */
     private final GameState model;
 
+    /**
+     * List of connected clients that have to join the game
+     */
+    private final Queue<ClientHandler> waitingClients;
+
+    /**
+     * Clients thread executor
+     */
+    private final ExecutorService executor;
+
     public GameServer(Room room) throws IOException, InvalidMaxPlayersException {
         this.room = room;
 
         socket = new ServerSocket(room.getAssignedPort());
         model = new GameState(room.getMaxPlayersCount());
         controller = new Controller(model, this);
+
+        executor = Executors.newCachedThreadPool();
+        waitingClients = new ConcurrentLinkedQueue<>();
     }
 
     @Override
@@ -56,18 +73,20 @@ public class GameServer implements Runnable, Server {
                 Socket client = socket.accept();
                 client.setSoTimeout(Constants.SOCKET_TIMEOUT);
 
+                System.out.printf("client %s connected to game server %d\n",
+                        client.getInetAddress(), room.getAssignedPort());
+
                 // create client handler
                 ClientHandler clientHandler = new ClientHandler(client);
                 // subscribe the server as system commands handler
                 clientHandler.setServer(this);
 
-                // TODO: change bare Thread class with Executor/ThreadPool?
-                Thread thread = new Thread(clientHandler);
-                thread.start();
+                executor.execute(clientHandler);
+                waitingClients.offer(clientHandler);
             }
             catch (IOException e) {
                 if (!room.isRunning()) {
-                    System.out.println("game server closed");
+                    System.out.println("game server " + room.getAssignedPort() + " closed");
                     return;
                 }
 
@@ -100,7 +119,7 @@ public class GameServer implements Runnable, Server {
                 break;
             case DISCONNECTED:
                 // TODO: remove client from game
-                System.out.println("client disconnected from game server");
+                System.out.println("client disconnected from game server " + room.getAssignedPort());
                 // close socket to avoid sending close message
                 client.close();
 
@@ -138,6 +157,7 @@ public class GameServer implements Runnable, Server {
 
         // register client to the game
         controller.addClient(client, name);
+        waitingClients.remove(client);
 
         // update room with the new client
         room.clientJoined();
@@ -158,16 +178,24 @@ public class GameServer implements Runnable, Server {
         // release assigned port
         PortsManager.release(room.getAssignedPort());
 
-        // close the room to disconnect clients
+        // close the room
         room.close();
 
-        System.out.println("shutting down game server...");
+        // disconnect clients that do not have joined the game
+        while (!waitingClients.isEmpty()) {
+            waitingClients.poll().close();
+        }
+
+        // shutdown clients thread executor
+        executor.shutdownNow();
+
+        System.out.println("shutting down game server " + room.getAssignedPort() + "...");
 
         try {
             socket.close();
         }
         catch (IOException e) {
-            System.out.println("error while shutting down server");
+            System.out.println("error while shutting down game server " + room.getAssignedPort());
             e.printStackTrace();
             System.exit(1);
         }

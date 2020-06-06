@@ -50,8 +50,6 @@ public class ClientHandler implements Runnable {
         try {
             this.incoming = new ObjectInputStream(client.getInputStream());
             this.outgoing = new ObjectOutputStream(client.getOutputStream());
-
-            System.out.println("connected to " + client.getInetAddress());
         }
         catch (IOException e) {
             // TODO: manage exception

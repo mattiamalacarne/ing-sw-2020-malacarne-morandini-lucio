@@ -99,6 +99,7 @@ public interface UserInterface
      */
     void chooseCell(CellListMsg cellListMsg) throws IOException;
 
+
     /**
      * The user chooses what to build in the build action
      */

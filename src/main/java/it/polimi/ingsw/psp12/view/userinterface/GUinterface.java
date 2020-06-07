@@ -3,7 +3,9 @@ package it.polimi.ingsw.psp12.view.userinterface;
 import it.polimi.ingsw.psp12.client.MessageHandler;
 import it.polimi.ingsw.psp12.client.ServerInfo;
 import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
+import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Cell;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.utils.Color;
@@ -22,6 +24,10 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Class for the GUI interface of the game
@@ -176,12 +182,11 @@ public class GUinterface extends JFrame implements UserInterface
 
     }
 
-
-
     @Override
-    public void roomFull() throws IOException {
+    public void roomFullMessage() throws IOException {
 
     }
+
 
     @Override
     public void joinPlayerNameConfirmation()
@@ -203,6 +208,53 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
+    public void chooseCard(CardsListMsg cardsListMsg) {
+        // Open a dialog with a card list
+        // TODO: Sotituiscimi con qualcosa nella GUI
+
+        Scanner cmdIn;
+        //Card choice
+        int cardChoice;
+        do {
+            System.out.println("Choose a card:");
+            System.out.println(" 0) Read cards descriptions");
+            for (int c=1; c<=cardsListMsg.getCards().size(); c++){
+                System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
+            }
+
+            cmdIn = new Scanner(System.in);
+            try {
+                cardChoice = cmdIn.nextInt();
+            } catch (InputMismatchException e){
+                cardChoice = -1;
+            }
+            if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
+                System.out.println("Choice not allowed, retry\n");
+            }
+            if (cardChoice == 0){
+                for (int card = 0; card < cardsListMsg.getCards().size(); card++) {
+                    //Prints cards descriptions
+                    System.out.println(cardsListMsg.getCards().get(card).getName());
+                    System.out.println(cardsListMsg.getCards().get(card).getShortDescription());
+                    System.out.println(cardsListMsg.getCards().get(card).getDescription() + "\n");
+                }
+
+            }
+        }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
+
+        System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
+
+        messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
+
+    }
+
+    public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
+    {
+        System.out.println("Worker Selected");
+        messageHandler.sendToServer(msg);
+    }
+
+    @Override
     public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException
     {
 
@@ -213,7 +265,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     public void sendStartInfo(PlayerInfoMsg msg)
     {
-        System.out.println("Invio i dati di prova");
+        //System.out.println("Invio i dati di prova");
         messageHandler.sendToServer(msg);
     }
 
@@ -221,8 +273,9 @@ public class GUinterface extends JFrame implements UserInterface
     public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
 
         // Set in the gamescreen the correct phase
+        System.out.println("Choose action");
         game.setGamePhase(GamePhase.CHOOSE_ACTION);
-        game.setMyWorker(actionsListMsg.getWorkers());
+        game.displayActionSelection(actionsListMsg.getActions());
 
     }
 
@@ -244,7 +297,25 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
+    public void chooseWorker(WorkersListMsg workersListMsg) {
+        game.setGamePhase(GamePhase.CHOOSE_ACTION);
+        List<Point> points = new ArrayList<>();
+        List<Worker> workers = workersListMsg.getWorkers();
+
+        for (Worker worker: workers)
+        {
+            points.add(worker.getPosition());
+        }
+        game.displayWorkerPos(points);
+    }
+
+    @Override
     public void chooseBuildOption(OptionsListMsg optionsListMsg) {
+
+    }
+
+    @Override
+    public void chooseUndo() {
 
     }
 
@@ -276,6 +347,11 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
         System.out.println("Non hai perso tu");
+    }
+
+    @Override
+    public void closeGameMessage() throws IOException {
+
     }
 
 

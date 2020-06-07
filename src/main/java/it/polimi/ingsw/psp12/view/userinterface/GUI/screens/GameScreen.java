@@ -9,6 +9,7 @@ import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.ChooseColorPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.BoardTerrainContainer;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseActionPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 
@@ -47,7 +48,8 @@ public class GameScreen extends Screen
     private List<Cell> selectdCells;
     private List<Worker> myWorker;
 
-    private Action choosedAction;
+    private int choosedAction;
+    private List<Action> possibleActions;
 
     private Board actualBoard;
 
@@ -152,6 +154,11 @@ public class GameScreen extends Screen
         board.validateBoard(pos);
     }
 
+    public void displayWorkerPos(List<Point> p)
+    {
+        board.validateBoard(p);
+    }
+
     /**
      * Select a cell or a list of cell to pass to the server
      * @param p the location of the cell
@@ -163,16 +170,24 @@ public class GameScreen extends Screen
             actualBoard = new Board();
         }
         selectdCells.add(actualBoard.getCell(p));
-        //System.out.println(phase);
 
         // Check the game phase
         switch (phase)
         {
             case CHOOSE_ACTION: askUserForAction(); break;// Ask user for action
             case SETUP: sendSetupWorkerToServer(); break; // Control the selected list size
-            case ACTION: {gui.sendCellToServer(selectdCells.get(1)); resetSelectedCell(); break;} // Send the server the selected cell
+            case ACTION: {gui.sendCellToServer(selectdCells.get(0)); resetSelectedCell(); break;} // Send the server the selected cell
             default: return;
         }
+    }
+
+    /**
+     * Generate the list of possible action for the user
+     * @param actions
+     */
+    public void setPossibleActionList(List<Action> actions)
+    {
+        this.possibleActions = actions;
     }
 
     /**
@@ -181,10 +196,21 @@ public class GameScreen extends Screen
      */
     private void askUserForAction()
     {
+        System.out.println("AskFORACTION");
         // Display an otionpanel with action
-        System.out.println("Invio l'azione al server");
-        gui.sendActionToServer(new SelectActionMsg(Action.MOVE, selectdCells.get(1).getWorker().getId()));
-        System.out.println("Ho inviato il worker numero " + selectdCells.get(1).getWorker().getId());
+        gui.sendSelectedWorkerToServer(new SelectWorkerMsg(selectdCells.get(0).getWorker().getId()));
+        resetSelectedCell();
+    }
+
+    public void displayActionSelection(List<Action> poss)
+    {
+        SetupDialog setup = new SetupDialog(gui, new ChooseActionPanel(gui, me, poss), "Choose action");
+    }
+
+    public void chooseAction(int action) {
+        this.choosedAction = action;
+
+        gui.sendActionToServer(new SelectActionMsg(possibleActions.get(action)));
         resetSelectedCell();
     }
 
@@ -197,13 +223,10 @@ public class GameScreen extends Screen
         {
             gui.sendStartInfo( new PlayerInfoMsg( req.getAvailableColors().get(choosedColor),
                     selectdCells.get(0).getLocation(),
-                    selectdCells.get(1).getLocation(),
-                    req.getAvailableCards().get(0)) );
-            //System.out.println("Data sended to server");
+                    selectdCells.get(1).getLocation()));
             board.flushBoard();
             setGamePhase(GamePhase.NOT_MY_TURN);
             resetSelectedCell();
-            //System.out.println("Dimension selection: "+selectdCells.size());
         } else
         {
             System.out.println("Select other cell");
@@ -215,11 +238,7 @@ public class GameScreen extends Screen
      */
     public void resetSelectedCell()
     {
-        //System.out.println("Rimuovo la selezione intera");
-        for(int i = 0; i < selectdCells.size(); i++)
-        {
-            selectdCells.remove(i);
-        }
+        selectdCells.clear();
     }
 
 }

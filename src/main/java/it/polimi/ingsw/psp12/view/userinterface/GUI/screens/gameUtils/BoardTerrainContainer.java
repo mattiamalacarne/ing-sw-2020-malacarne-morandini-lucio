@@ -76,8 +76,8 @@ public class BoardTerrainContainer extends JLayeredPane
         {
             for (int j = 0; j < 5; j++)
             {
-                cells[i][j] = new CellDraw(new Point(i,j), game);
-                gameGrid.add(cells[i][j]);
+                cells[j][i] = new CellDraw(new Point(j,i), game);
+                gameGrid.add(cells[j][i]);
             }
         }
     }

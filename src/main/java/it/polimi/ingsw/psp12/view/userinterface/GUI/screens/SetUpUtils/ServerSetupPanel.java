@@ -24,6 +24,7 @@ public class ServerSetupPanel extends SetUpPanel
         this.setLayout(new GridLayout(3,1));
         serverLabel = new MenuTextComponent("Server IP");
         serverIn = new TextFieldComponent();
+        serverIn.setText("localhost");
 
         JButton btn = new JButton("Play");
         btn.addActionListener(new ActionListener() {

@@ -135,12 +135,14 @@ public class DeckTest {
                 "God Card",
                 "Short description test",
                 "Description test",
-                Arrays.asList(0)
+                Arrays.asList(0),
+                "src/main/resources/cards/NoPower.png"
         );
 
         assertEquals(loadedCard.getName(),"God Card");
         assertEquals(loadedCard.getShortDescription(),"Short description test");
         assertEquals(loadedCard.getDescription(),"Description test");
         assertEquals(loadedCard.getPowers(),Arrays.asList(0));
+        assertEquals(loadedCard.getImage(),"src/main/resources/cards/NoPower.png");
     }
 }

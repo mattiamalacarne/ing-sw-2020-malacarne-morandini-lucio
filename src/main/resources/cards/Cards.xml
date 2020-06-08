@@ -20,6 +20,9 @@
       </void>
      </object>
     </void>
+    <void property="image">
+     <string>src/main/resources/cards/Apollo.png</string>
+    </void>
    </object>
   </void>
 
@@ -40,6 +43,9 @@
        <int>1</int>
       </void>
      </object>
+    </void>
+    <void property="image">
+     <string>src/main/resources/cards/Artemis.png</string>
     </void>
    </object>
   </void>
@@ -62,6 +68,9 @@
       </void>
      </object>
     </void>
+    <void property="image">
+     <string>src/main/resources/cards/Athena.png</string>
+    </void>
    </object>
   </void>
 
@@ -82,6 +91,9 @@
        <int>3</int>
       </void>
      </object>
+    </void>
+    <void property="image">
+     <string>src/main/resources/cards/Atlas.png</string>
     </void>
    </object>
   </void>
@@ -104,6 +116,9 @@
       </void>
      </object>
     </void>
+    <void property="image">
+     <string>src/main/resources/cards/Demeter.png</string>
+    </void>
    </object>
   </void>
 
@@ -124,6 +139,9 @@
        <int>5</int>
       </void>
      </object>
+    </void>
+    <void property="image">
+     <string>src/main/resources/cards/Hephaestus.png</string>
     </void>
    </object>
   </void>
@@ -146,6 +164,9 @@
       </void>
      </object>
     </void>
+    <void property="image">
+     <string>src/main/resources/cards/Minotaur.png</string>
+    </void>
    </object>
   </void>
 
@@ -167,6 +188,9 @@
       </void>
      </object>
     </void>
+    <void property="image">
+     <string>src/main/resources/cards/Pan.png</string>
+    </void>
    </object>
   </void>
 
@@ -187,6 +211,9 @@
        <int>8</int>
       </void>
      </object>
+    </void>
+    <void property="image">
+     <string>src/main/resources/cards/Prometheus.png</string>
     </void>
    </object>
   </void>

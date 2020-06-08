@@ -8,8 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CardTest {
     @Test
@@ -28,9 +27,10 @@ public class CardTest {
         String shortDesc = "Short description";
         String desc = "Full description";
         List<Integer> powers = new ArrayList<>();
+        String image = "src/main/resources/cards/NoPower.png";
         powers.add(4);
 
-        Card card = new Card(name, shortDesc, desc, powers);
+        Card card = new Card(name, shortDesc, desc, powers, image);
 
         assertEquals(name, card.getName());
         assertEquals(shortDesc, card.getShortDescription());
@@ -38,5 +38,7 @@ public class CardTest {
 
         Power power = card.getPower();
         assertTrue(power instanceof BuildAgainDecorator);
+
+        assertEquals(card.getImage(),"src/main/resources/cards/NoPower.png");
     }
 }

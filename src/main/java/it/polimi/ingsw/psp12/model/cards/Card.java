@@ -34,18 +34,22 @@ public class Card implements Serializable {
 
     private final List<Integer> powers;
 
+    private final String image;
+
     /**
      * Constructor for cards loaded from file
      * @param name name of the card
      * @param shortDesc short description
      * @param desc full description
      * @param powers powers provided by the card
+     * @param image address to the image resource
      */
-    public Card(String name, String shortDesc, String desc, List<Integer> powers) {
+    public Card(String name, String shortDesc, String desc, List<Integer> powers, String image) {
         this.name = name;
         this.shortDescription = shortDesc;
         this.description = desc;
         this.powers = new ArrayList<>(powers);
+        this.image = image;
     }
 
     /**
@@ -56,6 +60,7 @@ public class Card implements Serializable {
         this.shortDescription = "Play without powers";
         this.description = "Play the game without using god powers";
         this.powers = new ArrayList<>();
+        this.image = "src/main/resources/cards/NoPower.png";
     }
 
     public String getName() {
@@ -84,6 +89,14 @@ public class Card implements Serializable {
         }
 
         return power;
+    }
+
+    /**
+     * Returns the the string address to the image resource of the card
+     * @return address to the image resource of the card
+     */
+    public String getImage() {
+        return image;
     }
 
     @Override

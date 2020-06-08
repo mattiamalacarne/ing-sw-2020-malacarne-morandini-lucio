@@ -16,14 +16,17 @@ public class LoadedCard {
 
     private List<Integer> powers;
 
+    private String image;
+
     public LoadedCard() {
     }
 
-    public LoadedCard(String name, String shortDescription, String description, List<Integer> powers) {
+    public LoadedCard(String name, String shortDescription, String description, List<Integer> powers, String image) {
         this.name = name;
         this.shortDescription = shortDescription;
         this.description = description;
         this.powers = powers;
+        this.image = image;
     }
 
     public String getName() {
@@ -56,5 +59,13 @@ public class LoadedCard {
 
     public void setPowers(List<Integer> powers) {
         this.powers = powers;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

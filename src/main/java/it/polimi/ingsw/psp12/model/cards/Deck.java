@@ -41,7 +41,7 @@ public class Deck {
 
         //Initialize the cards list
         loadedCards.forEach(
-                n-> cards.add( new Card(n.getName(), n.getShortDescription(), n.getDescription(), n.getPowers()) )
+                n-> cards.add( new Card(n.getName(), n.getShortDescription(), n.getDescription(), n.getPowers(), n.getImage()) )
         );
 
     }

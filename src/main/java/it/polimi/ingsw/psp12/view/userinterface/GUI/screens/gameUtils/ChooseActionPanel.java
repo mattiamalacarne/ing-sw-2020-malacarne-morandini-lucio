@@ -39,7 +39,7 @@ public class ChooseActionPanel extends DialogContent
 
         avAction = new JComboBox(actions);
         text = new JLabel("Select your action");
-        setButton = new JButton("Set");
+        setButton = new JButton("Choose");
         setButton.addActionListener(setAction);
 
         this.add(text);
@@ -52,7 +52,8 @@ public class ChooseActionPanel extends DialogContent
     ActionListener setAction = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Invio al server");
+            game.chooseAction(avAction.getSelectedIndex());
+            parent.dispose();
         }
     };
 }

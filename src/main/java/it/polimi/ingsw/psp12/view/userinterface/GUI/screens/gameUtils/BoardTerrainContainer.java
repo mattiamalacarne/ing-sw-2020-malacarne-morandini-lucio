@@ -3,7 +3,9 @@ package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine.MenuTextComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +26,9 @@ public class BoardTerrainContainer extends JLayeredPane
     /** List of cell **/
     private CellDraw[][] cells;
 
+    /** infobox text **/
+    private MenuTextComponent infoLabel;
+
     private GameScreen game;
 
     public BoardTerrainContainer(Dimension size, GameScreen game)
@@ -33,6 +38,8 @@ public class BoardTerrainContainer extends JLayeredPane
 
         this.game = game;
 
+        infoLabel = new MenuTextComponent("Loading");
+        infoLabel.setBounds(10,10, 650, 30);
         // Init the gameGrid
         gameGrid = new JPanel();
         gameGrid.setBounds(496,187, 430,438 );
@@ -51,6 +58,7 @@ public class BoardTerrainContainer extends JLayeredPane
 
         this.add(gameBoard, JLayeredPane.DEFAULT_LAYER);
         this.add(gameGrid, JLayeredPane.DRAG_LAYER);
+        this.add(infoLabel, JLayeredPane.DRAG_LAYER);
 
         this.setVisible(true);
     }
@@ -157,6 +165,11 @@ public class BoardTerrainContainer extends JLayeredPane
                 cells[i][j].setIcon(null);
             }
         }
+    }
+
+    public void setInfo(String info)
+    {
+        infoLabel.setText(info);
     }
 
     /**

@@ -275,6 +275,7 @@ public class GUinterface extends JFrame implements UserInterface
         // Set in the gamescreen the correct phase
         System.out.println("Choose action");
         game.setGamePhase(GamePhase.CHOOSE_ACTION);
+        game.setPossibleActionList(actionsListMsg.getActions());
         game.displayActionSelection(actionsListMsg.getActions());
 
     }
@@ -298,6 +299,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void chooseWorker(WorkersListMsg workersListMsg) {
+        game.setGameInfo("Choose a worker for the turn");
         game.setGamePhase(GamePhase.CHOOSE_ACTION);
         List<Point> points = new ArrayList<>();
         List<Worker> workers = workersListMsg.getWorkers();
@@ -317,12 +319,23 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void chooseUndo() {
 
+        System.out.println("Waiting for undo!");
+        game.setGameInfo("Terminate the turn or repeat?");
+        game.displayUndoSelector();
+    }
+
+    public void sendUndoToServer(MsgCommand cmd)
+    {
+        System.out.println("Sending undo to server");
+        messageHandler.sendToServer(new Message(cmd));
     }
 
     @Override
     public void endTurnMessage() {
-        System.out.println("Your turn is ended");
+        //System.out.println("Your turn is ended");
         game.setGamePhase(GamePhase.NOT_MY_TURN);
+        game.setGameInfo("Your turn is ended");
+        game.destroyUndoBox();
     }
 
 

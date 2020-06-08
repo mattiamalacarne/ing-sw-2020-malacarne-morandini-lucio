@@ -5,12 +5,15 @@ import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.ChooseColorPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.BoardTerrainContainer;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseActionPanel;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseUndoPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine.MenuTextComponent;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 
 import javax.swing.*;
@@ -53,6 +56,8 @@ public class GameScreen extends Screen
 
     private Board actualBoard;
 
+    private Thread undoBox;
+    private SetupDialog undo;
 
 
     /**
@@ -83,6 +88,17 @@ public class GameScreen extends Screen
     public void setGamePhase(GamePhase phase)
     {
         this.phase = phase;
+        switch (phase)
+        {
+            case NOT_MY_TURN: { setGameInfo("Not my turn"); break; }
+            case ACTION: { setGameInfo("Select where do you want to do the action"); break;}
+            case SETUP: { setGameInfo("Choose your workers starting point"); break; }
+        }
+    }
+
+    public void setGameInfo(String info)
+    {
+        if (board != null) board.setInfo(info);
     }
 
     public void setMyWorker(List<Worker> workers)
@@ -208,8 +224,9 @@ public class GameScreen extends Screen
     }
 
     public void chooseAction(int action) {
-        this.choosedAction = action;
-
+        System.out.println("Starting send action: " + action);
+        System.out.println("Action choosed: " + possibleActions.get(action).name());
+        board.setInfo("Choose where do you want to " + possibleActions.get(action));
         gui.sendActionToServer(new SelectActionMsg(possibleActions.get(action)));
         resetSelectedCell();
     }
@@ -231,6 +248,27 @@ public class GameScreen extends Screen
         {
             System.out.println("Select other cell");
         }
+    }
+
+    public void displayUndoSelector()
+    {
+        undoBox = new Thread(() ->
+        {
+            undo = new SetupDialog(gui, new ChooseUndoPanel(gui, me), "Confirm turn?");
+        });
+
+        undoBox.start();
+    }
+
+    public void destroyUndoBox()
+    {
+        undoBox.interrupt();
+    }
+
+    public void chooseUndo(MsgCommand cmd)
+    {
+        System.out.println("Undo selected: " + cmd);
+        gui.sendUndoToServer(cmd);
     }
 
     /**

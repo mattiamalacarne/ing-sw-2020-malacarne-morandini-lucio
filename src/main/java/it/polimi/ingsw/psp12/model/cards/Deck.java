@@ -29,7 +29,9 @@ public class Deck {
 
         List<LoadedCard> loadedCards;
 
-        FileInputStream fis = new FileInputStream("src\\main\\resources\\cards\\Cards.xml");
+        //FileInputStream fis = new FileInputStream("src\\main\\resources\\cards\\Cards.xml");
+        // TODO: For start in linux remove me;
+        FileInputStream fis = new FileInputStream("src/main/resources/cards/Cards.xml");
         XMLDecoder decoder = new XMLDecoder(fis);
 
         loadedCards = (List<LoadedCard>) decoder.readObject( );

@@ -154,6 +154,15 @@ public class GameServer implements Runnable, Server {
             return;
         }
 
+        // trim spaces from the name
+        name = name.trim();
+        // check if name is not empty
+        if (name.isEmpty()) {
+            client.send(new Message(MsgCommand.INVALID_NICKNAME));
+            System.out.println("empty name");
+            return;
+        }
+
         // subscribe the client only if the selected name is not already taken
         if (model.alreadyRegistered(name)) {
             // ask user for another name

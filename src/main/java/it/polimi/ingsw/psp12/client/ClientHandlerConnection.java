@@ -82,7 +82,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      * Send a message through the socket connection
      * @param msg The message to be sent
      */
-    public void sendRequestToServer(Message msg)
+    public synchronized void sendRequestToServer(Message msg)
     {
 
         try {

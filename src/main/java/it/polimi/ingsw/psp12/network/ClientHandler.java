@@ -27,6 +27,8 @@ public class ClientHandler implements Runnable {
 
     private boolean running;
 
+    private final Object runningLock;
+
     /**
      * Timer used to periodically send ping to keep the connection open
      */
@@ -42,20 +44,13 @@ public class ClientHandler implements Runnable {
      */
     private Server server;
 
-    public ClientHandler(Socket client)
-    {
+    public ClientHandler(Socket client) throws IOException {
         this.socket = client;
         this.running = true;
+        this.runningLock = new Object();
 
-        try {
-            this.incoming = new ObjectInputStream(client.getInputStream());
-            this.outgoing = new ObjectOutputStream(client.getOutputStream());
-        }
-        catch (IOException e) {
-            // TODO: manage exception
-            System.out.println("error while getting client " + client.getInetAddress() + " streams");
-            e.printStackTrace();
-        }
+        this.incoming = new ObjectInputStream(client.getInputStream());
+        this.outgoing = new ObjectOutputStream(client.getOutputStream());
 
         this.pingTimer = Executors.newSingleThreadScheduledExecutor();
         this.pingTimer.scheduleAtFixedRate(() -> {
@@ -78,7 +73,12 @@ public class ClientHandler implements Runnable {
     @Override
     public void run()
     {
-        while (running) {
+        boolean isRunning;
+        synchronized (runningLock) {
+            isRunning = running;
+        }
+
+        while (isRunning) {
             try {
                 Message msg = (Message)incoming.readObject();
 
@@ -99,7 +99,11 @@ public class ClientHandler implements Runnable {
                 //System.out.println("client " + socket.getInetAddress() + " connection dropped");
                 //e.printStackTrace();
 
-                if (running) {
+                synchronized (runningLock) {
+                    isRunning = running;
+                }
+
+                if (isRunning) {
                     // notify the server that the client has disconnected
                     server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
                 }
@@ -111,6 +115,10 @@ public class ClientHandler implements Runnable {
                 // TODO: manage exception
                 e.printStackTrace();
             }
+
+            synchronized (runningLock) {
+                isRunning = running;
+            }
         }
     }
 
@@ -118,14 +126,16 @@ public class ClientHandler implements Runnable {
      * Send a message to the client
      * @param message message to be sent to the client
      */
-    public void send(Message message)
+    public synchronized void send(Message message)
     {
         try {
             outgoing.writeObject(message);
         }
         catch (IOException e) {
             // TODO: manage exception
-            e.printStackTrace();
+            //e.printStackTrace();
+            // notify the server that the client has disconnected
+            server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
         }
     }
 
@@ -135,7 +145,10 @@ public class ClientHandler implements Runnable {
     public void close()
     {
         if (running) {
-            running = false; // TODO: handle multi threading
+            synchronized (runningLock) {
+                running = false; // TODO: handle multi threading
+            }
+
             pingTimer.shutdownNow();
             try {
                 incoming.close();

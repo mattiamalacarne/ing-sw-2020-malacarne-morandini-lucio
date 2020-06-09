@@ -50,7 +50,7 @@ public class Controller implements Observer<Message> {
         this.clients = new ArrayList<>();
     }
 
-    public void addClient(ClientHandler client, String name) {
+    public synchronized void addClient(ClientHandler client, String name) {
         // create player with the provided name
         Player player = model.addPlayer(name);
 
@@ -456,7 +456,7 @@ public class Controller implements Observer<Message> {
      * Notify the current player that the turn ended
      * and initialize the turn of the next player
      */
-    void endCurrentTurn() {
+    synchronized void endCurrentTurn() {
         // do nothing if the turn has been already initialized
         if (model.getCurrentState() != TurnState.END) {
             System.out.println("turn already ended");
@@ -482,7 +482,7 @@ public class Controller implements Observer<Message> {
      * When the current player send undo command
      * restore board state and re-initialize the turn
      */
-    void undoTurn() {
+    synchronized void undoTurn() {
         // do nothing if the turn has been already initialized
         if (model.getCurrentState() != TurnState.END) {
             System.out.println("turn already ended");
@@ -560,7 +560,7 @@ public class Controller implements Observer<Message> {
     /**
      * Disconnect clients and notify the server responsible for closing the room when the game ended
      */
-    public void endGame() {
+    public synchronized void endGame() {
         System.out.println("closing the game...");
 
         // disconnect clients

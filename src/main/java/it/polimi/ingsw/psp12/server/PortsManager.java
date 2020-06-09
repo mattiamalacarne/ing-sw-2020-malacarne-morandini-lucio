@@ -37,7 +37,7 @@ public class PortsManager {
      * Determines if there are available ports that can be assigned
      * @return true if there is at least one available port
      */
-    public static boolean available() {
+    public static synchronized boolean available() {
         return availablePorts.stream()
                 .anyMatch(p -> !p.assigned);
     }
@@ -46,7 +46,7 @@ public class PortsManager {
      * Returns a free port and mark it as assigned
      * @return assigned port
      */
-    public static int assign() {
+    public static synchronized int assign() {
         Optional<Port> port = availablePorts.stream()
                 .filter(p -> !p.assigned)
                 .findFirst();
@@ -59,7 +59,7 @@ public class PortsManager {
      * Releases the specified port
      * @param releasedPort port to be released
      */
-    public static void release(int releasedPort) {
+    public static synchronized void release(int releasedPort) {
         Optional<Port> port = availablePorts.stream()
                 .filter(p -> (p.port == releasedPort))
                 .findFirst();

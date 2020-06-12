@@ -43,6 +43,9 @@ public class ChooseColorPanel extends DialogContent
         this.setVisible(true);
     }
 
+    /**
+     * Pass to the GUI the color for create the message
+     */
     ActionListener setColorPressed = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {

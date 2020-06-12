@@ -7,6 +7,11 @@ import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This screen display a box for connect to a server
+ * @author Mattia Malacarne
+ */
+
 public class SetUpScreen extends Screen
 {
 
@@ -15,6 +20,7 @@ public class SetUpScreen extends Screen
 
     private GUinterface gui;
     private SetUpScreen thisScreen;
+    private GenericMessageScreen waitBox;
 
     public SetUpScreen(GUinterface gui) {
         super(gui);
@@ -24,6 +30,7 @@ public class SetUpScreen extends Screen
         this.setPreferredSize(new Dimension(screenX, screenY));
 
         this.setLayout(null);
+
         // Load the bg
         Image bg = loadScreenBackground("firstscreen.png", new Dimension(screenX, screenY));
         screenBg = new JLabel(new ImageIcon(bg));
@@ -38,15 +45,16 @@ public class SetUpScreen extends Screen
         actualPanel = serverSetupPanel;
         actualPanel.setVisible(true);
 
+
         this.setVisible(true);
     }
 
-    public void loadNewPanel(Setup setup)
+    /**
+     * Load a waiting message to the screen
+     */
+    public void dispayWaitBox()
     {
-        actualPanel.setVisible(false);
-        actualPanel.setVisible(true);
-        thisScreen.revalidate();
-        thisScreen.repaint();
-        thisScreen.setVisible(true);
+        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), "Waiting the other players"));
     }
+
 }

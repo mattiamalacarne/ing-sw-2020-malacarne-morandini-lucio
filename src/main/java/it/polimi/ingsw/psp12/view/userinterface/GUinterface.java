@@ -15,9 +15,8 @@ import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.LobbyScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.Screen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpScreen;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.CreateRoomPanel;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.PlayerNamePanel;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.*;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseUndoPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
 
 import javax.swing.*;
@@ -54,6 +53,9 @@ public class GUinterface extends JFrame implements UserInterface
     private SetupDialog dialog;
     private GameScreen game;
 
+    private SetupDialog waiting;
+    private SetUpScreen setup;
+
     /**
      * Init the UI starting the mainWindow and populate it with the necessary panel
      */
@@ -74,6 +76,7 @@ public class GUinterface extends JFrame implements UserInterface
         // Load the default screen
         try {
             loadNewStatusScreen(GUIStatus.SETUP, null);
+            setup = (SetUpScreen) actualScreen;
         } catch (GUIStatusErrorException e) {
             e.printStackTrace();
         }
@@ -84,6 +87,7 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     public double getWindowDimY() { return windowDimY; }
+    public double getWindoeDImX() { return windowDimX; }
     public double getAspectRatio() { return aspectRatio; }
 
 
@@ -151,7 +155,8 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void waitMessage() {
-
+        System.out.println("WE ARE WAITING");
+        setup.dispayWaitBox();
     }
 
     @Override
@@ -211,6 +216,7 @@ public class GUinterface extends JFrame implements UserInterface
     public void chooseCard(CardsListMsg cardsListMsg) {
         // Open a dialog with a card list
         // TODO: Sotituiscimi con qualcosa nella GUI
+
 
         Scanner cmdIn;
         //Card choice
@@ -349,22 +355,34 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void youWonMessage() {
-        System.out.println("Hai vinto!!");
+        game.displayMessageScreen("You win!!");
+        startReloadTimer();
     }
 
     @Override
     public void youLostMessage() {
-        System.out.println("Hai perso!!");
+        game.displayMessageScreen("You win!!");
+        startReloadTimer();
     }
 
     @Override
     public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
         System.out.println("Non hai perso tu");
+        // Non so ancora che fare, da decidere (mahari un messagebox ch scompare dopo qualche secondo
     }
 
     @Override
     public void closeGameMessage() throws IOException {
+        System.out.println("Game is closing");
+    }
 
+    /**
+     * Start a timer, whene expires reload the setupscreen
+     */
+    private void startReloadTimer()
+    {
+        //TODO: SETUP the timer
+        System.out.println("[DEBUG]: Starting reload timer");
     }
 
 

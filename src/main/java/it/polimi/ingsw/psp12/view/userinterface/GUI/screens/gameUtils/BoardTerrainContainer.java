@@ -31,12 +31,16 @@ public class BoardTerrainContainer extends JLayeredPane
 
     private GameScreen game;
 
+    private CardGamePanel cardPanel;
+
     public BoardTerrainContainer(Dimension size, GameScreen game)
     {
         // Set dimension of the terrain size
         this.setPreferredSize(size);
 
         this.game = game;
+
+        cardPanel = new CardGamePanel(null, size);
 
         infoLabel = new MenuTextComponent("Loading");
         infoLabel.setBounds(10,10, 650, 30);
@@ -59,6 +63,7 @@ public class BoardTerrainContainer extends JLayeredPane
         this.add(gameBoard, JLayeredPane.DEFAULT_LAYER);
         this.add(gameGrid, JLayeredPane.DRAG_LAYER);
         this.add(infoLabel, JLayeredPane.DRAG_LAYER);
+        this.add(cardPanel, JLayeredPane.DRAG_LAYER);
 
         this.setVisible(true);
     }

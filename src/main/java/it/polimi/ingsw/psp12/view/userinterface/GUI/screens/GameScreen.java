@@ -8,11 +8,9 @@ import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.ChooseColorPanel;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.GenericMessageScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.BoardTerrainContainer;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseActionPanel;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseUndoPanel;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine.MenuTextComponent;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 
@@ -60,6 +58,7 @@ public class GameScreen extends Screen
     private SetupDialog undo;
 
 
+
     /**
      * init a gamescreen
      * @param gui
@@ -75,16 +74,22 @@ public class GameScreen extends Screen
 
        selectdCells = new ArrayList<Cell>();
 
-       //System.out.println("Ho caricato gamescreen");
 
-      setGamePhase(GamePhase.NOT_MY_TURN);
+
+       setGamePhase(GamePhase.NOT_MY_TURN);
 
        board = new BoardTerrainContainer(new Dimension(screenX, screenY), this);
         this.add(board,JLayeredPane.DEFAULT_LAYER);
 
+
+
         this.setVisible(true);
     }
 
+    /**
+     * Set a new game phase
+     * @param phase
+     */
     public void setGamePhase(GamePhase phase)
     {
         this.phase = phase;
@@ -101,6 +106,7 @@ public class GameScreen extends Screen
         if (board != null) board.setInfo(info);
     }
 
+    //TODO: Useless remove me
     public void setMyWorker(List<Worker> workers)
     {
         List<Point> pos = new ArrayList<Point>();
@@ -118,6 +124,10 @@ public class GameScreen extends Screen
     }
 
 
+    /**
+     * Set the choosed color
+     * @param avColor
+     */
     private void setChoosedColor(List<it.polimi.ingsw.psp12.utils.Color> avColor)
     {
         SetupDialog setup = new SetupDialog(gui, new ChooseColorPanel(me, gui, avColor), "Set a color");
@@ -218,11 +228,19 @@ public class GameScreen extends Screen
         resetSelectedCell();
     }
 
+    /**
+     * Display a box with possible action list
+     * @param poss
+     */
     public void displayActionSelection(List<Action> poss)
     {
         SetupDialog setup = new SetupDialog(gui, new ChooseActionPanel(gui, me, poss), "Choose action");
     }
 
+    /**
+     * Choose an action from the list
+     * @param action
+     */
     public void chooseAction(int action) {
         System.out.println("Starting send action: " + action);
         System.out.println("Action choosed: " + possibleActions.get(action).name());
@@ -250,6 +268,9 @@ public class GameScreen extends Screen
         }
     }
 
+    /**
+     * Display a box for confirm the turn
+     */
     public void displayUndoSelector()
     {
         undoBox = new Thread(() ->
@@ -260,11 +281,18 @@ public class GameScreen extends Screen
         undoBox.start();
     }
 
+    /**
+     * Hide the undo box
+     */
     public void destroyUndoBox()
     {
         undoBox.interrupt();
     }
 
+    /**
+     * Choose if confirm the turn or rpeat
+     * @param cmd
+     */
     public void chooseUndo(MsgCommand cmd)
     {
         System.out.println("Undo selected: " + cmd);
@@ -277,6 +305,11 @@ public class GameScreen extends Screen
     public void resetSelectedCell()
     {
         selectdCells.clear();
+    }
+
+    public void displayMessageScreen(String text)
+    {
+        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), "Text"));
     }
 
 }

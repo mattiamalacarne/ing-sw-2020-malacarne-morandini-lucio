@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.power.BasicPower;
 import it.polimi.ingsw.psp12.model.power.Power;
 import it.polimi.ingsw.psp12.utils.Color;
@@ -22,6 +23,7 @@ public class Player
     private final String name;
     private int currentWorker;
     private Power power;
+    private Card card;
     private boolean initialized;
 
 
@@ -100,17 +102,29 @@ public class Player
     }
 
     /**
-     * set the player power depending of his card
-     * @param pow the new power of the player
+     * set the player card and power offered by the card
+     * @param card card assigned to the player
      */
-    public void setPower(Power pow) {
-        this.power = pow;
+    public void setPower(Card card) {
+        this.card = card;
+        this.power = card.getPower();
     }
 
+    /**
+     * get the player power
+     * @return power of the player
+     */
     public Power getPower() {
         return this.power;
     }
 
+    /**
+     * get the card assigned to the player
+     * @return card of the player
+     */
+    public Card getCard() {
+        return this.card;
+    }
 
     /**
      * Initialize player color and workers positions

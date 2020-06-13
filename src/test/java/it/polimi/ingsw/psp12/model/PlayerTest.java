@@ -2,7 +2,11 @@ package it.polimi.ingsw.psp12.model;
 
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
+import it.polimi.ingsw.psp12.model.cards.Deck;
 import it.polimi.ingsw.psp12.model.power.BasicPower;
+import it.polimi.ingsw.psp12.model.power.cardPower.MoveAgainDecorator;
+import it.polimi.ingsw.psp12.model.power.cardPower.SwapWorkersDecorator;
 import it.polimi.ingsw.psp12.utils.Color;
 import org.junit.Before;
 import org.junit.Test;
@@ -103,5 +107,20 @@ public class PlayerTest {
         assertEquals(player.getWorkerByIndex(0).getPosition(), workers.get(0).getPosition());
         assertNotEquals(player.getWorkerByIndex(1), workers.get(1));
         assertEquals(player.getWorkerByIndex(1).getPosition(), workers.get(1).getPosition());
+    }
+
+    @Test
+    public void assignPower_ShouldSetCardAndPower() {
+        Player player = new Player(0, "P1");
+        Deck deck = new Deck(2);
+
+        assertTrue(player.getPower() instanceof BasicPower);
+        assertNull(player.getCard());
+
+        Card card = deck.getAvailableCards().get(2);
+        player.setPower(card);
+
+        assertEquals(card, player.getCard());
+        assertTrue(player.getPower() instanceof MoveAgainDecorator);
     }
 }

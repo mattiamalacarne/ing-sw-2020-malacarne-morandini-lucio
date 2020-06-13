@@ -497,13 +497,13 @@ public class GameState extends Observable<Message>
         deck.cardAssigned(card);
 
         // set the power of the current player with the selected card
-        players[turn].setPower(card.getPower());
+        players[turn].setPower(card);
 
         // if assignment process has completed (only one card remained)
         // complete the process setting the power of the first player
         if (deck.getAssignmentRemainingCount() <= 1) {
             // set the power of the first player with the last card remained
-            players[0].setPower(deck.getRemainingCard().getPower());
+            players[0].setPower(deck.getRemainingCard());
 
             // complete card setup process
             setup = SetupState.WORKERS_PLACEMENT;

@@ -126,6 +126,9 @@ public class Controller implements Observer<Message> {
             case UNDO_TURN:
                 undoTurn();
                 break;
+            case MY_CARD:
+                sendCard();
+                break;
         }
     }
 
@@ -178,6 +181,9 @@ public class Controller implements Observer<Message> {
                 requestCard();
                 break;
             case WORKERS_PLACEMENT:
+                // send cards to the players
+                sendCardsToPlayers();
+                // init game
                 model.initGame();
                 // send info request to the first user
                 requestPlayerInfo();
@@ -431,6 +437,26 @@ public class Controller implements Observer<Message> {
 
         // execute the next action or end the turn
         actionSelected(actions.get(0));
+    }
+
+    /**
+     * Send the assigned card to the current player
+     */
+    void sendCard() {
+        System.out.println("sending card to the current player");
+
+        sendToCurrentPlayer(new YourCardMsg(model.getCurrentPlayer().getCard()));
+    }
+
+    /**
+     * Send the assigned cards to the players
+     */
+    void sendCardsToPlayers() {
+        for (Player player : model.getPlayers()) {
+            System.out.println("sending card to the player " + player.getId());
+
+            sendToPlayer(player, new YourCardMsg(player.getCard()));
+        }
     }
 
     /**

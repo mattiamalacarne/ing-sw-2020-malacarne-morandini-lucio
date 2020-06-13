@@ -39,6 +39,8 @@ public enum MsgCommand {
     SELECTED_OPTION(MsgType.GAME),
     CARDS_LIST(MsgType.GAME),
     SELECTED_CARD(MsgType.GAME),
+    YOUR_CARD(MsgType.GAME),
+    MY_CARD(MsgType.GAME),
     WORKERS_LIST(MsgType.GAME),
     SELECTED_WORKER(MsgType.GAME);
 

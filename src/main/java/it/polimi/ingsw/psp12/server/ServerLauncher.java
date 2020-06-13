@@ -50,23 +50,17 @@ public class ServerLauncher
         System.out.println("acceptance server started on port " + Constants.ACCEPTANCE_PORT);
 
 
-        // TODO: manage system administrator commands from CLI
-
-        // listen for commands
+        // listen for stop command
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext())
         {
             String command = scanner.nextLine().toLowerCase();
-            switch (command)
-            {
-                case "stop": {
-                    acceptanceServer.close();
-                    System.out.println("stopping server");
-                    return;
-                }
-                default: {
-                    System.out.println("command unknown");
-                }
+            if ("stop".equals(command)) {
+                System.out.println("stopping server");
+                acceptanceServer.close();
+                return;
+            } else {
+                System.out.println("command unknown");
             }
         }
     }

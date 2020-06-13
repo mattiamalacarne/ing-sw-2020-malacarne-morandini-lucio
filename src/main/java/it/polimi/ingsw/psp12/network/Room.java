@@ -22,11 +22,6 @@ public class Room implements Serializable{
      */
     private int playersCount;
 
-    /*/**
-     * Number of clients that have subscribed to the room but not joined
-     */
-    //private int subscribedCount;
-
     /**
      * Determines if the game is currently active and initialized
      */
@@ -35,7 +30,6 @@ public class Room implements Serializable{
     public Room() {
         this.active = false;
         this.playersCount = 0;
-        //this.subscribedCount = 0;
     }
 
     /**
@@ -61,30 +55,6 @@ public class Room implements Serializable{
     public void setAssignedPort(int assignedPort) {
         this.assignedPort = assignedPort;
     }
-
-    /*/**
-     * Register that a new client subscribed to the game
-     */
-    /*public void subscribe() {
-        subscribedCount++;
-    }*/
-
-    /*/**
-     * Register that a new client unsubscribed from the game
-     */
-    /*public void unsubscribe() {
-        if (subscribedCount > 0) {
-            subscribedCount--;
-        }
-    }*/
-
-    /*/**
-     * Checks if the all clients have subscribed the game and so the initialization process is completed
-     * @return true if all clients have subscribed
-     */
-    /*public boolean isReady() {
-        return (subscribedCount >= maxPlayersCount);
-    }*/
 
     /**
      * Returns max number of players that can join the game

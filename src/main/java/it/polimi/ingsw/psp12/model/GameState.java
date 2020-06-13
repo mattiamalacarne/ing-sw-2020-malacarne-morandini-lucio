@@ -28,17 +28,17 @@ public class GameState extends Observable<Message>
     /**
      * The game board where the game is played
      */
-    private Board gameBoard;
+    private final Board gameBoard;
 
     /**
      * List of players of the game
      */
-    private Player players[];
+    private Player[] players;
 
     /**
      * Deck of cards that provide god powers
      */
-    private Deck deck;
+    private final Deck deck;
 
     /**
      * Number of players subscribed to the game
@@ -126,7 +126,7 @@ public class GameState extends Observable<Message>
         // remove player
         playersCount -= 1;
 
-        Player tmp[] = players;
+        Player[] tmp = players;
         players = new Player[playersCount];
 
         int i = 0;
@@ -168,7 +168,7 @@ public class GameState extends Observable<Message>
      * @return waiting players
      */
     public Player[] getWaitingPlayers() {
-        Player waitingPlayers[] = new Player[playersCount - 1];
+        Player[] waitingPlayers = new Player[playersCount - 1];
         int j = 0;
         for (int i = 0; i < playersCount; i++) {
             if (i != turn) {
@@ -315,9 +315,9 @@ public class GameState extends Observable<Message>
      * @param color color of the workers
      * @param points positions of the workers
      */
-    public void setPlayerInfo(Color color, Point points[]) {
+    public void setPlayerInfo(Color color, Point[] points) {
         // get the cells associated to the points selected by the user
-        Cell cells[] = new Cell[2];
+        Cell[] cells = new Cell[2];
         for (int i = 0; i < 2; i++) {
             cells[i] = gameBoard.getCell(points[i]);
         }
@@ -346,7 +346,6 @@ public class GameState extends Observable<Message>
     public List<Color> getAvailableColors() {
         return new ArrayList<>(colors);
     }
-
 
     /**
      * Initialize the turn for the current player and reset power parameters

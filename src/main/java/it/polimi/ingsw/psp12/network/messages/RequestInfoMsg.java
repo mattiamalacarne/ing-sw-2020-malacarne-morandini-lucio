@@ -1,7 +1,6 @@
 package it.polimi.ingsw.psp12.network.messages;
 
 import it.polimi.ingsw.psp12.model.board.Point;
-import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.utils.Color;
 
@@ -17,18 +16,12 @@ public class RequestInfoMsg extends Message {
     /**
      * List of available colors
      */
-    List<Color> availableColors;
+    private List<Color> availableColors;
 
     /**
      * List of available positions
      */
-    List<Point> availablePositions;
-
-    /**
-     * List of available cards
-     * @deprecated
-     */
-    List<Card> availableCards;
+    private final List<Point> availablePositions;
 
     /**
      * Construct the message
@@ -52,19 +45,5 @@ public class RequestInfoMsg extends Message {
 
     public List<Point> getAvailablePositions() {
         return availablePositions;
-    }
-
-    /**
-     * @deprecated
-     */
-    public void setAvailableCards(List<Card> availableCards) {
-        this.availableCards = availableCards;
-    }
-
-    /**
-     * @deprecated
-     */
-    public List<Card> getAvailableCards() {
-        return availableCards;
     }
 }

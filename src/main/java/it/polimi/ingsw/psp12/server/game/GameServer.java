@@ -85,6 +85,7 @@ public class GameServer implements Runnable, Server {
                     // subscribe the server as system commands handler
                     clientHandler.setServer(this);
 
+                    // add client to the list of waiting clients
                     executor.execute(clientHandler);
                     waitingClients.offer(clientHandler);
 
@@ -101,7 +102,7 @@ public class GameServer implements Runnable, Server {
                     return;
                 }
 
-                System.out.println("client connection failed");
+                System.out.println("server connection failed");
                 e.printStackTrace();
             }
         }
@@ -114,7 +115,12 @@ public class GameServer implements Runnable, Server {
      */
     @Override
     public void processCommand(Message message, ClientHandler client) {
-        // process incoming command from client
+        /*
+            process incoming command from client
+            commands to be managed by game server:
+            - join: subscribe a player to the current room
+            - disconnected: handle disconnection of a client
+        */
         switch (message.getCommand())
         {
             case JOIN:
@@ -122,6 +128,7 @@ public class GameServer implements Runnable, Server {
                 // subscribe the client to the game
                 subscribeClient(msg.getUserName(), client);
 
+                // start the game if the room is full
                 if (room.isFull()) {
                     // stop abort game timer
                     cancelTimer();
@@ -131,10 +138,8 @@ public class GameServer implements Runnable, Server {
                 }
                 break;
             case DISCONNECTED:
+                // handle disconnection of a client
                 disconnectedClient(client);
-                break;
-            case PING:
-                //System.out.println("ping received");
                 break;
         }
     }
@@ -173,6 +178,7 @@ public class GameServer implements Runnable, Server {
 
         // register client to the game
         controller.addClient(client, name);
+        // remove client from the list of waiting clients
         waitingClients.remove(client);
 
         // update room with the new client

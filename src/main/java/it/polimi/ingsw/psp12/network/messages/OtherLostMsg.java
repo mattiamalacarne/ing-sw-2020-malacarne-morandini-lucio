@@ -10,7 +10,7 @@ public class OtherLostMsg extends Message {
     /**
      * Name of the player that has lost
      */
-    String player;
+    private final String player;
 
     /**
      * Construct the message

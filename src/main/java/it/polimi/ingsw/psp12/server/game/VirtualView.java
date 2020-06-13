@@ -15,12 +15,12 @@ public class VirtualView extends Observable<Message> implements Observer<Message
     /**
      * Handler of the client
      */
-    private ClientHandler clientHandler;
+    private final ClientHandler clientHandler;
 
     /**
      * Reference to the corresponding player in the model
      */
-    private Player player;
+    private final Player player;
 
     public VirtualView(ClientHandler handler, Player p) {
         clientHandler = handler;

@@ -27,17 +27,17 @@ public class Controller implements Observer<Message> {
     /**
      * Model of the current game
      */
-    private GameState model;
+    private final GameState model;
 
     /**
      * List of subscribed clients
      */
-    private List<VirtualView> clients;
+    private final List<VirtualView> clients;
 
     /**
      * Server that has created the game
      */
-    private GameServer server;
+    private final GameServer server;
 
     /**
      * Timer to end the turn when the player does not send confirm/undo command in time
@@ -243,7 +243,7 @@ public class Controller implements Observer<Message> {
     void sendToPlayer(Player player, Message message) {
         Optional<VirtualView> vv = clients.stream().filter(v -> v.getPlayer().equals(player)).findFirst();
 
-        if (!vv.isPresent()) {
+        if (vv.isEmpty()) {
             System.out.println("no virtual view associated with the requested player");
             return;
         }
@@ -579,7 +579,7 @@ public class Controller implements Observer<Message> {
     void disconnectClient(Player player) {
         Optional<VirtualView> vv = clients.stream().filter(v -> v.getPlayer().equals(player)).findFirst();
 
-        if (!vv.isPresent()) {
+        if (vv.isEmpty()) {
             System.out.println("no virtual view associated with the requested player");
             return;
         }

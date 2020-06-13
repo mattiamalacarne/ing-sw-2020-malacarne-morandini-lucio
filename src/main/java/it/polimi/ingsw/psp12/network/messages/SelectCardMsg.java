@@ -11,7 +11,7 @@ public class SelectCardMsg extends Message {
     /**
      * Selected card
      */
-    Card card;
+    private final Card card;
 
     /**
      * Create the message with the card selected by the user

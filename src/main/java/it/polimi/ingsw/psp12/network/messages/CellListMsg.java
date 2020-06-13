@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class CellListMsg extends Message
 {
-    private List<Cell> cellList;
+    private final List<Cell> cellList;
 
-    private Action action;
+    private final Action action;
 
     /**
      * Init the message with the list of cell created by the server

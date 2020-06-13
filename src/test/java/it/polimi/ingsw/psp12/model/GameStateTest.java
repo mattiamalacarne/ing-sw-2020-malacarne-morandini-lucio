@@ -148,7 +148,7 @@ public class GameStateTest {
         gameState2.addPlayer("P1");
         gameState2.addPlayer("P2");
 
-        Player ps[] = gameState2.getPlayers();
+        Player[] ps = gameState2.getPlayers();
 
         assertEquals(2, ps.length);
 
@@ -186,7 +186,7 @@ public class GameStateTest {
         assertEquals("P2", gameState3.getCurrentPlayer().getName());
 
         // check waiting players
-        Player ps[] = gameState3.getWaitingPlayers();
+        Player[] ps = gameState3.getWaitingPlayers();
 
         assertEquals(2, ps.length);
 
@@ -254,18 +254,18 @@ public class GameStateTest {
         gameState2.initGame();
 
         // check initial state
-        Color initialColors[] = Color.values();
+        Color[] initialColors = Color.values();
         assertArrayEquals(initialColors, gameState2.getAvailableColors().toArray());
 
         assertTrue(gameState2.getCurrentPlayer().getPower() instanceof BasicPower);
         assertFalse(gameState2.getCurrentPlayer().isInitialized());
 
         // set player info
-        Point points[] = new Point[] { new Point(0, 0), new Point(2, 1) };
+        Point[] points = new Point[] { new Point(0, 0), new Point(2, 1) };
         gameState2.setPlayerInfo(Color.BLUE, points);
 
         // check final state
-        Color finalColors[] = new Color[Color.values().length - 1];
+        Color[] finalColors = new Color[Color.values().length - 1];
         int i = 0;
         for (Color c : Color.values()) {
             if (!c.equals(Color.BLUE)) {
@@ -300,7 +300,7 @@ public class GameStateTest {
         gameState2.initGame();
 
         // set first player info
-        Point points1[] = new Point[] { new Point(0, 0), new Point(2, 1) };
+        Point[] points1 = new Point[] { new Point(0, 0), new Point(2, 1) };
         gameState2.setPlayerInfo(Color.BLUE, points1);
 
         // check intermediate state
@@ -310,7 +310,7 @@ public class GameStateTest {
         gameState2.nextTurn();
 
         // set second player info
-        Point points2[] = new Point[] { new Point(1, 3), new Point(0, 2) };
+        Point[] points2 = new Point[] { new Point(1, 3), new Point(0, 2) };
         gameState2.setPlayerInfo(Color.RED, points2);
 
         // check final state
@@ -918,7 +918,7 @@ public class GameStateTest {
         // initialize state with a player
         gameState2.addPlayer("P1");
         gameState2.initGame();
-        Point points[] = new Point[] { new Point(0, 2), new Point(3, 1) };
+        Point[] points = new Point[] { new Point(0, 2), new Point(3, 1) };
         gameState2.setPlayerInfo(Color.BLUE, points);
 
         // initialize board

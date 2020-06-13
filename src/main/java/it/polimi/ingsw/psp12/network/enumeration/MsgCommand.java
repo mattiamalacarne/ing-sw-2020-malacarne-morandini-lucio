@@ -5,8 +5,6 @@ package it.polimi.ingsw.psp12.network.enumeration;
  */
 public enum MsgCommand {
     /** System commands **/
-    /**@deprecated **/ LIST(MsgType.SYSTEM), // request list of available rooms
-    /**@deprecated **/ ROOMS(MsgType.SYSTEM), // response with a list of available rooms
     CREATE(MsgType.SYSTEM), // create a new room
     CREATED(MsgType.SYSTEM), // confirm creation of a new room
     CREATE_FAILED(MsgType.SYSTEM), // notify user that a room has not been created
@@ -19,8 +17,8 @@ public enum MsgCommand {
     NOT_YOUR_TURN(MsgType.SYSTEM), // the client sent a message not in its turn
     PING(MsgType.SYSTEM), // ping to keep the connection open and prevent socket timeout
     CLOSE(MsgType.SYSTEM), // notify the client to close the socket
-    WAIT(MsgType.SYSTEM),
-    REQUEST_CREATE(MsgType.SYSTEM),
+    WAIT(MsgType.SYSTEM), // notify the client to wait for other clients to start the game
+    REQUEST_CREATE(MsgType.SYSTEM), // request to the client the number of players in the game
 
     /** Game commands **/
     REQUEST_INFO(MsgType.GAME),
@@ -31,8 +29,6 @@ public enum MsgCommand {
     TURN_DONE(MsgType.GAME),
     CONFIRM_TURN(MsgType.GAME),
     UNDO_TURN(MsgType.GAME),
-    /**@deprecated **/ MOVE(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
-    /**@deprecated **/ BUILD(MsgType.GAME), // TODO: remove, replaced with SELECTED_CELL
     CELL_LIST(MsgType.GAME),
     SELECTED_CELL(MsgType.GAME),
     BOARD_UPDATE(MsgType.GAME),
@@ -44,11 +40,10 @@ public enum MsgCommand {
     CARDS_LIST(MsgType.GAME),
     SELECTED_CARD(MsgType.GAME),
     WORKERS_LIST(MsgType.GAME),
-    SELECTED_WORKER(MsgType.GAME),
-    /**@deprecated **/ CELL_REQUEST(MsgType.GAME); // TODO: remove
+    SELECTED_WORKER(MsgType.GAME);
 
     /** Determine if this is a system or game message **/
-    private MsgType type;
+    private final MsgType type;
 
     public MsgType getType() {
         return type;

@@ -11,7 +11,7 @@ public class SelectOptionMsg extends Message {
     /**
      * Selected build option
      */
-    BuildOption option;
+    private final BuildOption option;
 
     /**
      * Create the message with the build option selected by the user

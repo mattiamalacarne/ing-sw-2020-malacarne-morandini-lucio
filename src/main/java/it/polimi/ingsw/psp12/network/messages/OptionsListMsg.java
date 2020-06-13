@@ -14,12 +14,12 @@ public class OptionsListMsg extends Message {
     /**
      * Options that the player can select
      */
-    List<BuildOption> options;
+    private final List<BuildOption> options;
 
     /**
      * Cell where the build will be performed
      */
-    Cell cell;
+    private final Cell cell;
 
     /**
      * Create the message with the list of build options that can be selected

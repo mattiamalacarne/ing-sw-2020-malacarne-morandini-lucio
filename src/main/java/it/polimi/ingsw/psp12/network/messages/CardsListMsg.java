@@ -13,12 +13,12 @@ public class CardsListMsg extends Message {
     /**
      * List of cards that can be selected
      */
-    List<Card> cards;
+    private final List<Card> cards;
 
     /**
      * Remaining cards count that the player have to select
      */
-    int remaining;
+    private final int remaining;
 
     /**
      * Create the message with the list of cards that can be selected

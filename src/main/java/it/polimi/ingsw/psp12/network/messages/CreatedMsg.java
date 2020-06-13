@@ -11,7 +11,7 @@ public class CreatedMsg extends Message {
     /**
      * Room that has been created
      */
-    Room room;
+    private final Room room;
 
     /**
      * Construct the message

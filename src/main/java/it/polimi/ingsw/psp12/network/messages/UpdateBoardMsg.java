@@ -9,7 +9,7 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
  */
 public class UpdateBoardMsg extends Message
 {
-    private Board board;
+    private final Board board;
 
     /**
      * Init the message with the board obtained after a move/build

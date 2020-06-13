@@ -11,12 +11,12 @@ public class Point implements Serializable
     /**
      * Column index
      */
-    private int x;
+    private final int x;
 
     /**
      * Row index
      */
-    private int y;
+    private final int y;
 
 
     /**
@@ -89,6 +89,7 @@ public class Point implements Serializable
      * Returns a clone of the point
      * @return point clone
      */
+    @Override
     public Point clone() {
         return new Point(this.x, this.y);
     }

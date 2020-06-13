@@ -128,10 +128,6 @@ public class GUinterface extends JFrame implements UserInterface
         messageHandler.sendToServer(new CreateMsg(playerNumber));
     }
 
-    public void getRoomList() throws IOException {
-        messageHandler.sendToServer(new Message(MsgCommand.LIST));
-    }
-
 
 
     @Override

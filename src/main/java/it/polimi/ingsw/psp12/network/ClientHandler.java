@@ -19,11 +19,11 @@ import java.util.concurrent.TimeUnit;
  * @author Luca Morandini
  */
 public class ClientHandler implements Runnable {
-    private Socket socket;
+    private final Socket socket;
 
-    private ObjectInputStream incoming;
+    private final ObjectInputStream incoming;
 
-    private ObjectOutputStream outgoing;
+    private final ObjectOutputStream outgoing;
 
     private boolean running;
 
@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable {
     /**
      * Timer used to periodically send ping to keep the connection open
      */
-    private ScheduledExecutorService pingTimer;
+    private final ScheduledExecutorService pingTimer;
 
     /**
      * Handler of game commands
@@ -162,7 +162,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * Set the handler of game commands
-     * @param commandHandler
+     * @param commandHandler game commands handler
      */
     public void setCommandHandler(CommandHandler commandHandler) {
         handler = commandHandler;
@@ -170,7 +170,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * Set the server that manages system commands
-     * @param server
+     * @param server system commands handler
      */
     public void setServer(Server server) {
         this.server = server;

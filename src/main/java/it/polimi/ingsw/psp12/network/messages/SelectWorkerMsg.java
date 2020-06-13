@@ -10,7 +10,7 @@ public class SelectWorkerMsg extends Message {
     /**
      * Selected worker for the current turn
      */
-    private int worker;
+    private final int worker;
 
     /**
      * Create the message with the worker selected by the user

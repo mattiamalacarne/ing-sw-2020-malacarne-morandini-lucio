@@ -93,6 +93,7 @@ public class Worker implements Serializable
      * Returns a clone of the worker
      * @return worker clone
      */
+    @Override
     public Worker clone() {
         Worker w = new Worker(this.playerId, this.playerName, this.workerId);
         w.color = this.color;

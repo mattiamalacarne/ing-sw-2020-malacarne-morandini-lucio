@@ -38,12 +38,6 @@ public class AcceptanceServer implements Runnable, Server {
      */
     private final Object runningLock;
 
-    /*/**
-     * List of currently active rooms
-     */
-    // TODO: remove!!!
-    //private List<Room> rooms;
-
     /**
      * Room currently in the creation and clients subscription phases
      */
@@ -58,8 +52,6 @@ public class AcceptanceServer implements Runnable, Server {
      * Synchronization lock for waitingRoom and creator variables
      */
     private final Object waitingRoomLock;
-
-    //private List<ClientHandler> waitingClientsList;
 
     /**
      * List of connected clients that are waiting to be assigned to a room
@@ -78,20 +70,18 @@ public class AcceptanceServer implements Runnable, Server {
 
     public AcceptanceServer(int port) throws IOException {
         socket = new ServerSocket(port);
-        //rooms = new ArrayList<>();
-
-        //waitingClientsList = new ArrayList<>();
-        waitingClients = new ConcurrentLinkedQueue<>();
-        waitingRoom = null;
-        creator = null;
 
         // initialize ports manager for game servers
         PortsManager.init(Constants.GAME_PORTS);
 
         executor = Executors.newCachedThreadPool();
+        waitingClients = new ConcurrentLinkedQueue<>();
 
         runningLock = new Object();
         waitingRoomLock = new Object();
+
+        // reset current room
+        resetWaitingRoom();
     }
 
     @Override
@@ -116,10 +106,11 @@ public class AcceptanceServer implements Runnable, Server {
                     // subscribe the server as system commands handler
                     clientHandler.setServer(this);
 
+                    // add client to the list of waiting clients
                     executor.execute(clientHandler);
-
-                    //waitingClientsList.add(clientHandler);
                     waitingClients.offer(clientHandler);
+
+                    // determine the message to be sent to the connected client
                     handleClient(clientHandler);
                 }
                 catch (IOException e) {
@@ -136,48 +127,13 @@ public class AcceptanceServer implements Runnable, Server {
                     return;
                 }
 
-                System.out.println("client connection failed");
+                System.out.println("server connection failed");
                 e.printStackTrace();
             }
 
             synchronized (runningLock) {
                 isRunning = running;
             }
-        }
-    }
-
-    /**
-     * Stop acceptance server
-     */
-    public void close() {
-        synchronized (runningLock) {
-            running = false; // TODO: handle multi threading
-        }
-
-        System.out.println("disconnecting clients...");
-
-        // disconnect clients
-        while (!waitingClients.isEmpty()) {
-            waitingClients.poll().close();
-        }
-
-        // shutdown clients thread executor
-        executor.shutdownNow();
-
-        // stop request timer if it is running
-        if (requestTimer != null) {
-            requestTimer.shutdownNow();
-        }
-
-        System.out.println("shutting down acceptance server...");
-
-        try {
-            socket.close();
-        }
-        catch (IOException e) {
-            System.out.println("error while shutting down acceptance server");
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 
@@ -189,38 +145,25 @@ public class AcceptanceServer implements Runnable, Server {
     @Override
     public void processCommand(Message message, ClientHandler client) {
         /*
+            process incoming command from client
             commands to be managed by acceptance server:
-            - list: return list of available rooms
-            - create: create a room and add to the list of active rooms
-
-            - select players count
+            - create: create a room with the selected players count
+            - disconnected: handle disconnection of a client
         */
         switch (message.getCommand())
         {
-            /*case LIST:
-                List<Room> rooms = listAvailableRooms();
-                client.send(new RoomsMsg(rooms));
-                break;
-            case CREATE:
-                CreateMsg msg = (CreateMsg)message;
-                // create room and the corresponding game server
-                createRoom(msg.getRoomName(), msg.getMaxPlayersCount(), client);
-                break;*/
             case CREATE:
                 CreateMsg msg = (CreateMsg)message;
                 // create room and the corresponding game server
                 createRoom(msg.getMaxPlayersCount(), client);
-                //handleClient(client);
                 // process the list of waiting clients
                 processWaitingClients();
                 break;
             case DISCONNECTED:
+                // handle disconnection of a client
                 disconnectedClient(client);
                 // process the list of waiting clients
                 processWaitingClients();
-                break;
-            case PING:
-                //System.out.println("ping received");
                 break;
         }
     }
@@ -229,44 +172,6 @@ public class AcceptanceServer implements Runnable, Server {
      * Handle the provided client and determine the message that has to be sent
      * @param client client to be processed
      */
-    /*private void handleClient(ClientHandler client) {
-        // check if there is a room in the creation process
-        if (waitingRoom == null) {
-            // create new room
-            waitingRoom = new Room();
-            creator = client;
-
-            System.out.println("requesting room creation to");
-            // ask client to create a game
-            client.send(new Message(MsgCommand.REQUEST_CREATE));
-            return;
-        }
-
-        // check if room has been initialized
-        if (!waitingRoom.isRunning()) {
-            // send to client wait command
-            client.send(new Message(MsgCommand.WAIT));
-            return;
-        }
-
-        // send to client join command
-        // send to the user the room that has been created
-        client.send(new CreatedMsg(waitingRoom));
-        client.close();
-
-        //waitingClientsList.remove(client);
-        // remove processed client from the list of waiting clients
-        waitingClients.remove(client);
-
-        // register that a new client subscribed the room
-        waitingRoom.subscribe();
-
-        // reset current room if all the clients have joined
-        if (waitingRoom.isReady()) {
-            waitingRoom = null;
-            creator = null;
-        }
-    }*/
     private void handleClient(ClientHandler client) {
         // check if there is a room in the creation process
         synchronized (waitingRoomLock) {
@@ -326,27 +231,14 @@ public class AcceptanceServer implements Runnable, Server {
     private void processWaitingClients() {
         boolean stop = false;
 
-        //while (waitingClientsList.size() > 0) {
         while (!waitingClients.isEmpty() && !stop) {
-            //ClientHandler client = waitingClientsList.get(0);
             ClientHandler client = waitingClients.peek();
             handleClient(client);
 
             // stop processing clients if room has been created but not initialized
-            //stop = (waitingRoom != null && !waitingRoom.isRunning());
             stop = waitingRoom != null;
         }
     }
-
-    /*/**
-     * Returns a list of available rooms that are not full and the game has not started
-     * @return active rooms
-     * @deprecated
-     */
-    // TODO: remove!!!
-    /*private List<Room> listAvailableRooms() {
-        return rooms.stream().filter(room -> !room.isFull()).collect(Collectors.toList());
-    }*/
 
     /**
      * Creates room for a new game and the server that handles the game
@@ -372,7 +264,6 @@ public class AcceptanceServer implements Runnable, Server {
         int port = PortsManager.assign();
 
         // create room and assign port
-        //Room room = new Room();
         waitingRoom.setAssignedPort(port);
 
         // initialize and activate current room
@@ -412,36 +303,12 @@ public class AcceptanceServer implements Runnable, Server {
             return;
         }
 
-        //rooms.add(room);
-
-        // TODO: change bare Thread class with Executor/ThreadPool?
         String threadName = "game_server_" + port;
         Thread thread = new Thread(gameServer, threadName);
         thread.start();
 
         System.out.println("game created on port " + waitingRoom.getAssignedPort() +
                 " [" + waitingRoom.getMaxPlayersCount() + "]");
-
-        // send to the user the room that has been created
-        //client.send(new CreatedMsg(waitingRoom));
-    }
-
-    /**
-     * Process the disconnection of a client
-     * @param client disconnected client
-     */
-    private synchronized void disconnectedClient(ClientHandler client) {
-        System.out.println("client disconnected from acceptance server");
-
-        client.close();
-
-        waitingClients.remove(client);
-
-        if (client.equals(creator)) {
-            resetWaitingRoom();
-
-            System.out.println("creator disconnected, aborting room creation");
-        }
     }
 
     /**
@@ -454,6 +321,62 @@ public class AcceptanceServer implements Runnable, Server {
         }
 
         System.out.println("reset waiting room");
+    }
+
+    /**
+     * Process the disconnection of a client
+     * @param client disconnected client
+     */
+    private synchronized void disconnectedClient(ClientHandler client) {
+        System.out.println("client disconnected from acceptance server");
+
+        // close socket
+        client.close();
+
+        // remove client from the list of waiting clients
+        waitingClients.remove(client);
+
+        // reset waiting room if the creator has disconnected
+        if (client.equals(creator)) {
+            resetWaitingRoom();
+
+            System.out.println("creator disconnected, aborting room creation");
+        }
+    }
+
+    /**
+     * Stop acceptance server
+     */
+    public void close() {
+        synchronized (runningLock) {
+            running = false;
+        }
+
+        System.out.println("disconnecting clients...");
+
+        // disconnect waiting clients
+        while (!waitingClients.isEmpty()) {
+            waitingClients.poll().close();
+        }
+
+        // shutdown clients thread executor
+        executor.shutdownNow();
+
+        // stop request timer if it is running
+        if (requestTimer != null) {
+            requestTimer.shutdownNow();
+        }
+
+        System.out.println("shutting down acceptance server...");
+
+        try {
+            socket.close();
+        }
+        catch (IOException e) {
+            System.out.println("error while shutting down acceptance server");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**
@@ -480,19 +403,4 @@ public class AcceptanceServer implements Runnable, Server {
         requestTimer.shutdownNow();
         System.out.println("request timer stopped");
     }
-
-    /*/**
-     * Close the room of an ended game and remove it from the list of active rooms
-     * @param room room to be removed
-     * @deprecated
-     */
-    // TODO: remove!!!
-    /*public void gameEnded(Room room) {
-        /*if (rooms.remove(room)) {
-            System.out.println("game " + room.getAssignedPort() + " closed successfully");
-        }
-        else {
-            System.out.printf("no game found on port " + room.getAssignedPort());
-        }*
-    }*/
 }

@@ -11,7 +11,7 @@ public class JoinMsg extends Message {
     /**
      * Name of the client
      */
-    String userName;
+    private final String userName;
 
     /**
      * Construct the class

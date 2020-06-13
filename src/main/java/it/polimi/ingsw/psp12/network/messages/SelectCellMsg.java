@@ -9,7 +9,7 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
  */
 public class SelectCellMsg extends Message
 {
-    private Cell selectedCell;
+    private final Cell selectedCell;
 
     /**
      * Init the message with a cell

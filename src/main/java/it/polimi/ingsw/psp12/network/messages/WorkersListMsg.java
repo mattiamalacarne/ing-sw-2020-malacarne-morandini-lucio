@@ -13,7 +13,7 @@ public class WorkersListMsg extends Message {
     /**
      * Workers that the player can select
      */
-    private List<Worker> workers;
+    private final List<Worker> workers;
 
     /**
      * Create the message with the list of workers that can be selected

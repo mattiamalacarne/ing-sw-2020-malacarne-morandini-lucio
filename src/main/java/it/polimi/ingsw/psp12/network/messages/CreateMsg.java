@@ -8,26 +8,9 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
  */
 public class CreateMsg extends Message {
     /**
-     * Name of the room
-     */
-    String roomName;
-
-    /**
      * Max number of players that can join the game
      */
-    int maxPlayersCount;
-
-    /**
-     * Construct the message
-     * @param roomName name of the room
-     * @param maxPlayersCount max number of players of the game
-     * @deprecated
-     */
-    public CreateMsg(String roomName, int maxPlayersCount) {
-        super(MsgCommand.CREATE);
-        this.roomName = roomName;
-        this.maxPlayersCount = maxPlayersCount;
-    }
+    private final int maxPlayersCount;
 
     /**
      * Construct the message
@@ -36,11 +19,6 @@ public class CreateMsg extends Message {
     public CreateMsg(int maxPlayersCount) {
         super(MsgCommand.CREATE);
         this.maxPlayersCount = maxPlayersCount;
-    }
-
-    /** @deprecated */
-    public String getRoomName() {
-        return roomName;
     }
 
     public int getMaxPlayersCount() {

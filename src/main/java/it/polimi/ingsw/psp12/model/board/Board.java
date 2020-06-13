@@ -16,7 +16,7 @@ public class Board implements Serializable
     /**
      * Matrix of cells that compose the game board
      */
-    private Cell boardCells[][];
+    private final Cell[][] boardCells;
 
     /**
      * Matrix of cells that store the snapshot of the real game board
@@ -192,6 +192,7 @@ public class Board implements Serializable
      * Returns a clone of the board
      * @return board clone
      */
+    @Override
     public Board clone() {
         Board b = new Board();
         for (int x = 0; x < 5; x++) {

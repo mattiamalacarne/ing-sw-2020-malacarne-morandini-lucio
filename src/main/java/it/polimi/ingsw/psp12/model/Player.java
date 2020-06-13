@@ -6,7 +6,6 @@ import it.polimi.ingsw.psp12.model.power.BasicPower;
 import it.polimi.ingsw.psp12.model.power.Power;
 import it.polimi.ingsw.psp12.utils.Color;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,10 +17,10 @@ import java.util.List;
  */
 public class Player
 {
-    private int id;
-    private Worker workers[];
+    private final int id;
+    private final Worker[] workers;
+    private final String name;
     private int currentWorker;
-    private String name;
     private Power power;
     private boolean initialized;
 
@@ -118,7 +117,7 @@ public class Player
      * @param color color of the workers
      * @param cells positions of the workers
      */
-    public void initialize(Color color, Cell cells[]) {
+    public void initialize(Color color, Cell[] cells) {
         for (int i = 0; i < 2; i++) {
             // set worker color
             workers[i].setColor(color);

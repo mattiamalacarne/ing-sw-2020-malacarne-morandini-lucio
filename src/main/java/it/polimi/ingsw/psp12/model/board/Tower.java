@@ -50,6 +50,7 @@ public class Tower implements Serializable
      * Returns a clone of the tower
      * @return tower clone
      */
+    @Override
     public Tower clone() {
         Tower t = new Tower();
         t.level = this.level;

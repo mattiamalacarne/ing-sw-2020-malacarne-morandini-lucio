@@ -24,7 +24,7 @@ public class Cell implements Serializable
     /**
      * Coordinates of the current cell on the board
      */
-    private Point location;
+    private final Point location;
 
 
     /**
@@ -123,6 +123,7 @@ public class Cell implements Serializable
      * Returns a clone of the cell
      * @return cell clone
      */
+    @Override
     public Cell clone() {
         Cell c = new Cell(this.location.getX(), this.location.getY());
         c.tower = this.tower.clone();

@@ -15,31 +15,10 @@ import java.util.List;
  */
 public abstract class Power {
 
-    /*/**
-     * identifier of the power
-     */
-    // TODO: can be removed?
-    //int powerId;
-
     /**
      * max level to climb in move
      */
     int maxClimbLevel;
-
-    /*/**
-     * max number of possible movement distance in cells
-     */
-    //int maxMoves; // TODO: can be removed? the dedicated power can work with just 'movesCount'
-
-    /*/**
-     * max possible building levels to build
-     */
-    //int maxBuildsLevel;
-
-    /*/**
-     * min level where it's possible to build a dome
-     */
-    //int minDomeLevel;
 
     /**
      * number of move actions that the player performed in the current turn
@@ -50,11 +29,6 @@ public abstract class Power {
      * number of build actions that the player performed in the current turn
      */
     int buildsCount;
-
-    /*/**
-     * max level the next player can climb in move
-     */
-    //int nextPlayerMaxClimb;
 
     /**
      * cells of the current and previous positions [current, previous]
@@ -71,66 +45,17 @@ public abstract class Power {
      */
     Cell buildInProgress;
 
-    /*/**
-     * Getter of the id of the power
-     * @return id of the power
-     */
-    // TODO: can be removed?
-    /*public int getPowerId() {
-        return powerId;
-    }*/
-
-    /*/**
-     * Getter of the max level to climb in move
-     * @return max level to climb in move
-     */
-    /*public int getMaxClimbLevel() {
-        return maxClimbLevel;
-    }*/
-
     /**
      * Setter of the max level to climb in move
      * @param maxClimbLevel max level to climb in move
      */
     public abstract void setMaxClimbLevel(int maxClimbLevel);
 
-    /*/**
-     * Getter of the max number of possible movement distance in cells
-     * @return max number of possible movement distance in cells
-     */
-    /*public int getMaxMoves() {
-        return maxMoves;
-    }*/
-
-    /*/**
-     * Getter of the max possible building levels to build
-     * @return max possible building levels to build
-     */
-    /*public int getMaxBuildsLevel() {
-        return maxBuildsLevel;
-    }*/
-
     /**
      * Getter of the min level where it's possible to build a dome
      * @return min level where it's possible to build a dome
      */
     public abstract int getMinDomeLevel();
-
-    /*/**
-     * Getter of the move actions that the player performed in the current turn
-     * @return count of move actions
-     */
-    /*public int getMovesCount() {
-        return movesCount;
-    }*/
-
-    /*/**
-     * Getter of the build actions that the player performed in the current turn
-     * @return count of build actions
-     */
-    /*public int getBuildsCount() {
-        return buildsCount;
-    }*/
 
     /**
      * Getter of the max level the next player can climb in move

@@ -19,6 +19,7 @@ public class CellDraw extends JButton
     private Point pos;
     private GameScreen game;
     private CellDraw me;
+    private CellContainer parent;
 
     public CellDraw(String text)
     {
@@ -29,11 +30,14 @@ public class CellDraw extends JButton
 
     }
 
-    public CellDraw(Point cell, GameScreen game)
+    public CellDraw(Point cell, GameScreen game, CellContainer parent)
     {
+        this.parent = parent;
         this.pos = cell;
         this.game = game;
         me = this;
+
+        this.setBounds(0,0,86,86);
         this.setOpaque(false);
         this.setBorderPainted(false);
         this.setContentAreaFilled(false);
@@ -115,7 +119,7 @@ public class CellDraw extends JButton
         switch (type)
         {
             case WORKER: {this.setIcon(loadWorker(color)); break;}
-            case TOWER: {this.setIcon(loadTower(level)); break; }
+            case TOWER: {this.parent.setTower(loadTower(level)); break; }
             case SELECTOR: {this.loadSelector(); break; }
         }
         this.setBorderPainted(false);

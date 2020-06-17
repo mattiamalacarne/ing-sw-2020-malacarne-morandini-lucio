@@ -24,7 +24,7 @@ public class BoardTerrainContainer extends JLayeredPane
     private JPanel gameGrid;
 
     /** List of cell **/
-    private CellDraw[][] cells;
+    private CellContainer[][] cells;
 
     /** infobox text **/
     private MenuTextComponent infoLabel;
@@ -43,7 +43,7 @@ public class BoardTerrainContainer extends JLayeredPane
         cardPanel = new CardGamePanel(null, size);
 
         infoLabel = new MenuTextComponent("Loading");
-        infoLabel.setBounds(10,10, 650, 30);
+        infoLabel.setBounds(200,20, 650, 30);
         // Init the gameGrid
         gameGrid = new JPanel();
         gameGrid.setBounds(496,187, 430,438 );
@@ -84,12 +84,12 @@ public class BoardTerrainContainer extends JLayeredPane
      */
     private void drawGameGrid(JPanel grid)
     {
-        cells = new CellDraw[5][5];
+        cells = new CellContainer[5][5];
         for (int i = 0; i < 5; i++)
         {
             for (int j = 0; j < 5; j++)
             {
-                cells[j][i] = new CellDraw(new Point(j,i), game);
+                cells[j][i] = new CellContainer(new Point(j,i), game);
                 gameGrid.add(cells[j][i]);
             }
         }
@@ -105,7 +105,7 @@ public class BoardTerrainContainer extends JLayeredPane
         {
             for (int j = 0; j < 5; j++)
             {
-                cells[i][j].flushMe();
+                cells[i][j].cell.flushMe();
             }
         }
     }
@@ -121,7 +121,7 @@ public class BoardTerrainContainer extends JLayeredPane
         for (Point p: validCell)
         {
             //System.out.println("Valido una cella");
-            cells[p.getX()][p.getY()].enablePress();
+            cells[p.getX()][p.getY()].cell.enablePress();
         }
         this.repaint();
         this.revalidate();
@@ -140,7 +140,7 @@ public class BoardTerrainContainer extends JLayeredPane
         for (Cell cell: cellWithWorker)
         {
             Point cellPos = cell.getLocation();
-            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.WORKER, cell.getWorker().getColor(), 0);
+            cells[cellPos.getX()][cellPos.getY()].cell.updateCell(CellIcon.WORKER, cell.getWorker().getColor(), 0);
         }
 
         // Draw tower on the screen
@@ -152,7 +152,7 @@ public class BoardTerrainContainer extends JLayeredPane
 
             if (cell.getTower().hasDome()) level = 4;
 
-            cells[cellPos.getX()][cellPos.getY()].updateCell(CellIcon.TOWER, null, level);
+            cells[cellPos.getX()][cellPos.getY()].cell.updateCell(CellIcon.TOWER, null, level);
         }
         //this.revalidate();
     }
@@ -167,7 +167,7 @@ public class BoardTerrainContainer extends JLayeredPane
         {
             for (int j = 0; j < 5; j++)
             {
-                cells[i][j].setIcon(null);
+                cells[i][j].cell.setIcon(null);
             }
         }
     }

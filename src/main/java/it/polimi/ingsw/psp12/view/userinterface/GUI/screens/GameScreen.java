@@ -309,7 +309,7 @@ public class GameScreen extends Screen
 
     public void displayMessageScreen(String text)
     {
-        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), "Text"));
+        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), text));
     }
 
 }

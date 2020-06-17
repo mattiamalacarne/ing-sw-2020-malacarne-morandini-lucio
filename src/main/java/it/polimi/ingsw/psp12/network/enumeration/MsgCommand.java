@@ -40,7 +40,7 @@ public enum MsgCommand {
     CARDS_LIST(MsgType.GAME),
     SELECTED_CARD(MsgType.GAME),
     YOUR_CARD(MsgType.GAME),
-    MY_CARD(MsgType.GAME),
+    /** @deprecated **/MY_CARD(MsgType.GAME), // TODO: remove
     WORKERS_LIST(MsgType.GAME),
     SELECTED_WORKER(MsgType.GAME);
 

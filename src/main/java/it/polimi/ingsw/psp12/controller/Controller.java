@@ -275,6 +275,7 @@ public class Controller implements Observer<Message> {
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " started the turn");
 
+        sendCard();
         sendToCurrentPlayer(new WorkersListMsg(model.getCurrentPlayer().getWorkers()));
     }
 

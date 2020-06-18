@@ -82,6 +82,12 @@ public interface UserInterface
     void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
     /**
+     * Communicates to the user the his god card
+     * @param yourCardMsg The god card of the player
+     */
+    void yourCardMessage(YourCardMsg yourCardMsg);
+
+    /**
      * The user chooses the worker that will perform the action
      * @param workersListMsg The list of possible worker to choose
      */
@@ -140,8 +146,7 @@ public interface UserInterface
      * Communicates to the user that the game is ended
      * and the connection with the game server is closing,
      * return then to the Play-Exit menu
-     * @throws IOException IO Exception
      */
-    void closeGameMessage() throws IOException;
+    void closeGameMessage();
 
 }

@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.InputMismatchException;
@@ -38,11 +38,9 @@ public class CLInterface implements UserInterface
     /**
      * CLI constructor
      */
-    public CLInterface() throws IOException {
+    public CLInterface() {
 
-        System.out.println("Starting CLI, Setup server and client");
-        cmdIn = new Scanner(System.in);
-        messageHandler = new MessageHandler(this);
+        welcomeMessage();
 
     }
 
@@ -52,13 +50,44 @@ public class CLInterface implements UserInterface
         System.out.println(s.toUpperCase());
     }
 
+    public void welcomeMessage() {
+
+        System.out.print("\n***********************************");
+        System.out.print("\n**** Welcome to Santorini game ****");
+        System.out.print("\n***********************************");
+        System.out.println("\n0) Play\n1) Exit");
+
+        int choice;
+        do {
+            cmdIn = new Scanner(System.in);
+            try {
+                choice = cmdIn.nextInt();
+            }catch (InputMismatchException e){
+                choice = -1;
+            }
+            if (choice<0 || choice>1){
+                System.out.println("Choice not allowed, retry");
+            }
+        }while (choice<0 || choice>1);
+
+        if (choice==0){
+            //Play
+            messageHandler = new MessageHandler(this);
+        }else {
+            //Exit
+            System.out.println("Quitting the game");
+            System.exit(0);
+        }
+
+    }
+
+
     @Override
     public ServerInfo getServerByIp() {
 
         System.out.println("(IP) Hostname: ");
         ServerInfo serverInfo;
 
-        //FIXME: gestire caso in cui l'iserimento errato è numerico
         do {
             cmdIn = new Scanner(System.in);
             try {
@@ -252,6 +281,15 @@ public class CLInterface implements UserInterface
     }
 
     @Override
+    public void yourCardMessage(YourCardMsg yourCardMsg) {
+        System.out.println("Your card:");
+        System.out.println(yourCardMsg.getCard().getName());
+        System.out.println(yourCardMsg.getCard().getShortDescription());
+        System.out.println(yourCardMsg.getCard().getDescription() + "\n");
+
+    }
+
+    @Override
     public void chooseWorker(WorkersListMsg workersListMsg) {
 
         System.out.println("Choose the worker for this turn:");
@@ -412,8 +450,13 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void closeGameMessage() throws IOException {
-        System.out.println("The game is closing");
-        //TODO: return to play-exit menu
+    public void closeGameMessage() {
+
+        scannerThread.interrupt();
+
+        System.out.println("\nThe game is closing");
+
+        welcomeMessage();
     }
+
 }

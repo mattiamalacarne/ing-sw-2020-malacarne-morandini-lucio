@@ -43,15 +43,59 @@ public class MoveAgainDecoratorTest {
     @Test
     public void nextActions_FirstMove_ShouldReturnSecondMove(){
 
-        power.setInitialPosition(new Cell(0,0));
-        power.moved(new Cell(0,1));
+        Cell start = new Cell(0,1);
+        Cell firstMove = new Cell(0, 2);
+        Worker worker = new Worker();
+
+        //place worker on the board
+        power.setInitialPosition(gameBoard.getCell(start.getLocation()));
+        worker.move(start.getLocation());
+
+        //move the worker
+        power.moved(gameBoard.getCell(firstMove.getLocation()));
+        gameBoard.getCell(firstMove.getLocation()).addWorker(worker);
 
         List<Action> actionList = power.nextActions(TurnState.MOVE, gameBoard);
-
         assertEquals(2, actionList.size());
         assertTrue(actionList.contains(Action.MOVE));
         assertTrue(actionList.contains(Action.BUILD));
 
+    }
+
+    @Test
+    public void nextActions_FirstMove_SecondMoveNotPossible_ShouldReturnEnd(){
+
+        Cell start = new Cell(0,0);
+        Cell firstMove = new Cell(0, 1);
+        Worker worker1 = new Worker();
+        Worker worker2 = new Worker();
+
+        //place worker on the board
+        power.setInitialPosition(gameBoard.getCell(start.getLocation()));
+        worker1.move(start.getLocation());
+
+        //move the worker
+        power.moved(gameBoard.getCell(firstMove.getLocation()));
+        worker1.move(firstMove.getLocation());
+        gameBoard.getCell(firstMove.getLocation()).addWorker(worker1);
+
+
+        //place other player on the board
+        gameBoard.getCell(new Point(1,0)).addWorker(worker2);
+
+        //build tower levels
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+
+        gameBoard.getCell(new Point(1,1)).getTower().buildDome();
+        gameBoard.getCell(new Point(1,2)).getTower().buildDome();
+
+        List<Action> actionList = power.nextActions(TurnState.MOVE, gameBoard);
+
+        assertEquals(1, actionList.size());
+        assertTrue(actionList.contains(Action.BUILD));
     }
 
     @Test
@@ -275,5 +319,42 @@ public class MoveAgainDecoratorTest {
         assertTrue(expectedCellList.containsAll(cellList));
 
     }
+
+    @Test
+    public void getPossibleMoves4_SecondMoveNotPossible(){
+
+        Cell start = new Cell(0,0);
+        Cell firstMove = new Cell(0,1);
+        Worker worker1 = new Worker();
+        Worker worker2 = new Worker();
+
+        //place worker on the board
+        power.setInitialPosition(start);
+        gameBoard.getCell(start.getLocation()).addWorker(worker1);
+        worker1.move(start.getLocation());
+
+        //move the worker
+        power.moved(firstMove);
+        gameBoard.getCell(start.getLocation()).getWorker().move(firstMove.getLocation());
+
+        //place other player on the board
+        gameBoard.getCell(new Point(1,0)).addWorker(worker2);
+
+        //build tower levels
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,2)).getTower().incrementLevel();
+
+        //builds domes
+        gameBoard.getCell(new Point(1,1)).getTower().buildDome();
+        gameBoard.getCell(new Point(1,2)).getTower().buildDome();
+
+        //get possible moves
+        List<Cell> cellList = power.getPossibleMoves(gameBoard, worker1);
+
+        assertEquals(cellList.size(), 0);
+    }
+
 
 }

@@ -37,7 +37,10 @@ public class BuildAgainDecorator extends ExtendedPowerDecorator {
                 actions.add(Action.BUILD);
                 break;
             case BUILD:
-                if (getBuildsCount() == 1) {
+                //It's possible to build a second time only if the player has built one time
+                // and there is an available cell where to build a second time
+                Worker worker = getLastPositions()[0].getWorker();
+                if (getBuildsCount() == 1 && getPossibleBuilds(b,worker).size()!=0) {
                     actions.add(Action.BUILD);
                 }
                 actions.add(Action.END);

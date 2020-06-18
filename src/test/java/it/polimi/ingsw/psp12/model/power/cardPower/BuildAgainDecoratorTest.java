@@ -57,14 +57,59 @@ public class BuildAgainDecoratorTest {
     @Test
     public void nextActions_FirstBuild_ShouldReturnSecondBuild(){
 
-        power.setInitialPosition(new Cell(0,0));
-        power.moved(new Cell(0,1));
-        power.hasBuilt(new Cell(0,2));
+        Cell start = new Cell(0,1);
+        Cell firstBuild = new Cell(0, 2);
+        Worker worker = new Worker();
+
+        //place worker on the board
+        gameBoard.getCell(start.getLocation()).addWorker(worker);
+        power.setInitialPosition(gameBoard.getCell(start.getLocation()));
+        worker.move(start.getLocation());
+
+        //the worker does a build
+        power.hasBuilt(firstBuild);
+        gameBoard.getCell(firstBuild.getLocation()).getTower().incrementLevel();
 
         List<Action> actionList = power.nextActions(TurnState.BUILD, gameBoard);
 
         assertEquals(2, actionList.size());
         assertTrue(actionList.contains(Action.BUILD));
+        assertTrue(actionList.contains(Action.END));
+
+    }
+
+    @Test
+    public void nextActions_FirstBuild_SecondBuildNotPossible_ShouldReturnEnd(){
+
+        Cell start = new Cell(0,1);
+        Cell firstBuild = new Cell(0, 2);
+        Worker worker1 = new Worker();
+        Worker worker2 = new Worker();
+
+        //place worker on the board
+        gameBoard.getCell(start.getLocation()).addWorker(worker1);
+        power.setInitialPosition(gameBoard.getCell(start.getLocation()));
+        worker1.move(start.getLocation());
+
+        //the worker does a build
+        power.hasBuilt(firstBuild);
+        gameBoard.getCell(firstBuild.getLocation()).getTower().incrementLevel();
+
+        //place other player on the board
+        gameBoard.getCell(new Point(1,0)).addWorker(worker2);
+
+        //build tower levels
+        gameBoard.getCell(new Point(0,0)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,0)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,0)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(0,0)).getTower().incrementLevel();
+
+        gameBoard.getCell(new Point(1,1)).getTower().buildDome();
+        gameBoard.getCell(new Point(1,2)).getTower().buildDome();
+
+        List<Action> actionList = power.nextActions(TurnState.BUILD, gameBoard);
+
+        assertEquals(1, actionList.size());
         assertTrue(actionList.contains(Action.END));
 
     }
@@ -273,6 +318,49 @@ public class BuildAgainDecoratorTest {
         assertEquals(cellList.size(), expectedCellList.size());
         assertTrue(cellList.containsAll(expectedCellList));
         assertTrue(expectedCellList.containsAll(cellList));
+
+    }
+
+    @Test
+    public void getPossibleBuild4_SecondBuildNotPossible(){
+
+        Cell start = new Cell(1,2);
+        Cell first = new Cell(2,2);
+        Worker worker1 = new Worker();
+        Worker worker2 = new Worker();
+
+        //place worker on the board
+        power.setInitialPosition(start);
+        gameBoard.getCell(start.getLocation()).addWorker(worker1);
+        worker1.move(start.getLocation());
+
+        //the worker does a build
+        power.hasBuilt(first);
+        gameBoard.getCell(first.getLocation()).getTower().incrementLevel();
+
+        //place other player on the board
+        gameBoard.getCell(new Point(2,1)).addWorker(worker2);
+
+        //build tower levels
+        gameBoard.getCell(new Point(1,1)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(1,1)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(1,1)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(1,1)).getTower().incrementLevel();
+
+        gameBoard.getCell(new Point(3,1)).getTower().incrementLevel();
+        gameBoard.getCell(new Point(3,1)).getTower().incrementLevel();
+
+        //build domes
+        gameBoard.getCell(new Point(0,1)).getTower().buildDome();
+        gameBoard.getCell(new Point(0,2)).getTower().buildDome();
+        gameBoard.getCell(new Point(0,3)).getTower().buildDome();
+        gameBoard.getCell(new Point(1,3)).getTower().buildDome();
+        gameBoard.getCell(new Point(2,3)).getTower().buildDome();
+
+        //get possible builds
+        List<Cell> cellList = power.getPossibleBuilds(gameBoard, worker1);
+
+        assertEquals(cellList.size(), 0);
 
     }
 

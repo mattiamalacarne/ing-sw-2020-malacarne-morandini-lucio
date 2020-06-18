@@ -34,7 +34,10 @@ public class MoveAgainDecorator extends ExtendedPowerDecorator {
                 actions.add(Action.MOVE);
                 break;
             case MOVE:
-                if (getMovesCount() == 1) {
+                //It's possible to move a second time only if the player has moved one time
+                // and there is an available cell where to move a second time
+                Worker worker = getLastPositions()[0].getWorker();
+                if (getMovesCount() == 1 && getPossibleMoves(b, worker).size()!=0) {
                     actions.add(Action.MOVE);
                 }
                 actions.add(Action.BUILD);

@@ -37,7 +37,7 @@ public class CellDraw extends JButton
         this.game = game;
         me = this;
 
-        this.setBounds(0,0,86,86);
+        this.setBounds(0,0,100,80);
         this.setOpaque(false);
         this.setBorderPainted(false);
         this.setContentAreaFilled(false);

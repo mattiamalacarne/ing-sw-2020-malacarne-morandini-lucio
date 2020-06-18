@@ -12,7 +12,7 @@ public class MessageTypeNotFoundException extends Exception
 {
     public MessageTypeNotFoundException(Message msg)
     {
-        super("Message type not found, impossible to cast the message");
+        super("Message type not found, impossible to cast the message " + msg.getCommand());
         System.out.println(msg.getType());
         System.out.println(msg.getCommand());
     }

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens;
 
+import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 
@@ -54,7 +56,11 @@ public class SetUpScreen extends Screen
      */
     public void dispayWaitBox()
     {
-        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), "Waiting the other players"));
+        try {
+            gui.loadNewStatusScreen(GUIStatus.WAIT_CARD_SELECTION, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
     }
 
 }

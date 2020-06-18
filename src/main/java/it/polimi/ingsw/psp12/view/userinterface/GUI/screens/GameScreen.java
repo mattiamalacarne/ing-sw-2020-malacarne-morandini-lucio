@@ -1,12 +1,15 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens;
 
+import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
 import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.ChooseColorPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.GenericMessageScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.SetupDialog;
@@ -57,19 +60,22 @@ public class GameScreen extends Screen
     private Thread undoBox;
     private SetupDialog undo;
 
+    private Card gameCard;
+
 
 
     /**
      * init a gamescreen
      * @param gui
-     * @param request null if gamemode, not null if setup mode
+     * @param cardMsg draw the correct card on screen
      */
-    public GameScreen(GUinterface gui, Message request)
+    public GameScreen(GUinterface gui, YourCardMsg cardMsg)
     {
         // Init screen size
        super(gui);
        me = this;
        req = null;
+       this.gameCard = cardMsg.getCard();
 
 
        selectdCells = new ArrayList<Cell>();
@@ -78,7 +84,7 @@ public class GameScreen extends Screen
 
        setGamePhase(GamePhase.NOT_MY_TURN);
 
-       board = new BoardTerrainContainer(new Dimension(screenX, screenY), this);
+       board = new BoardTerrainContainer(new Dimension(screenX, screenY), this, gameCard);
         this.add(board,JLayeredPane.DEFAULT_LAYER);
 
 
@@ -93,6 +99,7 @@ public class GameScreen extends Screen
     public void setGamePhase(GamePhase phase)
     {
         this.phase = phase;
+        System.out.println("[DEBUG] Setting game phase " + phase);
         switch (phase)
         {
             case NOT_MY_TURN: { setGameInfo("Not my turn"); break; }
@@ -309,7 +316,11 @@ public class GameScreen extends Screen
 
     public void displayMessageScreen(String text)
     {
-        gui.setContentPane(new GenericMessageScreen(new Dimension(gui.getWidth(),gui.getHeight()), text));
+        try {
+            gui.loadNewStatusScreen(GUIStatus.WAIT_OTHER_PLAYER, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 import it.polimi.ingsw.psp12.model.board.Board;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine.MenuTextComponent;
@@ -33,14 +34,14 @@ public class BoardTerrainContainer extends JLayeredPane
 
     private CardGamePanel cardPanel;
 
-    public BoardTerrainContainer(Dimension size, GameScreen game)
+    public BoardTerrainContainer(Dimension size, GameScreen game, Card card)
     {
         // Set dimension of the terrain size
         this.setPreferredSize(size);
 
         this.game = game;
 
-        cardPanel = new CardGamePanel(null, size);
+        cardPanel = new CardGamePanel(card, size);
 
         infoLabel = new MenuTextComponent("Loading");
         infoLabel.setBounds(200,20, 650, 30);
@@ -167,6 +168,7 @@ public class BoardTerrainContainer extends JLayeredPane
         {
             for (int j = 0; j < 5; j++)
             {
+                cells[i][j].removeTower();
                 cells[i][j].cell.setIcon(null);
             }
         }

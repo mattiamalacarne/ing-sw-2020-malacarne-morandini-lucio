@@ -1,5 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils;
 
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.Screen;
+import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,12 +11,18 @@ import java.awt.*;
  * @author Mattia Malacarne
  */
 
-public class GenericMessageScreen extends JLayeredPane
+public class GenericMessageScreen extends Screen
 {
     private JLabel waitText;
     private JLabel backg;
 
-    public GenericMessageScreen(Dimension size, String text) {
+    private JLayeredPane msgPanel;
+
+    public GenericMessageScreen(Dimension size, String text, GUinterface gui) {
+        super(gui);
+
+        this.setLayout(null);
+        this.setBounds(0,0, size.width, size.height);
 
         Image bg = loadScreenBackground("firstscreen.png", new Dimension(size.width, size.height));
         backg = new JLabel(new ImageIcon(bg));
@@ -24,13 +33,16 @@ public class GenericMessageScreen extends JLayeredPane
         waitText.setFont(new Font("dalek", Font.PLAIN, 28));
         waitText.setBounds(490,50, 437, 300);
 
-        this.setLayout(null);
+        msgPanel = new JLayeredPane();
 
-        this.setBounds(0,0, size.width,size.height);
-        this.add(waitText, JLayeredPane.DRAG_LAYER);
-        this.add(backg, JLayeredPane.DEFAULT_LAYER);
-        this.setVisible(true);
-        this.setVisible(true);
+        msgPanel.setLayout(null);
+
+        msgPanel.setBounds(0,0, size.width,size.height);
+        msgPanel.add(waitText, JLayeredPane.DRAG_LAYER);
+        msgPanel.add(backg, JLayeredPane.DEFAULT_LAYER);
+        msgPanel.setVisible(true);
+
+        this.add(msgPanel);
     }
 
     public Image loadScreenBackground(String bg, Dimension size) {

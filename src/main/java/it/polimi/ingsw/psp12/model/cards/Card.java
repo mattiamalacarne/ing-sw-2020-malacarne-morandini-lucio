@@ -60,7 +60,7 @@ public class Card implements Serializable {
         this.shortDescription = "Play without powers";
         this.description = "Play the game without using god powers";
         this.powers = new ArrayList<>();
-        this.image = "src/main/resources/cards/NoPower.png";
+        this.image = "/cards/NoPower.png";
     }
 
     public String getName() {

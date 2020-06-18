@@ -20,7 +20,7 @@ public class CardGamePanel extends JPanel {
     {
         this.setOpaque(false);
         //cardDisplay = new JLabel(getCardImage(myCard.getImage()));
-        cardImage = getCardImage(null);
+        cardImage = getCardImage(myCard);
         this.setBounds(0,(int) winSize.getHeight() - cardImage.getIconHeight(), cardImage.getIconWidth(),cardImage.getIconHeight());
         cardDisplay = new JLabel(cardImage);
 
@@ -30,12 +30,12 @@ public class CardGamePanel extends JPanel {
 
     /**
      * Load the Image for display the card in the GameScreen
-     * @param cardPath
+     * @param card
      * @return
      */
-    private ImageIcon getCardImage(String cardPath)
+    private ImageIcon getCardImage(Card card)
     {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/cards/Apollo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource(card.getImage()));
         int scaleFactor = 4;
         Image scaled = icon.getImage().getScaledInstance(icon.getIconWidth()/scaleFactor, icon.getIconHeight()/scaleFactor, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);

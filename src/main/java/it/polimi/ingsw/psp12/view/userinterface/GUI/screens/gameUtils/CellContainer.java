@@ -23,7 +23,7 @@ public class CellContainer extends JLayeredPane
         cell = new CellDraw(p, game, this);
         tower = new JLabel();
 
-        tower.setBounds(0,0,86,86);
+        tower.setBounds(0,0,100,80);
 
         this.add(tower, JLayeredPane.DEFAULT_LAYER);
         this.add(cell, JLayeredPane.DRAG_LAYER);
@@ -36,5 +36,10 @@ public class CellContainer extends JLayeredPane
     public void setTower(ImageIcon icon)
     {
         tower.setIcon(icon);
+    }
+
+    public void removeTower()
+    {
+        tower.setIcon(null);
     }
 }

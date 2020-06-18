@@ -6,15 +6,13 @@ import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
 import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
+import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.utils.Color;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.SetupHelper;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.LobbyScreen;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.Screen;
-import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpScreen;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseUndoPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
@@ -56,6 +54,9 @@ public class GUinterface extends JFrame implements UserInterface
     private SetupDialog waiting;
     private SetUpScreen setup;
 
+    /** if true, recreate gamescreen with card displayed **/
+    private boolean needCard;
+
     /**
      * Init the UI starting the mainWindow and populate it with the necessary panel
      */
@@ -68,6 +69,7 @@ public class GUinterface extends JFrame implements UserInterface
         aspectRatio = 16.0/9.0;
         windowDimX = (int) (windowDimY*aspectRatio);
 
+        needCard = true;
 
         this.setSize((int) windowDimX, (int) windowDimY + 40);
         this.setResizable(false);
@@ -100,10 +102,14 @@ public class GUinterface extends JFrame implements UserInterface
         Screen newScreen;
         switch (status)
         {
-            case GAME: actualScreen = new GameScreen(this, null); break;
+            case GAME: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;
+            case WAIT_CARD_SELECTION: actualScreen = new GenericMessageScreen(gui.getSize(), "Waiting other players", this); break;
+            case WAIT_OTHER_PLAYER: actualScreen = new GenericMessageScreen(gui.getSize(), "Waiting other players", this); break;
+            case YOU_LOST: actualScreen = new GenericMessageScreen(gui.getSize(), "You lost!", this); break;
+            case YOU_WIN: actualScreen = new GenericMessageScreen(gui.getSize(), "You are the winner!!", this); break;
             case SETUP: actualScreen = new SetUpScreen(this); break;
-            case LOBBY: actualScreen = new LobbyScreen(this); break;
-            case STARTING: actualScreen = new GameScreen(this, msg); break;
+            case CARDLIST: actualScreen = new CardSelectorScreen(this, (((CardsListMsg) msg).getCards())); break;
+            case STARTING: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;
             default: actualScreen = new SetUpScreen(this);
         }
 
@@ -151,7 +157,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void waitMessage() {
-        System.out.println("WE ARE WAITING");
+        //System.out.println("WE ARE WAITING");
         setup.dispayWaitBox();
     }
 
@@ -195,7 +201,7 @@ public class GUinterface extends JFrame implements UserInterface
         System.out.println("Room joined");
         try {
             //gui.loadNewStatusScreen(GUIStatus.LOBBY, null);
-            gui.loadNewStatusScreen(GUIStatus.GAME, null);
+            gui.loadNewStatusScreen(GUIStatus.WAIT_OTHER_PLAYER, null);
         } catch (GUIStatusErrorException e) {
             e.printStackTrace();
         }
@@ -210,44 +216,16 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void chooseCard(CardsListMsg cardsListMsg) {
-        // Open a dialog with a card list
-        // TODO: Sotituiscimi con qualcosa nella GUI
+        try {
+            gui.loadNewStatusScreen(GUIStatus.CARDLIST, (Message) cardsListMsg);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-        Scanner cmdIn;
-        //Card choice
-        int cardChoice;
-        do {
-            System.out.println("Choose a card:");
-            System.out.println(" 0) Read cards descriptions");
-            for (int c=1; c<=cardsListMsg.getCards().size(); c++){
-                System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
-            }
-
-            cmdIn = new Scanner(System.in);
-            try {
-                cardChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e){
-                cardChoice = -1;
-            }
-            if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
-                System.out.println("Choice not allowed, retry\n");
-            }
-            if (cardChoice == 0){
-                for (int card = 0; card < cardsListMsg.getCards().size(); card++) {
-                    //Prints cards descriptions
-                    System.out.println(cardsListMsg.getCards().get(card).getName());
-                    System.out.println(cardsListMsg.getCards().get(card).getShortDescription());
-                    System.out.println(cardsListMsg.getCards().get(card).getDescription() + "\n");
-                }
-
-            }
-        }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
-
-        System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
-
-        messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
-
+    public void sendCardToServer(Card card)
+    {
+        messageHandler.sendToServer(new SelectCardMsg(card));
     }
 
     public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
@@ -267,7 +245,6 @@ public class GUinterface extends JFrame implements UserInterface
 
     public void sendStartInfo(PlayerInfoMsg msg)
     {
-        //System.out.println("Invio i dati di prova");
         messageHandler.sendToServer(msg);
     }
 
@@ -351,13 +328,21 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void youWonMessage() {
-        game.displayMessageScreen("You win!!");
+        try {
+            gui.loadNewStatusScreen(GUIStatus.YOU_WIN, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
         startReloadTimer();
     }
 
     @Override
     public void youLostMessage() {
-        game.displayMessageScreen("You win!!");
+        try {
+            gui.loadNewStatusScreen(GUIStatus.YOU_LOST, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
         startReloadTimer();
     }
 
@@ -368,8 +353,21 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
-    public void closeGameMessage() throws IOException {
+    public void closeGameMessage() {
         System.out.println("Game is closing");
+    }
+
+    @Override
+    public void yourCardMessage(YourCardMsg yourCardMsg) {
+        try {
+            if (needCard)
+            {
+                this.loadNewStatusScreen(GUIStatus.GAME, (Message) yourCardMsg);
+                needCard = false;
+            }
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -380,6 +378,7 @@ public class GUinterface extends JFrame implements UserInterface
         //TODO: SETUP the timer
         System.out.println("[DEBUG]: Starting reload timer");
     }
+
 
 
 }

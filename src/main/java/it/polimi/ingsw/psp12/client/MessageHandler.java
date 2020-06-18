@@ -8,7 +8,7 @@ import it.polimi.ingsw.psp12.view.userinterface.UserInterface;
 
 import java.io.IOException;
 
-/** class for reading a generic message from the server and cast it toa specific one for interpretation
+/** class for reading a generic message from the server and cast it to a specific one for interpretation
  * @author Mattia Malacarne
  * @author Michele Lucio
  */
@@ -35,13 +35,22 @@ public class MessageHandler implements Observer<Message>
      */
     private int gamePort;
 
-    public MessageHandler(UserInterface userInterface) throws IOException {
+    public MessageHandler(UserInterface userInterface) {
 
         this.userInterface = userInterface;
 
-        this.serverInfo = userInterface.getServerByIp();
+        // Continue to asks to the user the ip of the server to connect to,
+        // until a valid ip is entered
+        do {
+            try {
+                this.serverInfo = userInterface.getServerByIp();
+                clientHandlerConnection = new ClientHandlerConnection(serverInfo);
+            } catch (IOException e) {
+                System.out.println("This server doesn't exists, retry...\n");
+                clientHandlerConnection = null;
+            }
+        } while (clientHandlerConnection==null);
 
-        clientHandlerConnection = new ClientHandlerConnection(serverInfo);
         clientHandlerConnection.addObserver(this);
         Thread thread = new Thread(clientHandlerConnection);
         thread.start();
@@ -127,8 +136,8 @@ public class MessageHandler implements Observer<Message>
                 break;
             case PING:
                 break;
-
             case CLOSE:
+                clientHandlerConnection.close();
                 userInterface.closeGameMessage();
                 break;
 
@@ -138,6 +147,9 @@ public class MessageHandler implements Observer<Message>
                 break;
             case BOARD_UPDATE:
                 userInterface.updateBoard( (UpdateBoardMsg) message );
+                break;
+            case YOUR_CARD:
+                userInterface.yourCardMessage( (YourCardMsg) message );
                 break;
             case WORKERS_LIST:
                 userInterface.chooseWorker( (WorkersListMsg) message );

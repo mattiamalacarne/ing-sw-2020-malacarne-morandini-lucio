@@ -37,8 +37,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      * prepare the client for connect to the server
      * @param server the server info containing ip and port
      */
-    public ClientHandlerConnection(ServerInfo server)
-    {
+    public ClientHandlerConnection(ServerInfo server) throws IOException {
         this.serverInfo = server;
         running = true;
 
@@ -47,23 +46,24 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
             // TODO: handle multi threading
             sendRequestToServer(new Message(MsgCommand.PING));
         }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
+
+        clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
+        clientSocket.setSoTimeout(Constants.SOCKET_TIMEOUT);
+        System.out.println("Connected to server on port " + serverInfo.serverPort);
+
+        // Init the stream after connection
+        output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
+        output_stream.flush();
+
+        input_stream = new ObjectInputStream(clientSocket.getInputStream());
+
     }
 
     @Override
     public void run()
     {
         // Connect to the server
-
         try {
-            clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);
-            clientSocket.setSoTimeout(Constants.SOCKET_TIMEOUT);
-            System.out.println("Connected to server on port " + serverInfo.serverPort);
-
-            // Init the stream after connection
-            output_stream = new ObjectOutputStream(clientSocket.getOutputStream());
-            output_stream.flush();
-
-            input_stream = new ObjectInputStream(clientSocket.getInputStream());
 
             while (running){
 
@@ -73,7 +73,9 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("\nERROR: Game server unreachable\n");
+            notifyObservers(new Message(MsgCommand.CLOSE));
         }
 
     }
@@ -89,7 +91,9 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
             output_stream.writeObject(msg);
             output_stream.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("\nERROR: Game server unreachable\n");
+            notifyObservers(new Message(MsgCommand.CLOSE));
         }
 
     }

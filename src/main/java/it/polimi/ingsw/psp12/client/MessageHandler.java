@@ -136,6 +136,9 @@ public class MessageHandler implements Observer<Message>
                 break;
             case PING:
                 break;
+            case NOT_YOUR_TURN:
+                userInterface.notYourTurnMessage();
+                break;
             case CLOSE:
                 clientHandlerConnection.close();
                 userInterface.closeGameMessage();

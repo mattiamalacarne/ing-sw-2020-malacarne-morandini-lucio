@@ -105,24 +105,29 @@ public class CLInterface implements UserInterface
     @Override
     public void createsNewRoom() {
 
-        System.out.println("\nThere are no available room to join!\nCreate a new room to start playing");
+        scannerThread = new Thread(() -> {
 
-        //Room player number
-        System.out.println("Player number [2-3]:");
-        int playerNumber;
-        do {
-            cmdIn=new Scanner(System.in);
-            try {
-                playerNumber = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                playerNumber=0;
-            }
-            if (playerNumber<2 || playerNumber>3){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (playerNumber<2 || playerNumber>3);
+            System.out.println("\nThere are no available room to join!\nCreate a new room to start playing");
 
-        messageHandler.sendToServer( new CreateMsg(playerNumber)  );
+            //Room player number
+            System.out.println("Player number [2-3]:");
+            int playerNumber;
+            do {
+                cmdIn=new Scanner(System.in);
+                try {
+                    playerNumber = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    playerNumber=0;
+                }
+                if (playerNumber<2 || playerNumber>3){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (playerNumber<2 || playerNumber>3);
+
+            messageHandler.sendToServer( new CreateMsg(playerNumber)  );
+
+        });
+        scannerThread.start();
 
     }
 
@@ -133,15 +138,27 @@ public class CLInterface implements UserInterface
 
     @Override
     public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException {
-        System.out.printf("\nRoom for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
 
-        //New port is updated
-        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());
+        //FIXME: uncomment after synchronization fix in ClientHandlerConnection
+//        scannerThread = new Thread(() -> {
 
-        System.out.println("What's you name: ");
-        cmdIn= new Scanner(System.in);
-        String playerName = cmdIn.nextLine();
-        messageHandler.sendToServer(new JoinMsg(playerName));
+            System.out.printf("\nRoom for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
+
+            //New port is updated
+            try {
+                messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());
+            } catch (IOException e) {
+                System.out.println("Error entering the room...");
+            }
+
+            System.out.println("What's you name: ");
+            cmdIn= new Scanner(System.in);
+            String playerName = cmdIn.nextLine();
+            messageHandler.sendToServer(new JoinMsg(playerName));
+
+//        });
+//        scannerThread.start();
+
     }
 
     @Override
@@ -174,109 +191,126 @@ public class CLInterface implements UserInterface
 
     @Override
     public void joinPlayerNameAlreadyUsed() {
-        System.out.println("That name is already used! Choose another name: ");
-        String playerName = cmdIn.nextLine();
-        messageHandler.sendToServer(new JoinMsg(playerName));
+
+        scannerThread = new Thread(() -> {
+
+            System.out.println("That name is already used! Choose another name: ");
+            String playerName = cmdIn.nextLine();
+            messageHandler.sendToServer(new JoinMsg(playerName));
+
+        });
+        scannerThread.start();
+
     }
 
     @Override
     public void chooseCard(CardsListMsg cardsListMsg) {
 
-        //Card choice
-        int cardChoice;
-        do {
-            System.out.println("Choose a card:");
-            System.out.println(" 0) Read cards descriptions");
-            for (int c=1; c<=cardsListMsg.getCards().size(); c++){
-                System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
-            }
+        scannerThread = new Thread(()->{
 
-            cmdIn = new Scanner(System.in);
-            try {
-                cardChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e){
-                cardChoice = -1;
-            }
-            if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
-                System.out.println("Choice not allowed, retry\n");
-            }
-            if (cardChoice == 0){
-                for (int card = 0; card < cardsListMsg.getCards().size(); card++) {
-                    //Prints cards descriptions
-                    System.out.println(cardsListMsg.getCards().get(card).getName());
-                    System.out.println(cardsListMsg.getCards().get(card).getShortDescription());
-                    System.out.println(cardsListMsg.getCards().get(card).getDescription() + "\n");
+            //Card choice
+            int cardChoice;
+            do {
+                System.out.println("Choose a card:");
+                System.out.println(" 0) Read cards descriptions");
+                for (int c=1; c<=cardsListMsg.getCards().size(); c++){
+                    System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
                 }
 
-            }
-        }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
+                cmdIn = new Scanner(System.in);
+                try {
+                    cardChoice = cmdIn.nextInt();
+                } catch (InputMismatchException e){
+                    cardChoice = -1;
+                }
+                if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
+                    System.out.println("Choice not allowed, retry\n");
+                }
+                if (cardChoice == 0){
+                    for (int card = 0; card < cardsListMsg.getCards().size(); card++) {
+                        //Prints cards descriptions
+                        System.out.println(cardsListMsg.getCards().get(card).getName());
+                        System.out.println(cardsListMsg.getCards().get(card).getShortDescription());
+                        System.out.println(cardsListMsg.getCards().get(card).getDescription() + "\n");
+                    }
 
-        System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
+                }
+            }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
 
-        messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
+            System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
+
+            messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
+
+        });
+        scannerThread.start();
 
     }
 
     @Override
     public void requestStartInfo(RequestInfoMsg requestInfoMsg) {
 
-        System.out.println("Choose a color:");
-        for (int c=0; c<requestInfoMsg.getAvailableColors().size();c++){
-            System.out.printf("%d) %s\n", c, requestInfoMsg.getAvailableColors().get(c).toString());
-        }
-        int colorChoice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                colorChoice=cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                colorChoice=-1;
-            }
-            if ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() ){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() );
+        scannerThread = new Thread(() -> {
 
-        System.out.println("Choose the position of the first worker:");
-        for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-            System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
-        }
-        int worker1Position;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                worker1Position = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                worker1Position=-1;
+            System.out.println("Choose a color:");
+            for (int c=0; c<requestInfoMsg.getAvailableColors().size();c++){
+                System.out.printf("%d) %s\n", c, requestInfoMsg.getAvailableColors().get(c).toString());
             }
-            if (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size());
+            int colorChoice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    colorChoice=cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    colorChoice=-1;
+                }
+                if ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() ){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() );
 
-        //TODO: rimuovere la cella scelta direttamente dalla lista
-
-        //FIXME: va bene fare qui il controllo sulla scelta della stessa cella da parte dell'utente? (worker1Position==worker2Position)
-        System.out.println("Choose the position of the second worker:");
-        for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-            System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
-        }
-        int worker2Position;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                worker2Position = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                worker2Position=-1;
+            System.out.println("Choose the position of the first worker:");
+            for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
+                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
             }
-            if (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
+            int worker1Position;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    worker1Position = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    worker1Position=-1;
+                }
+                if (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size());
 
-        messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
-                                                        requestInfoMsg.getAvailablePositions().get(worker1Position),
-                                                        requestInfoMsg.getAvailablePositions().get(worker2Position) ) );
+            //TODO: rimuovere la cella scelta direttamente dalla lista
+
+            //FIXME: va bene fare qui il controllo sulla scelta della stessa cella da parte dell'utente? (worker1Position==worker2Position)
+            System.out.println("Choose the position of the second worker:");
+            for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
+                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
+            }
+            int worker2Position;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    worker2Position = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    worker2Position=-1;
+                }
+                if (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
+
+            messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
+                    requestInfoMsg.getAvailablePositions().get(worker1Position),
+                    requestInfoMsg.getAvailablePositions().get(worker2Position) ) );
+
+        });
+        scannerThread.start();
 
     }
 
@@ -292,74 +326,89 @@ public class CLInterface implements UserInterface
     @Override
     public void chooseWorker(WorkersListMsg workersListMsg) {
 
-        System.out.println("Choose the worker for this turn:");
-        for (int i = 0; i < workersListMsg.getWorkers().size(); i++) {
-            System.out.printf("%d) Worker at position %s\n", i, workersListMsg.getWorkers().get(i).getPosition().toString());
-        }
+        scannerThread = new Thread(() -> {
 
-        int workerChoice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                workerChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                workerChoice = -1;
+            System.out.println("Choose the worker for this turn:");
+            for (int i = 0; i < workersListMsg.getWorkers().size(); i++) {
+                System.out.printf("%d) Worker at position %s\n", i, workersListMsg.getWorkers().get(i).getPosition().toString());
             }
-            if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size());
 
-        messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );
+            int workerChoice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    workerChoice = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    workerChoice = -1;
+                }
+                if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size());
+
+            messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );
+
+        });
+        scannerThread.start();
 
     }
 
     @Override
     public void chooseAction(ActionsListMsg actionsListMsg) {
 
-        System.out.println("Choose the next action: ");
-        for (int c=0; c<actionsListMsg.getActions().size(); c++){
-            System.out.printf("%d) %s\n", c, actionsListMsg.getActions().get(c));
-        }
+        scannerThread = new Thread(() -> {
 
-        int actionChoice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                actionChoice=cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                actionChoice = -1;
+            System.out.println("Choose the next action: ");
+            for (int c=0; c<actionsListMsg.getActions().size(); c++){
+                System.out.printf("%d) %s\n", c, actionsListMsg.getActions().get(c));
             }
-            if (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size());
 
-        messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );
+            int actionChoice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    actionChoice=cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    actionChoice = -1;
+                }
+                if (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size());
+
+            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );
+
+        });
+        scannerThread.start();
 
     }
 
     @Override
     public void chooseCell(CellListMsg cellListMsg) {
 
-        System.out.printf("Choose the cell where to do the %s action\n", cellListMsg.getAction());
-        for (int c=0; c<cellListMsg.getCellList().size(); c++){
-            System.out.printf("%2d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
-        }
-        int choice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                choice = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                choice = -1;
-            }
-            if (choice<0 || choice>=cellListMsg.getCellList().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (choice<0 || choice>=cellListMsg.getCellList().size());
+        scannerThread = new Thread(() -> {
 
-        messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );
+            System.out.printf("Choose the cell where to do the %s action\n", cellListMsg.getAction());
+            for (int c=0; c<cellListMsg.getCellList().size(); c++){
+                System.out.printf("%2d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
+            }
+            int choice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    choice = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    choice = -1;
+                }
+                if (choice<0 || choice>=cellListMsg.getCellList().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (choice<0 || choice>=cellListMsg.getCellList().size());
+
+            messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );
+
+        });
+        scannerThread.start();
 
     }
 
@@ -367,24 +416,29 @@ public class CLInterface implements UserInterface
     @Override
     public void chooseBuildOption(OptionsListMsg optionsListMsg) {
 
-        System.out.printf("Choose what to build in the %s cell\n", optionsListMsg.getCell().getLocation().toString());
-        for (int i = 0; i < optionsListMsg.getOptions().size(); i++) {
-            System.out.printf("%2d) %s\n", i, optionsListMsg.getOptions().get(i));
-        }
-        int optionChoice;
-        do {
-            cmdIn = new Scanner(System.in);
-            try {
-                optionChoice = cmdIn.nextInt();
-            } catch (InputMismatchException e) {
-                optionChoice = -1;
-            }
-            if (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size()){
-                System.out.println("Choice not allowed, retry");
-            }
-        }while (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size());
+        scannerThread = new Thread(() -> {
 
-        messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );
+            System.out.printf("Choose what to build in the %s cell\n", optionsListMsg.getCell().getLocation().toString());
+            for (int i = 0; i < optionsListMsg.getOptions().size(); i++) {
+                System.out.printf("%2d) %s\n", i, optionsListMsg.getOptions().get(i));
+            }
+            int optionChoice;
+            do {
+                cmdIn = new Scanner(System.in);
+                try {
+                    optionChoice = cmdIn.nextInt();
+                } catch (InputMismatchException e) {
+                    optionChoice = -1;
+                }
+                if (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size()){
+                    System.out.println("Choice not allowed, retry");
+                }
+            }while (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size());
+
+            messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );
+
+        });
+        scannerThread.start();
 
     }
 
@@ -416,7 +470,6 @@ public class CLInterface implements UserInterface
                 messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );
             }
 
-
         } );
 
         scannerThread.start();
@@ -447,6 +500,11 @@ public class CLInterface implements UserInterface
     @Override
     public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
         System.out.printf("The player %s has lost\n", otherLostMsg.getPlayer());
+    }
+
+    @Override
+    public void notYourTurnMessage() {
+        System.out.println("It's not your turn\n");
     }
 
     @Override

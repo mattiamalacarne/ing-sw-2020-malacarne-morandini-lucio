@@ -143,6 +143,11 @@ public interface UserInterface
     void otherPlayerLostMessage(OtherLostMsg otherLostMsg);
 
     /**
+     * Communicates to the user that it's not his turn
+     */
+    void notYourTurnMessage();
+
+    /**
      * Communicates to the user that the game is ended
      * and the connection with the game server is closing,
      * return then to the Play-Exit menu

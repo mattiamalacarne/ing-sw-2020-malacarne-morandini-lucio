@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Class for the GUI interface of the game
@@ -107,6 +109,7 @@ public class GUinterface extends JFrame implements UserInterface
             case WAIT_OTHER_PLAYER: actualScreen = new GenericMessageScreen(gui.getSize(), "Waiting other players", this); break;
             case YOU_LOST: actualScreen = new GenericMessageScreen(gui.getSize(), "You lost!", this); break;
             case YOU_WIN: actualScreen = new GenericMessageScreen(gui.getSize(), "You are the winner!!", this); break;
+            case GAME_CLOSING: actualScreen = new GenericMessageScreen(gui.getSize(), "Other players have left, Game is restarting", this); break;
             case SETUP: actualScreen = new SetUpScreen(this); break;
             case CARDLIST: actualScreen = new CardSelectorScreen(this, (((CardsListMsg) msg).getCards())); break;
             case STARTING: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;
@@ -353,8 +356,18 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     @Override
+    public void notYourTurnMessage() {
+
+    }
+
+    @Override
     public void closeGameMessage() {
-        System.out.println("Game is closing");
+        try {
+            gui.loadNewStatusScreen(GUIStatus.GAME_CLOSING, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
+        startReloadTimer();
     }
 
     @Override
@@ -377,6 +390,22 @@ public class GUinterface extends JFrame implements UserInterface
     {
         //TODO: SETUP the timer
         System.out.println("[DEBUG]: Starting reload timer");
+        Timer timer = new Timer();
+
+        needCard = true;
+        TimerTask reloadGame = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    gui.loadNewStatusScreen(GUIStatus.SETUP, null);
+                    setup = (SetUpScreen) actualScreen;
+                } catch (GUIStatusErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        timer.schedule(reloadGame, 5000);
     }
 
 

@@ -25,7 +25,8 @@ public class CardGamePanel extends JPanel {
         cardDisplay = new JLabel(cardImage);
 
         this.add(cardDisplay);
-        this.setVisible(true);
+        if (myCard == null) this.setVisible(false);
+        else this.setVisible(true);
     }
 
     /**
@@ -35,7 +36,10 @@ public class CardGamePanel extends JPanel {
      */
     private ImageIcon getCardImage(Card card)
     {
-        ImageIcon icon = new ImageIcon(getClass().getResource(card.getImage()));
+        String image;
+        if (card == null) image = "/cards/NoPower.png";
+        else image = card.getImage();
+        ImageIcon icon = new ImageIcon(getClass().getResource(image));
         int scaleFactor = 4;
         Image scaled = icon.getImage().getScaledInstance(icon.getIconWidth()/scaleFactor, icon.getIconHeight()/scaleFactor, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);

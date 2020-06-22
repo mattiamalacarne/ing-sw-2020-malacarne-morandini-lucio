@@ -9,5 +9,6 @@ public enum GUIStatus
     WAIT_CARD_SELECTION,
     WAIT_OTHER_PLAYER,
     YOU_WIN,
-    YOU_LOST
+    YOU_LOST,
+    GAME_CLOSING
 }

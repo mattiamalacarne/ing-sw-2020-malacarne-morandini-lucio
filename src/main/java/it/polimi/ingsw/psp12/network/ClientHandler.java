@@ -54,7 +54,6 @@ public class ClientHandler implements Runnable {
 
         this.pingTimer = Executors.newSingleThreadScheduledExecutor();
         this.pingTimer.scheduleAtFixedRate(() -> {
-            // TODO: handle multi threading
             send(new Message(MsgCommand.PING));
         }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
     }
@@ -63,8 +62,10 @@ public class ClientHandler implements Runnable {
      * Determine if the socket is open
      * @return true if socket is open
      */
-    public boolean isRunning() { // TODO: handle multi threading
-        return running;
+    public boolean isRunning() {
+        synchronized (runningLock) {
+            return running;
+        }
     }
 
     /**
@@ -95,10 +96,6 @@ public class ClientHandler implements Runnable {
                 }
             }
             catch (IOException e) {
-                // TODO: manage exception
-                //System.out.println("client " + socket.getInetAddress() + " connection dropped");
-                //e.printStackTrace();
-
                 synchronized (runningLock) {
                     isRunning = running;
                 }
@@ -112,7 +109,7 @@ public class ClientHandler implements Runnable {
                 close();
             }
             catch (ClassNotFoundException e) {
-                // TODO: manage exception
+                System.out.println("unknown message... ignoring");
                 e.printStackTrace();
             }
 
@@ -132,8 +129,6 @@ public class ClientHandler implements Runnable {
             outgoing.writeObject(message);
         }
         catch (IOException e) {
-            // TODO: manage exception
-            //e.printStackTrace();
             // notify the server that the client has disconnected
             server.processCommand(new Message(MsgCommand.DISCONNECTED), this);
         }
@@ -146,7 +141,7 @@ public class ClientHandler implements Runnable {
     {
         if (running) {
             synchronized (runningLock) {
-                running = false; // TODO: handle multi threading
+                running = false;
             }
 
             pingTimer.shutdownNow();
@@ -155,6 +150,7 @@ public class ClientHandler implements Runnable {
                 outgoing.close();
                 socket.close();
             } catch (IOException e) {
+                System.out.println("error while closing client socket");
                 e.printStackTrace();
             }
         }

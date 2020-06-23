@@ -200,7 +200,6 @@ public class GameServer implements Runnable, Server {
         // close socket to avoid sending close message
         client.close();
 
-        // TODO: handle multi threading
         // stop game and disconnect all clients
         controller.endGame();
     }
@@ -251,7 +250,6 @@ public class GameServer implements Runnable, Server {
 
             abortTimer = Executors.newSingleThreadScheduledExecutor();
             abortTimer.schedule(() -> {
-                // TODO: handle multi threading
                 System.out.println("abort timer expired");
                 // stop game and disconnect all clients
                 controller.endGame();

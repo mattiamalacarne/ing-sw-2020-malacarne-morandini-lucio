@@ -43,7 +43,6 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
 
         this.pingTimer = Executors.newSingleThreadScheduledExecutor();
         this.pingTimer.scheduleAtFixedRate(() -> {
-            // TODO: handle multi threading
             sendRequestToServer(new Message(MsgCommand.PING));
         }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
 

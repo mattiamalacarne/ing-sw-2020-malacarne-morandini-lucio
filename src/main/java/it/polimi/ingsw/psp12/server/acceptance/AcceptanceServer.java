@@ -387,7 +387,6 @@ public class AcceptanceServer implements Runnable, Server {
 
         requestTimer = Executors.newSingleThreadScheduledExecutor();
         requestTimer.schedule(() -> {
-            // TODO: handle multi threading
             System.out.println("request timer expired");
             // disconnect client
             disconnectedClient(creator);

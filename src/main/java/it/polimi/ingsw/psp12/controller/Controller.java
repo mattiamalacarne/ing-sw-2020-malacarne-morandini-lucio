@@ -126,9 +126,6 @@ public class Controller implements Observer<Message> {
             case UNDO_TURN:
                 undoTurn();
                 break;
-            case MY_CARD:
-                sendCard();
-                break;
         }
     }
 
@@ -275,7 +272,10 @@ public class Controller implements Observer<Message> {
 
         System.out.println("player " + model.getCurrentPlayer().getId() + " started the turn");
 
-        sendCard();
+        System.out.println("sending card to the player " + model.getCurrentPlayer().getId());
+        sendToCurrentPlayer(new YourCardMsg(model.getCurrentPlayer().getCard()));
+
+        System.out.println("sending workers positions to the player " + model.getCurrentPlayer().getId());
         sendToCurrentPlayer(new WorkersListMsg(model.getCurrentPlayer().getWorkers()));
     }
 
@@ -441,15 +441,6 @@ public class Controller implements Observer<Message> {
     }
 
     /**
-     * Send the assigned card to the current player
-     */
-    void sendCard() {
-        System.out.println("sending card to the current player");
-
-        sendToCurrentPlayer(new YourCardMsg(model.getCurrentPlayer().getCard()));
-    }
-
-    /**
      * Send the assigned cards to the players
      */
     void sendCardsToPlayers() {
@@ -472,7 +463,6 @@ public class Controller implements Observer<Message> {
         // start undo timer
         this.undoTimer = Executors.newSingleThreadScheduledExecutor();
         undoTimer.schedule(() -> {
-            // TODO: handle multi threading
             System.out.println("undo timer expired");
             // end the turn if the timer expired
             endCurrentTurn();

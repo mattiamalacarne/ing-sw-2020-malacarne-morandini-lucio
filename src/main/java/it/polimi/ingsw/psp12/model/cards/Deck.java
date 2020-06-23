@@ -1,8 +1,8 @@
 package it.polimi.ingsw.psp12.model.cards;
 
 import java.beans.XMLDecoder;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +20,7 @@ public class Deck {
      * Loads cards from file on startup
      * @throws IOException IOException
      */
+    @SuppressWarnings("unchecked")
     public static void loadCards() throws IOException {
 
         // make sure to load cards only one time
@@ -27,14 +28,20 @@ public class Deck {
             return;
         }
 
-        List<LoadedCard> loadedCards;
+        InputStream fis = Deck.class.getClassLoader().getResourceAsStream("cards/Cards.xml");
+        if (fis == null) {
+            throw new IOException("cards file not found");
+        }
 
-        //FileInputStream fis = new FileInputStream("src\\main\\resources\\cards\\Cards.xml");
-        // TODO: For start in linux remove me;
-        FileInputStream fis = new FileInputStream("src/main/resources/cards/Cards.xml");
         XMLDecoder decoder = new XMLDecoder(fis);
 
-        loadedCards = (List<LoadedCard>) decoder.readObject( );
+        List<LoadedCard> loadedCards;
+        try {
+            loadedCards = (List<LoadedCard>) decoder.readObject();
+        }
+        catch (ClassCastException e) {
+            throw new IOException("invalid cards file");
+        }
 
         decoder.close();
         fis.close();

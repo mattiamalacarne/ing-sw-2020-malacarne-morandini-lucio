@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp12.client;
 
 
+import it.polimi.ingsw.psp12.view.userinterface.CLInterface;
+import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
 import it.polimi.ingsw.psp12.view.userinterface.InterfaceSelector;
 import it.polimi.ingsw.psp12.view.userinterface.UserInterface;
 
@@ -15,14 +17,14 @@ import java.util.Scanner;
 public class ClientLauncher
 {
     // TODO: Cambiare il tipo una volta che michele ha settato il factory per le interfacce
-    private Object userInterface;
+    /*private Object userInterface;
     private ServerInfo serverInfo;
 
     /**
      * Ask user which interface the game has to load
      * @return reference of the selected interface
      */
-    private UserInterface chooseUserInterface()  {
+    /*private UserInterface chooseUserInterface()  {
 
         System.out.println("Select the interface you want to use");
         System.out.println("1) CLI");
@@ -53,17 +55,25 @@ public class ClientLauncher
             }
         }
         return null;
-    }
+    }*/
 
     public static void main (String[] args) throws IOException {
 
+        /*
         ClientLauncher client = new ClientLauncher();
         UserInterface ui = client.chooseUserInterface();
         //TODO: Toglimi alla fine (serve solo per testare la GUI
         //UserInterface ui = InterfaceSelector.setInterface(2);
         //TODO: Fine cosa da rimuovere
+        */
 
 
+        if (args.length > 0 && (args[0].contains("cli") || args[0].contains("c"))) {
+            new CLInterface();
+        }
+        else {
+            new GUinterface();
+        }
     }
 
 

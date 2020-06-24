@@ -10,13 +10,13 @@ import java.util.List;
  */
 public abstract class Observable<T> {
 
-    private List<Observer<T>> observers = new ArrayList<>();
+    private final List<Observer<T>> observers = new ArrayList<>();
 
-    public void addObserver(Observer observer){
+    public void addObserver(Observer<T> observer){
         observers.add(observer);
     }
 
-    public void removeObserver(Observer observer){
+    public void removeObserver(Observer<T> observer){
         observers.remove(observer);
     }
 

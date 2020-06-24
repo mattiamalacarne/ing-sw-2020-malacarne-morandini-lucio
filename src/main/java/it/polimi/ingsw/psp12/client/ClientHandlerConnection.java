@@ -26,6 +26,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     private ObjectOutputStream output_stream;
     private ObjectInputStream input_stream;
     private Boolean running;
+    private final Object runningLock;
 
     /**
      * Timer used to periodically send ping to keep the connection open
@@ -55,20 +56,28 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
         output_stream.flush();
 
         input_stream = new ObjectInputStream(clientSocket.getInputStream());
-
+        this.runningLock = new Object();
     }
 
     @Override
     public void run()
     {
+//        boolean isRunning;
+//        synchronized (runningLock) {
+//            isRunning = running;
+//        }
         // Connect to the server
         try {
 
+//            while (isRunning){
             while (running){
 
                 Message msg = (Message) input_stream.readObject();
                 notifyObservers(msg);
 
+//                synchronized (runningLock) {
+//                    isRunning = running;
+//                }
             }
 
         } catch (IOException | ClassNotFoundException e) {

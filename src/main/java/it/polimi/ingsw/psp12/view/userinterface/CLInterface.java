@@ -24,9 +24,14 @@ public class CLInterface implements UserInterface
      */
     private Scanner cmdIn;
 
-    //TODO: rimuovere poi, non necessario
+    /**
+     * The input stream reader
+     */
     private InputStreamReader inputStreamReader;
 
+    /**
+     * Used to know when to terminate the game
+     */
     private Boolean exitGame;
 
     /**
@@ -36,6 +41,9 @@ public class CLInterface implements UserInterface
 
 //    private Boolean isWaiting;
 
+    /**
+     * Thread dedicated to receive user input
+     */
     private Thread scannerThread;
 
     private Thread timerThread;
@@ -121,10 +129,17 @@ public class CLInterface implements UserInterface
             System.out.println("Player number [2-3]:");
             int playerNumber;
             do {
-                cmdIn=new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    playerNumber = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    playerNumber = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     playerNumber=0;
                 }
                 if (playerNumber<2 || playerNumber>3){
@@ -160,8 +175,15 @@ public class CLInterface implements UserInterface
         }
 
         System.out.println("What's your name: ");
-        cmdIn= new Scanner(inputStreamReader);
+
         String playerName = cmdIn.nextLine();
+
+        //Checks if it's still connected to the server
+        if (exitGame){
+            closeGameMessage();
+            return;
+        }
+
         messageHandler.sendToServer(new JoinMsg(playerName));
 
 //        });
@@ -204,6 +226,13 @@ public class CLInterface implements UserInterface
 
             System.out.println("That name is already used! Choose another name: ");
             String playerName = cmdIn.nextLine();
+
+            //Checks if it's still connected to the server
+            if (exitGame){
+                closeGameMessage();
+                return;
+            }
+
             messageHandler.sendToServer(new JoinMsg(playerName));
 
         });
@@ -225,16 +254,18 @@ public class CLInterface implements UserInterface
                     System.out.printf("%2d) %s\n", c, cardsListMsg.getCards().get(c-1).getName());
                 }
 
-                cmdIn = new Scanner(System.in);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    cardChoice = cmdIn.nextInt();
-                } catch (InputMismatchException e){
+                    cardChoice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     cardChoice = -1;
-                    if (exitGame){
-                        //message used just to discover that the server connection is closed
-                        messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(0)));
-                        return;
-                    }
                 }
                 if (cardChoice<0 || cardChoice>cardsListMsg.getCards().size()){
                     System.out.println("Choice not allowed, retry\n");
@@ -250,10 +281,7 @@ public class CLInterface implements UserInterface
                 }
             }while (cardChoice<=0 || cardChoice>cardsListMsg.getCards().size());
 
-            if (!exitGame) {
-                //Message printed only if there is a correct connection with the server
-                System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
-            }
+            System.out.printf("You choose %s\n\n", cardsListMsg.getCards().get(cardChoice-1).getName());
 
             messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));
 
@@ -273,10 +301,17 @@ public class CLInterface implements UserInterface
             }
             int colorChoice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    colorChoice=cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    colorChoice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     colorChoice=-1;
                 }
                 if ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() ){
@@ -290,10 +325,17 @@ public class CLInterface implements UserInterface
             }
             int worker1Position;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    worker1Position = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    worker1Position = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     worker1Position=-1;
                 }
                 if (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size()){
@@ -310,10 +352,17 @@ public class CLInterface implements UserInterface
             }
             int worker2Position;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    worker2Position = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    worker2Position = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     worker2Position=-1;
                 }
                 if (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position){
@@ -333,9 +382,14 @@ public class CLInterface implements UserInterface
     @Override
     public void yourCardMessage(YourCardMsg yourCardMsg) {
         System.out.println("Your card:");
-        System.out.println(yourCardMsg.getCard().getName());
-        System.out.println(yourCardMsg.getCard().getShortDescription());
-        System.out.println(yourCardMsg.getCard().getDescription() + "\n");
+
+        if (yourCardMsg.getCard()!=null) {
+            System.out.println(yourCardMsg.getCard().getName());
+            System.out.println(yourCardMsg.getCard().getShortDescription());
+            System.out.println(yourCardMsg.getCard().getDescription() + "\n");
+        } else {
+            System.out.println("No card\n");
+        }
 
     }
 
@@ -351,10 +405,17 @@ public class CLInterface implements UserInterface
 
             int workerChoice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    workerChoice = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    workerChoice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     workerChoice = -1;
                 }
                 if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
@@ -381,10 +442,17 @@ public class CLInterface implements UserInterface
 
             int actionChoice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    actionChoice=cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    actionChoice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     actionChoice = -1;
                 }
                 if (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size()){
@@ -410,10 +478,17 @@ public class CLInterface implements UserInterface
             }
             int choice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    choice = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    choice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     choice = -1;
                 }
                 if (choice<0 || choice>=cellListMsg.getCellList().size()){
@@ -440,10 +515,17 @@ public class CLInterface implements UserInterface
             }
             int optionChoice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    optionChoice = cmdIn.nextInt();
-                } catch (InputMismatchException e) {
+                    optionChoice = Integer.parseInt( input );
+                } catch (NumberFormatException e) {
                     optionChoice = -1;
                 }
                 if (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size()){
@@ -469,10 +551,17 @@ public class CLInterface implements UserInterface
 
             int choice;
             do {
-                cmdIn = new Scanner(inputStreamReader);
+                String input = cmdIn.nextLine();
+
+                //Checks if it's still connected to the server
+                if (exitGame){
+                    closeGameMessage();
+                    return;
+                }
+
                 try {
-                    choice = cmdIn.nextInt();
-                }catch (InputMismatchException e){
+                    choice = Integer.parseInt( input );
+                }catch (NumberFormatException e){
                     choice = -1;
                 }
                 if (choice<0 || choice>=2){
@@ -528,7 +617,7 @@ public class CLInterface implements UserInterface
 
 
         if (!exitGame) {
-            System.out.println("\nThe game is closing");
+            System.out.println("\nDisconnected from server, the game is closing");
             System.out.println("\nPress a key to exit");
 
             exitGame = true;

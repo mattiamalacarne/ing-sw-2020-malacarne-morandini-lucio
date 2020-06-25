@@ -35,6 +35,16 @@ public class CLInterface implements UserInterface
     private Boolean exitGame;
 
     /**
+     * Used to synchronize undo request and chooseWorker request
+     */
+    private final Object cmdLock;
+
+    /**
+     * Used to distinguish if to ask or not an input to the player after undo request
+     */
+    private Boolean discardUndo;
+
+    /**
      * MessageHandler that will manages the communication which the server
      */
     private MessageHandler messageHandler;
@@ -54,6 +64,7 @@ public class CLInterface implements UserInterface
     public CLInterface() {
 
         welcomeMessage();
+        cmdLock = new Object();
 
     }
 
@@ -398,32 +409,36 @@ public class CLInterface implements UserInterface
 
         scannerThread = new Thread(() -> {
 
-            System.out.println("Choose the worker for this turn:");
-            for (int i = 0; i < workersListMsg.getWorkers().size(); i++) {
-                System.out.printf("%d) Worker at position %s\n", i, workersListMsg.getWorkers().get(i).getPosition().toString());
+            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
+            synchronized (cmdLock) {
+
+                System.out.println("Choose the worker for this turn:");
+                for (int i = 0; i < workersListMsg.getWorkers().size(); i++) {
+                    System.out.printf("%d) Worker at position %s\n", i, workersListMsg.getWorkers().get(i).getPosition().toString());
+                }
+
+                int workerChoice;
+                do {
+                    String input = cmdIn.nextLine();
+
+                    //Checks if it's still connected to the server
+                    if (exitGame){
+                        closeGameMessage();
+                        return;
+                    }
+
+                    try {
+                        workerChoice = Integer.parseInt( input );
+                    } catch (NumberFormatException e) {
+                        workerChoice = -1;
+                    }
+                    if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
+                        System.out.println("Choice not allowed, retry");
+                    }
+                }while (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size());
+
+                messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );
             }
-
-            int workerChoice;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    workerChoice = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    workerChoice = -1;
-                }
-                if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size());
-
-            messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );
 
         });
         scannerThread.start();
@@ -543,36 +558,47 @@ public class CLInterface implements UserInterface
     @Override
     public void chooseUndo() {
 
+        discardUndo = false;
         scannerThread = new Thread( () -> {
 
-            System.out.println("Do you want to confirm your turn?");
-            System.out.println("You have 5 seconds to chose");
-            System.out.println("0) Confirm\n1) Undo");
+            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
+            synchronized (cmdLock) {
 
-            int choice;
-            do {
-                String input = cmdIn.nextLine();
+                System.out.println("Do you want to confirm your turn?");
+                System.out.println("You have 5 seconds to chose");
+                System.out.println("0) Confirm\n1) Undo");
 
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
+                int choice;
+                do {
+
+                    String input = cmdIn.nextLine();
+
+                    //Check if player let the undo timer expire, ignore the player input
+                    if (discardUndo){
+                        return;
+                    }
+
+                    //Checks if it's still connected to the server
+                    if (exitGame){
+                        closeGameMessage();
+                        return;
+                    }
+
+                    try {
+                        choice = Integer.parseInt( input );
+                    }catch (NumberFormatException e){
+                        choice = -1;
+                    }
+                    if (choice<0 || choice>=2){
+                        System.out.println("Choice not allowed, retry");
+                    }
+                }while (choice<0 || choice>=2);
+
+                if (choice == 0){
+                    messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );
+                }else {
+                    messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );
                 }
-
-                try {
-                    choice = Integer.parseInt( input );
-                }catch (NumberFormatException e){
-                    choice = -1;
-                }
-                if (choice<0 || choice>=2){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (choice<0 || choice>=2);
-
-            if (choice == 0){
-                messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );
-            }else {
-                messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );
             }
 
         } );
@@ -584,7 +610,13 @@ public class CLInterface implements UserInterface
     @Override
     public void endTurnMessage() {
         scannerThread.interrupt();
-        System.out.print("\nYour turn is ended!\n");
+        System.out.print("\nYour turn is ended!");
+
+        //If the thread that ask the undo request is still waiting for an input
+        if (scannerThread.isAlive()){
+            discardUndo = true;
+            System.out.println("\nPress a key to continue\n");
+        }
     }
 
     @Override

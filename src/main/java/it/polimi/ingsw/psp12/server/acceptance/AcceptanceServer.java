@@ -44,6 +44,11 @@ public class AcceptanceServer implements Runnable, Server {
     private Room waitingRoom;
 
     /**
+     * Game server associated with the waiting room
+     */
+    GameServer gameServer;
+
+    /**
      * Client that has created the current room
      */
     private ClientHandler creator;
@@ -270,7 +275,6 @@ public class AcceptanceServer implements Runnable, Server {
         waitingRoom.setMaxPlayersCount(maxPlayers);
         waitingRoom.activate();
 
-        GameServer gameServer;
         try {
             // create game server
             gameServer = new GameServer(waitingRoom);
@@ -318,6 +322,7 @@ public class AcceptanceServer implements Runnable, Server {
         synchronized (waitingRoomLock) {
             waitingRoom = null;
             creator = null;
+            gameServer = null;
         }
 
         System.out.println("reset waiting room");
@@ -365,6 +370,12 @@ public class AcceptanceServer implements Runnable, Server {
         // stop request timer if it is running
         if (requestTimer != null) {
             requestTimer.shutdownNow();
+        }
+
+        synchronized (waitingRoomLock) {
+            if (gameServer != null) {
+                gameServer.gameEnded();
+            }
         }
 
         System.out.println("shutting down acceptance server...");

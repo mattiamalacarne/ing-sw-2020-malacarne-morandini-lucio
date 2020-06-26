@@ -44,6 +44,7 @@ public class PlayerTest {
         assertEquals("Test", player.getName());
         assertFalse(player.isInitialized());
         assertTrue(player.getPower() instanceof BasicPower);
+        assertEquals(Card.getNoPowers(), player.getCard());
 
         assertNull(player.getWorkerByIndex(0).getColor());
         assertNull(player.getWorkerByIndex(0).getPosition());
@@ -115,7 +116,7 @@ public class PlayerTest {
         Deck deck = new Deck(2);
 
         assertTrue(player.getPower() instanceof BasicPower);
-        assertNull(player.getCard());
+        assertEquals(Card.getNoPowers(), player.getCard());
 
         Card card = deck.getAvailableCards().get(2);
         player.setPower(card);

@@ -109,6 +109,17 @@ public class CellDraw extends JButton
     }
 
     /**
+     * Load the dome icon
+     * @return
+     */
+    private ImageIcon loadDome()
+    {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/dome.png"));
+        Image scaled = icon.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
+    }
+
+    /**
      * Draw something in this cell
      * @param type
      * @param color
@@ -119,6 +130,7 @@ public class CellDraw extends JButton
         switch (type)
         {
             case WORKER: {this.setIcon(loadWorker(color)); break;}
+            case DOME: {this.setIcon(loadDome()); break;}
             case TOWER: {this.parent.setTower(loadTower(level)); break; }
             case SELECTOR: {this.loadSelector(); break; }
         }

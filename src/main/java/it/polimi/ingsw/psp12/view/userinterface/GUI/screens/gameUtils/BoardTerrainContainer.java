@@ -151,11 +151,12 @@ public class BoardTerrainContainer extends JLayeredPane
             Point cellPos = cell.getLocation();
             int level = cell.getTower().getLevel();
 
-            if (cell.getTower().hasDome()) level = 4;
 
             cells[cellPos.getX()][cellPos.getY()].cell.updateCell(CellIcon.TOWER, null, level);
+            if (cell.getTower().hasDome()) cells[cellPos.getX()][cellPos.getY()].cell.updateCell(CellIcon.DOME, null, 0);
         }
         //this.revalidate();
+
     }
 
     /**

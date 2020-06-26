@@ -7,5 +7,6 @@ package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 public enum CellIcon {
     WORKER,
     TOWER,
-    SELECTOR
+    SELECTOR,
+    DOME
 }

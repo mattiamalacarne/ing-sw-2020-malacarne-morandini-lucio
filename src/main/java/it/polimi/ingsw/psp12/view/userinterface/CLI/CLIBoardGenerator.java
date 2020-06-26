@@ -15,13 +15,13 @@ public class CLIBoardGenerator {
     /**
      * Reference to the original board, where to take info about the board to print
      */
-    private Board board;
+    private final Board board;
 
     /**
      * Strings used to format text
      */
     static String cellFormat = "# %-20s "; // meglio █ ?
-    static String testLastCellFormat = "# %-20s #";
+//    static String testLastCellFormat = "# %-20s #";
     static String domeString = "        ^  "; //meglio ▲ ?
 
     public CLIBoardGenerator(Board board) {
@@ -64,6 +64,7 @@ public class CLIBoardGenerator {
      * @return The name of the player
      */
     private String getPlayerName(Cell cell){
+        //Player name limited to 4 char
         String playerName = cell.getWorker().getPlayerName();
 
         if (playerName.length()>=4) {
@@ -80,9 +81,7 @@ public class CLIBoardGenerator {
     //Upper_Bottom border
     private void makeBorder(StringBuilder boardString) {
 
-        for (int c = 0; c < 23; c++) {
-            boardString.append('#'); //meglio ■ ?
-        }
+        boardString.append("#".repeat(23)); //meglio ■ ?
     }
 
     //INFO LEVEL: coordinate
@@ -99,7 +98,7 @@ public class CLIBoardGenerator {
 
         //There is a player
         if (cell.hasWorker() && cell.getTower().getLevel() == 3) {
-            //FIXME: nome player
+            //append player name
             boardString.append(String.format(cellFormat, colorString(getPlayerName(cell), cell.getWorker().getColor())));
 
         //There is a dome
@@ -118,7 +117,7 @@ public class CLIBoardGenerator {
 
         //There is a player
         if (cell.hasWorker() && cell.getTower().getLevel() == 2) {
-            //FIXME: nome player
+            //append player name
             boardString.append(String.format(cellFormat, colorString(getPlayerName(cell), cell.getWorker().getColor())));
 
         //There is a build
@@ -140,7 +139,7 @@ public class CLIBoardGenerator {
 
         //There is a player
         if (cell.hasWorker() && cell.getTower().getLevel() == 1) {
-            //FIXME: nome player
+            //append player name
             boardString.append(String.format(cellFormat, colorString(getPlayerName(cell), cell.getWorker().getColor())));
 
         //There is a build
@@ -162,7 +161,7 @@ public class CLIBoardGenerator {
 
         //There is a player
         if (cell.hasWorker() && cell.getTower().getLevel() == 0) {
-            //FIXME: nome player
+            //append player name
             boardString.append(String.format(cellFormat, colorString(getPlayerName(cell), cell.getWorker().getColor())));
 
         //There is a build

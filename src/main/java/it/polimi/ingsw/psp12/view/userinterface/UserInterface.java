@@ -15,11 +15,6 @@ import java.net.UnknownHostException;
 
 public interface UserInterface
 {
-    /**
-     * Write a string on the standard output
-     * @param s the string to write
-     */
-    void writeOnStream(String s);
 
     /**
      * The user chooses the IP of the to server to which it wants to connect

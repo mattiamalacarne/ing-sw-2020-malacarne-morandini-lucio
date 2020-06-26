@@ -62,27 +62,25 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     @Override
     public void run()
     {
-//        boolean isRunning;
-//        synchronized (runningLock) {
-//            isRunning = running;
-//        }
+        boolean isRunning;
+        synchronized (runningLock) {
+            isRunning = running;
+        }
         // Connect to the server
         try {
 
-//            while (isRunning){
-            while (running){
+            while (isRunning){
 
                 Message msg = (Message) input_stream.readObject();
                 notifyObservers(msg);
 
-//                synchronized (runningLock) {
-//                    isRunning = running;
-//                }
+                synchronized (runningLock) {
+                    isRunning = running;
+                }
             }
 
         } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-            System.out.println("\nERROR: Game server unreachable\n");
+            //Game server unreachable
             notifyObservers(new Message(MsgCommand.CLOSE));
         }
 
@@ -99,8 +97,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
             output_stream.writeObject(msg);
             output_stream.flush();
         } catch (IOException e) {
-//            e.printStackTrace();
-            System.out.println("\nERROR: Game server unreachable\n");
+            //Game server unreachable
             notifyObservers(new Message(MsgCommand.CLOSE));
         }
 
@@ -111,7 +108,9 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
      * @throws IOException IO Exception
      */
     public void close() throws IOException {
-        running = false;
+        synchronized (runningLock) {
+            running = false;
+        }
         pingTimer.shutdownNow();
         clientSocket.close();
     }

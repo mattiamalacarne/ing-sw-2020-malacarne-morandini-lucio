@@ -32,6 +32,7 @@ public class Player
         this.name = name;
         this.initialized = false;
         this.power = new BasicPower();
+        this.card = Card.getNoPowers();
 
         workers = new Worker[2];
         for (int i = 0; i < 2; i++) {

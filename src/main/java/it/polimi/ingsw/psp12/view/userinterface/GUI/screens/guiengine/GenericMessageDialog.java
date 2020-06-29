@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * this class is a dialogbox for display generic message to the user
+ * @author Mattia Malacarne
+ */
 public class GenericMessageDialog extends DialogContent
 {
 

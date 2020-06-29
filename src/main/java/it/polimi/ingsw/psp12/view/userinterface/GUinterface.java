@@ -134,19 +134,19 @@ public class GUinterface extends JFrame implements UserInterface
      * @param hostname server address
      */
     public void connectToServer(String hostname) throws IOException {
-        System.out.println("Provo a connettermi");
+        //System.out.println("Provo a connettermi");
         this.hostname = hostname;
         ServerInfo serverInfo;
 
         try {
             serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));
         } catch (UnknownHostException e) {
-            System.out.println("pls retry"); // TODO: show retry popup
+            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "Invalid address, please retry"), "Network error");
             return;
         }
 
         if (!messageHandler.connect(serverInfo)) {
-            System.out.println("pls retry"); // TODO: show retry popup
+            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "Invalid address, please retry"), "Network error");
         }
     }
 
@@ -177,14 +177,21 @@ public class GUinterface extends JFrame implements UserInterface
         askPlayerName(0);
     }
 
+    /**
+     * Display a dialog for set a player name
+     * @param choosed
+     */
     public void askPlayerName(int choosed)
     {
         dialog = new SetupDialog(this, new PlayerNamePanel(this, choosed),  "What's your name?");
     }
 
+    /**
+     * Ask the server to set the choosed name
+     * @param playerName
+     */
     public void setPlayerName(String playerName)
     {
-        //System.out.println("Provo ad aggiungere il nome");
         messageHandler.sendToServer(new JoinMsg(playerName));
     }
 
@@ -230,11 +237,19 @@ public class GUinterface extends JFrame implements UserInterface
         }
     }
 
+    /**
+     * Send the card to the server
+     * @param card
+     */
     public void sendCardToServer(Card card)
     {
         messageHandler.sendToServer(new SelectCardMsg(card));
     }
 
+    /**
+     * Send to server the worker selected int the current turn
+     * @param msg
+     */
     public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
     {
         System.out.println("Worker Selected");
@@ -250,6 +265,11 @@ public class GUinterface extends JFrame implements UserInterface
 
     }
 
+
+    /**
+     * Send to server the info for start the game (Worker position and Color
+     * @param msg
+     */
     public void sendStartInfo(PlayerInfoMsg msg)
     {
         messageHandler.sendToServer(msg);
@@ -266,11 +286,19 @@ public class GUinterface extends JFrame implements UserInterface
 
     }
 
+    /**
+     * Send to server the selected action
+     * @param msg
+     */
     public void sendActionToServer(SelectActionMsg msg)
     {
         messageHandler.sendToServer(msg);
     }
 
+    /**
+     * Send to server the selected cell
+     * @param sel
+     */
     public void sendCellToServer(Cell sel)
     {
         messageHandler.sendToServer(new SelectCellMsg(sel));
@@ -321,6 +349,10 @@ public class GUinterface extends JFrame implements UserInterface
         game.displayUndoSelector();
     }
 
+    /**
+     * Send to server the undo decision
+     * @param cmd
+     */
     public void sendUndoToServer(MsgCommand cmd)
     {
         System.out.println("Sending undo to server");
@@ -376,11 +408,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void closeGameMessage() {
-        try {
-            gui.loadNewStatusScreen(GUIStatus.GAME_CLOSING, null);
-        } catch (GUIStatusErrorException e) {
-            e.printStackTrace();
-        }
+
         startReloadTimer();
     }
 

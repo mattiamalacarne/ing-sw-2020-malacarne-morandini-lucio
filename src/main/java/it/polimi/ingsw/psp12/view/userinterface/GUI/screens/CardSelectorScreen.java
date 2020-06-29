@@ -1,6 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens;
 
+import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
 import it.polimi.ingsw.psp12.model.cards.Card;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils.CardListDisplayer;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils.SelectedCardPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
@@ -47,13 +49,27 @@ public class CardSelectorScreen extends Screen
         this.setVisible(true);
     }
 
+    /**
+     * Display card image and description on the right
+     * @param card
+     */
     public void updateConfirmPanel(Card card)
     {
         selectedCardPanel.updateMe(card);
     }
 
+    /**
+     * Send decsion to server
+     * @param card
+     */
     public void setCard(Card card)
     {
+
         gui.sendCardToServer(card);
+        try {
+            gui.loadNewStatusScreen(GUIStatus.WAIT_CARD_SELECTION, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
     }
 }

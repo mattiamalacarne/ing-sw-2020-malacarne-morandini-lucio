@@ -322,6 +322,9 @@ public class AcceptanceServer implements Runnable, Server {
         synchronized (waitingRoomLock) {
             waitingRoom = null;
             creator = null;
+            if (gameServer != null) {
+                gameServer.gameEnded();
+            }
             gameServer = null;
         }
 
@@ -372,11 +375,8 @@ public class AcceptanceServer implements Runnable, Server {
             requestTimer.shutdownNow();
         }
 
-        synchronized (waitingRoomLock) {
-            if (gameServer != null) {
-                gameServer.gameEnded();
-            }
-        }
+        // close waiting room game server
+        resetWaitingRoom();
 
         System.out.println("shutting down acceptance server...");
 

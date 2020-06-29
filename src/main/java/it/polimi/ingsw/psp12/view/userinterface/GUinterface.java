@@ -73,6 +73,8 @@ public class GUinterface extends JFrame implements UserInterface
 
         needCard = true;
 
+        messageHandler = new MessageHandler(this);
+
         this.setSize((int) windowDimX, (int) windowDimY + 40);
         this.setResizable(false);
 
@@ -124,23 +126,31 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
 
+    /**
+     * Connect to the server with the address provided by the user
+     * @param hostname server address
+     */
     public void connectToServer(String hostname) throws IOException {
         System.out.println("Provo a connettermi");
         this.hostname = hostname;
-        messageHandler = new MessageHandler(this);
-        //messageHandler.startGame();
+        ServerInfo serverInfo;
+
+        try {
+            serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));
+        } catch (UnknownHostException e) {
+            System.out.println("pls retry"); // TODO: show retry popup
+            return;
+        }
+
+        if (!messageHandler.connect(serverInfo)) {
+            System.out.println("pls retry"); // TODO: show retry popup
+        }
     }
 
     public void createRoom(int playerNumber) throws IOException {
         //TODO: Build a room with the helper
         System.out.println("Creo la stanza");
         messageHandler.sendToServer(new CreateMsg(playerNumber));
-    }
-
-    @Override
-    public ServerInfo getServerByIp() throws UnknownHostException {
-        System.out.println("Getting server ip");
-        return new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.polimi.ingsw.psp12.view.userinterface;
 
 import it.polimi.ingsw.psp12.client.MessageHandler;
 import it.polimi.ingsw.psp12.client.ServerInfo;
+import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
@@ -9,7 +10,9 @@ import it.polimi.ingsw.psp12.view.userinterface.CLI.CLIBoardGenerator;
 import java.io.*;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -45,6 +48,11 @@ public class CLInterface implements UserInterface
     private Boolean discardUndo;
 
     /**
+     * Used to discard close message when closing acceptance server to connect to game server
+     */
+    private Boolean serverClosedRedirection;
+
+    /**
      * MessageHandler that will manages the communication which the server
      */
     private MessageHandler messageHandler;
@@ -56,7 +64,7 @@ public class CLInterface implements UserInterface
      */
     private Thread scannerThread;
 
-    private Thread timerThread;
+//    private Thread timerThread;
 
     /**
      * CLI constructor
@@ -68,15 +76,49 @@ public class CLInterface implements UserInterface
 
     }
 
-    @Override
-    public void writeOnStream(String s)
-    {
-        System.out.println(s.toUpperCase());
+    /**
+     * Gets the input from the user and checks:
+     * -if it's a valid input
+     * -if it't in a valid range
+     *
+     * @param list The list used to determine the range size of possible selection
+     * @return The selection of the user
+     * @throws Throwable If a server disconnection it's detected while waiting for the user input
+     * that exception is launched to stop the scanner from waiting for a user input
+     */
+    private int getUserInput(List<?> list) throws Throwable {
+
+        int returnInput;
+        do {
+            String input = cmdIn.nextLine();
+
+            //Checks if it's still connected to the server
+            if (exitGame){
+                closeGameMessage();
+                throw new Throwable();
+            }
+
+            try {
+                returnInput = Integer.parseInt( input );
+            } catch (NumberFormatException e) {
+                returnInput=-1;
+            }
+            if (returnInput<0 || returnInput>=list.size()){
+                System.out.println("Choice not allowed, retry");
+            }
+        }while (returnInput<0 || returnInput>=list.size());
+
+        return returnInput;
+
     }
 
+    /**
+     * Welcome game menu
+     */
     public void welcomeMessage() {
 
         inputStreamReader = new InputStreamReader(System.in);
+        serverClosedRedirection = false;
         exitGame = false;
 
         System.out.print("\n***********************************");
@@ -171,10 +213,12 @@ public class CLInterface implements UserInterface
     }
 
     @Override
-    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException {
+    public void roomCreatedMessage(CreatedMsg createdMsg) {
 
-        //FIXME: uncomment after synchronization fix in ClientHandlerConnection
-//        scannerThread = new Thread(() -> {
+        serverClosedRedirection = true;
+        exitGame = false;
+
+        scannerThread = new Thread(() -> {
 
         System.out.printf("\nRoom for %d players created\n", createdMsg.getRoom().getMaxPlayersCount());
 
@@ -184,6 +228,7 @@ public class CLInterface implements UserInterface
         } catch (IOException e) {
             System.out.println("Error entering the room...");
         }
+        serverClosedRedirection = false;
 
         System.out.println("What's your name: ");
 
@@ -197,8 +242,8 @@ public class CLInterface implements UserInterface
 
         messageHandler.sendToServer(new JoinMsg(playerName));
 
-//        });
-//        scannerThread.start();
+        });
+        scannerThread.start();
 
     }
 
@@ -222,7 +267,7 @@ public class CLInterface implements UserInterface
         System.out.println("You have joined the room!\n");
 //        isWaiting = true;
 //        while (isWaiting){
-//            //TODO: stampa messaggio di waiting ?
+//            //TODO: print waiting message ?
 //        }
     }
 
@@ -306,84 +351,69 @@ public class CLInterface implements UserInterface
 
         scannerThread = new Thread(() -> {
 
+            //Request for color selection
             System.out.println("Choose a color:");
             for (int c=0; c<requestInfoMsg.getAvailableColors().size();c++){
                 System.out.printf("%d) %s\n", c, requestInfoMsg.getAvailableColors().get(c).toString());
             }
             int colorChoice;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    colorChoice = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    colorChoice=-1;
-                }
-                if ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() ){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while ( colorChoice<0 || colorChoice>=requestInfoMsg.getAvailableColors().size() );
-
-            System.out.println("Choose the position of the first worker:");
-            for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
+            try {
+                colorChoice = getUserInput(requestInfoMsg.getAvailableColors());
+            } catch (Throwable throwable) {
+                //server disconnected
+                return;
             }
-            int worker1Position;
-            do {
-                String input = cmdIn.nextLine();
 
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
+            //List used as support, where user choice for worker position will be added
+            List<Point> selectedPoint = new ArrayList<>();
+
+            //Two request for worker position
+            for (int i = 0; i < 2; i++) {
+
+                if (i==0){
+                    System.out.println("Choose the position of the first worker:");
+                }else {
+                    System.out.println("Choose the position of the second worker:");
                 }
 
-                try {
-                    worker1Position = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    worker1Position=-1;
+                //Prints all the available position
+                for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
+                    System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
                 }
-                if (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size()){
-                    System.out.println("Choice not allowed, retry");
+
+                //Selection of the position of the first worker
+                if (i==0){
+                    int worker1Position;
+                    try {
+                        worker1Position = getUserInput(requestInfoMsg.getAvailablePositions());
+                    } catch (Throwable throwable) {
+                        //server disconnected
+                        return;
+                    }
+                    //added user selection to the support list
+                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker1Position));
+                    //remove the selected point from the original list
+                    requestInfoMsg.getAvailablePositions().remove(worker1Position);
                 }
-            }while (worker1Position<0 || worker1Position>=requestInfoMsg.getAvailablePositions().size());
 
-            //TODO: rimuovere la cella scelta direttamente dalla lista
+                //Selection of the position of the second worker
+                else {
+                    int worker2Position;
+                    try {
+                        worker2Position = getUserInput(requestInfoMsg.getAvailablePositions());
+                    } catch (Throwable throwable) {
+                        //server disconnected
+                        return;
+                    }
+                    //added user selection to the support list
+                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker2Position));
+                }
 
-            //FIXME: va bene fare qui il controllo sulla scelta della stessa cella da parte dell'utente? (worker1Position==worker2Position)
-            System.out.println("Choose the position of the second worker:");
-            for (int c=0; c<requestInfoMsg.getAvailablePositions().size(); c++){
-                System.out.printf("%2d) %s\n", c, requestInfoMsg.getAvailablePositions().get(c).toString());
             }
-            int worker2Position;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    worker2Position = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    worker2Position=-1;
-                }
-                if (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (worker2Position<0 || worker2Position>=requestInfoMsg.getAvailablePositions().size() || worker1Position==worker2Position);
 
             messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),
-                    requestInfoMsg.getAvailablePositions().get(worker1Position),
-                    requestInfoMsg.getAvailablePositions().get(worker2Position) ) );
+                    selectedPoint.get(0),
+                    selectedPoint.get(1) ) );
 
         });
         scannerThread.start();
@@ -418,24 +448,12 @@ public class CLInterface implements UserInterface
                 }
 
                 int workerChoice;
-                do {
-                    String input = cmdIn.nextLine();
-
-                    //Checks if it's still connected to the server
-                    if (exitGame){
-                        closeGameMessage();
-                        return;
-                    }
-
-                    try {
-                        workerChoice = Integer.parseInt( input );
-                    } catch (NumberFormatException e) {
-                        workerChoice = -1;
-                    }
-                    if (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size()){
-                        System.out.println("Choice not allowed, retry");
-                    }
-                }while (workerChoice<0 || workerChoice>=workersListMsg.getWorkers().size());
+                try {
+                    workerChoice = getUserInput(workersListMsg.getWorkers());
+                } catch (Throwable throwable) {
+                    //server disconnected
+                    return;
+                }
 
                 messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );
             }
@@ -456,24 +474,12 @@ public class CLInterface implements UserInterface
             }
 
             int actionChoice;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    actionChoice = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    actionChoice = -1;
-                }
-                if (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size()){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (actionChoice<0 || actionChoice>=actionsListMsg.getActions().size());
+            try {
+                actionChoice = getUserInput(actionsListMsg.getActions());
+            } catch (Throwable throwable) {
+                //server disconnected
+                return;
+            }
 
             messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );
 
@@ -491,25 +497,14 @@ public class CLInterface implements UserInterface
             for (int c=0; c<cellListMsg.getCellList().size(); c++){
                 System.out.printf("%2d) %s\n", c, cellListMsg.getCellList().get(c).getLocation().toString());
             }
+
             int choice;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    choice = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    choice = -1;
-                }
-                if (choice<0 || choice>=cellListMsg.getCellList().size()){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (choice<0 || choice>=cellListMsg.getCellList().size());
+            try {
+                choice = getUserInput(cellListMsg.getCellList());
+            } catch (Throwable throwable) {
+                //server disconnected
+                return;
+            }
 
             messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );
 
@@ -528,25 +523,14 @@ public class CLInterface implements UserInterface
             for (int i = 0; i < optionsListMsg.getOptions().size(); i++) {
                 System.out.printf("%2d) %s\n", i, optionsListMsg.getOptions().get(i));
             }
+
             int optionChoice;
-            do {
-                String input = cmdIn.nextLine();
-
-                //Checks if it's still connected to the server
-                if (exitGame){
-                    closeGameMessage();
-                    return;
-                }
-
-                try {
-                    optionChoice = Integer.parseInt( input );
-                } catch (NumberFormatException e) {
-                    optionChoice = -1;
-                }
-                if (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size()){
-                    System.out.println("Choice not allowed, retry");
-                }
-            }while (optionChoice<0 || optionChoice>=optionsListMsg.getOptions().size());
+            try {
+                optionChoice = getUserInput(optionsListMsg.getOptions());
+            } catch (Throwable throwable) {
+                //server disconnected
+                return;
+            }
 
             messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );
 
@@ -647,18 +631,26 @@ public class CLInterface implements UserInterface
     @Override
     public void closeGameMessage() {
 
+        // Close message caused by disconnection of the acceptance server,
+        // need to be discarded because this disconnection it' not an error,
+        // it's a disconnection followed by connection to the game server
+        if (serverClosedRedirection){
+            return;
+        }
 
-        if (!exitGame) {
-            System.out.println("\nDisconnected from server, the game is closing");
+        // If there is an active thread ask to the user to press a key
+        // in that way active scanner will be closed
+        if (( scannerThread!=null && scannerThread.isAlive() ) && !exitGame) {
+            System.out.println("\nDisconnected from server");
             System.out.println("\nPress a key to exit");
 
             exitGame = true;
 
         } else {
+            System.out.println("\nThe game is closing");
             welcomeMessage();
         }
 
-//        welcomeMessage();
     }
 
 }

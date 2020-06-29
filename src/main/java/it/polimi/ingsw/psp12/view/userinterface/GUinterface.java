@@ -137,14 +137,6 @@ public class GUinterface extends JFrame implements UserInterface
         messageHandler.sendToServer(new CreateMsg(playerNumber));
     }
 
-
-
-    @Override
-    public void writeOnStream(String s)
-    {
-        System.out.println("GUI " + s.toUpperCase());
-    }
-
     @Override
     public ServerInfo getServerByIp() throws UnknownHostException {
         System.out.println("Getting server ip");

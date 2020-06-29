@@ -32,7 +32,14 @@ public class BoardTerrainContainer extends JLayeredPane
 
     private GameScreen game;
 
+    /** Card image panel **/
     private CardGamePanel cardPanel;
+
+    /** Card title panel **/
+    private CardTitlePanel cardTitlePanel;
+
+    /** Card description panel **/
+    private CardDescriptionPanel cardDescriptionPanel;
 
     public BoardTerrainContainer(Dimension size, GameScreen game, Card card)
     {
@@ -42,6 +49,8 @@ public class BoardTerrainContainer extends JLayeredPane
         this.game = game;
 
         cardPanel = new CardGamePanel(card, size);
+        cardDescriptionPanel = new CardDescriptionPanel(card, size);
+        cardTitlePanel = new CardTitlePanel(card, size);
 
         infoLabel = new MenuTextComponent("Loading");
         infoLabel.setBounds(200,20, 650, 30);
@@ -65,6 +74,8 @@ public class BoardTerrainContainer extends JLayeredPane
         this.add(gameGrid, JLayeredPane.DRAG_LAYER);
         this.add(infoLabel, JLayeredPane.DRAG_LAYER);
         this.add(cardPanel, JLayeredPane.DRAG_LAYER);
+        this.add(cardDescriptionPanel, JLayeredPane.DRAG_LAYER);
+        this.add(cardTitlePanel, JLayeredPane.DRAG_LAYER);
 
         this.setVisible(true);
     }

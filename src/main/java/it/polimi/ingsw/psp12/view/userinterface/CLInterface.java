@@ -71,8 +71,10 @@ public class CLInterface implements UserInterface
      */
     public CLInterface() {
 
-        welcomeMessage();
         cmdLock = new Object();
+        messageHandler = new MessageHandler(this);
+
+        welcomeMessage();
 
     }
 
@@ -141,7 +143,7 @@ public class CLInterface implements UserInterface
 
         if (choice==0){
             //Play
-            messageHandler = new MessageHandler(this);
+            connect();
         }else {
             //Exit
             System.out.println("Quitting the game");
@@ -150,8 +152,27 @@ public class CLInterface implements UserInterface
 
     }
 
+    /**
+     * Tries to connect to the server until a valid ip is entered
+     */
+    public void connect() {
+        // Continue to asks to the user the ip of the server to connect to,
+        // until a valid ip is entered
+        boolean connected = false;
+        do {
+            connected = messageHandler.connect(getServerByIp());
+            if (!connected) {
+                System.out.println("This server doesn't exists, retry...");
+            }
+        } while (!connected);
 
-    @Override
+        System.out.println("Successfully connected to the server!");
+    }
+
+    /**
+     * Requests server ip to the user
+     * @return server information
+     */
     public ServerInfo getServerByIp() {
 
         System.out.println("(IP) Hostname: ");

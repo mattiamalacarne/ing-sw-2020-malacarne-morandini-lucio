@@ -39,22 +39,24 @@ public class MessageHandler implements Observer<Message>
 
         this.userInterface = userInterface;
 
+    }
+
+    public boolean connect(ServerInfo serverInfo) {
         // Continue to asks to the user the ip of the server to connect to,
         // until a valid ip is entered
-        do {
-            try {
-                this.serverInfo = userInterface.getServerByIp();
-                clientHandlerConnection = new ClientHandlerConnection(serverInfo);
-            } catch (IOException e) {
-                System.out.println("This server doesn't exists, retry...\n");
-                clientHandlerConnection = null;
-            }
-        } while (clientHandlerConnection==null);
+        try {
+            this.serverInfo = serverInfo;
+            clientHandlerConnection = new ClientHandlerConnection(serverInfo);
+            clientHandlerConnection.addObserver(this);
+            Thread thread = new Thread(clientHandlerConnection);
+            thread.start();
 
-        clientHandlerConnection.addObserver(this);
-        Thread thread = new Thread(clientHandlerConnection);
-        thread.start();
+            return true;
+        } catch (IOException e) {
+            clientHandlerConnection = null;
 
+            return false;
+        }
     }
 
     /**

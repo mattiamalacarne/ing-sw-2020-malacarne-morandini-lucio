@@ -17,12 +17,6 @@ public interface UserInterface
 {
 
     /**
-     * The user chooses the IP of the to server to which it wants to connect
-     * @return Data for create the socket
-     */
-    ServerInfo getServerByIp() throws UnknownHostException;
-
-    /**
      * The user creates a new room
      */
     void createsNewRoom() throws IOException;

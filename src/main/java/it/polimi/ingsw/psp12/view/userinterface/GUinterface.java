@@ -366,8 +366,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
-        System.out.println("Non hai perso tu");
-        // Non so ancora che fare, da decidere (mahari un messagebox ch scompare dopo qualche secondo
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, otherLostMsg.getPlayer()+" has lost the game"), "Message from Gods!");
     }
 
     @Override

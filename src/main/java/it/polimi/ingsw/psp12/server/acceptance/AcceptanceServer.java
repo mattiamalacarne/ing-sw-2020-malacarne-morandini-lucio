@@ -322,9 +322,6 @@ public class AcceptanceServer implements Runnable, Server {
         synchronized (waitingRoomLock) {
             waitingRoom = null;
             creator = null;
-            if (gameServer != null) {
-                gameServer.gameEnded();
-            }
             gameServer = null;
         }
 
@@ -346,6 +343,13 @@ public class AcceptanceServer implements Runnable, Server {
 
         // reset waiting room if the creator has disconnected
         if (client.equals(creator)) {
+            // close game server
+            synchronized (waitingRoomLock) {
+                if (gameServer != null) {
+                    gameServer.gameEnded();
+                }
+            }
+
             resetWaitingRoom();
 
             System.out.println("creator disconnected, aborting room creation");
@@ -375,8 +379,12 @@ public class AcceptanceServer implements Runnable, Server {
             requestTimer.shutdownNow();
         }
 
-        // close waiting room game server
-        resetWaitingRoom();
+        // close game server
+        synchronized (waitingRoomLock) {
+            if (gameServer != null) {
+                gameServer.gameEnded();
+            }
+        }
 
         System.out.println("shutting down acceptance server...");
 

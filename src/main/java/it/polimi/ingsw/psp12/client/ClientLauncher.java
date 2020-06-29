@@ -13,13 +13,27 @@ import java.io.IOException;
 public class ClientLauncher
 {
     public static void main (String[] args) throws IOException {
+
         // launch cli if there is the specific parameter
         // launch gui as default interface
         if (args.length > 0 && (args[0].contains("cli") || args[0].contains("c"))) {
-            new CLInterface();
+
+            // If it's used a terminal which doesn't support ansi code (Windows OS terminal)
+            // it's used a different version of the printed board on cli (without colors)
+            if ( args.length > 1 &&
+                    ( args[1].toLowerCase().contains("nocolor") || args[1].toLowerCase().contains("no") )
+            ){
+                new CLInterface(false);
+            }
+            //Colored version
+            else {
+                new CLInterface(true);
+            }
+
         }
         else {
             new GUinterface();
         }
+
     }
 }

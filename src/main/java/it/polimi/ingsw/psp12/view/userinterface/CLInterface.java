@@ -67,13 +67,20 @@ public class CLInterface implements UserInterface
 //    private Thread timerThread;
 
     /**
+     * Used to distinguish the board representation on the cli,
+     * because the ansi code for text color aren't recognize on some terminal
+     */
+    private final Boolean coloredBoard;
+
+    /**
      * CLI constructor
      */
-    public CLInterface() {
+    public CLInterface( Boolean coloredBoard ) {
 
         cmdLock = new Object();
         messageHandler = new MessageHandler(this);
 
+        this.coloredBoard = coloredBoard;
         welcomeMessage();
 
     }
@@ -626,7 +633,7 @@ public class CLInterface implements UserInterface
 
     @Override
     public void updateBoard(UpdateBoardMsg updateBoardMsg) {
-        System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard()) ).toString() );
+        System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard(), coloredBoard) ).toString() );
     }
 
     @Override

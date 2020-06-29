@@ -18,14 +18,21 @@ public class CLIBoardGenerator {
     private final Board board;
 
     /**
+     * Used to distinguish the board representation,
+     * because the ansi code for text color aren't recognize on some terminal
+     */
+    private final Boolean coloredBoard;
+
+    /**
      * Strings used to format text
      */
     static String cellFormat = "# %-20s "; // meglio █ ?
 //    static String testLastCellFormat = "# %-20s #";
     static String domeString = "        ^  "; //meglio ▲ ?
 
-    public CLIBoardGenerator(Board board) {
+    public CLIBoardGenerator(Board board, Boolean coloredBoard) {
         this.board = board;
+        this.coloredBoard = coloredBoard;
     }
 
     /**
@@ -37,24 +44,28 @@ public class CLIBoardGenerator {
      */
     private String colorString(String string, Color color) {
 
-        final String ANSI_RESET = "\u001B[0m";
-        final String ANSI_WHITE = "\u001B[37m";
-        final String ANSI_RED = "\u001B[31m";
-        final String ANSI_YELLOW = "\u001B[33m";
-        final String ANSI_GREEN = "\u001B[32m";
-        final String ANSI_BLUE = "\u001B[34m";
+        if (coloredBoard) {
+            final String ANSI_RESET = "\u001B[0m";
+//            final String ANSI_WHITE = "\u001B[37m";
+            final String ANSI_RED = "\u001B[31m";
+            final String ANSI_YELLOW = "\u001B[33m";
+            final String ANSI_GREEN = "\u001B[32m";
+            final String ANSI_BLUE = "\u001B[34m";
 
-        switch (color) {
-            case RED:
-                return ANSI_RED + string + ANSI_RESET + "              ";
-            case GREEN:
-                return ANSI_GREEN + string + ANSI_RESET + "              ";
-            case YELLOW:
-                return ANSI_YELLOW + string + ANSI_RESET + "              ";
-            case BLUE:
-                return ANSI_BLUE + string + ANSI_RESET + "              ";
-            default:
-                return string;
+            switch (color) {
+                case RED:
+                    return ANSI_RED + string + ANSI_RESET + "              ";
+                case GREEN:
+                    return ANSI_GREEN + string + ANSI_RESET + "              ";
+                case YELLOW:
+                    return ANSI_YELLOW + string + ANSI_RESET + "              ";
+                case BLUE:
+                    return ANSI_BLUE + string + ANSI_RESET + "              ";
+                default:
+                    return string;
+            }
+        } else {
+            return string;
         }
     }
 
@@ -64,27 +75,58 @@ public class CLIBoardGenerator {
      * @return The name of the player
      */
     private String getPlayerName(Cell cell){
-        //Player name limited to 4 char
         String playerName = cell.getWorker().getPlayerName();
 
-        if (playerName.length()>=4) {
-            playerName = playerName.substring(0,4);
-            return playerName+'_'+cell.getWorker().getId();
+        if (coloredBoard) {
+            //Player name limited to 4 char
+
+            if (playerName.length()>=4) {
+                playerName = playerName.substring(0,4);
+                playerName = playerName + '_' + cell.getWorker().getId();
+
+            } else {
+                playerName = playerName + '_' + cell.getWorker().getId();
+                playerName = playerName.concat(" ".repeat(6-playerName.length()));
+            }
 
         } else {
-            playerName = playerName+'_'+cell.getWorker().getId();
-            return playerName.concat(" ".repeat(6-playerName.length()));
+            //Alternative representation of player name, without ansi code for colored text
+            if (playerName.length()>14){
+                playerName = playerName.substring(0,14);
+            }
+            switch (cell.getWorker().getColor()){
+                case RED:
+                    playerName = "[R] " + playerName + '_' + cell.getWorker().getId();
+                    break;
+                case BLUE:
+                    playerName = "[B] " + playerName + '_' + cell.getWorker().getId();
+                    break;
+                case GREEN:
+                    playerName = "[G] " + playerName + '_' + cell.getWorker().getId();
+                    break;
+                case YELLOW:
+                    playerName = "[Y] " + playerName + '_' + cell.getWorker().getId();
+                    break;
+            }
         }
+        return playerName;
 
     }
 
-    //Upper_Bottom border
+    /**
+     * Upper_Bottom border
+     * @param boardString The string which contains the representation of the board
+     */
     private void makeBorder(StringBuilder boardString) {
 
         boardString.append("#".repeat(23)); //meglio ■ ?
     }
 
-    //INFO LEVEL: coordinate
+    /**
+     * INFO LEVEL: coordinate
+     * @param boardString The string which contains the representation of the board
+     * @param cell Cell of the board from which takes the information
+     */
     private void makeLine1(StringBuilder boardString, Cell cell) {
 
         int x = cell.getLocation().getX();
@@ -93,7 +135,11 @@ public class CLIBoardGenerator {
         boardString.append(String.format(cellFormat, "[" + x + "," + y + "]"));
     }
 
-    //LEVEL 3: player or cupola
+    /**
+     * LEVEL 3: player or cupola
+     * @param boardString The string which contains the representation of the board
+     * @param cell Cell of the board from which takes the information
+     */
     private void makeLine2(StringBuilder boardString, Cell cell) {
 
         //There is a player
@@ -112,7 +158,11 @@ public class CLIBoardGenerator {
 
     }
 
-    //LEVEL 2: player or build
+    /**
+     * LEVEL 2: player or build
+     * @param boardString The string which contains the representation of the board
+     * @param cell Cell of the board from which takes the information
+     */
     private void makeLine3(StringBuilder boardString, Cell cell) {
 
         //There is a player
@@ -134,7 +184,11 @@ public class CLIBoardGenerator {
         }
     }
 
-    //LEVEL 1: player or build
+    /**
+     * LEVEL 1: player or build
+     * @param boardString The string which contains the representation of the board
+     * @param cell Cell of the board from which takes the information
+     */
     private void makeLine4(StringBuilder boardString, Cell cell) {
 
         //There is a player
@@ -156,7 +210,11 @@ public class CLIBoardGenerator {
         }
     }
 
-    //LEVEL 0: player or build
+    /**
+     * LEVEL 0: player or build
+     * @param boardString The string which contains the representation of the board
+     * @param cell Cell of the board from which takes the information
+     */
     private void makeLine5(StringBuilder boardString, Cell cell) {
 
         //There is a player
@@ -178,6 +236,10 @@ public class CLIBoardGenerator {
         }
     }
 
+    /**
+     * toString method
+     * @return string representation of the board
+     */
     public String toString() {
 
         StringBuilder stringBuilder = new StringBuilder();

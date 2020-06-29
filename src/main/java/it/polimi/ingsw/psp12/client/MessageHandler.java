@@ -103,7 +103,7 @@ public class MessageHandler implements Observer<Message>
      */
     private void genericMessageToSpec(Message message) throws MessageTypeNotFoundException, IOException {
         MsgCommand cmd = getMsgType(message);
-        System.out.println("[DEBUG] MSGREC: " + cmd);
+//        System.out.println("[DEBUG] MSGREC: " + cmd);
         switch (cmd)
         {
             //System commands
@@ -195,7 +195,7 @@ public class MessageHandler implements Observer<Message>
      */
     public void sendToServer(Message message)  {
 
-        System.out.println("[DEBUG] MSGSEND: " + message.getCommand());
+//        System.out.println("[DEBUG] MSGSEND: " + message.getCommand());
         clientHandlerConnection.sendRequestToServer(message);
     }
 

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
 
-import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.DialogContent;
 import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
@@ -12,47 +12,52 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
- * This class display a dialobox asking to user an action to complete
+ * Dialog activate by cards power for build something in a cell
  * @author Mattia Malacarne
  */
 
-public class ChooseActionPanel extends DialogContent
+public class ChooseBuildPanel extends DialogContent
 {
-
     private GameScreen game;
     private JLabel text;
     private JButton setButton;
 
-    private JComboBox avAction;
+    private JComboBox avBuild;
 
-    public ChooseActionPanel(GUinterface gui, GameScreen game, List<Action> possActions) {
+    List<BuildOption> options;
+
+    public ChooseBuildPanel(GUinterface gui, List<BuildOption> options, GameScreen game) {
         super(gui);
+
         this.game = game;
+        this.options = options;
 
         this.setLayout(new GridLayout(3,1));
 
-        Action[] actions = new Action[possActions.size()];
-        for (int i = 0; i < possActions.size(); i++)
+        BuildOption[] builds = new BuildOption[options.size()];
+        for (int i = 0; i < options.size(); i++)
         {
-            actions[i] = possActions.get(i);
+            builds[i] = options.get(i);
         }
 
-        avAction = new JComboBox(actions);
-        text = new JLabel("Select your action");
+        avBuild = new JComboBox(builds);
+        text = new JLabel("Select a build type");
         setButton = new JButton("Choose");
-        setButton.addActionListener(setAction);
+        setButton.addActionListener(setBuild);
 
         this.add(text);
-        this.add(avAction);
+        this.add(avBuild);
         this.add(setButton);
 
         this.setVisible(true);
+
     }
 
-    ActionListener setAction = new ActionListener() {
+    ActionListener setBuild = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            game.chooseAction(avAction.getSelectedIndex());
+
+            game.chooseBuild(options.get(avBuild.getSelectedIndex()));
             parent.dispose();
         }
     };

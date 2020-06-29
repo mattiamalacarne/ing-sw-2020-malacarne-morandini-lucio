@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Card;
 import it.polimi.ingsw.psp12.model.enumeration.Action;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
@@ -249,8 +250,7 @@ public class GameScreen extends Screen
      * @param action
      */
     public void chooseAction(int action) {
-        System.out.println("Starting send action: " + action);
-        System.out.println("Action choosed: " + possibleActions.get(action).name());
+
         board.setInfo("Choose where do you want to " + possibleActions.get(action));
         gui.sendActionToServer(new SelectActionMsg(possibleActions.get(action)));
         resetSelectedCell();
@@ -321,6 +321,24 @@ public class GameScreen extends Screen
         } catch (GUIStatusErrorException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Display a box with possible build list
+     * @param poss
+     */
+    public void displayBuildSelection(List<BuildOption> poss)
+    {
+        SetupDialog setup = new SetupDialog(gui, new ChooseBuildPanel(gui, poss, me), "Choose build");
+    }
+
+    /**
+     * Choose the type of build
+     * @param buildOption
+     */
+    public void chooseBuild(BuildOption buildOption)
+    {
+        gui.sendBuildOptionToServer(buildOption);
     }
 
 }

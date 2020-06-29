@@ -98,6 +98,7 @@ public class CellDraw extends JButton
      */
     public ImageIcon loadTower(int level)
     {
+        if (level == 0) return null;
         StringBuilder str = new StringBuilder();
         str.append("/towers/tower");
         str.append(level);

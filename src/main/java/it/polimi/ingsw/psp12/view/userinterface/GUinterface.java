@@ -7,6 +7,7 @@ import it.polimi.ingsw.psp12.model.Worker;
 import it.polimi.ingsw.psp12.model.board.Cell;
 import it.polimi.ingsw.psp12.model.board.Point;
 import it.polimi.ingsw.psp12.model.cards.Card;
+import it.polimi.ingsw.psp12.model.enumeration.BuildOption;
 import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
 import it.polimi.ingsw.psp12.network.messages.*;
 import it.polimi.ingsw.psp12.utils.Color;
@@ -14,8 +15,10 @@ import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.SetupHelper;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.*;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.*;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseBuildPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.ChooseUndoPanel;
 import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils.GamePhase;
+import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.guiengine.GenericMessageDialog;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -153,6 +156,7 @@ public class GUinterface extends JFrame implements UserInterface
         messageHandler.sendToServer(new CreateMsg(playerNumber));
     }
 
+
     @Override
     public void createsNewRoom() throws IOException
     {
@@ -186,26 +190,24 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void roomCreatedFailedMessage() {
-
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "Error creating the room"), "Error");
     }
 
     @Override
     public void invalidMaxPlayerMessage() {
-
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "Invalid max player number"), "Error");
     }
 
     @Override
     public void roomFullMessage() throws IOException {
-
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "Sorry, this room is full"), "Ops!");
     }
 
 
     @Override
     public void joinPlayerNameConfirmation()
     {
-        System.out.println("Room joined");
         try {
-            //gui.loadNewStatusScreen(GUIStatus.LOBBY, null);
             gui.loadNewStatusScreen(GUIStatus.WAIT_OTHER_PLAYER, null);
         } catch (GUIStatusErrorException e) {
             e.printStackTrace();
@@ -215,7 +217,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void joinPlayerNameAlreadyUsed() throws IOException {
-        System.out.println("Playername already used");
+
         askPlayerName(1);
     }
 
@@ -298,6 +300,17 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void chooseBuildOption(OptionsListMsg optionsListMsg) {
 
+        game.displayBuildSelection(optionsListMsg.getOptions());
+
+    }
+
+    /**
+     * Send selected build option to the server
+     * @param buildOption
+     */
+    public void sendBuildOptionToServer(BuildOption buildOption)
+    {
+        messageHandler.sendToServer(new SelectOptionMsg(buildOption));
     }
 
     @Override
@@ -359,7 +372,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void notYourTurnMessage() {
-
+        // do nothing
     }
 
     @Override

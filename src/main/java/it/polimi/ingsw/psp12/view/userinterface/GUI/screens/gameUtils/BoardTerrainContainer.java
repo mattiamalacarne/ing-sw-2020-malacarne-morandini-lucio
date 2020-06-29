@@ -48,7 +48,10 @@ public class BoardTerrainContainer extends JLayeredPane
 
         this.game = game;
 
-        cardPanel = new CardGamePanel(card, size);
+        if (card.getName() != "No cards")
+        {
+            cardPanel = new CardGamePanel(card, size);
+        }
         cardDescriptionPanel = new CardDescriptionPanel(card, size);
         cardTitlePanel = new CardTitlePanel(card, size);
 

@@ -53,6 +53,11 @@ public class CLInterface implements UserInterface
     private Boolean serverClosedRedirection;
 
     /**
+     * Used to know if the undo scanner is still waiting for an input
+     */
+    private Boolean undoScannerWaiting;
+
+    /**
      * MessageHandler that will manages the communication which the server
      */
     private MessageHandler messageHandler;
@@ -129,6 +134,7 @@ public class CLInterface implements UserInterface
         inputStreamReader = new InputStreamReader(System.in);
         serverClosedRedirection = false;
         exitGame = false;
+        discardUndo = false;
 
         System.out.print("\n***********************************");
         System.out.print("\n**** Welcome to Santorini game ****");
@@ -256,7 +262,6 @@ public class CLInterface implements UserInterface
         } catch (IOException e) {
             System.out.println("Error entering the room...");
         }
-        serverClosedRedirection = false;
 
         System.out.println("What's your name: ");
 
@@ -467,6 +472,10 @@ public class CLInterface implements UserInterface
 
         scannerThread = new Thread(() -> {
 
+            if (discardUndo){
+                System.out.println("\nPress a key to continue\n");
+            }
+
             //Synchronization for an exclusive execution of chooseWorker and chooseUndo
             synchronized (cmdLock) {
 
@@ -571,6 +580,7 @@ public class CLInterface implements UserInterface
     public void chooseUndo() {
 
         discardUndo = false;
+        undoScannerWaiting = true;
         scannerThread = new Thread( () -> {
 
             //Synchronization for an exclusive execution of chooseWorker and chooseUndo
@@ -606,6 +616,8 @@ public class CLInterface implements UserInterface
                     }
                 }while (choice<0 || choice>=2);
 
+                undoScannerWaiting = false;
+
                 if (choice == 0){
                     messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );
                 }else {
@@ -622,10 +634,10 @@ public class CLInterface implements UserInterface
     @Override
     public void endTurnMessage() {
         scannerThread.interrupt();
-        System.out.print("\nYour turn is ended!");
+        System.out.println("\nYour turn is ended!");
 
         //If the thread that ask the undo request is still waiting for an input
-        if (scannerThread.isAlive()){
+        if (undoScannerWaiting){
             discardUndo = true;
             System.out.println("\nPress a key to continue\n");
         }
@@ -663,6 +675,7 @@ public class CLInterface implements UserInterface
         // need to be discarded because this disconnection it' not an error,
         // it's a disconnection followed by connection to the game server
         if (serverClosedRedirection){
+            serverClosedRedirection = false;
             return;
         }
 

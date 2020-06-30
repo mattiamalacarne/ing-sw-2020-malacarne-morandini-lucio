@@ -148,7 +148,7 @@ public class CLIBoardGenerator {
             boardString.append(String.format(cellFormat, colorString(getPlayerName(cell), cell.getWorker().getColor())));
 
         //There is a dome
-        } else if (cell.getTower().hasDome() && cell.getTower().getLevel() == 2) {
+        } else if (cell.getTower().hasDome() && cell.getTower().getLevel() == 3) {
             boardString.append(String.format(cellFormat, domeString));
 
         //Empty level

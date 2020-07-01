@@ -34,12 +34,17 @@ public class SelectedCardPanel extends JPanel {
         this.selectedCard = card;
 
         this.setLayout(new GridLayout(3,1));
-        this.setPreferredSize(new Dimension(200, parent.getHeight() - 300));
+        this.setPreferredSize(new Dimension(300, parent.getHeight() - 500));
+        this.setBounds(parent.getWidth()-300, 0, 300, parent.getHeight());
         cardConfirmImage = new JLabel(loadCardImage(card.getImage()));
-        cardConfirmDescription = new JLabel(card.getDescription());
+        cardConfirmDescription = new JLabel("<html>"+card.getDescription()+"</html>");
+        cardConfirmDescription.setBounds(0,0,295,280);
 
         confirmCardBtn = new JButton("Confirm");
         confirmCardBtn.addActionListener(confirmCard);
+        cardConfirmImage.setBounds(0,0, 300, 300);
+
+        confirmCardBtn.setPreferredSize(new Dimension(300, 100));
 
 
         this.add(cardConfirmImage);
@@ -51,7 +56,7 @@ public class SelectedCardPanel extends JPanel {
 
     private ImageIcon loadCardImage(String image)
     {
-        int scaleFactor = 4;
+        int scaleFactor = 3;
         ImageIcon icon = new ImageIcon(getClass().getResource(image));
         Image scaled = icon.getImage().getScaledInstance(icon.getIconWidth()/scaleFactor, icon.getIconHeight()/scaleFactor, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);
@@ -60,7 +65,7 @@ public class SelectedCardPanel extends JPanel {
     public void updateMe(Card card)
     {
         cardConfirmImage.setIcon(loadCardImage(card.getImage()));
-        cardConfirmDescription.setText(card.getDescription());
+        cardConfirmDescription.setText("<html>"+card.getDescription()+"</html>");
         selectedCard = card;
     }
 

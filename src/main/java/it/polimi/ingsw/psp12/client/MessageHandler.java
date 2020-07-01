@@ -195,7 +195,7 @@ public class MessageHandler implements Observer<Message>
      */
     public void sendToServer(Message message)  {
 
-//        System.out.println("[DEBUG] MSGSEND: " + message.getCommand());
+        System.out.println("[DEBUG] MSGSEND: " + message.getCommand());
         clientHandlerConnection.sendRequestToServer(message);
     }
 

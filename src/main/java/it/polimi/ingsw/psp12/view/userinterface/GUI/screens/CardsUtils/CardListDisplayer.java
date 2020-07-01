@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
  * Display a single card in CardSelectorScreen
  * @author Mattia Malacarne
  */
-public class CardListDisplayer extends JPanel
+public class CardListDisplayer extends JLayeredPane
 {
     private JButton cardImage;
     private Card card;

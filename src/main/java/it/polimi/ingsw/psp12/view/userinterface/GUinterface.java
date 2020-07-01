@@ -378,21 +378,14 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void youWonMessage() {
-        try {
-            gui.loadNewStatusScreen(GUIStatus.YOU_WIN, null);
-        } catch (GUIStatusErrorException e) {
-            e.printStackTrace();
-        }
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "You win"), "Message from Gods!");
+
         startReloadTimer();
     }
 
     @Override
     public void youLostMessage() {
-        try {
-            gui.loadNewStatusScreen(GUIStatus.YOU_LOST, null);
-        } catch (GUIStatusErrorException e) {
-            e.printStackTrace();
-        }
+        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, "You lose"), "Message from Gods!");
         startReloadTimer();
     }
 
@@ -409,6 +402,11 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void closeGameMessage() {
 
+        try {
+            gui.loadNewStatusScreen(GUIStatus.GAME_CLOSING, null);
+        } catch (GUIStatusErrorException e) {
+            e.printStackTrace();
+        }
         startReloadTimer();
     }
 

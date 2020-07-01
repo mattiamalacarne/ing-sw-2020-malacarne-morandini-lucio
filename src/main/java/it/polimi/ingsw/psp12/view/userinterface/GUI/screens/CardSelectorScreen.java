@@ -22,6 +22,8 @@ public class CardSelectorScreen extends Screen
     /** Display more info about the selected card **/
     private SelectedCardPanel selectedCardPanel;
 
+    private JLabel background;
+
     /**
      * Create the screen with the list of cards, for every screen the user can choose only one card
      * @param gui

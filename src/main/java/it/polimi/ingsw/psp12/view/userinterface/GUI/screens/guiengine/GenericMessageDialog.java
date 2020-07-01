@@ -19,7 +19,7 @@ public class GenericMessageDialog extends DialogContent
     private JButton btn;
     public GenericMessageDialog(GUinterface gui, String text) {
         super(gui);
-        this.text = new JLabel(text);
+        this.text = new JLabel("<html></center>"+text+"</center></html>");
 
         this.btn = new JButton("OK");
         this.btn.addActionListener(close);

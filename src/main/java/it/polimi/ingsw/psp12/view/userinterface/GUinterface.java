@@ -114,7 +114,7 @@ public class GUinterface extends JFrame implements UserInterface
             case WAIT_OTHER_PLAYER: actualScreen = new GenericMessageScreen(gui.getSize(), "Waiting other players", this); break;
             case YOU_LOST: actualScreen = new GenericMessageScreen(gui.getSize(), "You lost!", this); break;
             case YOU_WIN: actualScreen = new GenericMessageScreen(gui.getSize(), "You are the winner!!", this); break;
-            case GAME_CLOSING: actualScreen = new GenericMessageScreen(gui.getSize(), "Other players have left, Game is restarting", this); break;
+            case GAME_CLOSING: actualScreen = new GenericMessageScreen(gui.getSize(), "<html>The game is ended, Game is restarting</html>", this); break;
             case SETUP: actualScreen = new SetUpScreen(this); break;
             case CARDLIST: actualScreen = new CardSelectorScreen(this, (((CardsListMsg) msg).getCards())); break;
             case STARTING: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;

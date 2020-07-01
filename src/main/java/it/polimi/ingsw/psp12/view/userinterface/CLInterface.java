@@ -261,6 +261,8 @@ public class CLInterface implements UserInterface
             messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());
         } catch (IOException e) {
             System.out.println("Error entering the room...");
+            serverClosedRedirection = false;
+            closeGameMessage();
         }
 
         System.out.println("What's your name: ");

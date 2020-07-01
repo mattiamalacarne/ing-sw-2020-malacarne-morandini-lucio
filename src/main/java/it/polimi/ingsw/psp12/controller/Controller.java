@@ -531,6 +531,9 @@ public class Controller implements Observer<Message> {
 
         // check if there the game can continue (at least two players remain)
         if ((model.getPlayersCount() - 1) >= 2) {
+            // save other player name before removing from model
+            String otherName = model.getCurrentPlayer().getName();
+
             // disconnect current client
             disconnectClient(model.getCurrentPlayer());
 
@@ -540,7 +543,7 @@ public class Controller implements Observer<Message> {
 
             // notify other players that the current player has lost
             for (Player waitingPlayer : model.getPlayers()) {
-                sendToPlayer(waitingPlayer, new OtherLostMsg(model.getCurrentPlayer().getName()));
+                sendToPlayer(waitingPlayer, new OtherLostMsg(otherName));
             }
 
             // start the next turn

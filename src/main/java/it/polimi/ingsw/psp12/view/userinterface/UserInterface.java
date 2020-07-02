@@ -1,10 +1,8 @@
 package it.polimi.ingsw.psp12.view.userinterface;
 
-import it.polimi.ingsw.psp12.client.ServerInfo;
 import it.polimi.ingsw.psp12.network.messages.*;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 /**
  * <p>This <b>Interface</b> is the user interface manager</p>
@@ -18,6 +16,7 @@ public interface UserInterface
 
     /**
      * The user creates a new room
+     * @throws IOException the IOException
      */
     void createsNewRoom() throws IOException;
 
@@ -45,6 +44,7 @@ public interface UserInterface
 
     /**
      * Communicates to the user that the chosen room is already full
+     * @throws IOException the IOException
      */
     void roomFullMessage() throws IOException;
 
@@ -55,6 +55,7 @@ public interface UserInterface
 
     /**
      * The user insert the name again, because the previous one is already used
+     * @throws IOException the IOException
      */
     void joinPlayerNameAlreadyUsed() throws IOException;
 
@@ -67,6 +68,7 @@ public interface UserInterface
     /**
      * The user chooses the color and the position of its workers
      * @param requestInfoMsg The list of available color and the available positions to choose
+     * @throws IOException the IOException
      */
     void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException;
 
@@ -85,18 +87,21 @@ public interface UserInterface
     /**
      * The user chooses the action to perform
      * @param actionsListMsg The list of possible action to perform
+     * @throws IOException the IOException
      */
     void chooseAction(ActionsListMsg actionsListMsg) throws IOException;
 
     /**
      * The user chooses the cell where to perform the action
      * @param cellListMsg The list of cell where to perform the action, and the action to perform
+     * @throws IOException the IOException
      */
     void chooseCell(CellListMsg cellListMsg) throws IOException;
 
 
     /**
      * The user chooses what to build in the build action
+     * @param optionsListMsg The list of possible build option to select
      */
     void chooseBuildOption(OptionsListMsg optionsListMsg);
 
@@ -112,6 +117,7 @@ public interface UserInterface
 
     /**
      * Update the shown information of the board
+     * @param updateBoardMsg Contains the board to represent
      */
     void updateBoard(UpdateBoardMsg updateBoardMsg);
 

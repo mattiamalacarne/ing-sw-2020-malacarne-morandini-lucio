@@ -6,7 +6,7 @@ import it.polimi.ingsw.psp12.network.enumeration.MsgType;
 import java.io.Serializable;
 
 /**
- * Class for general message, server->client->server
+ * Class for general message, server-client-server
  *
  * @author Mattia Malacarne
  */

@@ -37,6 +37,7 @@ public class ClientHandlerConnection extends Observable<Message> implements Runn
     /**
      * prepare the client for connect to the server
      * @param server the server info containing ip and port
+     * @throws IOException IO Exception
      */
     public ClientHandlerConnection(ServerInfo server) throws IOException {
         this.serverInfo = server;

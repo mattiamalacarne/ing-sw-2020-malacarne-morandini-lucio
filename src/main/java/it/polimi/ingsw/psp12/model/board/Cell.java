@@ -92,7 +92,8 @@ public class Cell implements Serializable
     /**
      * Check if worker can move on the current cell
      * @param currentLevel the level of the actual cell tower
-     * @return true if tower.level - currentLevel <= maxClimbLevel
+     * @param maxClimbLevel max number of level/s which is possible to climb
+     * @return true if (tower.level - currentLevel) is low_equal to maxClimbLevel
      */
     public boolean canMoveOn(int currentLevel, int maxClimbLevel) {
         return (tower.getLevel() - currentLevel) <= maxClimbLevel && !tower.hasDome();

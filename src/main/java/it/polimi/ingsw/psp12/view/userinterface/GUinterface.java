@@ -64,6 +64,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Init the UI starting the mainWindow and populate it with the necessary panel
+     * @throws IOException the IOException
      */
     public GUinterface() throws IOException {
 
@@ -103,6 +104,8 @@ public class GUinterface extends JFrame implements UserInterface
     /**
      * Load a new screen depending by the status of the GUI
      * @param status the new screen to load
+     * @param msg the message
+     * @throws GUIStatusErrorException the GUIStatusErrorException
      */
     public void loadNewStatusScreen(GUIStatus status, Message msg) throws GUIStatusErrorException
     {
@@ -132,6 +135,7 @@ public class GUinterface extends JFrame implements UserInterface
     /**
      * Connect to the server with the address provided by the user
      * @param hostname server address
+     * @throws IOException the IOException
      */
     public void connectToServer(String hostname) throws IOException {
         //System.out.println("Provo a connettermi");
@@ -177,7 +181,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Display a dialog for set a player name
-     * @param choosed
+     * @param choosed to determine the text to show on the panel
      */
     public void askPlayerName(int choosed)
     {
@@ -186,7 +190,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Ask the server to set the choosed name
-     * @param playerName
+     * @param playerName the player name
      */
     public void setPlayerName(String playerName)
     {
@@ -237,7 +241,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send the card to the server
-     * @param card
+     * @param card the card
      */
     public void sendCardToServer(Card card)
     {
@@ -246,7 +250,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send to server the worker selected int the current turn
-     * @param msg
+     * @param msg the selected worker
      */
     public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
     {
@@ -266,7 +270,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send to server the info for start the game (Worker position and Color
-     * @param msg
+     * @param msg the PlayerInfoMsg message
      */
     public void sendStartInfo(PlayerInfoMsg msg)
     {
@@ -286,7 +290,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send to server the selected action
-     * @param msg
+     * @param msg action to send
      */
     public void sendActionToServer(SelectActionMsg msg)
     {
@@ -295,7 +299,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send to server the selected cell
-     * @param sel
+     * @param sel cell to send
      */
     public void sendCellToServer(Cell sel)
     {
@@ -332,7 +336,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send selected build option to the server
-     * @param buildOption
+     * @param buildOption the build option
      */
     public void sendBuildOptionToServer(BuildOption buildOption)
     {
@@ -348,7 +352,7 @@ public class GUinterface extends JFrame implements UserInterface
 
     /**
      * Send to server the undo decision
-     * @param cmd
+     * @param cmd the command
      */
     public void sendUndoToServer(MsgCommand cmd)
     {

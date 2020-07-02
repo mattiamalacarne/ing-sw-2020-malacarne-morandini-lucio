@@ -73,7 +73,7 @@ public class CellDraw extends JButton
 
     /**
      * Draw a worker in this cell
-     * @param color
+     * @param color the worker color
      * @return the image to render
      */
     public ImageIcon loadWorker(Color color)
@@ -93,7 +93,7 @@ public class CellDraw extends JButton
 
     /**
      * Draw a tower in this cell
-     * @param level
+     * @param level the tower level
      * @return the image to render
      */
     public ImageIcon loadTower(int level)
@@ -122,9 +122,9 @@ public class CellDraw extends JButton
 
     /**
      * Draw something in this cell
-     * @param type
-     * @param color
-     * @param level
+     * @param type the cell type
+     * @param color the color
+     * @param level the level
      */
     public void updateCell(CellIcon type,Color color, int level)
     {

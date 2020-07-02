@@ -21,8 +21,9 @@ public interface ScreenInterface
 
     /**
      * Load the bg of the loaded screen
-     * @param bg
-     * @return
+     * @param bg the bg
+     * @param size the dimension
+     * @return the loaded image
      */
     public Image loadScreenBackground(String bg, Dimension size);
 }

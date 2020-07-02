@@ -79,6 +79,8 @@ public class CLInterface implements UserInterface
 
     /**
      * CLI constructor
+     * @param coloredBoard Distinguishes whether to use or not ansi code
+     *                     for color text in the board representation
      */
     public CLInterface( Boolean coloredBoard ) {
 

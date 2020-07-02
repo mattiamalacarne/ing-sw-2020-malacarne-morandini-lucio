@@ -66,8 +66,8 @@ public class GameScreen extends Screen
 
 
     /**
-     * init a gamescreen
-     * @param gui
+     * init a game screen
+     * @param gui the GUI
      * @param cardMsg draw the correct card on screen
      */
     public GameScreen(GUinterface gui, YourCardMsg cardMsg)
@@ -95,7 +95,7 @@ public class GameScreen extends Screen
 
     /**
      * Set a new game phase
-     * @param phase
+     * @param phase the game phase
      */
     public void setGamePhase(GamePhase phase)
     {
@@ -141,7 +141,7 @@ public class GameScreen extends Screen
 
     /**
      * Tell the gameBoard to draw worker and tower
-     * @param msg
+     * @param msg the UpdateBoardMsg message
      */
     public void drawBoard(UpdateBoardMsg msg)
     {
@@ -159,7 +159,7 @@ public class GameScreen extends Screen
 
     /**
      * Setup the player selecting color and the start position of the worker
-     * @param msg
+     * @param msg the RequestInfoMsg message
      */
     public void setUp(RequestInfoMsg msg)
     {
@@ -170,8 +170,8 @@ public class GameScreen extends Screen
     }
 
     /**
-     * Extract the location of the selectable cells and make it readable for validateboard
-     * @param cells
+     * Extract the location of the selectable cells and make it readable for validate board
+     * @param cells the list of the selectable cells
      */
     public void displayPossibility(List<Cell> cells)
     {
@@ -213,7 +213,7 @@ public class GameScreen extends Screen
 
     /**
      * Generate the list of possible action for the user
-     * @param actions
+     * @param actions the list of possible action for the user
      */
     public void setPossibleActionList(List<Action> actions)
     {
@@ -233,7 +233,7 @@ public class GameScreen extends Screen
 
     /**
      * Display a box with possible action list
-     * @param poss
+     * @param poss list of possible action
      */
     public void displayActionSelection(List<Action> poss)
     {
@@ -242,7 +242,7 @@ public class GameScreen extends Screen
 
     /**
      * Choose an action from the list
-     * @param action
+     * @param action the action
      */
     public void chooseAction(int action) {
 
@@ -292,8 +292,8 @@ public class GameScreen extends Screen
     }
 
     /**
-     * Choose if confirm the turn or rpeat
-     * @param cmd
+     * Choose if confirm the turn or repeat
+     * @param cmd the command
      */
     public void chooseUndo(MsgCommand cmd)
     {
@@ -320,7 +320,7 @@ public class GameScreen extends Screen
 
     /**
      * Display a box with possible build list
-     * @param poss
+     * @param poss the list of possible build option
      */
     public void displayBuildSelection(List<BuildOption> poss)
     {
@@ -329,7 +329,7 @@ public class GameScreen extends Screen
 
     /**
      * Choose the type of build
-     * @param buildOption
+     * @param buildOption the build option
      */
     public void chooseBuild(BuildOption buildOption)
     {

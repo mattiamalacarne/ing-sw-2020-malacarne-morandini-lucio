@@ -88,6 +88,7 @@ public abstract class Power {
     /**
      * Determines the list of next possible actions based on the current turn state
      * @param turnState current turn state
+     * @param b the Board
      * @return list of actions that can be performed next
      */
     public abstract List<Action> nextActions(TurnState turnState, Board b);

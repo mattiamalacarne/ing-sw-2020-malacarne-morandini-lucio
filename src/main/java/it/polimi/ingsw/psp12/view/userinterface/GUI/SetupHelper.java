@@ -13,8 +13,8 @@ public class SetupHelper
 
     /**
      * Create the helper used for Join a room
-     * @param hostname
-     * @param clientName
+     * @param hostname the host name
+     * @param clientName the client name
      */
     public SetupHelper(String hostname, String clientName)
     {
@@ -24,8 +24,8 @@ public class SetupHelper
 
     /**
      * Setup an helper for create a new room
-     * @param roomName
-     * @param roomMaxPlayer
+     * @param roomName the room name
+     * @param roomMaxPlayer the max player number for the room
      */
     public SetupHelper(String roomName, int roomMaxPlayer)
     {

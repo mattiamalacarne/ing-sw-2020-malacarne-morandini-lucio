@@ -144,7 +144,7 @@ public class BoardTerrainContainer extends JLayeredPane
 
     /**
      * Display the board drawing worker and tower in position
-     * @param board
+     * @param board the board
      */
     public void updateBoard(Board board)
     {
@@ -196,7 +196,7 @@ public class BoardTerrainContainer extends JLayeredPane
 
     /**
      * Highlights on the board the possible selection
-     * @param possibleList
+     * @param possibleList the list of possible cell/s
      */
     public void showPossibleSelections(List<Cell> possibleList)
     {

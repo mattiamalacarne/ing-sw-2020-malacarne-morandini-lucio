@@ -26,8 +26,8 @@ public class CardSelectorScreen extends Screen
 
     /**
      * Create the screen with the list of cards, for every screen the user can choose only one card
-     * @param gui
-     * @param cards
+     * @param gui the GUI
+     * @param cards the list of possible cards
      */
     public CardSelectorScreen(GUinterface gui, List<Card> cards) {
         super(gui);
@@ -53,7 +53,7 @@ public class CardSelectorScreen extends Screen
 
     /**
      * Display card image and description on the right
-     * @param card
+     * @param card the card
      */
     public void updateConfirmPanel(Card card)
     {
@@ -61,8 +61,8 @@ public class CardSelectorScreen extends Screen
     }
 
     /**
-     * Send decsion to server
-     * @param card
+     * Send decision to server
+     * @param card the card
      */
     public void setCard(Card card)
     {

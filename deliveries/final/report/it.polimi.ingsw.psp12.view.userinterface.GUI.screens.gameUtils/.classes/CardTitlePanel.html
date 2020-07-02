@@ -1,0 +1,110 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardTitlePanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardTitlePanel (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardTitlePanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Card;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import javax.swing.*;
+<i>6</i>&nbsp;import java.awt.*;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * This class draw a container for the player&#39;s card title
+<i>10</i>&nbsp; * @author Luca Morandini
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public class CardTitlePanel extends JPanel {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    private JLabel cardShortDesc;
+<i>15</i>&nbsp;
+<b class="nc"><i>16</i>&nbsp;    public CardTitlePanel(Card card, Dimension size) {</b>
+<b class="nc"><i>17</i>&nbsp;        this.setOpaque(false);</b>
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;        cardShortDesc = new JLabel(card.getShortDescription());</b>
+<b class="nc"><i>20</i>&nbsp;        cardShortDesc.setFont(new Font(&quot;dalek&quot;, Font.PLAIN, 20));</b>
+<i>21</i>&nbsp;
+<b class="nc"><i>22</i>&nbsp;        this.setBounds(220, (int) size.getHeight() - 98, 300, 50);</b>
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;        this.add(cardShortDesc);</b>
+<b class="nc"><i>25</i>&nbsp;        this.setVisible(card != null);</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

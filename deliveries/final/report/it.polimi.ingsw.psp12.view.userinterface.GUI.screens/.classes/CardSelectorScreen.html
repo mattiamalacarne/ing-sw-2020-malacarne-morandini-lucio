@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardSelectorScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardSelectorScreen (it.polimi.ingsw.psp12.view.userinterface.GUI.screens)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardSelectorScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.exceptions.GUIStatusErrorException;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Card;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.GUIStatus;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils.CardListDisplayer;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils.SelectedCardPanel;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import javax.swing.*;
+<i>11</i>&nbsp;import java.awt.*;
+<i>12</i>&nbsp;import java.util.List;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This class is used in the GUI for choose the cardset or the player card
+<i>16</i>&nbsp; * @author Mattia Malacarne
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;public class CardSelectorScreen extends Screen
+<i>20</i>&nbsp;{
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /** Display more info about the selected card **/
+<i>23</i>&nbsp;    private SelectedCardPanel selectedCardPanel;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    private JLabel background;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * Create the screen with the list of cards, for every screen the user can choose only one card
+<i>29</i>&nbsp;     * @param gui
+<i>30</i>&nbsp;     * @param cards
+<i>31</i>&nbsp;     */
+<i>32</i>&nbsp;    public CardSelectorScreen(GUinterface gui, List&lt;Card&gt; cards) {
+<b class="nc"><i>33</i>&nbsp;        super(gui);</b>
+<b class="nc"><i>34</i>&nbsp;        this.setPreferredSize(new Dimension(screenX, screenY));</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        this.setLayout(new BorderLayout());</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        JPanel cardList = new JPanel();</b>
+<b class="nc"><i>39</i>&nbsp;        cardList.setLayout(new GridLayout(2,5));</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;        // Add cards to the screen
+<b class="nc"><i>42</i>&nbsp;        for (Card card: cards)</b>
+<i>43</i>&nbsp;        {
+<b class="nc"><i>44</i>&nbsp;            cardList.add(new CardListDisplayer(card, this));</b>
+<b class="nc"><i>45</i>&nbsp;        }</b>
+<i>46</i>&nbsp;
+<b class="nc"><i>47</i>&nbsp;        selectedCardPanel = new SelectedCardPanel(cards.get(0), this);</b>
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;        this.add(cardList, BorderLayout.CENTER);</b>
+<b class="nc"><i>50</i>&nbsp;        this.add(selectedCardPanel, BorderLayout.EAST);</b>
+<b class="nc"><i>51</i>&nbsp;        this.setVisible(true);</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Display card image and description on the right
+<i>56</i>&nbsp;     * @param card
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    public void updateConfirmPanel(Card card)
+<i>59</i>&nbsp;    {
+<b class="nc"><i>60</i>&nbsp;        selectedCardPanel.updateMe(card);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Send decsion to server
+<i>65</i>&nbsp;     * @param card
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public void setCard(Card card)
+<i>68</i>&nbsp;    {
+<i>69</i>&nbsp;
+<b class="nc"><i>70</i>&nbsp;        gui.sendCardToServer(card);</b>
+<i>71</i>&nbsp;        try {
+<b class="nc"><i>72</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.WAIT_CARD_SELECTION, null);</b>
+<b class="nc"><i>73</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>74</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>75</i>&nbsp;        }</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

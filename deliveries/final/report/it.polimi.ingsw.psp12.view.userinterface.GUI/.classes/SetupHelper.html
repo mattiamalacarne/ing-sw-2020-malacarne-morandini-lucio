@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SetupHelper</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SetupHelper (it.polimi.ingsw.psp12.view.userinterface.GUI)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SetupHelper</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * This class help the GUI while create serverinfo and setup a room
+<i>5</i>&nbsp; * @author Mattia Malacarne
+<i>6</i>&nbsp; */
+<i>7</i>&nbsp;public class SetupHelper
+<i>8</i>&nbsp;{
+<i>9</i>&nbsp;    private String hostname;
+<i>10</i>&nbsp;    private String roomName;
+<i>11</i>&nbsp;    private String clientName;
+<i>12</i>&nbsp;    private int roomMaxPlayer;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    /**
+<i>15</i>&nbsp;     * Create the helper used for Join a room
+<i>16</i>&nbsp;     * @param hostname
+<i>17</i>&nbsp;     * @param clientName
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    public SetupHelper(String hostname, String clientName)
+<b class="nc"><i>20</i>&nbsp;    {</b>
+<b class="nc"><i>21</i>&nbsp;        this.hostname = hostname;</b>
+<b class="nc"><i>22</i>&nbsp;        this.clientName = clientName;</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * Setup an helper for create a new room
+<i>27</i>&nbsp;     * @param roomName
+<i>28</i>&nbsp;     * @param roomMaxPlayer
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    public SetupHelper(String roomName, int roomMaxPlayer)
+<b class="nc"><i>31</i>&nbsp;    {</b>
+<b class="nc"><i>32</i>&nbsp;        this.roomMaxPlayer = roomMaxPlayer;</b>
+<b class="nc"><i>33</i>&nbsp;        this.roomName = roomName;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public String getHostname() {
+<b class="nc"><i>38</i>&nbsp;        return hostname;</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    public String getRoomName() {
+<b class="nc"><i>42</i>&nbsp;        return roomName;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public String getClientName() {
+<b class="nc"><i>46</i>&nbsp;        return clientName;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    public int getRoomMaxPlayer() {
+<b class="nc"><i>50</i>&nbsp;        return roomMaxPlayer;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

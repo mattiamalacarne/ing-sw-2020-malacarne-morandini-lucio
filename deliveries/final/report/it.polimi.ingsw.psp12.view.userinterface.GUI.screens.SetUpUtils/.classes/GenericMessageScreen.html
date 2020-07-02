@@ -1,0 +1,136 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GenericMessageScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GenericMessageScreen (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GenericMessageScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.Screen;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import javax.swing.*;
+<i>7</i>&nbsp;import java.awt.*;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Display on screen a box while the other player join the room
+<i>11</i>&nbsp; * @author Mattia Malacarne
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;public class GenericMessageScreen extends Screen
+<i>15</i>&nbsp;{
+<i>16</i>&nbsp;    private JLabel waitText;
+<i>17</i>&nbsp;    private JLabel backg;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    private JLayeredPane msgPanel;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public GenericMessageScreen(Dimension size, String text, GUinterface gui) {
+<b class="nc"><i>22</i>&nbsp;        super(gui);</b>
+<i>23</i>&nbsp;
+<b class="nc"><i>24</i>&nbsp;        this.setLayout(null);</b>
+<b class="nc"><i>25</i>&nbsp;        this.setBounds(0,0, size.width, size.height);</b>
+<i>26</i>&nbsp;
+<b class="nc"><i>27</i>&nbsp;        Image bg = loadScreenBackground(&quot;firstscreen.png&quot;, new Dimension(size.width, size.height));</b>
+<b class="nc"><i>28</i>&nbsp;        backg = new JLabel(new ImageIcon(bg));</b>
+<i>29</i>&nbsp;
+<b class="nc"><i>30</i>&nbsp;        backg.setBounds(0,0, size.width, size.height);</b>
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;        waitText = new JLabel(&quot;&lt;html&gt;&lt;center&gt;&quot;+text+&quot;&lt;/center&gt;&lt;/html&quot;, SwingConstants.CENTER);</b>
+<b class="nc"><i>33</i>&nbsp;        waitText.setFont(new Font(&quot;dalek&quot;, Font.PLAIN, 28));</b>
+<b class="nc"><i>34</i>&nbsp;        waitText.setBounds(390,50, 600, 300);</b>
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;        msgPanel = new JLayeredPane();</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;        msgPanel.setLayout(null);</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;        msgPanel.setBounds(0,0, size.width,size.height);</b>
+<b class="nc"><i>41</i>&nbsp;        msgPanel.add(waitText, JLayeredPane.DRAG_LAYER);</b>
+<b class="nc"><i>42</i>&nbsp;        msgPanel.add(backg, JLayeredPane.DEFAULT_LAYER);</b>
+<b class="nc"><i>43</i>&nbsp;        msgPanel.setVisible(true);</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;        this.add(msgPanel);</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    public Image loadScreenBackground(String bg, Dimension size) {
+<b class="nc"><i>49</i>&nbsp;        ImageIcon icon = new ImageIcon(getClass().getResource(&quot;/&quot;+bg));</b>
+<b class="nc"><i>50</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>51</i>&nbsp;        return scaled;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

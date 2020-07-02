@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardListDisplayer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardListDisplayer (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardListDisplayer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 19)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CardListDisplayer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardsUtils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Card;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.CardSelectorScreen;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import javax.swing.*;
+<i>7</i>&nbsp;import java.awt.*;
+<i>8</i>&nbsp;import java.awt.event.ActionEvent;
+<i>9</i>&nbsp;import java.awt.event.ActionListener;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Display a single card in CardSelectorScreen
+<i>13</i>&nbsp; * @author Mattia Malacarne
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class CardListDisplayer extends JLayeredPane
+<i>16</i>&nbsp;{
+<i>17</i>&nbsp;    private JButton cardImage;
+<i>18</i>&nbsp;    private Card card;
+<i>19</i>&nbsp;    private ImageIcon cardIcon;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    private CardSelectorScreen parent;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    public CardListDisplayer(Card card, CardSelectorScreen parent)
+<b class="nc"><i>24</i>&nbsp;    {</b>
+<b class="nc"><i>25</i>&nbsp;        this.setLayout(null);</b>
+<b class="nc"><i>26</i>&nbsp;        this.card = card;</b>
+<i>27</i>&nbsp;
+<b class="nc"><i>28</i>&nbsp;        this.parent = parent;</b>
+<i>29</i>&nbsp;
+<b class="nc"><i>30</i>&nbsp;        cardIcon = loadCardImage(card.getImage());</b>
+<b class="nc"><i>31</i>&nbsp;        cardImage = new JButton(cardIcon);</b>
+<b class="nc"><i>32</i>&nbsp;        cardImage.setBorderPainted(false);</b>
+<b class="nc"><i>33</i>&nbsp;        cardImage.addActionListener(cardInfoDisplay);</b>
+<b class="nc"><i>34</i>&nbsp;        cardImage.setOpaque(false);</b>
+<b class="nc"><i>35</i>&nbsp;        cardImage.setBounds(0,0,cardIcon.getIconWidth(),cardIcon.getIconHeight());</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        this.add(cardImage);</b>
+<b class="nc"><i>38</i>&nbsp;        this.setVisible(true);</b>
+<i>39</i>&nbsp;    }
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    public ImageIcon getImage()
+<i>42</i>&nbsp;    {
+<b class="nc"><i>43</i>&nbsp;        return this.cardIcon;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public String getDesc()
+<i>47</i>&nbsp;    {
+<b class="nc"><i>48</i>&nbsp;        return this.card.getDescription();</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Load the card image to render om screen
+<i>53</i>&nbsp;     * @param image
+<i>54</i>&nbsp;     * @return
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    private ImageIcon loadCardImage(String image)
+<i>57</i>&nbsp;    {
+<b class="nc"><i>58</i>&nbsp;        int scaleFactor = 6;</b>
+<b class="nc"><i>59</i>&nbsp;        ImageIcon icon = new ImageIcon(getClass().getResource(image));</b>
+<b class="nc"><i>60</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(icon.getIconWidth()/scaleFactor, icon.getIconHeight()/scaleFactor, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>61</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;    ActionListener cardInfoDisplay = new ActionListener() {</b>
+<i>65</i>&nbsp;        @Override
+<i>66</i>&nbsp;        public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>67</i>&nbsp;            parent.updateConfirmPanel(card);</b>
+<i>68</i>&nbsp;        }
+<i>69</i>&nbsp;    };
+<i>70</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

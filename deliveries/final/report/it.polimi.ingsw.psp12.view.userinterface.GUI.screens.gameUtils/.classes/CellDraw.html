@@ -1,0 +1,287 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CellDraw</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CellDraw (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CellDraw</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 46)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CellDraw$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">CellDraw$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 52)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.board.Point;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.utils.Color;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import javax.swing.*;
+<i>8</i>&nbsp;import java.awt.*;
+<i>9</i>&nbsp;import java.awt.event.ActionEvent;
+<i>10</i>&nbsp;import java.awt.event.ActionListener;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;/**
+<i>13</i>&nbsp; * This class represent a cell on the GUI gameboard
+<i>14</i>&nbsp; * @author Mattia Malacarne
+<i>15</i>&nbsp; */
+<i>16</i>&nbsp;public class CellDraw extends JButton
+<i>17</i>&nbsp;{
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    private Point pos;
+<i>20</i>&nbsp;    private GameScreen game;
+<i>21</i>&nbsp;    private CellDraw me;
+<i>22</i>&nbsp;    private CellContainer parent;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    public CellDraw(String text)
+<i>25</i>&nbsp;    {
+<b class="nc"><i>26</i>&nbsp;        super(text);</b>
+<i>27</i>&nbsp;        // set the button transparent
+<b class="nc"><i>28</i>&nbsp;        this.setOpaque(false);</b>
+<b class="nc"><i>29</i>&nbsp;        this.setContentAreaFilled(false);</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public CellDraw(Point cell, GameScreen game, CellContainer parent)
+<b class="nc"><i>34</i>&nbsp;    {</b>
+<b class="nc"><i>35</i>&nbsp;        this.parent = parent;</b>
+<b class="nc"><i>36</i>&nbsp;        this.pos = cell;</b>
+<b class="nc"><i>37</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>38</i>&nbsp;        me = this;</b>
+<i>39</i>&nbsp;
+<b class="nc"><i>40</i>&nbsp;        this.setBounds(0,0,100,80);</b>
+<b class="nc"><i>41</i>&nbsp;        this.setOpaque(false);</b>
+<b class="nc"><i>42</i>&nbsp;        this.setBorderPainted(false);</b>
+<b class="nc"><i>43</i>&nbsp;        this.setContentAreaFilled(false);</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Make the cell clickable
+<i>49</i>&nbsp;     */
+<i>50</i>&nbsp;    public void enablePress()
+<i>51</i>&nbsp;    {
+<b class="nc"><i>52</i>&nbsp;        this.addActionListener(prssed);</b>
+<b class="nc"><i>53</i>&nbsp;        this.setBorderPainted(true);</b>
+<b class="nc"><i>54</i>&nbsp;        this.repaint();</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Reset the cell status
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    public void flushMe()
+<i>61</i>&nbsp;    {
+<b class="nc"><i>62</i>&nbsp;        this.setBorderPainted(false);</b>
+<b class="nc"><i>63</i>&nbsp;        this.removeActionListener(prssed);</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    // TODO: Remove me
+<i>67</i>&nbsp;    public ImageIcon loadSelector()
+<i>68</i>&nbsp;    {
+<b class="nc"><i>69</i>&nbsp;        ImageIcon icon = new ImageIcon(getClass().getResource(&quot;image&quot;));</b>
+<b class="nc"><i>70</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(100,80,Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>71</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Draw a worker in this cell
+<i>76</i>&nbsp;     * @param color
+<i>77</i>&nbsp;     * @return the image to render
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    public ImageIcon loadWorker(Color color)
+<i>80</i>&nbsp;    {
+<i>81</i>&nbsp;        ImageIcon icon;
+<b class="nc"><i>82</i>&nbsp;        switch (color)</b>
+<i>83</i>&nbsp;        {
+<b class="nc"><i>84</i>&nbsp;            case BLUE: { icon = new ImageIcon(getClass().getResource(&quot;/workers/blue-worker.png&quot;)); break;}</b>
+<b class="nc"><i>85</i>&nbsp;            case RED: { icon = new ImageIcon(getClass().getResource(&quot;/workers/red-worker.png&quot;)); break;}</b>
+<b class="nc"><i>86</i>&nbsp;            case GREEN: { icon = new ImageIcon(getClass().getResource(&quot;/workers/green-worker.png&quot;)); break;}</b>
+<b class="nc"><i>87</i>&nbsp;            case YELLOW: { icon = new ImageIcon(getClass().getResource(&quot;/workers/yellow-worker.png&quot;)); break;}</b>
+<b class="nc"><i>88</i>&nbsp;            default: return null;</b>
+<i>89</i>&nbsp;        }
+<b class="nc"><i>90</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>91</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>92</i>&nbsp;    }
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * Draw a tower in this cell
+<i>96</i>&nbsp;     * @param level
+<i>97</i>&nbsp;     * @return the image to render
+<i>98</i>&nbsp;     */
+<i>99</i>&nbsp;    public ImageIcon loadTower(int level)
+<i>100</i>&nbsp;    {
+<b class="nc"><i>101</i>&nbsp;        if (level == 0) return null;</b>
+<b class="nc"><i>102</i>&nbsp;        StringBuilder str = new StringBuilder();</b>
+<b class="nc"><i>103</i>&nbsp;        str.append(&quot;/towers/tower&quot;);</b>
+<b class="nc"><i>104</i>&nbsp;        str.append(level);</b>
+<b class="nc"><i>105</i>&nbsp;        str.append(&quot;.png&quot;);</b>
+<i>106</i>&nbsp;        ImageIcon icon;
+<b class="nc"><i>107</i>&nbsp;        icon = new ImageIcon(getClass().getResource(str.toString()));</b>
+<b class="nc"><i>108</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>109</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * Load the dome icon
+<i>114</i>&nbsp;     * @return
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    private ImageIcon loadDome()
+<i>117</i>&nbsp;    {
+<b class="nc"><i>118</i>&nbsp;        ImageIcon icon = new ImageIcon(getClass().getResource(&quot;/dome.png&quot;));</b>
+<b class="nc"><i>119</i>&nbsp;        Image scaled = icon.getImage().getScaledInstance(100, 80, Image.SCALE_SMOOTH);</b>
+<b class="nc"><i>120</i>&nbsp;        return new ImageIcon(scaled);</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Draw something in this cell
+<i>125</i>&nbsp;     * @param type
+<i>126</i>&nbsp;     * @param color
+<i>127</i>&nbsp;     * @param level
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    public void updateCell(CellIcon type,Color color, int level)
+<i>130</i>&nbsp;    {
+<b class="nc"><i>131</i>&nbsp;        switch (type)</b>
+<i>132</i>&nbsp;        {
+<b class="nc"><i>133</i>&nbsp;            case WORKER: {this.setIcon(loadWorker(color)); break;}</b>
+<b class="nc"><i>134</i>&nbsp;            case DOME: {this.setIcon(loadDome()); break;}</b>
+<b class="nc"><i>135</i>&nbsp;            case TOWER: {this.parent.setTower(loadTower(level)); break; }</b>
+<b class="nc"><i>136</i>&nbsp;            case SELECTOR: {this.loadSelector(); break; }</b>
+<i>137</i>&nbsp;        }
+<b class="nc"><i>138</i>&nbsp;        this.setBorderPainted(false);</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * This listener make selection on the board
+<i>143</i>&nbsp;     */
+<b class="nc"><i>144</i>&nbsp;    ActionListener prssed = new ActionListener() {</b>
+<i>145</i>&nbsp;        @Override
+<i>146</i>&nbsp;        public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>147</i>&nbsp;            if (game.getPhase() != GamePhase.NOT_MY_TURN)</b>
+<i>148</i>&nbsp;            {
+<i>149</i>&nbsp;                //System.out.println(&quot;Clicked on (&quot; +pos.getX()+&quot;,&quot;+pos.getY()+&quot;)&quot;);
+<b class="nc"><i>150</i>&nbsp;                game.selectCell(pos);</b>
+<i>151</i>&nbsp;            } else
+<i>152</i>&nbsp;            {
+<b class="nc"><i>153</i>&nbsp;                System.out.println(&quot;Not your turn!!&quot;);</b>
+<i>154</i>&nbsp;            }
+<i>155</i>&nbsp;        }
+<i>156</i>&nbsp;    };
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

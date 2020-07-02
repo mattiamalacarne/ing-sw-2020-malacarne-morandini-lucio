@@ -1,0 +1,125 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardsListMsg</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.network.messages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardsListMsg (it.polimi.ingsw.psp12.network.messages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardsListMsg</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.network.messages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.cards.Card;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Class for sending to the client a list of cards that can be selected
+<i>10</i>&nbsp; * @author Luca Morandini
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public class CardsListMsg extends Message {
+<i>13</i>&nbsp;    /**
+<i>14</i>&nbsp;     * List of cards that can be selected
+<i>15</i>&nbsp;     */
+<i>16</i>&nbsp;    private final List&lt;Card&gt; cards;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Remaining cards count that the player have to select
+<i>20</i>&nbsp;     */
+<i>21</i>&nbsp;    private final int remaining;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * Create the message with the list of cards that can be selected
+<i>25</i>&nbsp;     * @param cards list of available cards
+<i>26</i>&nbsp;     * @param remaining remaining cards count that the player have to select
+<i>27</i>&nbsp;     */
+<i>28</i>&nbsp;    public CardsListMsg(List&lt;Card&gt; cards, int remaining) {
+<b class="nc"><i>29</i>&nbsp;        super(MsgCommand.CARDS_LIST);</b>
+<i>30</i>&nbsp;
+<b class="nc"><i>31</i>&nbsp;        this.cards = cards;</b>
+<b class="nc"><i>32</i>&nbsp;        this.remaining = remaining;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public List&lt;Card&gt; getCards() {
+<b class="nc"><i>36</i>&nbsp;        return cards;</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public int getRemaining() {
+<b class="nc"><i>40</i>&nbsp;        return remaining;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

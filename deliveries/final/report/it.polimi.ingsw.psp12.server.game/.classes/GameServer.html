@@ -1,0 +1,376 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameServer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.server.game</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameServer (it.polimi.ingsw.psp12.server.game)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameServer</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 77)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GameServer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 78)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.server.game;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.controller.Controller;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.exceptions.InvalidMaxPlayersException;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.GameState;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.network.ClientHandler;
+<i>7</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>8</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.JoinMsg;
+<i>9</i>&nbsp;import it.polimi.ingsw.psp12.network.messages.Message;
+<i>10</i>&nbsp;import it.polimi.ingsw.psp12.network.Room;
+<i>11</i>&nbsp;import it.polimi.ingsw.psp12.server.PortsManager;
+<i>12</i>&nbsp;import it.polimi.ingsw.psp12.server.Server;
+<i>13</i>&nbsp;import it.polimi.ingsw.psp12.utils.Constants;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.io.IOException;
+<i>16</i>&nbsp;import java.net.ServerSocket;
+<i>17</i>&nbsp;import java.net.Socket;
+<i>18</i>&nbsp;import java.util.Queue;
+<i>19</i>&nbsp;import java.util.concurrent.*;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * Server that manages a single game on the provided port
+<i>23</i>&nbsp; * @author Luca Morandini
+<i>24</i>&nbsp; */
+<i>25</i>&nbsp;public class GameServer implements Runnable, Server {
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Socket used to accept clients
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    private final ServerSocket socket;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Room that host the current game
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    private final Room room;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Controller of the game managed by the server
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    private final Controller controller;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Model of the game managed by the server
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    private final GameState model;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * List of connected clients that have to join the game
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    private final Queue&lt;ClientHandler&gt; waitingClients;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Clients thread executor
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    private final ExecutorService executor;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Timer used for aborting a game if not all clients connect to the game server
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    private ScheduledExecutorService abortTimer;
+<i>60</i>&nbsp;
+<b class="nc"><i>61</i>&nbsp;    public GameServer(Room room) throws IOException, InvalidMaxPlayersException {</b>
+<b class="nc"><i>62</i>&nbsp;        this.room = room;</b>
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;        socket = new ServerSocket(room.getAssignedPort());</b>
+<b class="nc"><i>65</i>&nbsp;        model = new GameState(room.getMaxPlayersCount());</b>
+<b class="nc"><i>66</i>&nbsp;        controller = new Controller(model, this);</b>
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        executor = Executors.newCachedThreadPool();</b>
+<b class="nc"><i>69</i>&nbsp;        waitingClients = new ConcurrentLinkedQueue&lt;&gt;();</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    @Override
+<i>73</i>&nbsp;    public void run() {
+<b class="nc"><i>74</i>&nbsp;        while (room.isRunning()) {</b>
+<i>75</i>&nbsp;            try {
+<b class="nc"><i>76</i>&nbsp;                Socket client = socket.accept();</b>
+<b class="nc"><i>77</i>&nbsp;                client.setSoTimeout(Constants.SOCKET_TIMEOUT);</b>
+<i>78</i>&nbsp;
+<b class="nc"><i>79</i>&nbsp;                System.out.printf(&quot;client %s connected to game server %d\n&quot;,</b>
+<b class="nc"><i>80</i>&nbsp;                        client.getInetAddress(), room.getAssignedPort());</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;                try {
+<i>83</i>&nbsp;                    // create client handler
+<b class="nc"><i>84</i>&nbsp;                    ClientHandler clientHandler = new ClientHandler(client);</b>
+<i>85</i>&nbsp;                    // subscribe the server as system commands handler
+<b class="nc"><i>86</i>&nbsp;                    clientHandler.setServer(this);</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;                    // add client to the list of waiting clients
+<b class="nc"><i>89</i>&nbsp;                    executor.execute(clientHandler);</b>
+<b class="nc"><i>90</i>&nbsp;                    waitingClients.offer(clientHandler);</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;                    // start abort game timer
+<b class="nc"><i>93</i>&nbsp;                    startTimer();</b>
+<i>94</i>&nbsp;                }
+<b class="nc"><i>95</i>&nbsp;                catch (IOException e) {</b>
+<b class="nc"><i>96</i>&nbsp;                    System.out.println(&quot;game server failed to connect to the client &quot; + client.getInetAddress());</b>
+<b class="nc"><i>97</i>&nbsp;                }</b>
+<i>98</i>&nbsp;            }
+<b class="nc"><i>99</i>&nbsp;            catch (IOException e) {</b>
+<b class="nc"><i>100</i>&nbsp;                if (!room.isRunning()) {</b>
+<b class="nc"><i>101</i>&nbsp;                    System.out.println(&quot;game server &quot; + room.getAssignedPort() + &quot; closed&quot;);</b>
+<i>102</i>&nbsp;                    return;
+<i>103</i>&nbsp;                }
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;                System.out.println(&quot;server connection failed&quot;);</b>
+<b class="nc"><i>106</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>107</i>&nbsp;            }</b>
+<i>108</i>&nbsp;        }
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Process system commands incoming from clients
+<i>113</i>&nbsp;     * @param message message to be processed
+<i>114</i>&nbsp;     * @param client client that generated the command
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    @Override
+<i>117</i>&nbsp;    public void processCommand(Message message, ClientHandler client) {
+<i>118</i>&nbsp;        /*
+<i>119</i>&nbsp;            process incoming command from client
+<i>120</i>&nbsp;            commands to be managed by game server:
+<i>121</i>&nbsp;            - join: subscribe a player to the current room
+<i>122</i>&nbsp;            - disconnected: handle disconnection of a client
+<i>123</i>&nbsp;        */
+<b class="nc"><i>124</i>&nbsp;        switch (message.getCommand())</b>
+<i>125</i>&nbsp;        {
+<i>126</i>&nbsp;            case JOIN:
+<b class="nc"><i>127</i>&nbsp;                JoinMsg msg = (JoinMsg)message;</b>
+<i>128</i>&nbsp;                // subscribe the client to the game
+<b class="nc"><i>129</i>&nbsp;                subscribeClient(msg.getUserName(), client);</b>
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;                // start the game if the room is full
+<b class="nc"><i>132</i>&nbsp;                if (room.isFull()) {</b>
+<i>133</i>&nbsp;                    // stop abort game timer
+<b class="nc"><i>134</i>&nbsp;                    cancelTimer();</b>
+<i>135</i>&nbsp;                    // if all client have joined the game can start
+<b class="nc"><i>136</i>&nbsp;                    System.out.println(&quot;room full, the game &quot; + room.getAssignedPort() + &quot; can start&quot;);</b>
+<b class="nc"><i>137</i>&nbsp;                    controller.initGame();</b>
+<i>138</i>&nbsp;                }
+<i>139</i>&nbsp;                break;
+<i>140</i>&nbsp;            case DISCONNECTED:
+<i>141</i>&nbsp;                // handle disconnection of a client
+<b class="nc"><i>142</i>&nbsp;                disconnectedClient(client);</b>
+<i>143</i>&nbsp;                break;
+<i>144</i>&nbsp;        }
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Subscribe to a game if the room is not full and the name selected by the user is not already taken
+<i>149</i>&nbsp;     * @param name name provided by the user
+<i>150</i>&nbsp;     * @param client client handler of the user
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    private void subscribeClient(String name, ClientHandler client) {
+<i>153</i>&nbsp;        // subscribe the client only if the room is not full
+<b class="nc"><i>154</i>&nbsp;        if (room.isFull()) {</b>
+<i>155</i>&nbsp;            // notify the client that the game is already full and close connection
+<b class="nc"><i>156</i>&nbsp;            client.send(new Message(MsgCommand.ROOM_FULL));</b>
+<b class="nc"><i>157</i>&nbsp;            client.close();</b>
+<b class="nc"><i>158</i>&nbsp;            System.out.println(&quot;client tried to subscribe to a full room&quot;);</b>
+<i>159</i>&nbsp;            return;
+<i>160</i>&nbsp;        }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;        // trim spaces from the name
+<b class="nc"><i>163</i>&nbsp;        name = name.trim();</b>
+<i>164</i>&nbsp;        // check if name is not empty
+<b class="nc"><i>165</i>&nbsp;        if (name.isEmpty()) {</b>
+<b class="nc"><i>166</i>&nbsp;            client.send(new Message(MsgCommand.INVALID_NICKNAME));</b>
+<b class="nc"><i>167</i>&nbsp;            System.out.println(&quot;empty name&quot;);</b>
+<i>168</i>&nbsp;            return;
+<i>169</i>&nbsp;        }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;        // subscribe the client only if the selected name is not already taken
+<b class="nc"><i>172</i>&nbsp;        if (model.alreadyRegistered(name)) {</b>
+<i>173</i>&nbsp;            // ask user for another name
+<b class="nc"><i>174</i>&nbsp;            client.send(new Message(MsgCommand.INVALID_NICKNAME));</b>
+<b class="nc"><i>175</i>&nbsp;            System.out.println(&quot;name already taken&quot;);</b>
+<i>176</i>&nbsp;            return;
+<i>177</i>&nbsp;        }
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;        // register client to the game
+<b class="nc"><i>180</i>&nbsp;        controller.addClient(client, name);</b>
+<i>181</i>&nbsp;        // remove client from the list of waiting clients
+<b class="nc"><i>182</i>&nbsp;        waitingClients.remove(client);</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;        // update room with the new client
+<b class="nc"><i>185</i>&nbsp;        room.clientJoined();</b>
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;        // send subscription confirmation to the client
+<b class="nc"><i>188</i>&nbsp;        client.send(new Message(MsgCommand.JOINED));</b>
+<i>189</i>&nbsp;
+<b class="nc"><i>190</i>&nbsp;        System.out.println(&quot;client subscribed to the game &quot; + room.getAssignedPort() +</b>
+<b class="nc"><i>191</i>&nbsp;                &quot; [&quot; + room.getPlayersCount() + &quot;/&quot; + room.getMaxPlayersCount() + &quot;]&quot;);</b>
+<i>192</i>&nbsp;    }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    /**
+<i>195</i>&nbsp;     * Process the disconnection of a client
+<i>196</i>&nbsp;     * @param client disconnected client
+<i>197</i>&nbsp;     */
+<i>198</i>&nbsp;    private void disconnectedClient(ClientHandler client) {
+<b class="nc"><i>199</i>&nbsp;        System.out.println(&quot;client disconnected from game server &quot; + room.getAssignedPort());</b>
+<i>200</i>&nbsp;        // close socket to avoid sending close message
+<b class="nc"><i>201</i>&nbsp;        client.close();</b>
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;        // stop game and disconnect all clients
+<b class="nc"><i>204</i>&nbsp;        controller.endGame();</b>
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    /**
+<i>208</i>&nbsp;     * Removes the room from the active rooms when the game ended
+<i>209</i>&nbsp;     */
+<i>210</i>&nbsp;    public void gameEnded() {
+<b class="nc"><i>211</i>&nbsp;        System.out.println(&quot;game &quot; + room.getAssignedPort() + &quot; ended&quot;);</b>
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;        // release assigned port
+<b class="nc"><i>214</i>&nbsp;        PortsManager.release(room.getAssignedPort());</b>
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;        // close the room
+<b class="nc"><i>217</i>&nbsp;        room.close();</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;        // disconnect clients that do not have joined the game
+<b class="nc"><i>220</i>&nbsp;        while (!waitingClients.isEmpty()) {</b>
+<b class="nc"><i>221</i>&nbsp;            waitingClients.poll().close();</b>
+<i>222</i>&nbsp;        }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;        // shutdown clients thread executor
+<b class="nc"><i>225</i>&nbsp;        executor.shutdownNow();</b>
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;        // stop abort timer if it is running
+<b class="nc"><i>228</i>&nbsp;        if (abortTimer != null) {</b>
+<b class="nc"><i>229</i>&nbsp;            abortTimer.shutdownNow();</b>
+<i>230</i>&nbsp;        }
+<i>231</i>&nbsp;
+<b class="nc"><i>232</i>&nbsp;        System.out.println(&quot;shutting down game server &quot; + room.getAssignedPort() + &quot;...&quot;);</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;        try {
+<b class="nc"><i>235</i>&nbsp;            socket.close();</b>
+<i>236</i>&nbsp;        }
+<b class="nc"><i>237</i>&nbsp;        catch (IOException e) {</b>
+<b class="nc"><i>238</i>&nbsp;            System.out.println(&quot;error while shutting down game server &quot; + room.getAssignedPort());</b>
+<b class="nc"><i>239</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>240</i>&nbsp;            System.exit(1);</b>
+<b class="nc"><i>241</i>&nbsp;        }</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * Start timer for aborting a game
+<i>246</i>&nbsp;     */
+<i>247</i>&nbsp;    private void startTimer() {
+<b class="nc"><i>248</i>&nbsp;        if (abortTimer == null) {</b>
+<b class="nc"><i>249</i>&nbsp;            System.out.println(&quot;starting abort timer&quot;);</b>
+<i>250</i>&nbsp;
+<b class="nc"><i>251</i>&nbsp;            abortTimer = Executors.newSingleThreadScheduledExecutor();</b>
+<b class="nc"><i>252</i>&nbsp;            abortTimer.schedule(() -&gt; {</b>
+<b class="nc"><i>253</i>&nbsp;                System.out.println(&quot;abort timer expired&quot;);</b>
+<i>254</i>&nbsp;                // stop game and disconnect all clients
+<b class="nc"><i>255</i>&nbsp;                controller.endGame();</b>
+<i>256</i>&nbsp;            }, Constants.ABORT_INTERVAL, TimeUnit.MINUTES);
+<i>257</i>&nbsp;        }
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * Stop timer for aborting a game
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    private void cancelTimer() {
+<b class="nc"><i>264</i>&nbsp;        abortTimer.shutdownNow();</b>
+<b class="nc"><i>265</i>&nbsp;        System.out.println(&quot;abort timer stopped&quot;);</b>
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

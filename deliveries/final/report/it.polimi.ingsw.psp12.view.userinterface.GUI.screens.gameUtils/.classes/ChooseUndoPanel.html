@@ -1,0 +1,222 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseUndoPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseUndoPanel (it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseUndoPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChooseUndoPanel$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseUndoPanel$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseUndoPanel$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.view.userinterface.GUI.screens.gameUtils;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.network.enumeration.MsgCommand;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.GameScreen;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUI.screens.SetUpUtils.DialogContent;
+<i>6</i>&nbsp;import it.polimi.ingsw.psp12.view.userinterface.GUinterface;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import javax.swing.*;
+<i>9</i>&nbsp;import java.awt.*;
+<i>10</i>&nbsp;import java.awt.event.ActionEvent;
+<i>11</i>&nbsp;import java.awt.event.ActionListener;
+<i>12</i>&nbsp;import java.util.Timer;
+<i>13</i>&nbsp;import java.util.TimerTask;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This class display a panel used by the user for confirm the turn or restart
+<i>17</i>&nbsp; * @author Mattia Malacarne
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;public class ChooseUndoPanel extends DialogContent {</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    private JLabel text;
+<i>23</i>&nbsp;    private JButton confirm, undo;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    private GameScreen game;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private Timer disposeTimer;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public ChooseUndoPanel(GUinterface gui, GameScreen game) {
+<b class="nc"><i>30</i>&nbsp;        super(gui);</b>
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;        this.game = game;</b>
+<b class="nc"><i>33</i>&nbsp;        this.setLayout(new GridLayout(3,1));</b>
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        disposeTimer = new Timer();</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        text = new JLabel(&quot;Do you want to confirm your turn?&quot;);</b>
+<b class="nc"><i>38</i>&nbsp;        confirm = new JButton(&quot;Confirm&quot;);</b>
+<b class="nc"><i>39</i>&nbsp;        undo = new JButton(&quot;Undo&quot;);</b>
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;        confirm.addActionListener(confirmEv);</b>
+<b class="nc"><i>42</i>&nbsp;        undo.addActionListener(undoEv);</b>
+<i>43</i>&nbsp;
+<b class="nc"><i>44</i>&nbsp;        this.add(text);</b>
+<b class="nc"><i>45</i>&nbsp;        this.add(confirm);</b>
+<b class="nc"><i>46</i>&nbsp;        this.add(undo);</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;        // Start the timer
+<b class="nc"><i>49</i>&nbsp;        disposeTimer.schedule(disposeAction, 5200);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<b class="nc"><i>52</i>&nbsp;    ActionListener confirmEv = new ActionListener() {</b>
+<i>53</i>&nbsp;        @Override
+<i>54</i>&nbsp;        public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>55</i>&nbsp;            game.chooseUndo(MsgCommand.CONFIRM_TURN);</b>
+<b class="nc"><i>56</i>&nbsp;            parent.dispose();</b>
+<i>57</i>&nbsp;        }
+<i>58</i>&nbsp;    };
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;    ActionListener undoEv = new ActionListener() {</b>
+<i>61</i>&nbsp;        @Override
+<i>62</i>&nbsp;        public void actionPerformed(ActionEvent e) {
+<b class="nc"><i>63</i>&nbsp;            game.chooseUndo(MsgCommand.UNDO_TURN);</b>
+<b class="nc"><i>64</i>&nbsp;            parent.dispose();</b>
+<i>65</i>&nbsp;        }
+<i>66</i>&nbsp;    };
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;    TimerTask disposeAction = new TimerTask() {</b>
+<i>69</i>&nbsp;        @Override
+<i>70</i>&nbsp;        public void run() {
+<i>71</i>&nbsp;            //System.out.println(&quot;[DEBUG] Undo timer expired&quot;);
+<b class="nc"><i>72</i>&nbsp;            parent.dispose();</b>
+<i>73</i>&nbsp;        }
+<i>74</i>&nbsp;    };
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

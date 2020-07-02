@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Card</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.psp12.model.cards</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Card (it.polimi.ingsw.psp12.model.cards)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Card</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/ 29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.psp12.model.cards;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.psp12.model.power.BasicPower;
+<i>4</i>&nbsp;import it.polimi.ingsw.psp12.model.power.Power;
+<i>5</i>&nbsp;import it.polimi.ingsw.psp12.model.power.PowerFactory;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.io.Serializable;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;import java.util.List;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * Class that represent a card that offer powers to the player
+<i>13</i>&nbsp; * @author Luca Morandini
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class Card implements Serializable {
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Default card that represent the basic game without god powers
+<i>18</i>&nbsp;     */
+<b class="fc"><i>19</i>&nbsp;    private static final Card noPowers = new Card();</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Getter for the default card without powers
+<i>23</i>&nbsp;     * @return no powers card
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public static Card getNoPowers() {
+<b class="fc"><i>26</i>&nbsp;        return noPowers;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private final String name;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private final String shortDescription;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    private final String description;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private final List&lt;Integer&gt; powers;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    private final String image;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Constructor for cards loaded from file
+<i>41</i>&nbsp;     * @param name name of the card
+<i>42</i>&nbsp;     * @param shortDesc short description
+<i>43</i>&nbsp;     * @param desc full description
+<i>44</i>&nbsp;     * @param powers powers provided by the card
+<i>45</i>&nbsp;     * @param image address to the image resource
+<i>46</i>&nbsp;     */
+<b class="fc"><i>47</i>&nbsp;    public Card(String name, String shortDesc, String desc, List&lt;Integer&gt; powers, String image) {</b>
+<b class="fc"><i>48</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>49</i>&nbsp;        this.shortDescription = shortDesc;</b>
+<b class="fc"><i>50</i>&nbsp;        this.description = desc;</b>
+<b class="fc"><i>51</i>&nbsp;        this.powers = new ArrayList&lt;&gt;(powers);</b>
+<b class="fc"><i>52</i>&nbsp;        this.image = image;</b>
+<b class="fc"><i>53</i>&nbsp;    }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * Constructor for the default card without powers
+<i>57</i>&nbsp;     */
+<b class="fc"><i>58</i>&nbsp;    private Card() {</b>
+<b class="fc"><i>59</i>&nbsp;        this.name = &quot;No cards&quot;;</b>
+<b class="fc"><i>60</i>&nbsp;        this.shortDescription = &quot;Play without powers&quot;;</b>
+<b class="fc"><i>61</i>&nbsp;        this.description = &quot;Play the game without using god powers&quot;;</b>
+<b class="fc"><i>62</i>&nbsp;        this.powers = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>63</i>&nbsp;        this.image = &quot;/cards/NoPower.png&quot;;</b>
+<b class="fc"><i>64</i>&nbsp;    }</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Getter for the card name
+<i>68</i>&nbsp;     * @return card name
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    public String getName() {
+<b class="fc"><i>71</i>&nbsp;        return name;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Getter for the card short description
+<i>76</i>&nbsp;     * @return card short description
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    public String getShortDescription() {
+<b class="fc"><i>79</i>&nbsp;        return shortDescription;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Getter for the card description
+<i>84</i>&nbsp;     * @return card description
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>87</i>&nbsp;        return description;</b>
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Returns the power that the card offer to the player
+<i>92</i>&nbsp;     * @return power provided by the card
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public Power getPower() {
+<i>95</i>&nbsp;        // create basic power
+<b class="fc"><i>96</i>&nbsp;        Power power = new BasicPower();</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;        // decorate the basic power with the powers provided by the card
+<b class="fc"><i>99</i>&nbsp;        for (int id : powers) {</b>
+<b class="fc"><i>100</i>&nbsp;            power = PowerFactory.decorate(power, id);</b>
+<b class="fc"><i>101</i>&nbsp;        }</b>
+<i>102</i>&nbsp;
+<b class="fc"><i>103</i>&nbsp;        return power;</b>
+<i>104</i>&nbsp;    }
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * Returns the the string address to the image resource of the card
+<i>108</i>&nbsp;     * @return address to the image resource of the card
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public String getImage() {
+<b class="fc"><i>111</i>&nbsp;        return image;</b>
+<i>112</i>&nbsp;    }
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Determines if two cards are equal
+<i>116</i>&nbsp;     * @param o card to compare
+<i>117</i>&nbsp;     * @return true if this card equals the parameter
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    @Override
+<i>120</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i>121</i>&nbsp;        if (this == o) return true;</b>
+<b class="fc"><i>122</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="fc"><i>123</i>&nbsp;        Card card = (Card) o;</b>
+<b class="fc"><i>124</i>&nbsp;        return name.equals(card.name);</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-02 22:11</div>
+</div>
+</body>
+</html>

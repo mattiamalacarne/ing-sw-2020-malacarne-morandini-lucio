@@ -13,7 +13,7 @@ We have implemented the set of complete rules:
 
 It is also possible to play without any cards *(easy mode)* but it is not required by the specifications.
 
-We have developed both the CLI and the GUI where the GUI is the default UI and the CLI can be launched with a specific command.
+We have developed both the CLI and the GUI where the GUI is the default UI and the CLI can be launched with a specific command ([see *How to play* section](#client)).
 
 Since the game uses standard TCP sockets, it can be played on different machines connected on a network.
 

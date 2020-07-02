@@ -79,6 +79,10 @@ public class Point implements Serializable
                 y == point.y;
     }
 
+    /**
+     * Returns a string representation of the curren point
+     * @return string representation
+     */
     @Override
     public String toString() {
         return  "x = " + x +

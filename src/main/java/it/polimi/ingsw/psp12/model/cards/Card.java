@@ -63,14 +63,26 @@ public class Card implements Serializable {
         this.image = "/cards/NoPower.png";
     }
 
+    /**
+     * Getter for the card name
+     * @return card name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Getter for the card short description
+     * @return card short description
+     */
     public String getShortDescription() {
         return shortDescription;
     }
 
+    /**
+     * Getter for the card description
+     * @return card description
+     */
     public String getDescription() {
         return description;
     }
@@ -99,6 +111,11 @@ public class Card implements Serializable {
         return image;
     }
 
+    /**
+     * Determines if two cards are equal
+     * @param o card to compare
+     * @return true if this card equals the parameter
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

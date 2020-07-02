@@ -266,7 +266,7 @@ public class GameScreen extends Screen
             resetSelectedCell();
         } else
         {
-            System.out.println("Select other cell");
+           // System.out.println("Select other cell");
         }
     }
 

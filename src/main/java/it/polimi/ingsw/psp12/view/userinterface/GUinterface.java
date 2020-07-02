@@ -151,8 +151,7 @@ public class GUinterface extends JFrame implements UserInterface
     }
 
     public void createRoom(int playerNumber) throws IOException {
-        //TODO: Build a room with the helper
-        System.out.println("Creo la stanza");
+
         messageHandler.sendToServer(new CreateMsg(playerNumber));
     }
 
@@ -166,7 +165,6 @@ public class GUinterface extends JFrame implements UserInterface
 
     @Override
     public void waitMessage() {
-        //System.out.println("WE ARE WAITING");
         setup.dispayWaitBox();
     }
 
@@ -279,7 +277,7 @@ public class GUinterface extends JFrame implements UserInterface
     public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
 
         // Set in the gamescreen the correct phase
-        System.out.println("Choose action");
+
         game.setGamePhase(GamePhase.CHOOSE_ACTION);
         game.setPossibleActionList(actionsListMsg.getActions());
         game.displayActionSelection(actionsListMsg.getActions());
@@ -344,7 +342,6 @@ public class GUinterface extends JFrame implements UserInterface
     @Override
     public void chooseUndo() {
 
-        System.out.println("Waiting for undo!");
         game.setGameInfo("Terminate the turn or repeat?");
         game.displayUndoSelector();
     }
@@ -355,7 +352,6 @@ public class GUinterface extends JFrame implements UserInterface
      */
     public void sendUndoToServer(MsgCommand cmd)
     {
-        System.out.println("Sending undo to server");
         messageHandler.sendToServer(new Message(cmd));
     }
 
@@ -428,8 +424,8 @@ public class GUinterface extends JFrame implements UserInterface
      */
     private void startReloadTimer()
     {
-        //TODO: SETUP the timer
-        System.out.println("[DEBUG]: Starting reload timer");
+
+        //System.out.println("[DEBUG]: Starting reload timer");
         Timer timer = new Timer();
 
         needCard = true;

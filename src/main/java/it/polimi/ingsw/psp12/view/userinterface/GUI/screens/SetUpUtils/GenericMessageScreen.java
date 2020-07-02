@@ -29,9 +29,9 @@ public class GenericMessageScreen extends Screen
 
         backg.setBounds(0,0, size.width, size.height);
 
-        waitText = new JLabel(text, SwingConstants.CENTER);
+        waitText = new JLabel("<html><center>"+text+"</center></html", SwingConstants.CENTER);
         waitText.setFont(new Font("dalek", Font.PLAIN, 28));
-        waitText.setBounds(490,50, 437, 300);
+        waitText.setBounds(390,50, 600, 300);
 
         msgPanel = new JLayeredPane();
 

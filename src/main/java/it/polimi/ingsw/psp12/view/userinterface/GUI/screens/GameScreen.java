@@ -100,7 +100,7 @@ public class GameScreen extends Screen
     public void setGamePhase(GamePhase phase)
     {
         this.phase = phase;
-        System.out.println("[DEBUG] Setting game phase " + phase);
+        //System.out.println("[DEBUG] Setting game phase " + phase);
         switch (phase)
         {
             case NOT_MY_TURN: { setGameInfo("Not my turn"); break; }
@@ -109,22 +109,15 @@ public class GameScreen extends Screen
         }
     }
 
+    /**
+     * Set game info message on screen
+     * @param info text to display
+     */
     public void setGameInfo(String info)
     {
         if (board != null) board.setInfo(info);
     }
 
-    //TODO: Useless remove me
-    public void setMyWorker(List<Worker> workers)
-    {
-        List<Point> pos = new ArrayList<Point>();
-        for (Worker w: workers)
-        {
-            pos.add(w.getPosition());
-        }
-
-        board.validateBoard(pos);
-    }
 
     public GamePhase getPhase()
     {
@@ -157,6 +150,9 @@ public class GameScreen extends Screen
         //System.out.println("Aggiorno la board");
         actualBoard = null;
         actualBoard = msg.getBoard();
+        // Reset clickable cell
+        board.flushBoard();
+        // Create board for this turn
         board.updateBoard(msg.getBoard());
 
     }
@@ -230,7 +226,6 @@ public class GameScreen extends Screen
      */
     private void askUserForAction()
     {
-        System.out.println("AskFORACTION");
         // Display an otionpanel with action
         gui.sendSelectedWorkerToServer(new SelectWorkerMsg(selectdCells.get(0).getWorker().getId()));
         resetSelectedCell();
@@ -302,7 +297,7 @@ public class GameScreen extends Screen
      */
     public void chooseUndo(MsgCommand cmd)
     {
-        System.out.println("Undo selected: " + cmd);
+
         gui.sendUndoToServer(cmd);
     }
 

@@ -68,7 +68,7 @@ public class ChooseUndoPanel extends DialogContent {
     TimerTask disposeAction = new TimerTask() {
         @Override
         public void run() {
-            System.out.println("[DEBUG] Undo timer expired");
+            //System.out.println("[DEBUG] Undo timer expired");
             parent.dispose();
         }
     };

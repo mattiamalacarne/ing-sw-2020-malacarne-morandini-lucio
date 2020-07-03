@@ -153,630 +153,632 @@
 <i>79</i>&nbsp;
 <i>80</i>&nbsp;    /**
 <i>81</i>&nbsp;     * CLI constructor
-<i>82</i>&nbsp;     */
-<b class="nc"><i>83</i>&nbsp;    public CLInterface( Boolean coloredBoard ) {</b>
-<i>84</i>&nbsp;
-<b class="nc"><i>85</i>&nbsp;        cmdLock = new Object();</b>
-<b class="nc"><i>86</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
-<i>87</i>&nbsp;
-<b class="nc"><i>88</i>&nbsp;        this.coloredBoard = coloredBoard;</b>
-<b class="nc"><i>89</i>&nbsp;        welcomeMessage();</b>
-<i>90</i>&nbsp;
-<i>91</i>&nbsp;    }
+<i>82</i>&nbsp;     * @param coloredBoard Distinguishes whether to use or not ansi code
+<i>83</i>&nbsp;     *                     for color text in the board representation
+<i>84</i>&nbsp;     */
+<b class="nc"><i>85</i>&nbsp;    public CLInterface( Boolean coloredBoard ) {</b>
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;        cmdLock = new Object();</b>
+<b class="nc"><i>88</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;        this.coloredBoard = coloredBoard;</b>
+<b class="nc"><i>91</i>&nbsp;        welcomeMessage();</b>
 <i>92</i>&nbsp;
-<i>93</i>&nbsp;    /**
-<i>94</i>&nbsp;     * Gets the input from the user and checks:
-<i>95</i>&nbsp;     * -if it&#39;s a valid input
-<i>96</i>&nbsp;     * -if it&#39;t in a valid range
-<i>97</i>&nbsp;     *
-<i>98</i>&nbsp;     * @param list The list used to determine the range size of possible selection
-<i>99</i>&nbsp;     * @return The selection of the user
-<i>100</i>&nbsp;     * @throws Throwable If a server disconnection it&#39;s detected while waiting for the user input
-<i>101</i>&nbsp;     * that exception is launched to stop the scanner from waiting for a user input
-<i>102</i>&nbsp;     */
-<i>103</i>&nbsp;    private int getUserInput(List&lt;?&gt; list) throws Throwable {
-<i>104</i>&nbsp;
-<i>105</i>&nbsp;        int returnInput;
-<i>106</i>&nbsp;        do {
-<b class="nc"><i>107</i>&nbsp;            String input = cmdIn.nextLine();</b>
-<i>108</i>&nbsp;
-<i>109</i>&nbsp;            //Checks if it&#39;s still connected to the server
-<b class="nc"><i>110</i>&nbsp;            if (exitGame){</b>
-<b class="nc"><i>111</i>&nbsp;                closeGameMessage();</b>
-<b class="nc"><i>112</i>&nbsp;                throw new Throwable();</b>
-<i>113</i>&nbsp;            }
-<i>114</i>&nbsp;
-<i>115</i>&nbsp;            try {
-<b class="nc"><i>116</i>&nbsp;                returnInput = Integer.parseInt( input );</b>
-<b class="nc"><i>117</i>&nbsp;            } catch (NumberFormatException e) {</b>
-<b class="nc"><i>118</i>&nbsp;                returnInput=-1;</b>
-<b class="nc"><i>119</i>&nbsp;            }</b>
-<b class="nc"><i>120</i>&nbsp;            if (returnInput&lt;0 || returnInput&gt;=list.size()){</b>
-<b class="nc"><i>121</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
-<i>122</i>&nbsp;            }
-<b class="nc"><i>123</i>&nbsp;        }while (returnInput&lt;0 || returnInput&gt;=list.size());</b>
-<i>124</i>&nbsp;
-<b class="nc"><i>125</i>&nbsp;        return returnInput;</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Gets the input from the user and checks:
+<i>97</i>&nbsp;     * -if it&#39;s a valid input
+<i>98</i>&nbsp;     * -if it&#39;t in a valid range
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @param list The list used to determine the range size of possible selection
+<i>101</i>&nbsp;     * @return The selection of the user
+<i>102</i>&nbsp;     * @throws Throwable If a server disconnection it&#39;s detected while waiting for the user input
+<i>103</i>&nbsp;     * that exception is launched to stop the scanner from waiting for a user input
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    private int getUserInput(List&lt;?&gt; list) throws Throwable {
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;        int returnInput;
+<i>108</i>&nbsp;        do {
+<b class="nc"><i>109</i>&nbsp;            String input = cmdIn.nextLine();</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;            //Checks if it&#39;s still connected to the server
+<b class="nc"><i>112</i>&nbsp;            if (exitGame){</b>
+<b class="nc"><i>113</i>&nbsp;                closeGameMessage();</b>
+<b class="nc"><i>114</i>&nbsp;                throw new Throwable();</b>
+<i>115</i>&nbsp;            }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;            try {
+<b class="nc"><i>118</i>&nbsp;                returnInput = Integer.parseInt( input );</b>
+<b class="nc"><i>119</i>&nbsp;            } catch (NumberFormatException e) {</b>
+<b class="nc"><i>120</i>&nbsp;                returnInput=-1;</b>
+<b class="nc"><i>121</i>&nbsp;            }</b>
+<b class="nc"><i>122</i>&nbsp;            if (returnInput&lt;0 || returnInput&gt;=list.size()){</b>
+<b class="nc"><i>123</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>124</i>&nbsp;            }
+<b class="nc"><i>125</i>&nbsp;        }while (returnInput&lt;0 || returnInput&gt;=list.size());</b>
 <i>126</i>&nbsp;
-<i>127</i>&nbsp;    }
+<b class="nc"><i>127</i>&nbsp;        return returnInput;</b>
 <i>128</i>&nbsp;
-<i>129</i>&nbsp;    /**
-<i>130</i>&nbsp;     * Welcome game menu
-<i>131</i>&nbsp;     */
-<i>132</i>&nbsp;    public void welcomeMessage() {
-<i>133</i>&nbsp;
-<b class="nc"><i>134</i>&nbsp;        inputStreamReader = new InputStreamReader(System.in);</b>
-<b class="nc"><i>135</i>&nbsp;        serverClosedRedirection = false;</b>
-<b class="nc"><i>136</i>&nbsp;        exitGame = false;</b>
-<b class="nc"><i>137</i>&nbsp;        discardUndo = false;</b>
-<i>138</i>&nbsp;
-<b class="nc"><i>139</i>&nbsp;        System.out.print(&quot;\n***********************************&quot;);</b>
-<b class="nc"><i>140</i>&nbsp;        System.out.print(&quot;\n**** Welcome to Santorini game ****&quot;);</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Welcome game menu
+<i>133</i>&nbsp;     */
+<i>134</i>&nbsp;    public void welcomeMessage() {
+<i>135</i>&nbsp;
+<b class="nc"><i>136</i>&nbsp;        inputStreamReader = new InputStreamReader(System.in);</b>
+<b class="nc"><i>137</i>&nbsp;        serverClosedRedirection = false;</b>
+<b class="nc"><i>138</i>&nbsp;        exitGame = false;</b>
+<b class="nc"><i>139</i>&nbsp;        discardUndo = false;</b>
+<i>140</i>&nbsp;
 <b class="nc"><i>141</i>&nbsp;        System.out.print(&quot;\n***********************************&quot;);</b>
-<b class="nc"><i>142</i>&nbsp;        System.out.println(&quot;\n0) Play\n1) Exit&quot;);</b>
-<i>143</i>&nbsp;
-<i>144</i>&nbsp;        int choice;
-<i>145</i>&nbsp;        do {
-<b class="nc"><i>146</i>&nbsp;            cmdIn = new Scanner(inputStreamReader);</b>
-<i>147</i>&nbsp;            try {
-<b class="nc"><i>148</i>&nbsp;                choice = cmdIn.nextInt();</b>
-<b class="nc"><i>149</i>&nbsp;            }catch (InputMismatchException e){</b>
-<b class="nc"><i>150</i>&nbsp;                choice = -1;</b>
-<b class="nc"><i>151</i>&nbsp;            }</b>
-<b class="nc"><i>152</i>&nbsp;            if (choice&lt;0 || choice&gt;1){</b>
-<b class="nc"><i>153</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
-<i>154</i>&nbsp;            }
-<b class="nc"><i>155</i>&nbsp;        }while (choice&lt;0 || choice&gt;1);</b>
-<i>156</i>&nbsp;
-<b class="nc"><i>157</i>&nbsp;        if (choice==0){</b>
-<i>158</i>&nbsp;            //Play
-<b class="nc"><i>159</i>&nbsp;            connect();</b>
-<i>160</i>&nbsp;        }else {
-<i>161</i>&nbsp;            //Exit
-<b class="nc"><i>162</i>&nbsp;            System.out.println(&quot;Quitting the game&quot;);</b>
-<b class="nc"><i>163</i>&nbsp;            System.exit(0);</b>
-<i>164</i>&nbsp;        }
-<i>165</i>&nbsp;
-<i>166</i>&nbsp;    }
+<b class="nc"><i>142</i>&nbsp;        System.out.print(&quot;\n**** Welcome to Santorini game ****&quot;);</b>
+<b class="nc"><i>143</i>&nbsp;        System.out.print(&quot;\n***********************************&quot;);</b>
+<b class="nc"><i>144</i>&nbsp;        System.out.println(&quot;\n0) Play\n1) Exit&quot;);</b>
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;        int choice;
+<i>147</i>&nbsp;        do {
+<b class="nc"><i>148</i>&nbsp;            cmdIn = new Scanner(inputStreamReader);</b>
+<i>149</i>&nbsp;            try {
+<b class="nc"><i>150</i>&nbsp;                choice = cmdIn.nextInt();</b>
+<b class="nc"><i>151</i>&nbsp;            }catch (InputMismatchException e){</b>
+<b class="nc"><i>152</i>&nbsp;                choice = -1;</b>
+<b class="nc"><i>153</i>&nbsp;            }</b>
+<b class="nc"><i>154</i>&nbsp;            if (choice&lt;0 || choice&gt;1){</b>
+<b class="nc"><i>155</i>&nbsp;                System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>156</i>&nbsp;            }
+<b class="nc"><i>157</i>&nbsp;        }while (choice&lt;0 || choice&gt;1);</b>
+<i>158</i>&nbsp;
+<b class="nc"><i>159</i>&nbsp;        if (choice==0){</b>
+<i>160</i>&nbsp;            //Play
+<b class="nc"><i>161</i>&nbsp;            connect();</b>
+<i>162</i>&nbsp;        }else {
+<i>163</i>&nbsp;            //Exit
+<b class="nc"><i>164</i>&nbsp;            System.out.println(&quot;Quitting the game&quot;);</b>
+<b class="nc"><i>165</i>&nbsp;            System.exit(0);</b>
+<i>166</i>&nbsp;        }
 <i>167</i>&nbsp;
-<i>168</i>&nbsp;    /**
-<i>169</i>&nbsp;     * Tries to connect to the server until a valid ip is entered
-<i>170</i>&nbsp;     */
-<i>171</i>&nbsp;    public void connect() {
-<i>172</i>&nbsp;        // Continue to asks to the user the ip of the server to connect to,
-<i>173</i>&nbsp;        // until a valid ip is entered
-<b class="nc"><i>174</i>&nbsp;        boolean connected = false;</b>
-<i>175</i>&nbsp;        do {
-<b class="nc"><i>176</i>&nbsp;            connected = messageHandler.connect(getServerByIp());</b>
-<b class="nc"><i>177</i>&nbsp;            if (!connected) {</b>
-<b class="nc"><i>178</i>&nbsp;                System.out.println(&quot;This server doesn&#39;t exists, retry...&quot;);</b>
-<i>179</i>&nbsp;            }
-<b class="nc"><i>180</i>&nbsp;        } while (!connected);</b>
-<i>181</i>&nbsp;
-<b class="nc"><i>182</i>&nbsp;        System.out.println(&quot;Successfully connected to the server!&quot;);</b>
-<i>183</i>&nbsp;    }
-<i>184</i>&nbsp;
-<i>185</i>&nbsp;    /**
-<i>186</i>&nbsp;     * Requests server ip to the user
-<i>187</i>&nbsp;     * @return server information
-<i>188</i>&nbsp;     */
-<i>189</i>&nbsp;    public ServerInfo getServerByIp() {
-<i>190</i>&nbsp;
-<b class="nc"><i>191</i>&nbsp;        System.out.println(&quot;(IP) Hostname: &quot;);</b>
-<i>192</i>&nbsp;        ServerInfo serverInfo;
-<i>193</i>&nbsp;
-<i>194</i>&nbsp;        do {
-<b class="nc"><i>195</i>&nbsp;            cmdIn = new Scanner(inputStreamReader);</b>
-<i>196</i>&nbsp;            try {
-<b class="nc"><i>197</i>&nbsp;                String hostname = cmdIn.nextLine();</b>
-<b class="nc"><i>198</i>&nbsp;                serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
-<b class="nc"><i>199</i>&nbsp;            } catch (UnknownHostException e) {</b>
-<b class="nc"><i>200</i>&nbsp;                System.out.println(&quot;Invalid host address, retry...&quot;);</b>
-<b class="nc"><i>201</i>&nbsp;                serverInfo = null;</b>
-<b class="nc"><i>202</i>&nbsp;            }</b>
-<b class="nc"><i>203</i>&nbsp;        } while (serverInfo==null);</b>
-<i>204</i>&nbsp;
-<b class="nc"><i>205</i>&nbsp;        return serverInfo;</b>
-<i>206</i>&nbsp;    }
-<i>207</i>&nbsp;
-<i>208</i>&nbsp;    @Override
-<i>209</i>&nbsp;    public void createsNewRoom() {
-<i>210</i>&nbsp;
-<b class="nc"><i>211</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Tries to connect to the server until a valid ip is entered
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    public void connect() {
+<i>174</i>&nbsp;        // Continue to asks to the user the ip of the server to connect to,
+<i>175</i>&nbsp;        // until a valid ip is entered
+<b class="nc"><i>176</i>&nbsp;        boolean connected = false;</b>
+<i>177</i>&nbsp;        do {
+<b class="nc"><i>178</i>&nbsp;            connected = messageHandler.connect(getServerByIp());</b>
+<b class="nc"><i>179</i>&nbsp;            if (!connected) {</b>
+<b class="nc"><i>180</i>&nbsp;                System.out.println(&quot;This server doesn&#39;t exists, retry...&quot;);</b>
+<i>181</i>&nbsp;            }
+<b class="nc"><i>182</i>&nbsp;        } while (!connected);</b>
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;        System.out.println(&quot;Successfully connected to the server!&quot;);</b>
+<i>185</i>&nbsp;    }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /**
+<i>188</i>&nbsp;     * Requests server ip to the user
+<i>189</i>&nbsp;     * @return server information
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    public ServerInfo getServerByIp() {
+<i>192</i>&nbsp;
+<b class="nc"><i>193</i>&nbsp;        System.out.println(&quot;(IP) Hostname: &quot;);</b>
+<i>194</i>&nbsp;        ServerInfo serverInfo;
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;        do {
+<b class="nc"><i>197</i>&nbsp;            cmdIn = new Scanner(inputStreamReader);</b>
+<i>198</i>&nbsp;            try {
+<b class="nc"><i>199</i>&nbsp;                String hostname = cmdIn.nextLine();</b>
+<b class="nc"><i>200</i>&nbsp;                serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
+<b class="nc"><i>201</i>&nbsp;            } catch (UnknownHostException e) {</b>
+<b class="nc"><i>202</i>&nbsp;                System.out.println(&quot;Invalid host address, retry...&quot;);</b>
+<b class="nc"><i>203</i>&nbsp;                serverInfo = null;</b>
+<b class="nc"><i>204</i>&nbsp;            }</b>
+<b class="nc"><i>205</i>&nbsp;        } while (serverInfo==null);</b>
+<i>206</i>&nbsp;
+<b class="nc"><i>207</i>&nbsp;        return serverInfo;</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    @Override
+<i>211</i>&nbsp;    public void createsNewRoom() {
 <i>212</i>&nbsp;
-<b class="nc"><i>213</i>&nbsp;            System.out.println(&quot;\nThere are no available room to join!\nCreate a new room to start playing&quot;);</b>
+<b class="nc"><i>213</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
 <i>214</i>&nbsp;
-<i>215</i>&nbsp;            //Room player number
-<b class="nc"><i>216</i>&nbsp;            System.out.println(&quot;Player number [2-3]:&quot;);</b>
-<i>217</i>&nbsp;            int playerNumber;
-<i>218</i>&nbsp;            do {
-<b class="nc"><i>219</i>&nbsp;                String input = cmdIn.nextLine();</b>
-<i>220</i>&nbsp;
-<i>221</i>&nbsp;                //Checks if it&#39;s still connected to the server
-<b class="nc"><i>222</i>&nbsp;                if (exitGame){</b>
-<b class="nc"><i>223</i>&nbsp;                    closeGameMessage();</b>
-<i>224</i>&nbsp;                    return;
-<i>225</i>&nbsp;                }
-<i>226</i>&nbsp;
-<i>227</i>&nbsp;                try {
-<b class="nc"><i>228</i>&nbsp;                    playerNumber = Integer.parseInt( input );</b>
-<b class="nc"><i>229</i>&nbsp;                } catch (NumberFormatException e) {</b>
-<b class="nc"><i>230</i>&nbsp;                    playerNumber=0;</b>
-<b class="nc"><i>231</i>&nbsp;                }</b>
-<b class="nc"><i>232</i>&nbsp;                if (playerNumber&lt;2 || playerNumber&gt;3){</b>
-<b class="nc"><i>233</i>&nbsp;                    System.out.println(&quot;Choice not allowed, retry&quot;);</b>
-<i>234</i>&nbsp;                }
-<b class="nc"><i>235</i>&nbsp;            }while (playerNumber&lt;2 || playerNumber&gt;3);</b>
-<i>236</i>&nbsp;
-<b class="nc"><i>237</i>&nbsp;            messageHandler.sendToServer( new CreateMsg(playerNumber)  );</b>
+<b class="nc"><i>215</i>&nbsp;            System.out.println(&quot;\nThere are no available room to join!\nCreate a new room to start playing&quot;);</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;            //Room player number
+<b class="nc"><i>218</i>&nbsp;            System.out.println(&quot;Player number [2-3]:&quot;);</b>
+<i>219</i>&nbsp;            int playerNumber;
+<i>220</i>&nbsp;            do {
+<b class="nc"><i>221</i>&nbsp;                String input = cmdIn.nextLine();</b>
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;                //Checks if it&#39;s still connected to the server
+<b class="nc"><i>224</i>&nbsp;                if (exitGame){</b>
+<b class="nc"><i>225</i>&nbsp;                    closeGameMessage();</b>
+<i>226</i>&nbsp;                    return;
+<i>227</i>&nbsp;                }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;                try {
+<b class="nc"><i>230</i>&nbsp;                    playerNumber = Integer.parseInt( input );</b>
+<b class="nc"><i>231</i>&nbsp;                } catch (NumberFormatException e) {</b>
+<b class="nc"><i>232</i>&nbsp;                    playerNumber=0;</b>
+<b class="nc"><i>233</i>&nbsp;                }</b>
+<b class="nc"><i>234</i>&nbsp;                if (playerNumber&lt;2 || playerNumber&gt;3){</b>
+<b class="nc"><i>235</i>&nbsp;                    System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>236</i>&nbsp;                }
+<b class="nc"><i>237</i>&nbsp;            }while (playerNumber&lt;2 || playerNumber&gt;3);</b>
 <i>238</i>&nbsp;
-<i>239</i>&nbsp;        });
-<b class="nc"><i>240</i>&nbsp;        scannerThread.start();</b>
-<i>241</i>&nbsp;
-<i>242</i>&nbsp;    }
+<b class="nc"><i>239</i>&nbsp;            messageHandler.sendToServer( new CreateMsg(playerNumber)  );</b>
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;        });
+<b class="nc"><i>242</i>&nbsp;        scannerThread.start();</b>
 <i>243</i>&nbsp;
-<i>244</i>&nbsp;    @Override
-<i>245</i>&nbsp;    public void waitMessage() {
-<b class="nc"><i>246</i>&nbsp;        System.out.println(&quot;\nWait while all the players joined the room&quot;);</b>
-<i>247</i>&nbsp;    }
-<i>248</i>&nbsp;
-<i>249</i>&nbsp;    @Override
-<i>250</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) {
-<i>251</i>&nbsp;
-<b class="nc"><i>252</i>&nbsp;        serverClosedRedirection = true;</b>
-<b class="nc"><i>253</i>&nbsp;        exitGame = false;</b>
-<i>254</i>&nbsp;
-<b class="nc"><i>255</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    @Override
+<i>247</i>&nbsp;    public void waitMessage() {
+<b class="nc"><i>248</i>&nbsp;        System.out.println(&quot;\nWait while all the players joined the room&quot;);</b>
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    @Override
+<i>252</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) {
+<i>253</i>&nbsp;
+<b class="nc"><i>254</i>&nbsp;        serverClosedRedirection = true;</b>
+<b class="nc"><i>255</i>&nbsp;        exitGame = false;</b>
 <i>256</i>&nbsp;
-<b class="nc"><i>257</i>&nbsp;        System.out.printf(&quot;\nRoom for %d players created\n&quot;, createdMsg.getRoom().getMaxPlayersCount());</b>
+<b class="nc"><i>257</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
 <i>258</i>&nbsp;
-<i>259</i>&nbsp;        //New port is updated
-<i>260</i>&nbsp;        try {
-<b class="nc"><i>261</i>&nbsp;            messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
-<b class="nc"><i>262</i>&nbsp;        } catch (IOException e) {</b>
-<b class="nc"><i>263</i>&nbsp;            System.out.println(&quot;Error entering the room...&quot;);</b>
-<b class="nc"><i>264</i>&nbsp;            serverClosedRedirection = false;</b>
-<b class="nc"><i>265</i>&nbsp;            closeGameMessage();</b>
-<b class="nc"><i>266</i>&nbsp;        }</b>
-<i>267</i>&nbsp;
-<b class="nc"><i>268</i>&nbsp;        System.out.println(&quot;What&#39;s your name: &quot;);</b>
+<b class="nc"><i>259</i>&nbsp;        System.out.printf(&quot;\nRoom for %d players created\n&quot;, createdMsg.getRoom().getMaxPlayersCount());</b>
+<i>260</i>&nbsp;
+<i>261</i>&nbsp;        //New port is updated
+<i>262</i>&nbsp;        try {
+<b class="nc"><i>263</i>&nbsp;            messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
+<b class="nc"><i>264</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>265</i>&nbsp;            System.out.println(&quot;Error entering the room...&quot;);</b>
+<b class="nc"><i>266</i>&nbsp;            serverClosedRedirection = false;</b>
+<b class="nc"><i>267</i>&nbsp;            closeGameMessage();</b>
+<b class="nc"><i>268</i>&nbsp;        }</b>
 <i>269</i>&nbsp;
-<b class="nc"><i>270</i>&nbsp;        String playerName = cmdIn.nextLine();</b>
+<b class="nc"><i>270</i>&nbsp;        System.out.println(&quot;What&#39;s your name: &quot;);</b>
 <i>271</i>&nbsp;
-<i>272</i>&nbsp;        //Checks if it&#39;s still connected to the server
-<b class="nc"><i>273</i>&nbsp;        if (exitGame){</b>
-<b class="nc"><i>274</i>&nbsp;            closeGameMessage();</b>
-<i>275</i>&nbsp;            return;
-<i>276</i>&nbsp;        }
-<i>277</i>&nbsp;
-<b class="nc"><i>278</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<b class="nc"><i>272</i>&nbsp;        String playerName = cmdIn.nextLine();</b>
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;        //Checks if it&#39;s still connected to the server
+<b class="nc"><i>275</i>&nbsp;        if (exitGame){</b>
+<b class="nc"><i>276</i>&nbsp;            closeGameMessage();</b>
+<i>277</i>&nbsp;            return;
+<i>278</i>&nbsp;        }
 <i>279</i>&nbsp;
-<i>280</i>&nbsp;        });
-<b class="nc"><i>281</i>&nbsp;        scannerThread.start();</b>
-<i>282</i>&nbsp;
-<i>283</i>&nbsp;    }
+<b class="nc"><i>280</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;        });
+<b class="nc"><i>283</i>&nbsp;        scannerThread.start();</b>
 <i>284</i>&nbsp;
-<i>285</i>&nbsp;    @Override
-<i>286</i>&nbsp;    public void roomCreatedFailedMessage() {
-<b class="nc"><i>287</i>&nbsp;        System.out.println(&quot;Room creation failed!&quot;);</b>
-<i>288</i>&nbsp;    }
-<i>289</i>&nbsp;
-<i>290</i>&nbsp;    @Override
-<i>291</i>&nbsp;    public void invalidMaxPlayerMessage() {
-<b class="nc"><i>292</i>&nbsp;        System.out.println(&quot;Invalid player number!&quot;);</b>
-<i>293</i>&nbsp;    }
-<i>294</i>&nbsp;
-<i>295</i>&nbsp;    @Override
-<i>296</i>&nbsp;    public void roomFullMessage() {
-<b class="nc"><i>297</i>&nbsp;        System.out.println(&quot;This room is already full! Choose another room&quot;);</b>
-<i>298</i>&nbsp;    }
-<i>299</i>&nbsp;
-<i>300</i>&nbsp;    @Override
-<i>301</i>&nbsp;    public void joinPlayerNameConfirmation() {
-<b class="nc"><i>302</i>&nbsp;        System.out.println(&quot;You have joined the room!\n&quot;);</b>
-<i>303</i>&nbsp;//        isWaiting = true;
-<i>304</i>&nbsp;//        while (isWaiting){
-<i>305</i>&nbsp;//            //TODO: print waiting message ?
-<i>306</i>&nbsp;//        }
-<i>307</i>&nbsp;    }
-<i>308</i>&nbsp;
-<i>309</i>&nbsp;//    public void setIsWaiting(Boolean bool){
-<i>310</i>&nbsp;//        this.isWaiting = bool;
-<i>311</i>&nbsp;//    }
-<i>312</i>&nbsp;
-<i>313</i>&nbsp;    @Override
-<i>314</i>&nbsp;    public void joinPlayerNameAlreadyUsed() {
-<i>315</i>&nbsp;
-<b class="nc"><i>316</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>285</i>&nbsp;    }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    @Override
+<i>288</i>&nbsp;    public void roomCreatedFailedMessage() {
+<b class="nc"><i>289</i>&nbsp;        System.out.println(&quot;Room creation failed!&quot;);</b>
+<i>290</i>&nbsp;    }
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;    @Override
+<i>293</i>&nbsp;    public void invalidMaxPlayerMessage() {
+<b class="nc"><i>294</i>&nbsp;        System.out.println(&quot;Invalid player number!&quot;);</b>
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    @Override
+<i>298</i>&nbsp;    public void roomFullMessage() {
+<b class="nc"><i>299</i>&nbsp;        System.out.println(&quot;This room is already full! Choose another room&quot;);</b>
+<i>300</i>&nbsp;    }
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;    @Override
+<i>303</i>&nbsp;    public void joinPlayerNameConfirmation() {
+<b class="nc"><i>304</i>&nbsp;        System.out.println(&quot;You have joined the room!\n&quot;);</b>
+<i>305</i>&nbsp;//        isWaiting = true;
+<i>306</i>&nbsp;//        while (isWaiting){
+<i>307</i>&nbsp;//            //TODO: print waiting message ?
+<i>308</i>&nbsp;//        }
+<i>309</i>&nbsp;    }
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;//    public void setIsWaiting(Boolean bool){
+<i>312</i>&nbsp;//        this.isWaiting = bool;
+<i>313</i>&nbsp;//    }
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    @Override
+<i>316</i>&nbsp;    public void joinPlayerNameAlreadyUsed() {
 <i>317</i>&nbsp;
-<b class="nc"><i>318</i>&nbsp;            System.out.println(&quot;That name is already used! Choose another name: &quot;);</b>
-<b class="nc"><i>319</i>&nbsp;            String playerName = cmdIn.nextLine();</b>
-<i>320</i>&nbsp;
-<i>321</i>&nbsp;            //Checks if it&#39;s still connected to the server
-<b class="nc"><i>322</i>&nbsp;            if (exitGame){</b>
-<b class="nc"><i>323</i>&nbsp;                closeGameMessage();</b>
-<i>324</i>&nbsp;                return;
-<i>325</i>&nbsp;            }
-<i>326</i>&nbsp;
-<b class="nc"><i>327</i>&nbsp;            messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<b class="nc"><i>318</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>319</i>&nbsp;
+<b class="nc"><i>320</i>&nbsp;            System.out.println(&quot;That name is already used! Choose another name: &quot;);</b>
+<b class="nc"><i>321</i>&nbsp;            String playerName = cmdIn.nextLine();</b>
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;            //Checks if it&#39;s still connected to the server
+<b class="nc"><i>324</i>&nbsp;            if (exitGame){</b>
+<b class="nc"><i>325</i>&nbsp;                closeGameMessage();</b>
+<i>326</i>&nbsp;                return;
+<i>327</i>&nbsp;            }
 <i>328</i>&nbsp;
-<i>329</i>&nbsp;        });
-<b class="nc"><i>330</i>&nbsp;        scannerThread.start();</b>
-<i>331</i>&nbsp;
-<i>332</i>&nbsp;    }
+<b class="nc"><i>329</i>&nbsp;            messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;        });
+<b class="nc"><i>332</i>&nbsp;        scannerThread.start();</b>
 <i>333</i>&nbsp;
-<i>334</i>&nbsp;    @Override
-<i>335</i>&nbsp;    public void chooseCard(CardsListMsg cardsListMsg) {
-<i>336</i>&nbsp;
-<b class="nc"><i>337</i>&nbsp;        scannerThread = new Thread(()-&gt;{</b>
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    @Override
+<i>337</i>&nbsp;    public void chooseCard(CardsListMsg cardsListMsg) {
 <i>338</i>&nbsp;
-<i>339</i>&nbsp;            //Card choice
-<i>340</i>&nbsp;            int cardChoice;
-<i>341</i>&nbsp;            do {
-<b class="nc"><i>342</i>&nbsp;                System.out.println(&quot;Choose a card:&quot;);</b>
-<b class="nc"><i>343</i>&nbsp;                System.out.println(&quot; 0) Read cards descriptions&quot;);</b>
-<b class="nc"><i>344</i>&nbsp;                for (int c=1; c&lt;=cardsListMsg.getCards().size(); c++){</b>
-<b class="nc"><i>345</i>&nbsp;                    System.out.printf(&quot;%2d) %s\n&quot;, c, cardsListMsg.getCards().get(c-1).getName());</b>
-<i>346</i>&nbsp;                }
-<i>347</i>&nbsp;
-<b class="nc"><i>348</i>&nbsp;                String input = cmdIn.nextLine();</b>
+<b class="nc"><i>339</i>&nbsp;        scannerThread = new Thread(()-&gt;{</b>
+<i>340</i>&nbsp;
+<i>341</i>&nbsp;            //Card choice
+<i>342</i>&nbsp;            int cardChoice;
+<i>343</i>&nbsp;            do {
+<b class="nc"><i>344</i>&nbsp;                System.out.println(&quot;Choose a card:&quot;);</b>
+<b class="nc"><i>345</i>&nbsp;                System.out.println(&quot; 0) Read cards descriptions&quot;);</b>
+<b class="nc"><i>346</i>&nbsp;                for (int c=1; c&lt;=cardsListMsg.getCards().size(); c++){</b>
+<b class="nc"><i>347</i>&nbsp;                    System.out.printf(&quot;%2d) %s\n&quot;, c, cardsListMsg.getCards().get(c-1).getName());</b>
+<i>348</i>&nbsp;                }
 <i>349</i>&nbsp;
-<i>350</i>&nbsp;                //Checks if it&#39;s still connected to the server
-<b class="nc"><i>351</i>&nbsp;                if (exitGame){</b>
-<b class="nc"><i>352</i>&nbsp;                    closeGameMessage();</b>
-<i>353</i>&nbsp;                    return;
-<i>354</i>&nbsp;                }
-<i>355</i>&nbsp;
-<i>356</i>&nbsp;                try {
-<b class="nc"><i>357</i>&nbsp;                    cardChoice = Integer.parseInt( input );</b>
-<b class="nc"><i>358</i>&nbsp;                } catch (NumberFormatException e) {</b>
-<b class="nc"><i>359</i>&nbsp;                    cardChoice = -1;</b>
-<b class="nc"><i>360</i>&nbsp;                }</b>
-<b class="nc"><i>361</i>&nbsp;                if (cardChoice&lt;0 || cardChoice&gt;cardsListMsg.getCards().size()){</b>
-<b class="nc"><i>362</i>&nbsp;                    System.out.println(&quot;Choice not allowed, retry\n&quot;);</b>
-<i>363</i>&nbsp;                }
-<b class="nc"><i>364</i>&nbsp;                if (cardChoice == 0){</b>
-<b class="nc"><i>365</i>&nbsp;                    for (int card = 0; card &lt; cardsListMsg.getCards().size(); card++) {</b>
-<i>366</i>&nbsp;                        //Prints cards descriptions
-<b class="nc"><i>367</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getName());</b>
-<b class="nc"><i>368</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getShortDescription());</b>
-<b class="nc"><i>369</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getDescription() + &quot;\n&quot;);</b>
-<i>370</i>&nbsp;                    }
-<i>371</i>&nbsp;
-<i>372</i>&nbsp;                }
-<b class="nc"><i>373</i>&nbsp;            }while (cardChoice&lt;=0 || cardChoice&gt;cardsListMsg.getCards().size());</b>
-<i>374</i>&nbsp;
-<b class="nc"><i>375</i>&nbsp;            System.out.printf(&quot;You choose %s\n\n&quot;, cardsListMsg.getCards().get(cardChoice-1).getName());</b>
+<b class="nc"><i>350</i>&nbsp;                String input = cmdIn.nextLine();</b>
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;                //Checks if it&#39;s still connected to the server
+<b class="nc"><i>353</i>&nbsp;                if (exitGame){</b>
+<b class="nc"><i>354</i>&nbsp;                    closeGameMessage();</b>
+<i>355</i>&nbsp;                    return;
+<i>356</i>&nbsp;                }
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;                try {
+<b class="nc"><i>359</i>&nbsp;                    cardChoice = Integer.parseInt( input );</b>
+<b class="nc"><i>360</i>&nbsp;                } catch (NumberFormatException e) {</b>
+<b class="nc"><i>361</i>&nbsp;                    cardChoice = -1;</b>
+<b class="nc"><i>362</i>&nbsp;                }</b>
+<b class="nc"><i>363</i>&nbsp;                if (cardChoice&lt;0 || cardChoice&gt;cardsListMsg.getCards().size()){</b>
+<b class="nc"><i>364</i>&nbsp;                    System.out.println(&quot;Choice not allowed, retry\n&quot;);</b>
+<i>365</i>&nbsp;                }
+<b class="nc"><i>366</i>&nbsp;                if (cardChoice == 0){</b>
+<b class="nc"><i>367</i>&nbsp;                    for (int card = 0; card &lt; cardsListMsg.getCards().size(); card++) {</b>
+<i>368</i>&nbsp;                        //Prints cards descriptions
+<b class="nc"><i>369</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getName());</b>
+<b class="nc"><i>370</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getShortDescription());</b>
+<b class="nc"><i>371</i>&nbsp;                        System.out.println(cardsListMsg.getCards().get(card).getDescription() + &quot;\n&quot;);</b>
+<i>372</i>&nbsp;                    }
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;                }
+<b class="nc"><i>375</i>&nbsp;            }while (cardChoice&lt;=0 || cardChoice&gt;cardsListMsg.getCards().size());</b>
 <i>376</i>&nbsp;
-<b class="nc"><i>377</i>&nbsp;            messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));</b>
+<b class="nc"><i>377</i>&nbsp;            System.out.printf(&quot;You choose %s\n\n&quot;, cardsListMsg.getCards().get(cardChoice-1).getName());</b>
 <i>378</i>&nbsp;
-<i>379</i>&nbsp;        });
-<b class="nc"><i>380</i>&nbsp;        scannerThread.start();</b>
-<i>381</i>&nbsp;
-<i>382</i>&nbsp;    }
+<b class="nc"><i>379</i>&nbsp;            messageHandler.sendToServer(new SelectCardMsg(cardsListMsg.getCards().get(cardChoice-1)));</b>
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;        });
+<b class="nc"><i>382</i>&nbsp;        scannerThread.start();</b>
 <i>383</i>&nbsp;
-<i>384</i>&nbsp;    @Override
-<i>385</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) {
-<i>386</i>&nbsp;
-<b class="nc"><i>387</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>384</i>&nbsp;    }
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;    @Override
+<i>387</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) {
 <i>388</i>&nbsp;
-<i>389</i>&nbsp;            //Request for color selection
-<b class="nc"><i>390</i>&nbsp;            System.out.println(&quot;Choose a color:&quot;);</b>
-<b class="nc"><i>391</i>&nbsp;            for (int c=0; c&lt;requestInfoMsg.getAvailableColors().size();c++){</b>
-<b class="nc"><i>392</i>&nbsp;                System.out.printf(&quot;%d) %s\n&quot;, c, requestInfoMsg.getAvailableColors().get(c).toString());</b>
-<i>393</i>&nbsp;            }
-<i>394</i>&nbsp;            int colorChoice;
-<i>395</i>&nbsp;            try {
-<b class="nc"><i>396</i>&nbsp;                colorChoice = getUserInput(requestInfoMsg.getAvailableColors());</b>
-<b class="nc"><i>397</i>&nbsp;            } catch (Throwable throwable) {</b>
-<i>398</i>&nbsp;                //server disconnected
-<i>399</i>&nbsp;                return;
-<b class="nc"><i>400</i>&nbsp;            }</b>
-<i>401</i>&nbsp;
-<i>402</i>&nbsp;            //List used as support, where user choice for worker position will be added
-<b class="nc"><i>403</i>&nbsp;            List&lt;Point&gt; selectedPoint = new ArrayList&lt;&gt;();</b>
-<i>404</i>&nbsp;
-<i>405</i>&nbsp;            //Two request for worker position
-<b class="nc"><i>406</i>&nbsp;            for (int i = 0; i &lt; 2; i++) {</b>
-<i>407</i>&nbsp;
-<b class="nc"><i>408</i>&nbsp;                if (i==0){</b>
-<b class="nc"><i>409</i>&nbsp;                    System.out.println(&quot;Choose the position of the first worker:&quot;);</b>
-<i>410</i>&nbsp;                }else {
-<b class="nc"><i>411</i>&nbsp;                    System.out.println(&quot;Choose the position of the second worker:&quot;);</b>
-<i>412</i>&nbsp;                }
-<i>413</i>&nbsp;
-<i>414</i>&nbsp;                //Prints all the available position
-<b class="nc"><i>415</i>&nbsp;                for (int c=0; c&lt;requestInfoMsg.getAvailablePositions().size(); c++){</b>
-<b class="nc"><i>416</i>&nbsp;                    System.out.printf(&quot;%2d) %s\n&quot;, c, requestInfoMsg.getAvailablePositions().get(c).toString());</b>
-<i>417</i>&nbsp;                }
-<i>418</i>&nbsp;
-<i>419</i>&nbsp;                //Selection of the position of the first worker
-<b class="nc"><i>420</i>&nbsp;                if (i==0){</b>
-<i>421</i>&nbsp;                    int worker1Position;
-<i>422</i>&nbsp;                    try {
-<b class="nc"><i>423</i>&nbsp;                        worker1Position = getUserInput(requestInfoMsg.getAvailablePositions());</b>
-<b class="nc"><i>424</i>&nbsp;                    } catch (Throwable throwable) {</b>
-<i>425</i>&nbsp;                        //server disconnected
-<i>426</i>&nbsp;                        return;
-<b class="nc"><i>427</i>&nbsp;                    }</b>
-<i>428</i>&nbsp;                    //added user selection to the support list
-<b class="nc"><i>429</i>&nbsp;                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker1Position));</b>
-<i>430</i>&nbsp;                    //remove the selected point from the original list
-<b class="nc"><i>431</i>&nbsp;                    requestInfoMsg.getAvailablePositions().remove(worker1Position);</b>
-<b class="nc"><i>432</i>&nbsp;                }</b>
-<i>433</i>&nbsp;
-<i>434</i>&nbsp;                //Selection of the position of the second worker
-<i>435</i>&nbsp;                else {
-<i>436</i>&nbsp;                    int worker2Position;
-<i>437</i>&nbsp;                    try {
-<b class="nc"><i>438</i>&nbsp;                        worker2Position = getUserInput(requestInfoMsg.getAvailablePositions());</b>
-<b class="nc"><i>439</i>&nbsp;                    } catch (Throwable throwable) {</b>
-<i>440</i>&nbsp;                        //server disconnected
-<i>441</i>&nbsp;                        return;
-<b class="nc"><i>442</i>&nbsp;                    }</b>
-<i>443</i>&nbsp;                    //added user selection to the support list
-<b class="nc"><i>444</i>&nbsp;                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker2Position));</b>
-<i>445</i>&nbsp;                }
-<i>446</i>&nbsp;
-<i>447</i>&nbsp;            }
+<b class="nc"><i>389</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;            //Request for color selection
+<b class="nc"><i>392</i>&nbsp;            System.out.println(&quot;Choose a color:&quot;);</b>
+<b class="nc"><i>393</i>&nbsp;            for (int c=0; c&lt;requestInfoMsg.getAvailableColors().size();c++){</b>
+<b class="nc"><i>394</i>&nbsp;                System.out.printf(&quot;%d) %s\n&quot;, c, requestInfoMsg.getAvailableColors().get(c).toString());</b>
+<i>395</i>&nbsp;            }
+<i>396</i>&nbsp;            int colorChoice;
+<i>397</i>&nbsp;            try {
+<b class="nc"><i>398</i>&nbsp;                colorChoice = getUserInput(requestInfoMsg.getAvailableColors());</b>
+<b class="nc"><i>399</i>&nbsp;            } catch (Throwable throwable) {</b>
+<i>400</i>&nbsp;                //server disconnected
+<i>401</i>&nbsp;                return;
+<b class="nc"><i>402</i>&nbsp;            }</b>
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;            //List used as support, where user choice for worker position will be added
+<b class="nc"><i>405</i>&nbsp;            List&lt;Point&gt; selectedPoint = new ArrayList&lt;&gt;();</b>
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;            //Two request for worker position
+<b class="nc"><i>408</i>&nbsp;            for (int i = 0; i &lt; 2; i++) {</b>
+<i>409</i>&nbsp;
+<b class="nc"><i>410</i>&nbsp;                if (i==0){</b>
+<b class="nc"><i>411</i>&nbsp;                    System.out.println(&quot;Choose the position of the first worker:&quot;);</b>
+<i>412</i>&nbsp;                }else {
+<b class="nc"><i>413</i>&nbsp;                    System.out.println(&quot;Choose the position of the second worker:&quot;);</b>
+<i>414</i>&nbsp;                }
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;                //Prints all the available position
+<b class="nc"><i>417</i>&nbsp;                for (int c=0; c&lt;requestInfoMsg.getAvailablePositions().size(); c++){</b>
+<b class="nc"><i>418</i>&nbsp;                    System.out.printf(&quot;%2d) %s\n&quot;, c, requestInfoMsg.getAvailablePositions().get(c).toString());</b>
+<i>419</i>&nbsp;                }
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;                //Selection of the position of the first worker
+<b class="nc"><i>422</i>&nbsp;                if (i==0){</b>
+<i>423</i>&nbsp;                    int worker1Position;
+<i>424</i>&nbsp;                    try {
+<b class="nc"><i>425</i>&nbsp;                        worker1Position = getUserInput(requestInfoMsg.getAvailablePositions());</b>
+<b class="nc"><i>426</i>&nbsp;                    } catch (Throwable throwable) {</b>
+<i>427</i>&nbsp;                        //server disconnected
+<i>428</i>&nbsp;                        return;
+<b class="nc"><i>429</i>&nbsp;                    }</b>
+<i>430</i>&nbsp;                    //added user selection to the support list
+<b class="nc"><i>431</i>&nbsp;                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker1Position));</b>
+<i>432</i>&nbsp;                    //remove the selected point from the original list
+<b class="nc"><i>433</i>&nbsp;                    requestInfoMsg.getAvailablePositions().remove(worker1Position);</b>
+<b class="nc"><i>434</i>&nbsp;                }</b>
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;                //Selection of the position of the second worker
+<i>437</i>&nbsp;                else {
+<i>438</i>&nbsp;                    int worker2Position;
+<i>439</i>&nbsp;                    try {
+<b class="nc"><i>440</i>&nbsp;                        worker2Position = getUserInput(requestInfoMsg.getAvailablePositions());</b>
+<b class="nc"><i>441</i>&nbsp;                    } catch (Throwable throwable) {</b>
+<i>442</i>&nbsp;                        //server disconnected
+<i>443</i>&nbsp;                        return;
+<b class="nc"><i>444</i>&nbsp;                    }</b>
+<i>445</i>&nbsp;                    //added user selection to the support list
+<b class="nc"><i>446</i>&nbsp;                    selectedPoint.add(requestInfoMsg.getAvailablePositions().get(worker2Position));</b>
+<i>447</i>&nbsp;                }
 <i>448</i>&nbsp;
-<b class="nc"><i>449</i>&nbsp;            messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),</b>
-<b class="nc"><i>450</i>&nbsp;                    selectedPoint.get(0),</b>
-<b class="nc"><i>451</i>&nbsp;                    selectedPoint.get(1) ) );</b>
-<i>452</i>&nbsp;
-<i>453</i>&nbsp;        });
-<b class="nc"><i>454</i>&nbsp;        scannerThread.start();</b>
-<i>455</i>&nbsp;
-<i>456</i>&nbsp;    }
+<i>449</i>&nbsp;            }
+<i>450</i>&nbsp;
+<b class="nc"><i>451</i>&nbsp;            messageHandler.sendToServer( new PlayerInfoMsg( requestInfoMsg.getAvailableColors().get(colorChoice),</b>
+<b class="nc"><i>452</i>&nbsp;                    selectedPoint.get(0),</b>
+<b class="nc"><i>453</i>&nbsp;                    selectedPoint.get(1) ) );</b>
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;        });
+<b class="nc"><i>456</i>&nbsp;        scannerThread.start();</b>
 <i>457</i>&nbsp;
-<i>458</i>&nbsp;    @Override
-<i>459</i>&nbsp;    public void yourCardMessage(YourCardMsg yourCardMsg) {
-<b class="nc"><i>460</i>&nbsp;        System.out.println(&quot;Your card:&quot;);</b>
-<i>461</i>&nbsp;
-<b class="nc"><i>462</i>&nbsp;        if (yourCardMsg.getCard()!=null) {</b>
-<b class="nc"><i>463</i>&nbsp;            System.out.println(yourCardMsg.getCard().getName());</b>
-<b class="nc"><i>464</i>&nbsp;            System.out.println(yourCardMsg.getCard().getShortDescription());</b>
-<b class="nc"><i>465</i>&nbsp;            System.out.println(yourCardMsg.getCard().getDescription() + &quot;\n&quot;);</b>
-<i>466</i>&nbsp;        } else {
-<b class="nc"><i>467</i>&nbsp;            System.out.println(&quot;No card\n&quot;);</b>
-<i>468</i>&nbsp;        }
-<i>469</i>&nbsp;
-<i>470</i>&nbsp;    }
+<i>458</i>&nbsp;    }
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    @Override
+<i>461</i>&nbsp;    public void yourCardMessage(YourCardMsg yourCardMsg) {
+<b class="nc"><i>462</i>&nbsp;        System.out.println(&quot;Your card:&quot;);</b>
+<i>463</i>&nbsp;
+<b class="nc"><i>464</i>&nbsp;        if (yourCardMsg.getCard()!=null) {</b>
+<b class="nc"><i>465</i>&nbsp;            System.out.println(yourCardMsg.getCard().getName());</b>
+<b class="nc"><i>466</i>&nbsp;            System.out.println(yourCardMsg.getCard().getShortDescription());</b>
+<b class="nc"><i>467</i>&nbsp;            System.out.println(yourCardMsg.getCard().getDescription() + &quot;\n&quot;);</b>
+<i>468</i>&nbsp;        } else {
+<b class="nc"><i>469</i>&nbsp;            System.out.println(&quot;No card\n&quot;);</b>
+<i>470</i>&nbsp;        }
 <i>471</i>&nbsp;
-<i>472</i>&nbsp;    @Override
-<i>473</i>&nbsp;    public void chooseWorker(WorkersListMsg workersListMsg) {
-<i>474</i>&nbsp;
-<b class="nc"><i>475</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>472</i>&nbsp;    }
+<i>473</i>&nbsp;
+<i>474</i>&nbsp;    @Override
+<i>475</i>&nbsp;    public void chooseWorker(WorkersListMsg workersListMsg) {
 <i>476</i>&nbsp;
-<b class="nc"><i>477</i>&nbsp;            if (discardUndo){</b>
-<b class="nc"><i>478</i>&nbsp;                System.out.println(&quot;\nPress a key to continue\n&quot;);</b>
-<i>479</i>&nbsp;            }
-<i>480</i>&nbsp;
-<i>481</i>&nbsp;            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
-<b class="nc"><i>482</i>&nbsp;            synchronized (cmdLock) {</b>
-<i>483</i>&nbsp;
-<b class="nc"><i>484</i>&nbsp;                System.out.println(&quot;Choose the worker for this turn:&quot;);</b>
-<b class="nc"><i>485</i>&nbsp;                for (int i = 0; i &lt; workersListMsg.getWorkers().size(); i++) {</b>
-<b class="nc"><i>486</i>&nbsp;                    System.out.printf(&quot;%d) Worker at position %s\n&quot;, i, workersListMsg.getWorkers().get(i).getPosition().toString());</b>
-<i>487</i>&nbsp;                }
-<i>488</i>&nbsp;
-<i>489</i>&nbsp;                int workerChoice;
-<i>490</i>&nbsp;                try {
-<b class="nc"><i>491</i>&nbsp;                    workerChoice = getUserInput(workersListMsg.getWorkers());</b>
-<b class="nc"><i>492</i>&nbsp;                } catch (Throwable throwable) {</b>
-<i>493</i>&nbsp;                    //server disconnected
-<b class="nc"><i>494</i>&nbsp;                    return;</b>
-<b class="nc"><i>495</i>&nbsp;                }</b>
-<i>496</i>&nbsp;
-<b class="nc"><i>497</i>&nbsp;                messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );</b>
-<b class="nc"><i>498</i>&nbsp;            }</b>
-<i>499</i>&nbsp;
-<i>500</i>&nbsp;        });
-<b class="nc"><i>501</i>&nbsp;        scannerThread.start();</b>
-<i>502</i>&nbsp;
-<i>503</i>&nbsp;    }
+<b class="nc"><i>477</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>478</i>&nbsp;
+<b class="nc"><i>479</i>&nbsp;            if (discardUndo){</b>
+<b class="nc"><i>480</i>&nbsp;                System.out.println(&quot;\nPress a key to continue\n&quot;);</b>
+<i>481</i>&nbsp;            }
+<i>482</i>&nbsp;
+<i>483</i>&nbsp;            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
+<b class="nc"><i>484</i>&nbsp;            synchronized (cmdLock) {</b>
+<i>485</i>&nbsp;
+<b class="nc"><i>486</i>&nbsp;                System.out.println(&quot;Choose the worker for this turn:&quot;);</b>
+<b class="nc"><i>487</i>&nbsp;                for (int i = 0; i &lt; workersListMsg.getWorkers().size(); i++) {</b>
+<b class="nc"><i>488</i>&nbsp;                    System.out.printf(&quot;%d) Worker at position %s\n&quot;, i, workersListMsg.getWorkers().get(i).getPosition().toString());</b>
+<i>489</i>&nbsp;                }
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;                int workerChoice;
+<i>492</i>&nbsp;                try {
+<b class="nc"><i>493</i>&nbsp;                    workerChoice = getUserInput(workersListMsg.getWorkers());</b>
+<b class="nc"><i>494</i>&nbsp;                } catch (Throwable throwable) {</b>
+<i>495</i>&nbsp;                    //server disconnected
+<b class="nc"><i>496</i>&nbsp;                    return;</b>
+<b class="nc"><i>497</i>&nbsp;                }</b>
+<i>498</i>&nbsp;
+<b class="nc"><i>499</i>&nbsp;                messageHandler.sendToServer( new SelectWorkerMsg(workerChoice) );</b>
+<b class="nc"><i>500</i>&nbsp;            }</b>
+<i>501</i>&nbsp;
+<i>502</i>&nbsp;        });
+<b class="nc"><i>503</i>&nbsp;        scannerThread.start();</b>
 <i>504</i>&nbsp;
-<i>505</i>&nbsp;    @Override
-<i>506</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) {
-<i>507</i>&nbsp;
-<b class="nc"><i>508</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>505</i>&nbsp;    }
+<i>506</i>&nbsp;
+<i>507</i>&nbsp;    @Override
+<i>508</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) {
 <i>509</i>&nbsp;
-<b class="nc"><i>510</i>&nbsp;            System.out.println(&quot;Choose the next action: &quot;);</b>
-<b class="nc"><i>511</i>&nbsp;            for (int c=0; c&lt;actionsListMsg.getActions().size(); c++){</b>
-<b class="nc"><i>512</i>&nbsp;                System.out.printf(&quot;%d) %s\n&quot;, c, actionsListMsg.getActions().get(c));</b>
-<i>513</i>&nbsp;            }
-<i>514</i>&nbsp;
-<i>515</i>&nbsp;            int actionChoice;
-<i>516</i>&nbsp;            try {
-<b class="nc"><i>517</i>&nbsp;                actionChoice = getUserInput(actionsListMsg.getActions());</b>
-<b class="nc"><i>518</i>&nbsp;            } catch (Throwable throwable) {</b>
-<i>519</i>&nbsp;                //server disconnected
-<i>520</i>&nbsp;                return;
-<b class="nc"><i>521</i>&nbsp;            }</b>
-<i>522</i>&nbsp;
-<b class="nc"><i>523</i>&nbsp;            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );</b>
+<b class="nc"><i>510</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>511</i>&nbsp;
+<b class="nc"><i>512</i>&nbsp;            System.out.println(&quot;Choose the next action: &quot;);</b>
+<b class="nc"><i>513</i>&nbsp;            for (int c=0; c&lt;actionsListMsg.getActions().size(); c++){</b>
+<b class="nc"><i>514</i>&nbsp;                System.out.printf(&quot;%d) %s\n&quot;, c, actionsListMsg.getActions().get(c));</b>
+<i>515</i>&nbsp;            }
+<i>516</i>&nbsp;
+<i>517</i>&nbsp;            int actionChoice;
+<i>518</i>&nbsp;            try {
+<b class="nc"><i>519</i>&nbsp;                actionChoice = getUserInput(actionsListMsg.getActions());</b>
+<b class="nc"><i>520</i>&nbsp;            } catch (Throwable throwable) {</b>
+<i>521</i>&nbsp;                //server disconnected
+<i>522</i>&nbsp;                return;
+<b class="nc"><i>523</i>&nbsp;            }</b>
 <i>524</i>&nbsp;
-<i>525</i>&nbsp;        });
-<b class="nc"><i>526</i>&nbsp;        scannerThread.start();</b>
-<i>527</i>&nbsp;
-<i>528</i>&nbsp;    }
+<b class="nc"><i>525</i>&nbsp;            messageHandler.sendToServer( new SelectActionMsg(actionsListMsg.getActions().get(actionChoice)) );</b>
+<i>526</i>&nbsp;
+<i>527</i>&nbsp;        });
+<b class="nc"><i>528</i>&nbsp;        scannerThread.start();</b>
 <i>529</i>&nbsp;
-<i>530</i>&nbsp;    @Override
-<i>531</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) {
-<i>532</i>&nbsp;
-<b class="nc"><i>533</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>530</i>&nbsp;    }
+<i>531</i>&nbsp;
+<i>532</i>&nbsp;    @Override
+<i>533</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) {
 <i>534</i>&nbsp;
-<b class="nc"><i>535</i>&nbsp;            System.out.printf(&quot;Choose the cell where to do the %s action\n&quot;, cellListMsg.getAction());</b>
-<b class="nc"><i>536</i>&nbsp;            for (int c=0; c&lt;cellListMsg.getCellList().size(); c++){</b>
-<b class="nc"><i>537</i>&nbsp;                System.out.printf(&quot;%2d) %s\n&quot;, c, cellListMsg.getCellList().get(c).getLocation().toString());</b>
-<i>538</i>&nbsp;            }
-<i>539</i>&nbsp;
-<i>540</i>&nbsp;            int choice;
-<i>541</i>&nbsp;            try {
-<b class="nc"><i>542</i>&nbsp;                choice = getUserInput(cellListMsg.getCellList());</b>
-<b class="nc"><i>543</i>&nbsp;            } catch (Throwable throwable) {</b>
-<i>544</i>&nbsp;                //server disconnected
-<i>545</i>&nbsp;                return;
-<b class="nc"><i>546</i>&nbsp;            }</b>
-<i>547</i>&nbsp;
-<b class="nc"><i>548</i>&nbsp;            messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );</b>
+<b class="nc"><i>535</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>536</i>&nbsp;
+<b class="nc"><i>537</i>&nbsp;            System.out.printf(&quot;Choose the cell where to do the %s action\n&quot;, cellListMsg.getAction());</b>
+<b class="nc"><i>538</i>&nbsp;            for (int c=0; c&lt;cellListMsg.getCellList().size(); c++){</b>
+<b class="nc"><i>539</i>&nbsp;                System.out.printf(&quot;%2d) %s\n&quot;, c, cellListMsg.getCellList().get(c).getLocation().toString());</b>
+<i>540</i>&nbsp;            }
+<i>541</i>&nbsp;
+<i>542</i>&nbsp;            int choice;
+<i>543</i>&nbsp;            try {
+<b class="nc"><i>544</i>&nbsp;                choice = getUserInput(cellListMsg.getCellList());</b>
+<b class="nc"><i>545</i>&nbsp;            } catch (Throwable throwable) {</b>
+<i>546</i>&nbsp;                //server disconnected
+<i>547</i>&nbsp;                return;
+<b class="nc"><i>548</i>&nbsp;            }</b>
 <i>549</i>&nbsp;
-<i>550</i>&nbsp;        });
-<b class="nc"><i>551</i>&nbsp;        scannerThread.start();</b>
-<i>552</i>&nbsp;
-<i>553</i>&nbsp;    }
+<b class="nc"><i>550</i>&nbsp;            messageHandler.sendToServer( new SelectCellMsg(cellListMsg.getCellList().get(choice)) );</b>
+<i>551</i>&nbsp;
+<i>552</i>&nbsp;        });
+<b class="nc"><i>553</i>&nbsp;        scannerThread.start();</b>
 <i>554</i>&nbsp;
-<i>555</i>&nbsp;
-<i>556</i>&nbsp;    @Override
-<i>557</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
-<i>558</i>&nbsp;
-<b class="nc"><i>559</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>555</i>&nbsp;    }
+<i>556</i>&nbsp;
+<i>557</i>&nbsp;
+<i>558</i>&nbsp;    @Override
+<i>559</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
 <i>560</i>&nbsp;
-<b class="nc"><i>561</i>&nbsp;            System.out.printf(&quot;Choose what to build in the %s cell\n&quot;, optionsListMsg.getCell().getLocation().toString());</b>
-<b class="nc"><i>562</i>&nbsp;            for (int i = 0; i &lt; optionsListMsg.getOptions().size(); i++) {</b>
-<b class="nc"><i>563</i>&nbsp;                System.out.printf(&quot;%2d) %s\n&quot;, i, optionsListMsg.getOptions().get(i));</b>
-<i>564</i>&nbsp;            }
-<i>565</i>&nbsp;
-<i>566</i>&nbsp;            int optionChoice;
-<i>567</i>&nbsp;            try {
-<b class="nc"><i>568</i>&nbsp;                optionChoice = getUserInput(optionsListMsg.getOptions());</b>
-<b class="nc"><i>569</i>&nbsp;            } catch (Throwable throwable) {</b>
-<i>570</i>&nbsp;                //server disconnected
-<i>571</i>&nbsp;                return;
-<b class="nc"><i>572</i>&nbsp;            }</b>
-<i>573</i>&nbsp;
-<b class="nc"><i>574</i>&nbsp;            messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );</b>
+<b class="nc"><i>561</i>&nbsp;        scannerThread = new Thread(() -&gt; {</b>
+<i>562</i>&nbsp;
+<b class="nc"><i>563</i>&nbsp;            System.out.printf(&quot;Choose what to build in the %s cell\n&quot;, optionsListMsg.getCell().getLocation().toString());</b>
+<b class="nc"><i>564</i>&nbsp;            for (int i = 0; i &lt; optionsListMsg.getOptions().size(); i++) {</b>
+<b class="nc"><i>565</i>&nbsp;                System.out.printf(&quot;%2d) %s\n&quot;, i, optionsListMsg.getOptions().get(i));</b>
+<i>566</i>&nbsp;            }
+<i>567</i>&nbsp;
+<i>568</i>&nbsp;            int optionChoice;
+<i>569</i>&nbsp;            try {
+<b class="nc"><i>570</i>&nbsp;                optionChoice = getUserInput(optionsListMsg.getOptions());</b>
+<b class="nc"><i>571</i>&nbsp;            } catch (Throwable throwable) {</b>
+<i>572</i>&nbsp;                //server disconnected
+<i>573</i>&nbsp;                return;
+<b class="nc"><i>574</i>&nbsp;            }</b>
 <i>575</i>&nbsp;
-<i>576</i>&nbsp;        });
-<b class="nc"><i>577</i>&nbsp;        scannerThread.start();</b>
-<i>578</i>&nbsp;
-<i>579</i>&nbsp;    }
+<b class="nc"><i>576</i>&nbsp;            messageHandler.sendToServer( new SelectOptionMsg(optionsListMsg.getOptions().get(optionChoice)) );</b>
+<i>577</i>&nbsp;
+<i>578</i>&nbsp;        });
+<b class="nc"><i>579</i>&nbsp;        scannerThread.start();</b>
 <i>580</i>&nbsp;
-<i>581</i>&nbsp;    @Override
-<i>582</i>&nbsp;    public void chooseUndo() {
-<i>583</i>&nbsp;
-<b class="nc"><i>584</i>&nbsp;        discardUndo = false;</b>
-<b class="nc"><i>585</i>&nbsp;        undoScannerWaiting = true;</b>
-<b class="nc"><i>586</i>&nbsp;        scannerThread = new Thread( () -&gt; {</b>
-<i>587</i>&nbsp;
-<i>588</i>&nbsp;            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
-<b class="nc"><i>589</i>&nbsp;            synchronized (cmdLock) {</b>
-<i>590</i>&nbsp;
-<b class="nc"><i>591</i>&nbsp;                System.out.println(&quot;Do you want to confirm your turn?&quot;);</b>
-<b class="nc"><i>592</i>&nbsp;                System.out.println(&quot;You have 5 seconds to chose&quot;);</b>
-<b class="nc"><i>593</i>&nbsp;                System.out.println(&quot;0) Confirm\n1) Undo&quot;);</b>
-<i>594</i>&nbsp;
-<i>595</i>&nbsp;                int choice;
-<i>596</i>&nbsp;                do {
-<i>597</i>&nbsp;
-<b class="nc"><i>598</i>&nbsp;                    String input = cmdIn.nextLine();</b>
+<i>581</i>&nbsp;    }
+<i>582</i>&nbsp;
+<i>583</i>&nbsp;    @Override
+<i>584</i>&nbsp;    public void chooseUndo() {
+<i>585</i>&nbsp;
+<b class="nc"><i>586</i>&nbsp;        discardUndo = false;</b>
+<b class="nc"><i>587</i>&nbsp;        undoScannerWaiting = true;</b>
+<b class="nc"><i>588</i>&nbsp;        scannerThread = new Thread( () -&gt; {</b>
+<i>589</i>&nbsp;
+<i>590</i>&nbsp;            //Synchronization for an exclusive execution of chooseWorker and chooseUndo
+<b class="nc"><i>591</i>&nbsp;            synchronized (cmdLock) {</b>
+<i>592</i>&nbsp;
+<b class="nc"><i>593</i>&nbsp;                System.out.println(&quot;Do you want to confirm your turn?&quot;);</b>
+<b class="nc"><i>594</i>&nbsp;                System.out.println(&quot;You have 5 seconds to chose&quot;);</b>
+<b class="nc"><i>595</i>&nbsp;                System.out.println(&quot;0) Confirm\n1) Undo&quot;);</b>
+<i>596</i>&nbsp;
+<i>597</i>&nbsp;                int choice;
+<i>598</i>&nbsp;                do {
 <i>599</i>&nbsp;
-<i>600</i>&nbsp;                    //Check if player let the undo timer expire, ignore the player input
-<b class="nc"><i>601</i>&nbsp;                    if (discardUndo){</b>
-<b class="nc"><i>602</i>&nbsp;                        return;</b>
-<i>603</i>&nbsp;                    }
-<i>604</i>&nbsp;
-<i>605</i>&nbsp;                    //Checks if it&#39;s still connected to the server
-<b class="nc"><i>606</i>&nbsp;                    if (exitGame){</b>
-<b class="nc"><i>607</i>&nbsp;                        closeGameMessage();</b>
-<b class="nc"><i>608</i>&nbsp;                        return;</b>
-<i>609</i>&nbsp;                    }
-<i>610</i>&nbsp;
-<i>611</i>&nbsp;                    try {
-<b class="nc"><i>612</i>&nbsp;                        choice = Integer.parseInt( input );</b>
-<b class="nc"><i>613</i>&nbsp;                    }catch (NumberFormatException e){</b>
-<b class="nc"><i>614</i>&nbsp;                        choice = -1;</b>
-<b class="nc"><i>615</i>&nbsp;                    }</b>
-<b class="nc"><i>616</i>&nbsp;                    if (choice&lt;0 || choice&gt;=2){</b>
-<b class="nc"><i>617</i>&nbsp;                        System.out.println(&quot;Choice not allowed, retry&quot;);</b>
-<i>618</i>&nbsp;                    }
-<b class="nc"><i>619</i>&nbsp;                }while (choice&lt;0 || choice&gt;=2);</b>
-<i>620</i>&nbsp;
-<b class="nc"><i>621</i>&nbsp;                undoScannerWaiting = false;</b>
+<b class="nc"><i>600</i>&nbsp;                    String input = cmdIn.nextLine();</b>
+<i>601</i>&nbsp;
+<i>602</i>&nbsp;                    //Check if player let the undo timer expire, ignore the player input
+<b class="nc"><i>603</i>&nbsp;                    if (discardUndo){</b>
+<b class="nc"><i>604</i>&nbsp;                        return;</b>
+<i>605</i>&nbsp;                    }
+<i>606</i>&nbsp;
+<i>607</i>&nbsp;                    //Checks if it&#39;s still connected to the server
+<b class="nc"><i>608</i>&nbsp;                    if (exitGame){</b>
+<b class="nc"><i>609</i>&nbsp;                        closeGameMessage();</b>
+<b class="nc"><i>610</i>&nbsp;                        return;</b>
+<i>611</i>&nbsp;                    }
+<i>612</i>&nbsp;
+<i>613</i>&nbsp;                    try {
+<b class="nc"><i>614</i>&nbsp;                        choice = Integer.parseInt( input );</b>
+<b class="nc"><i>615</i>&nbsp;                    }catch (NumberFormatException e){</b>
+<b class="nc"><i>616</i>&nbsp;                        choice = -1;</b>
+<b class="nc"><i>617</i>&nbsp;                    }</b>
+<b class="nc"><i>618</i>&nbsp;                    if (choice&lt;0 || choice&gt;=2){</b>
+<b class="nc"><i>619</i>&nbsp;                        System.out.println(&quot;Choice not allowed, retry&quot;);</b>
+<i>620</i>&nbsp;                    }
+<b class="nc"><i>621</i>&nbsp;                }while (choice&lt;0 || choice&gt;=2);</b>
 <i>622</i>&nbsp;
-<b class="nc"><i>623</i>&nbsp;                if (choice == 0){</b>
-<b class="nc"><i>624</i>&nbsp;                    messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );</b>
-<i>625</i>&nbsp;                }else {
-<b class="nc"><i>626</i>&nbsp;                    messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );</b>
-<i>627</i>&nbsp;                }
-<b class="nc"><i>628</i>&nbsp;            }</b>
-<i>629</i>&nbsp;
-<i>630</i>&nbsp;        } );
+<b class="nc"><i>623</i>&nbsp;                undoScannerWaiting = false;</b>
+<i>624</i>&nbsp;
+<b class="nc"><i>625</i>&nbsp;                if (choice == 0){</b>
+<b class="nc"><i>626</i>&nbsp;                    messageHandler.sendToServer( new Message(MsgCommand.CONFIRM_TURN) );</b>
+<i>627</i>&nbsp;                }else {
+<b class="nc"><i>628</i>&nbsp;                    messageHandler.sendToServer( new Message(MsgCommand.UNDO_TURN) );</b>
+<i>629</i>&nbsp;                }
+<b class="nc"><i>630</i>&nbsp;            }</b>
 <i>631</i>&nbsp;
-<b class="nc"><i>632</i>&nbsp;        scannerThread.start();</b>
+<i>632</i>&nbsp;        } );
 <i>633</i>&nbsp;
-<i>634</i>&nbsp;    }
+<b class="nc"><i>634</i>&nbsp;        scannerThread.start();</b>
 <i>635</i>&nbsp;
-<i>636</i>&nbsp;    @Override
-<i>637</i>&nbsp;    public void endTurnMessage() {
-<b class="nc"><i>638</i>&nbsp;        scannerThread.interrupt();</b>
-<b class="nc"><i>639</i>&nbsp;        System.out.println(&quot;\nYour turn is ended!&quot;);</b>
-<i>640</i>&nbsp;
-<i>641</i>&nbsp;        //If the thread that ask the undo request is still waiting for an input
-<b class="nc"><i>642</i>&nbsp;        if (undoScannerWaiting){</b>
-<b class="nc"><i>643</i>&nbsp;            discardUndo = true;</b>
-<b class="nc"><i>644</i>&nbsp;            System.out.println(&quot;\nPress a key to continue\n&quot;);</b>
-<i>645</i>&nbsp;        }
-<i>646</i>&nbsp;    }
-<i>647</i>&nbsp;
-<i>648</i>&nbsp;    @Override
-<i>649</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
-<b class="nc"><i>650</i>&nbsp;        System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard(), coloredBoard) ).toString() );</b>
-<i>651</i>&nbsp;    }
-<i>652</i>&nbsp;
-<i>653</i>&nbsp;    @Override
-<i>654</i>&nbsp;    public void youWonMessage() {
-<b class="nc"><i>655</i>&nbsp;        System.out.println(&quot;********** You are the winner! **********&quot;);</b>
-<i>656</i>&nbsp;    }
-<i>657</i>&nbsp;
-<i>658</i>&nbsp;    @Override
-<i>659</i>&nbsp;    public void youLostMessage() {
-<b class="nc"><i>660</i>&nbsp;        System.out.println(&quot;You lost :(&quot;);</b>
-<i>661</i>&nbsp;    }
-<i>662</i>&nbsp;
-<i>663</i>&nbsp;    @Override
-<i>664</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
-<b class="nc"><i>665</i>&nbsp;        System.out.printf(&quot;The player %s has lost\n&quot;, otherLostMsg.getPlayer());</b>
-<i>666</i>&nbsp;    }
-<i>667</i>&nbsp;
-<i>668</i>&nbsp;    @Override
-<i>669</i>&nbsp;    public void notYourTurnMessage() {
-<b class="nc"><i>670</i>&nbsp;        System.out.println(&quot;It&#39;s not your turn\n&quot;);</b>
-<i>671</i>&nbsp;    }
-<i>672</i>&nbsp;
-<i>673</i>&nbsp;    @Override
-<i>674</i>&nbsp;    public void closeGameMessage() {
-<i>675</i>&nbsp;
-<i>676</i>&nbsp;        // Close message caused by disconnection of the acceptance server,
-<i>677</i>&nbsp;        // need to be discarded because this disconnection it&#39; not an error,
-<i>678</i>&nbsp;        // it&#39;s a disconnection followed by connection to the game server
-<b class="nc"><i>679</i>&nbsp;        if (serverClosedRedirection){</b>
-<b class="nc"><i>680</i>&nbsp;            serverClosedRedirection = false;</b>
-<i>681</i>&nbsp;            return;
-<i>682</i>&nbsp;        }
-<i>683</i>&nbsp;
-<i>684</i>&nbsp;        // If there is an active thread ask to the user to press a key
-<i>685</i>&nbsp;        // in that way active scanner will be closed
-<b class="nc"><i>686</i>&nbsp;        if (( scannerThread!=null &amp;&amp; scannerThread.isAlive() ) &amp;&amp; !exitGame) {</b>
-<b class="nc"><i>687</i>&nbsp;            System.out.println(&quot;\nDisconnected from server&quot;);</b>
-<b class="nc"><i>688</i>&nbsp;            System.out.println(&quot;\nPress a key to exit&quot;);</b>
-<i>689</i>&nbsp;
-<b class="nc"><i>690</i>&nbsp;            exitGame = true;</b>
+<i>636</i>&nbsp;    }
+<i>637</i>&nbsp;
+<i>638</i>&nbsp;    @Override
+<i>639</i>&nbsp;    public void endTurnMessage() {
+<b class="nc"><i>640</i>&nbsp;        scannerThread.interrupt();</b>
+<b class="nc"><i>641</i>&nbsp;        System.out.println(&quot;\nYour turn is ended!&quot;);</b>
+<i>642</i>&nbsp;
+<i>643</i>&nbsp;        //If the thread that ask the undo request is still waiting for an input
+<b class="nc"><i>644</i>&nbsp;        if (undoScannerWaiting){</b>
+<b class="nc"><i>645</i>&nbsp;            discardUndo = true;</b>
+<b class="nc"><i>646</i>&nbsp;            System.out.println(&quot;\nPress a key to continue\n&quot;);</b>
+<i>647</i>&nbsp;        }
+<i>648</i>&nbsp;    }
+<i>649</i>&nbsp;
+<i>650</i>&nbsp;    @Override
+<i>651</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
+<b class="nc"><i>652</i>&nbsp;        System.out.println( ( new CLIBoardGenerator(updateBoardMsg.getBoard(), coloredBoard) ).toString() );</b>
+<i>653</i>&nbsp;    }
+<i>654</i>&nbsp;
+<i>655</i>&nbsp;    @Override
+<i>656</i>&nbsp;    public void youWonMessage() {
+<b class="nc"><i>657</i>&nbsp;        System.out.println(&quot;********** You are the winner! **********&quot;);</b>
+<i>658</i>&nbsp;    }
+<i>659</i>&nbsp;
+<i>660</i>&nbsp;    @Override
+<i>661</i>&nbsp;    public void youLostMessage() {
+<b class="nc"><i>662</i>&nbsp;        System.out.println(&quot;You lost :(&quot;);</b>
+<i>663</i>&nbsp;    }
+<i>664</i>&nbsp;
+<i>665</i>&nbsp;    @Override
+<i>666</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
+<b class="nc"><i>667</i>&nbsp;        System.out.printf(&quot;The player %s has lost\n&quot;, otherLostMsg.getPlayer());</b>
+<i>668</i>&nbsp;    }
+<i>669</i>&nbsp;
+<i>670</i>&nbsp;    @Override
+<i>671</i>&nbsp;    public void notYourTurnMessage() {
+<b class="nc"><i>672</i>&nbsp;        System.out.println(&quot;It&#39;s not your turn\n&quot;);</b>
+<i>673</i>&nbsp;    }
+<i>674</i>&nbsp;
+<i>675</i>&nbsp;    @Override
+<i>676</i>&nbsp;    public void closeGameMessage() {
+<i>677</i>&nbsp;
+<i>678</i>&nbsp;        // Close message caused by disconnection of the acceptance server,
+<i>679</i>&nbsp;        // need to be discarded because this disconnection it&#39; not an error,
+<i>680</i>&nbsp;        // it&#39;s a disconnection followed by connection to the game server
+<b class="nc"><i>681</i>&nbsp;        if (serverClosedRedirection){</b>
+<b class="nc"><i>682</i>&nbsp;            serverClosedRedirection = false;</b>
+<i>683</i>&nbsp;            return;
+<i>684</i>&nbsp;        }
+<i>685</i>&nbsp;
+<i>686</i>&nbsp;        // If there is an active thread ask to the user to press a key
+<i>687</i>&nbsp;        // in that way active scanner will be closed
+<b class="nc"><i>688</i>&nbsp;        if (( scannerThread!=null &amp;&amp; scannerThread.isAlive() ) &amp;&amp; !exitGame) {</b>
+<b class="nc"><i>689</i>&nbsp;            System.out.println(&quot;\nDisconnected from server&quot;);</b>
+<b class="nc"><i>690</i>&nbsp;            System.out.println(&quot;\nPress a key to exit&quot;);</b>
 <i>691</i>&nbsp;
-<i>692</i>&nbsp;        } else {
-<b class="nc"><i>693</i>&nbsp;            System.out.println(&quot;\nThe game is closing&quot;);</b>
-<b class="nc"><i>694</i>&nbsp;            welcomeMessage();</b>
-<i>695</i>&nbsp;        }
-<i>696</i>&nbsp;
-<i>697</i>&nbsp;    }
+<b class="nc"><i>692</i>&nbsp;            exitGame = true;</b>
+<i>693</i>&nbsp;
+<i>694</i>&nbsp;        } else {
+<b class="nc"><i>695</i>&nbsp;            System.out.println(&quot;\nThe game is closing&quot;);</b>
+<b class="nc"><i>696</i>&nbsp;            welcomeMessage();</b>
+<i>697</i>&nbsp;        }
 <i>698</i>&nbsp;
-<i>699</i>&nbsp;}
+<i>699</i>&nbsp;    }
+<i>700</i>&nbsp;
+<i>701</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>

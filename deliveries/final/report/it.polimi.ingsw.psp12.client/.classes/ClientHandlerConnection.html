@@ -111,91 +111,92 @@
 <i>37</i>&nbsp;    /**
 <i>38</i>&nbsp;     * prepare the client for connect to the server
 <i>39</i>&nbsp;     * @param server the server info containing ip and port
-<i>40</i>&nbsp;     */
-<b class="nc"><i>41</i>&nbsp;    public ClientHandlerConnection(ServerInfo server) throws IOException {</b>
-<b class="nc"><i>42</i>&nbsp;        this.serverInfo = server;</b>
-<b class="nc"><i>43</i>&nbsp;        running = true;</b>
-<i>44</i>&nbsp;
-<b class="nc"><i>45</i>&nbsp;        this.pingTimer = Executors.newSingleThreadScheduledExecutor();</b>
-<b class="nc"><i>46</i>&nbsp;        this.pingTimer.scheduleAtFixedRate(() -&gt; {</b>
-<b class="nc"><i>47</i>&nbsp;            sendRequestToServer(new Message(MsgCommand.PING));</b>
-<i>48</i>&nbsp;        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
-<i>49</i>&nbsp;
-<b class="nc"><i>50</i>&nbsp;        clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);</b>
-<b class="nc"><i>51</i>&nbsp;        clientSocket.setSoTimeout(Constants.SOCKET_TIMEOUT);</b>
-<b class="nc"><i>52</i>&nbsp;        System.out.println(&quot;Connected to server on port &quot; + serverInfo.serverPort);</b>
-<i>53</i>&nbsp;
-<i>54</i>&nbsp;        // Init the stream after connection
-<b class="nc"><i>55</i>&nbsp;        output_stream = new ObjectOutputStream(clientSocket.getOutputStream());</b>
-<b class="nc"><i>56</i>&nbsp;        output_stream.flush();</b>
-<i>57</i>&nbsp;
-<b class="nc"><i>58</i>&nbsp;        input_stream = new ObjectInputStream(clientSocket.getInputStream());</b>
-<b class="nc"><i>59</i>&nbsp;        this.runningLock = new Object();</b>
-<i>60</i>&nbsp;    }
-<i>61</i>&nbsp;
-<i>62</i>&nbsp;    @Override
-<i>63</i>&nbsp;    public void run()
-<i>64</i>&nbsp;    {
-<i>65</i>&nbsp;        boolean isRunning;
-<b class="nc"><i>66</i>&nbsp;        synchronized (runningLock) {</b>
-<b class="nc"><i>67</i>&nbsp;            isRunning = running;</b>
-<b class="nc"><i>68</i>&nbsp;        }</b>
-<i>69</i>&nbsp;        // Connect to the server
-<i>70</i>&nbsp;        try {
-<i>71</i>&nbsp;
-<b class="nc"><i>72</i>&nbsp;            while (isRunning){</b>
-<i>73</i>&nbsp;
-<b class="nc"><i>74</i>&nbsp;                Message msg = (Message) input_stream.readObject();</b>
-<b class="nc"><i>75</i>&nbsp;                notifyObservers(msg);</b>
-<i>76</i>&nbsp;
-<b class="nc"><i>77</i>&nbsp;                synchronized (runningLock) {</b>
-<b class="nc"><i>78</i>&nbsp;                    isRunning = running;</b>
-<b class="nc"><i>79</i>&nbsp;                }</b>
-<b class="nc"><i>80</i>&nbsp;            }</b>
-<i>81</i>&nbsp;
-<b class="nc"><i>82</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
-<i>83</i>&nbsp;            //Game server unreachable
-<b class="nc"><i>84</i>&nbsp;            notifyObservers(new Message(MsgCommand.CLOSE));</b>
-<b class="nc"><i>85</i>&nbsp;        }</b>
-<i>86</i>&nbsp;
-<i>87</i>&nbsp;    }
-<i>88</i>&nbsp;
-<i>89</i>&nbsp;    /**
-<i>90</i>&nbsp;     * Send a message through the socket connection
-<i>91</i>&nbsp;     * @param msg The message to be sent
-<i>92</i>&nbsp;     */
-<i>93</i>&nbsp;    public synchronized void sendRequestToServer(Message msg)
-<i>94</i>&nbsp;    {
-<i>95</i>&nbsp;
-<i>96</i>&nbsp;        try {
-<b class="nc"><i>97</i>&nbsp;            output_stream.writeObject(msg);</b>
-<b class="nc"><i>98</i>&nbsp;            output_stream.flush();</b>
-<b class="nc"><i>99</i>&nbsp;        } catch (IOException e) {</b>
-<i>100</i>&nbsp;            //Game server unreachable
-<b class="nc"><i>101</i>&nbsp;            notifyObservers(new Message(MsgCommand.CLOSE));</b>
-<b class="nc"><i>102</i>&nbsp;        }</b>
-<i>103</i>&nbsp;
-<i>104</i>&nbsp;    }
-<i>105</i>&nbsp;
-<i>106</i>&nbsp;    /**
-<i>107</i>&nbsp;     * Closes the active socket
-<i>108</i>&nbsp;     * @throws IOException IO Exception
-<i>109</i>&nbsp;     */
-<i>110</i>&nbsp;    public void close() throws IOException {
-<b class="nc"><i>111</i>&nbsp;        synchronized (runningLock) {</b>
-<b class="nc"><i>112</i>&nbsp;            running = false;</b>
-<b class="nc"><i>113</i>&nbsp;        }</b>
-<b class="nc"><i>114</i>&nbsp;        pingTimer.shutdownNow();</b>
-<b class="nc"><i>115</i>&nbsp;        clientSocket.close();</b>
-<i>116</i>&nbsp;    }
-<i>117</i>&nbsp;
-<i>118</i>&nbsp;}
+<i>40</i>&nbsp;     * @throws IOException IO Exception
+<i>41</i>&nbsp;     */
+<b class="nc"><i>42</i>&nbsp;    public ClientHandlerConnection(ServerInfo server) throws IOException {</b>
+<b class="nc"><i>43</i>&nbsp;        this.serverInfo = server;</b>
+<b class="nc"><i>44</i>&nbsp;        running = true;</b>
+<i>45</i>&nbsp;
+<b class="nc"><i>46</i>&nbsp;        this.pingTimer = Executors.newSingleThreadScheduledExecutor();</b>
+<b class="nc"><i>47</i>&nbsp;        this.pingTimer.scheduleAtFixedRate(() -&gt; {</b>
+<b class="nc"><i>48</i>&nbsp;            sendRequestToServer(new Message(MsgCommand.PING));</b>
+<i>49</i>&nbsp;        }, Constants.PING_INTERVAL, Constants.PING_INTERVAL, TimeUnit.MILLISECONDS);
+<i>50</i>&nbsp;
+<b class="nc"><i>51</i>&nbsp;        clientSocket = new Socket(serverInfo.serverIp, serverInfo.serverPort);</b>
+<b class="nc"><i>52</i>&nbsp;        clientSocket.setSoTimeout(Constants.SOCKET_TIMEOUT);</b>
+<b class="nc"><i>53</i>&nbsp;        System.out.println(&quot;Connected to server on port &quot; + serverInfo.serverPort);</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        // Init the stream after connection
+<b class="nc"><i>56</i>&nbsp;        output_stream = new ObjectOutputStream(clientSocket.getOutputStream());</b>
+<b class="nc"><i>57</i>&nbsp;        output_stream.flush();</b>
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;        input_stream = new ObjectInputStream(clientSocket.getInputStream());</b>
+<b class="nc"><i>60</i>&nbsp;        this.runningLock = new Object();</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    @Override
+<i>64</i>&nbsp;    public void run()
+<i>65</i>&nbsp;    {
+<i>66</i>&nbsp;        boolean isRunning;
+<b class="nc"><i>67</i>&nbsp;        synchronized (runningLock) {</b>
+<b class="nc"><i>68</i>&nbsp;            isRunning = running;</b>
+<b class="nc"><i>69</i>&nbsp;        }</b>
+<i>70</i>&nbsp;        // Connect to the server
+<i>71</i>&nbsp;        try {
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;            while (isRunning){</b>
+<i>74</i>&nbsp;
+<b class="nc"><i>75</i>&nbsp;                Message msg = (Message) input_stream.readObject();</b>
+<b class="nc"><i>76</i>&nbsp;                notifyObservers(msg);</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;                synchronized (runningLock) {</b>
+<b class="nc"><i>79</i>&nbsp;                    isRunning = running;</b>
+<b class="nc"><i>80</i>&nbsp;                }</b>
+<b class="nc"><i>81</i>&nbsp;            }</b>
+<i>82</i>&nbsp;
+<b class="nc"><i>83</i>&nbsp;        } catch (IOException | ClassNotFoundException e) {</b>
+<i>84</i>&nbsp;            //Game server unreachable
+<b class="nc"><i>85</i>&nbsp;            notifyObservers(new Message(MsgCommand.CLOSE));</b>
+<b class="nc"><i>86</i>&nbsp;        }</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    }
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Send a message through the socket connection
+<i>92</i>&nbsp;     * @param msg The message to be sent
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public synchronized void sendRequestToServer(Message msg)
+<i>95</i>&nbsp;    {
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;        try {
+<b class="nc"><i>98</i>&nbsp;            output_stream.writeObject(msg);</b>
+<b class="nc"><i>99</i>&nbsp;            output_stream.flush();</b>
+<b class="nc"><i>100</i>&nbsp;        } catch (IOException e) {</b>
+<i>101</i>&nbsp;            //Game server unreachable
+<b class="nc"><i>102</i>&nbsp;            notifyObservers(new Message(MsgCommand.CLOSE));</b>
+<b class="nc"><i>103</i>&nbsp;        }</b>
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * Closes the active socket
+<i>109</i>&nbsp;     * @throws IOException IO Exception
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    public void close() throws IOException {
+<b class="nc"><i>112</i>&nbsp;        synchronized (runningLock) {</b>
+<b class="nc"><i>113</i>&nbsp;            running = false;</b>
+<b class="nc"><i>114</i>&nbsp;        }</b>
+<b class="nc"><i>115</i>&nbsp;        pingTimer.shutdownNow();</b>
+<b class="nc"><i>116</i>&nbsp;        clientSocket.close();</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>

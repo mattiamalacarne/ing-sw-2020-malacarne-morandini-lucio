@@ -183,395 +183,399 @@
 <i>64</i>&nbsp;
 <i>65</i>&nbsp;    /**
 <i>66</i>&nbsp;     * Init the UI starting the mainWindow and populate it with the necessary panel
-<i>67</i>&nbsp;     */
-<i>68</i>&nbsp;    public GUinterface() throws IOException {
-<i>69</i>&nbsp;
-<b class="nc"><i>70</i>&nbsp;        super(&quot;Santorini&quot;);</b>
-<b class="nc"><i>71</i>&nbsp;        gui = this;</b>
-<i>72</i>&nbsp;        // Init the dimensions
-<b class="nc"><i>73</i>&nbsp;        windowDimY = 800;</b>
-<b class="nc"><i>74</i>&nbsp;        aspectRatio = 16.0/9.0;</b>
-<b class="nc"><i>75</i>&nbsp;        windowDimX = (int) (windowDimY*aspectRatio);</b>
-<i>76</i>&nbsp;
-<b class="nc"><i>77</i>&nbsp;        needCard = true;</b>
-<i>78</i>&nbsp;
-<b class="nc"><i>79</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
-<i>80</i>&nbsp;
-<b class="nc"><i>81</i>&nbsp;        this.setSize((int) windowDimX, (int) windowDimY + 40);</b>
-<b class="nc"><i>82</i>&nbsp;        this.setResizable(false);</b>
-<i>83</i>&nbsp;
-<b class="nc"><i>84</i>&nbsp;        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
-<i>85</i>&nbsp;        // Load the default screen
-<i>86</i>&nbsp;        try {
-<b class="nc"><i>87</i>&nbsp;            loadNewStatusScreen(GUIStatus.SETUP, null);</b>
-<b class="nc"><i>88</i>&nbsp;            setup = (SetUpScreen) actualScreen;</b>
-<b class="nc"><i>89</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>90</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>91</i>&nbsp;        }</b>
-<i>92</i>&nbsp;
+<i>67</i>&nbsp;     * @throws IOException the IOException
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public GUinterface() throws IOException {
+<i>70</i>&nbsp;
+<b class="nc"><i>71</i>&nbsp;        super(&quot;Santorini&quot;);</b>
+<b class="nc"><i>72</i>&nbsp;        gui = this;</b>
+<i>73</i>&nbsp;        // Init the dimensions
+<b class="nc"><i>74</i>&nbsp;        windowDimY = 800;</b>
+<b class="nc"><i>75</i>&nbsp;        aspectRatio = 16.0/9.0;</b>
+<b class="nc"><i>76</i>&nbsp;        windowDimX = (int) (windowDimY*aspectRatio);</b>
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;        needCard = true;</b>
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;        messageHandler = new MessageHandler(this);</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        this.setSize((int) windowDimX, (int) windowDimY + 40);</b>
+<b class="nc"><i>83</i>&nbsp;        this.setResizable(false);</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<i>86</i>&nbsp;        // Load the default screen
+<i>87</i>&nbsp;        try {
+<b class="nc"><i>88</i>&nbsp;            loadNewStatusScreen(GUIStatus.SETUP, null);</b>
+<b class="nc"><i>89</i>&nbsp;            setup = (SetUpScreen) actualScreen;</b>
+<b class="nc"><i>90</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>91</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>92</i>&nbsp;        }</b>
 <i>93</i>&nbsp;
-<b class="nc"><i>94</i>&nbsp;        this.setVisible(true);</b>
-<i>95</i>&nbsp;
-<i>96</i>&nbsp;    }
-<i>97</i>&nbsp;
-<b class="nc"><i>98</i>&nbsp;    public double getWindowDimY() { return windowDimY; }</b>
-<b class="nc"><i>99</i>&nbsp;    public double getWindoeDImX() { return windowDimX; }</b>
-<b class="nc"><i>100</i>&nbsp;    public double getAspectRatio() { return aspectRatio; }</b>
-<i>101</i>&nbsp;
+<i>94</i>&nbsp;
+<b class="nc"><i>95</i>&nbsp;        this.setVisible(true);</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<b class="nc"><i>99</i>&nbsp;    public double getWindowDimY() { return windowDimY; }</b>
+<b class="nc"><i>100</i>&nbsp;    public double getWindoeDImX() { return windowDimX; }</b>
+<b class="nc"><i>101</i>&nbsp;    public double getAspectRatio() { return aspectRatio; }</b>
 <i>102</i>&nbsp;
-<i>103</i>&nbsp;    /**
-<i>104</i>&nbsp;     * Load a new screen depending by the status of the GUI
-<i>105</i>&nbsp;     * @param status the new screen to load
-<i>106</i>&nbsp;     */
-<i>107</i>&nbsp;    public void loadNewStatusScreen(GUIStatus status, Message msg) throws GUIStatusErrorException
-<i>108</i>&nbsp;    {
-<i>109</i>&nbsp;        Screen newScreen;
-<b class="nc"><i>110</i>&nbsp;        switch (status)</b>
-<i>111</i>&nbsp;        {
-<b class="nc"><i>112</i>&nbsp;            case GAME: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;</b>
-<b class="nc"><i>113</i>&nbsp;            case WAIT_CARD_SELECTION: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;Waiting other players&quot;, this); break;</b>
-<b class="nc"><i>114</i>&nbsp;            case WAIT_OTHER_PLAYER: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;Waiting other players&quot;, this); break;</b>
-<b class="nc"><i>115</i>&nbsp;            case YOU_LOST: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;You lost!&quot;, this); break;</b>
-<b class="nc"><i>116</i>&nbsp;            case YOU_WIN: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;You are the winner!!&quot;, this); break;</b>
-<b class="nc"><i>117</i>&nbsp;            case GAME_CLOSING: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;&lt;html&gt;The game is ended, Game is restarting&lt;/html&gt;&quot;, this); break;</b>
-<b class="nc"><i>118</i>&nbsp;            case SETUP: actualScreen = new SetUpScreen(this); break;</b>
-<b class="nc"><i>119</i>&nbsp;            case CARDLIST: actualScreen = new CardSelectorScreen(this, (((CardsListMsg) msg).getCards())); break;</b>
-<b class="nc"><i>120</i>&nbsp;            case STARTING: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;</b>
-<b class="nc"><i>121</i>&nbsp;            default: actualScreen = new SetUpScreen(this);</b>
-<i>122</i>&nbsp;        }
-<i>123</i>&nbsp;
-<b class="nc"><i>124</i>&nbsp;        gui.setContentPane(actualScreen);</b>
-<i>125</i>&nbsp;
-<b class="nc"><i>126</i>&nbsp;        gui.revalidate();</b>
-<b class="nc"><i>127</i>&nbsp;        gui.repaint();</b>
-<b class="nc"><i>128</i>&nbsp;        gui.setVisible(true);</b>
-<i>129</i>&nbsp;    }
-<i>130</i>&nbsp;
-<i>131</i>&nbsp;
-<i>132</i>&nbsp;    /**
-<i>133</i>&nbsp;     * Connect to the server with the address provided by the user
-<i>134</i>&nbsp;     * @param hostname server address
-<i>135</i>&nbsp;     */
-<i>136</i>&nbsp;    public void connectToServer(String hostname) throws IOException {
-<i>137</i>&nbsp;        //System.out.println(&quot;Provo a connettermi&quot;);
-<b class="nc"><i>138</i>&nbsp;        this.hostname = hostname;</b>
-<i>139</i>&nbsp;        ServerInfo serverInfo;
-<i>140</i>&nbsp;
-<i>141</i>&nbsp;        try {
-<b class="nc"><i>142</i>&nbsp;            serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
-<b class="nc"><i>143</i>&nbsp;        } catch (UnknownHostException e) {</b>
-<b class="nc"><i>144</i>&nbsp;            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid address, please retry&quot;), &quot;Network error&quot;);</b>
-<i>145</i>&nbsp;            return;
-<b class="nc"><i>146</i>&nbsp;        }</b>
-<i>147</i>&nbsp;
-<b class="nc"><i>148</i>&nbsp;        if (!messageHandler.connect(serverInfo)) {</b>
-<b class="nc"><i>149</i>&nbsp;            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid address, please retry&quot;), &quot;Network error&quot;);</b>
-<i>150</i>&nbsp;        }
-<i>151</i>&nbsp;    }
-<i>152</i>&nbsp;
-<i>153</i>&nbsp;    public void createRoom(int playerNumber) throws IOException {
-<i>154</i>&nbsp;
-<b class="nc"><i>155</i>&nbsp;        messageHandler.sendToServer(new CreateMsg(playerNumber));</b>
-<i>156</i>&nbsp;    }
-<i>157</i>&nbsp;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Load a new screen depending by the status of the GUI
+<i>106</i>&nbsp;     * @param status the new screen to load
+<i>107</i>&nbsp;     * @param msg the message
+<i>108</i>&nbsp;     * @throws GUIStatusErrorException the GUIStatusErrorException
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public void loadNewStatusScreen(GUIStatus status, Message msg) throws GUIStatusErrorException
+<i>111</i>&nbsp;    {
+<i>112</i>&nbsp;        Screen newScreen;
+<b class="nc"><i>113</i>&nbsp;        switch (status)</b>
+<i>114</i>&nbsp;        {
+<b class="nc"><i>115</i>&nbsp;            case GAME: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;</b>
+<b class="nc"><i>116</i>&nbsp;            case WAIT_CARD_SELECTION: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;Waiting other players&quot;, this); break;</b>
+<b class="nc"><i>117</i>&nbsp;            case WAIT_OTHER_PLAYER: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;Waiting other players&quot;, this); break;</b>
+<b class="nc"><i>118</i>&nbsp;            case YOU_LOST: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;You lost!&quot;, this); break;</b>
+<b class="nc"><i>119</i>&nbsp;            case YOU_WIN: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;You are the winner!!&quot;, this); break;</b>
+<b class="nc"><i>120</i>&nbsp;            case GAME_CLOSING: actualScreen = new GenericMessageScreen(gui.getSize(), &quot;&lt;html&gt;The game is ended, Game is restarting&lt;/html&gt;&quot;, this); break;</b>
+<b class="nc"><i>121</i>&nbsp;            case SETUP: actualScreen = new SetUpScreen(this); break;</b>
+<b class="nc"><i>122</i>&nbsp;            case CARDLIST: actualScreen = new CardSelectorScreen(this, (((CardsListMsg) msg).getCards())); break;</b>
+<b class="nc"><i>123</i>&nbsp;            case STARTING: actualScreen = new GameScreen(this, (YourCardMsg) msg); break;</b>
+<b class="nc"><i>124</i>&nbsp;            default: actualScreen = new SetUpScreen(this);</b>
+<i>125</i>&nbsp;        }
+<i>126</i>&nbsp;
+<b class="nc"><i>127</i>&nbsp;        gui.setContentPane(actualScreen);</b>
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;        gui.revalidate();</b>
+<b class="nc"><i>130</i>&nbsp;        gui.repaint();</b>
+<b class="nc"><i>131</i>&nbsp;        gui.setVisible(true);</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Connect to the server with the address provided by the user
+<i>137</i>&nbsp;     * @param hostname server address
+<i>138</i>&nbsp;     * @throws IOException the IOException
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    public void connectToServer(String hostname) throws IOException {
+<i>141</i>&nbsp;        //System.out.println(&quot;Provo a connettermi&quot;);
+<b class="nc"><i>142</i>&nbsp;        this.hostname = hostname;</b>
+<i>143</i>&nbsp;        ServerInfo serverInfo;
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;        try {
+<b class="nc"><i>146</i>&nbsp;            serverInfo = new ServerInfo((Inet4Address) Inet4Address.getByName(hostname));</b>
+<b class="nc"><i>147</i>&nbsp;        } catch (UnknownHostException e) {</b>
+<b class="nc"><i>148</i>&nbsp;            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid address, please retry&quot;), &quot;Network error&quot;);</b>
+<i>149</i>&nbsp;            return;
+<b class="nc"><i>150</i>&nbsp;        }</b>
+<i>151</i>&nbsp;
+<b class="nc"><i>152</i>&nbsp;        if (!messageHandler.connect(serverInfo)) {</b>
+<b class="nc"><i>153</i>&nbsp;            SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid address, please retry&quot;), &quot;Network error&quot;);</b>
+<i>154</i>&nbsp;        }
+<i>155</i>&nbsp;    }
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    public void createRoom(int playerNumber) throws IOException {
 <i>158</i>&nbsp;
-<i>159</i>&nbsp;    @Override
-<i>160</i>&nbsp;    public void createsNewRoom() throws IOException
-<i>161</i>&nbsp;    {
-<b class="nc"><i>162</i>&nbsp;        dialog = new SetupDialog(this, new CreateRoomPanel(this), &quot;Create new Room&quot;);</b>
-<i>163</i>&nbsp;
-<i>164</i>&nbsp;    }
-<i>165</i>&nbsp;
-<i>166</i>&nbsp;    @Override
-<i>167</i>&nbsp;    public void waitMessage() {
-<b class="nc"><i>168</i>&nbsp;        setup.dispayWaitBox();</b>
-<i>169</i>&nbsp;    }
-<i>170</i>&nbsp;
-<i>171</i>&nbsp;    @Override
-<i>172</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException
-<i>173</i>&nbsp;    {
-<b class="nc"><i>174</i>&nbsp;        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
-<b class="nc"><i>175</i>&nbsp;        askPlayerName(0);</b>
-<i>176</i>&nbsp;    }
-<i>177</i>&nbsp;
-<i>178</i>&nbsp;    /**
-<i>179</i>&nbsp;     * Display a dialog for set a player name
-<i>180</i>&nbsp;     * @param choosed
-<i>181</i>&nbsp;     */
-<i>182</i>&nbsp;    public void askPlayerName(int choosed)
-<i>183</i>&nbsp;    {
-<b class="nc"><i>184</i>&nbsp;        dialog = new SetupDialog(this, new PlayerNamePanel(this, choosed),  &quot;What&#39;s your name?&quot;);</b>
-<i>185</i>&nbsp;    }
-<i>186</i>&nbsp;
-<i>187</i>&nbsp;    /**
-<i>188</i>&nbsp;     * Ask the server to set the choosed name
-<i>189</i>&nbsp;     * @param playerName
-<i>190</i>&nbsp;     */
-<i>191</i>&nbsp;    public void setPlayerName(String playerName)
-<i>192</i>&nbsp;    {
-<b class="nc"><i>193</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
-<i>194</i>&nbsp;    }
-<i>195</i>&nbsp;
-<i>196</i>&nbsp;    @Override
-<i>197</i>&nbsp;    public void roomCreatedFailedMessage() {
-<b class="nc"><i>198</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Error creating the room&quot;), &quot;Error&quot;);</b>
-<i>199</i>&nbsp;    }
-<i>200</i>&nbsp;
-<i>201</i>&nbsp;    @Override
-<i>202</i>&nbsp;    public void invalidMaxPlayerMessage() {
-<b class="nc"><i>203</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid max player number&quot;), &quot;Error&quot;);</b>
-<i>204</i>&nbsp;    }
-<i>205</i>&nbsp;
-<i>206</i>&nbsp;    @Override
-<i>207</i>&nbsp;    public void roomFullMessage() throws IOException {
-<b class="nc"><i>208</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Sorry, this room is full&quot;), &quot;Ops!&quot;);</b>
-<i>209</i>&nbsp;    }
-<i>210</i>&nbsp;
-<i>211</i>&nbsp;
-<i>212</i>&nbsp;    @Override
-<i>213</i>&nbsp;    public void joinPlayerNameConfirmation()
-<i>214</i>&nbsp;    {
-<i>215</i>&nbsp;        try {
-<b class="nc"><i>216</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.WAIT_OTHER_PLAYER, null);</b>
-<b class="nc"><i>217</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>218</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>219</i>&nbsp;        }</b>
-<i>220</i>&nbsp;    }
-<i>221</i>&nbsp;
-<i>222</i>&nbsp;
-<i>223</i>&nbsp;    @Override
-<i>224</i>&nbsp;    public void joinPlayerNameAlreadyUsed() throws IOException {
+<b class="nc"><i>159</i>&nbsp;        messageHandler.sendToServer(new CreateMsg(playerNumber));</b>
+<i>160</i>&nbsp;    }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    @Override
+<i>164</i>&nbsp;    public void createsNewRoom() throws IOException
+<i>165</i>&nbsp;    {
+<b class="nc"><i>166</i>&nbsp;        dialog = new SetupDialog(this, new CreateRoomPanel(this), &quot;Create new Room&quot;);</b>
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    @Override
+<i>171</i>&nbsp;    public void waitMessage() {
+<b class="nc"><i>172</i>&nbsp;        setup.dispayWaitBox();</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public void roomCreatedMessage(CreatedMsg createdMsg) throws IOException
+<i>177</i>&nbsp;    {
+<b class="nc"><i>178</i>&nbsp;        messageHandler.setGamePort(createdMsg.getRoom().getAssignedPort());</b>
+<b class="nc"><i>179</i>&nbsp;        askPlayerName(0);</b>
+<i>180</i>&nbsp;    }
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Display a dialog for set a player name
+<i>184</i>&nbsp;     * @param choosed to determine the text to show on the panel
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    public void askPlayerName(int choosed)
+<i>187</i>&nbsp;    {
+<b class="nc"><i>188</i>&nbsp;        dialog = new SetupDialog(this, new PlayerNamePanel(this, choosed),  &quot;What&#39;s your name?&quot;);</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    /**
+<i>192</i>&nbsp;     * Ask the server to set the choosed name
+<i>193</i>&nbsp;     * @param playerName the player name
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;    public void setPlayerName(String playerName)
+<i>196</i>&nbsp;    {
+<b class="nc"><i>197</i>&nbsp;        messageHandler.sendToServer(new JoinMsg(playerName));</b>
+<i>198</i>&nbsp;    }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    @Override
+<i>201</i>&nbsp;    public void roomCreatedFailedMessage() {
+<b class="nc"><i>202</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Error creating the room&quot;), &quot;Error&quot;);</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    @Override
+<i>206</i>&nbsp;    public void invalidMaxPlayerMessage() {
+<b class="nc"><i>207</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Invalid max player number&quot;), &quot;Error&quot;);</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    @Override
+<i>211</i>&nbsp;    public void roomFullMessage() throws IOException {
+<b class="nc"><i>212</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;Sorry, this room is full&quot;), &quot;Ops!&quot;);</b>
+<i>213</i>&nbsp;    }
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    @Override
+<i>217</i>&nbsp;    public void joinPlayerNameConfirmation()
+<i>218</i>&nbsp;    {
+<i>219</i>&nbsp;        try {
+<b class="nc"><i>220</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.WAIT_OTHER_PLAYER, null);</b>
+<b class="nc"><i>221</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>222</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>223</i>&nbsp;        }</b>
+<i>224</i>&nbsp;    }
 <i>225</i>&nbsp;
-<b class="nc"><i>226</i>&nbsp;        askPlayerName(1);</b>
-<i>227</i>&nbsp;    }
-<i>228</i>&nbsp;
-<i>229</i>&nbsp;    @Override
-<i>230</i>&nbsp;    public void chooseCard(CardsListMsg cardsListMsg) {
-<i>231</i>&nbsp;        try {
-<b class="nc"><i>232</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.CARDLIST, (Message) cardsListMsg);</b>
-<b class="nc"><i>233</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>234</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>235</i>&nbsp;        }</b>
-<i>236</i>&nbsp;    }
-<i>237</i>&nbsp;
-<i>238</i>&nbsp;    /**
-<i>239</i>&nbsp;     * Send the card to the server
-<i>240</i>&nbsp;     * @param card
-<i>241</i>&nbsp;     */
-<i>242</i>&nbsp;    public void sendCardToServer(Card card)
-<i>243</i>&nbsp;    {
-<b class="nc"><i>244</i>&nbsp;        messageHandler.sendToServer(new SelectCardMsg(card));</b>
-<i>245</i>&nbsp;    }
-<i>246</i>&nbsp;
-<i>247</i>&nbsp;    /**
-<i>248</i>&nbsp;     * Send to server the worker selected int the current turn
-<i>249</i>&nbsp;     * @param msg
-<i>250</i>&nbsp;     */
-<i>251</i>&nbsp;    public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
-<i>252</i>&nbsp;    {
-<b class="nc"><i>253</i>&nbsp;        System.out.println(&quot;Worker Selected&quot;);</b>
-<b class="nc"><i>254</i>&nbsp;        messageHandler.sendToServer(msg);</b>
-<i>255</i>&nbsp;    }
-<i>256</i>&nbsp;
-<i>257</i>&nbsp;    @Override
-<i>258</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException
-<i>259</i>&nbsp;    {
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    @Override
+<i>228</i>&nbsp;    public void joinPlayerNameAlreadyUsed() throws IOException {
+<i>229</i>&nbsp;
+<b class="nc"><i>230</i>&nbsp;        askPlayerName(1);</b>
+<i>231</i>&nbsp;    }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    @Override
+<i>234</i>&nbsp;    public void chooseCard(CardsListMsg cardsListMsg) {
+<i>235</i>&nbsp;        try {
+<b class="nc"><i>236</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.CARDLIST, (Message) cardsListMsg);</b>
+<b class="nc"><i>237</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>238</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>239</i>&nbsp;        }</b>
+<i>240</i>&nbsp;    }
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    /**
+<i>243</i>&nbsp;     * Send the card to the server
+<i>244</i>&nbsp;     * @param card the card
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    public void sendCardToServer(Card card)
+<i>247</i>&nbsp;    {
+<b class="nc"><i>248</i>&nbsp;        messageHandler.sendToServer(new SelectCardMsg(card));</b>
+<i>249</i>&nbsp;    }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    /**
+<i>252</i>&nbsp;     * Send to server the worker selected int the current turn
+<i>253</i>&nbsp;     * @param msg the selected worker
+<i>254</i>&nbsp;     */
+<i>255</i>&nbsp;    public void sendSelectedWorkerToServer(SelectWorkerMsg msg)
+<i>256</i>&nbsp;    {
+<b class="nc"><i>257</i>&nbsp;        System.out.println(&quot;Worker Selected&quot;);</b>
+<b class="nc"><i>258</i>&nbsp;        messageHandler.sendToServer(msg);</b>
+<i>259</i>&nbsp;    }
 <i>260</i>&nbsp;
-<b class="nc"><i>261</i>&nbsp;         game = (GameScreen) actualScreen;</b>
-<b class="nc"><i>262</i>&nbsp;         game.setUp(requestInfoMsg);</b>
-<i>263</i>&nbsp;
-<i>264</i>&nbsp;    }
-<i>265</i>&nbsp;
-<i>266</i>&nbsp;
-<i>267</i>&nbsp;    /**
-<i>268</i>&nbsp;     * Send to server the info for start the game (Worker position and Color
-<i>269</i>&nbsp;     * @param msg
-<i>270</i>&nbsp;     */
-<i>271</i>&nbsp;    public void sendStartInfo(PlayerInfoMsg msg)
-<i>272</i>&nbsp;    {
-<b class="nc"><i>273</i>&nbsp;        messageHandler.sendToServer(msg);</b>
-<i>274</i>&nbsp;    }
-<i>275</i>&nbsp;
-<i>276</i>&nbsp;    @Override
-<i>277</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
-<i>278</i>&nbsp;
-<i>279</i>&nbsp;        // Set in the gamescreen the correct phase
-<i>280</i>&nbsp;
-<b class="nc"><i>281</i>&nbsp;        game.setGamePhase(GamePhase.CHOOSE_ACTION);</b>
-<b class="nc"><i>282</i>&nbsp;        game.setPossibleActionList(actionsListMsg.getActions());</b>
-<b class="nc"><i>283</i>&nbsp;        game.displayActionSelection(actionsListMsg.getActions());</b>
+<i>261</i>&nbsp;    @Override
+<i>262</i>&nbsp;    public void requestStartInfo(RequestInfoMsg requestInfoMsg) throws IOException
+<i>263</i>&nbsp;    {
+<i>264</i>&nbsp;
+<b class="nc"><i>265</i>&nbsp;         game = (GameScreen) actualScreen;</b>
+<b class="nc"><i>266</i>&nbsp;         game.setUp(requestInfoMsg);</b>
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Send to server the info for start the game (Worker position and Color
+<i>273</i>&nbsp;     * @param msg the PlayerInfoMsg message
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    public void sendStartInfo(PlayerInfoMsg msg)
+<i>276</i>&nbsp;    {
+<b class="nc"><i>277</i>&nbsp;        messageHandler.sendToServer(msg);</b>
+<i>278</i>&nbsp;    }
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;    @Override
+<i>281</i>&nbsp;    public void chooseAction(ActionsListMsg actionsListMsg) throws IOException {
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;        // Set in the gamescreen the correct phase
 <i>284</i>&nbsp;
-<i>285</i>&nbsp;    }
-<i>286</i>&nbsp;
-<i>287</i>&nbsp;    /**
-<i>288</i>&nbsp;     * Send to server the selected action
-<i>289</i>&nbsp;     * @param msg
-<i>290</i>&nbsp;     */
-<i>291</i>&nbsp;    public void sendActionToServer(SelectActionMsg msg)
-<i>292</i>&nbsp;    {
-<b class="nc"><i>293</i>&nbsp;        messageHandler.sendToServer(msg);</b>
-<i>294</i>&nbsp;    }
-<i>295</i>&nbsp;
-<i>296</i>&nbsp;    /**
-<i>297</i>&nbsp;     * Send to server the selected cell
-<i>298</i>&nbsp;     * @param sel
-<i>299</i>&nbsp;     */
-<i>300</i>&nbsp;    public void sendCellToServer(Cell sel)
-<i>301</i>&nbsp;    {
-<b class="nc"><i>302</i>&nbsp;        messageHandler.sendToServer(new SelectCellMsg(sel));</b>
-<i>303</i>&nbsp;    }
-<i>304</i>&nbsp;
-<i>305</i>&nbsp;    @Override
-<i>306</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) throws IOException {
-<b class="nc"><i>307</i>&nbsp;        System.out.println(&quot;Ora devi scegliere la cella&quot;);</b>
-<b class="nc"><i>308</i>&nbsp;        game.setGamePhase(GamePhase.ACTION);</b>
-<b class="nc"><i>309</i>&nbsp;        game.displayPossibility(cellListMsg.getCellList());</b>
-<i>310</i>&nbsp;    }
-<i>311</i>&nbsp;
-<i>312</i>&nbsp;    @Override
-<i>313</i>&nbsp;    public void chooseWorker(WorkersListMsg workersListMsg) {
-<b class="nc"><i>314</i>&nbsp;        game.setGameInfo(&quot;Choose a worker for the turn&quot;);</b>
-<b class="nc"><i>315</i>&nbsp;        game.setGamePhase(GamePhase.CHOOSE_ACTION);</b>
-<b class="nc"><i>316</i>&nbsp;        List&lt;Point&gt; points = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i>317</i>&nbsp;        List&lt;Worker&gt; workers = workersListMsg.getWorkers();</b>
-<i>318</i>&nbsp;
-<b class="nc"><i>319</i>&nbsp;        for (Worker worker: workers)</b>
-<i>320</i>&nbsp;        {
-<b class="nc"><i>321</i>&nbsp;            points.add(worker.getPosition());</b>
-<b class="nc"><i>322</i>&nbsp;        }</b>
-<b class="nc"><i>323</i>&nbsp;        game.displayWorkerPos(points);</b>
-<i>324</i>&nbsp;    }
-<i>325</i>&nbsp;
-<i>326</i>&nbsp;    @Override
-<i>327</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
-<i>328</i>&nbsp;
-<b class="nc"><i>329</i>&nbsp;        game.displayBuildSelection(optionsListMsg.getOptions());</b>
-<i>330</i>&nbsp;
-<i>331</i>&nbsp;    }
+<b class="nc"><i>285</i>&nbsp;        game.setGamePhase(GamePhase.CHOOSE_ACTION);</b>
+<b class="nc"><i>286</i>&nbsp;        game.setPossibleActionList(actionsListMsg.getActions());</b>
+<b class="nc"><i>287</i>&nbsp;        game.displayActionSelection(actionsListMsg.getActions());</b>
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    /**
+<i>292</i>&nbsp;     * Send to server the selected action
+<i>293</i>&nbsp;     * @param msg action to send
+<i>294</i>&nbsp;     */
+<i>295</i>&nbsp;    public void sendActionToServer(SelectActionMsg msg)
+<i>296</i>&nbsp;    {
+<b class="nc"><i>297</i>&nbsp;        messageHandler.sendToServer(msg);</b>
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    /**
+<i>301</i>&nbsp;     * Send to server the selected cell
+<i>302</i>&nbsp;     * @param sel cell to send
+<i>303</i>&nbsp;     */
+<i>304</i>&nbsp;    public void sendCellToServer(Cell sel)
+<i>305</i>&nbsp;    {
+<b class="nc"><i>306</i>&nbsp;        messageHandler.sendToServer(new SelectCellMsg(sel));</b>
+<i>307</i>&nbsp;    }
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;    @Override
+<i>310</i>&nbsp;    public void chooseCell(CellListMsg cellListMsg) throws IOException {
+<b class="nc"><i>311</i>&nbsp;        System.out.println(&quot;Ora devi scegliere la cella&quot;);</b>
+<b class="nc"><i>312</i>&nbsp;        game.setGamePhase(GamePhase.ACTION);</b>
+<b class="nc"><i>313</i>&nbsp;        game.displayPossibility(cellListMsg.getCellList());</b>
+<i>314</i>&nbsp;    }
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    @Override
+<i>317</i>&nbsp;    public void chooseWorker(WorkersListMsg workersListMsg) {
+<b class="nc"><i>318</i>&nbsp;        game.setGameInfo(&quot;Choose a worker for the turn&quot;);</b>
+<b class="nc"><i>319</i>&nbsp;        game.setGamePhase(GamePhase.CHOOSE_ACTION);</b>
+<b class="nc"><i>320</i>&nbsp;        List&lt;Point&gt; points = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>321</i>&nbsp;        List&lt;Worker&gt; workers = workersListMsg.getWorkers();</b>
+<i>322</i>&nbsp;
+<b class="nc"><i>323</i>&nbsp;        for (Worker worker: workers)</b>
+<i>324</i>&nbsp;        {
+<b class="nc"><i>325</i>&nbsp;            points.add(worker.getPosition());</b>
+<b class="nc"><i>326</i>&nbsp;        }</b>
+<b class="nc"><i>327</i>&nbsp;        game.displayWorkerPos(points);</b>
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;    @Override
+<i>331</i>&nbsp;    public void chooseBuildOption(OptionsListMsg optionsListMsg) {
 <i>332</i>&nbsp;
-<i>333</i>&nbsp;    /**
-<i>334</i>&nbsp;     * Send selected build option to the server
-<i>335</i>&nbsp;     * @param buildOption
-<i>336</i>&nbsp;     */
-<i>337</i>&nbsp;    public void sendBuildOptionToServer(BuildOption buildOption)
-<i>338</i>&nbsp;    {
-<b class="nc"><i>339</i>&nbsp;        messageHandler.sendToServer(new SelectOptionMsg(buildOption));</b>
-<i>340</i>&nbsp;    }
-<i>341</i>&nbsp;
-<i>342</i>&nbsp;    @Override
-<i>343</i>&nbsp;    public void chooseUndo() {
-<i>344</i>&nbsp;
-<b class="nc"><i>345</i>&nbsp;        game.setGameInfo(&quot;Terminate the turn or repeat?&quot;);</b>
-<b class="nc"><i>346</i>&nbsp;        game.displayUndoSelector();</b>
-<i>347</i>&nbsp;    }
+<b class="nc"><i>333</i>&nbsp;        game.displayBuildSelection(optionsListMsg.getOptions());</b>
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * Send selected build option to the server
+<i>339</i>&nbsp;     * @param buildOption the build option
+<i>340</i>&nbsp;     */
+<i>341</i>&nbsp;    public void sendBuildOptionToServer(BuildOption buildOption)
+<i>342</i>&nbsp;    {
+<b class="nc"><i>343</i>&nbsp;        messageHandler.sendToServer(new SelectOptionMsg(buildOption));</b>
+<i>344</i>&nbsp;    }
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    @Override
+<i>347</i>&nbsp;    public void chooseUndo() {
 <i>348</i>&nbsp;
-<i>349</i>&nbsp;    /**
-<i>350</i>&nbsp;     * Send to server the undo decision
-<i>351</i>&nbsp;     * @param cmd
-<i>352</i>&nbsp;     */
-<i>353</i>&nbsp;    public void sendUndoToServer(MsgCommand cmd)
-<i>354</i>&nbsp;    {
-<b class="nc"><i>355</i>&nbsp;        messageHandler.sendToServer(new Message(cmd));</b>
-<i>356</i>&nbsp;    }
-<i>357</i>&nbsp;
-<i>358</i>&nbsp;    @Override
-<i>359</i>&nbsp;    public void endTurnMessage() {
-<i>360</i>&nbsp;        //System.out.println(&quot;Your turn is ended&quot;);
-<b class="nc"><i>361</i>&nbsp;        game.setGamePhase(GamePhase.NOT_MY_TURN);</b>
-<b class="nc"><i>362</i>&nbsp;        game.setGameInfo(&quot;Your turn is ended&quot;);</b>
-<b class="nc"><i>363</i>&nbsp;        game.destroyUndoBox();</b>
-<i>364</i>&nbsp;    }
-<i>365</i>&nbsp;
-<i>366</i>&nbsp;
-<i>367</i>&nbsp;    @Override
-<i>368</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
-<i>369</i>&nbsp;        //System.out.println(&quot;Ho ricevuto una Board&quot;);
+<b class="nc"><i>349</i>&nbsp;        game.setGameInfo(&quot;Terminate the turn or repeat?&quot;);</b>
+<b class="nc"><i>350</i>&nbsp;        game.displayUndoSelector();</b>
+<i>351</i>&nbsp;    }
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;    /**
+<i>354</i>&nbsp;     * Send to server the undo decision
+<i>355</i>&nbsp;     * @param cmd the command
+<i>356</i>&nbsp;     */
+<i>357</i>&nbsp;    public void sendUndoToServer(MsgCommand cmd)
+<i>358</i>&nbsp;    {
+<b class="nc"><i>359</i>&nbsp;        messageHandler.sendToServer(new Message(cmd));</b>
+<i>360</i>&nbsp;    }
+<i>361</i>&nbsp;
+<i>362</i>&nbsp;    @Override
+<i>363</i>&nbsp;    public void endTurnMessage() {
+<i>364</i>&nbsp;        //System.out.println(&quot;Your turn is ended&quot;);
+<b class="nc"><i>365</i>&nbsp;        game.setGamePhase(GamePhase.NOT_MY_TURN);</b>
+<b class="nc"><i>366</i>&nbsp;        game.setGameInfo(&quot;Your turn is ended&quot;);</b>
+<b class="nc"><i>367</i>&nbsp;        game.destroyUndoBox();</b>
+<i>368</i>&nbsp;    }
+<i>369</i>&nbsp;
 <i>370</i>&nbsp;
-<b class="nc"><i>371</i>&nbsp;        game = (GameScreen) actualScreen;</b>
-<b class="nc"><i>372</i>&nbsp;        game.drawBoard(updateBoardMsg);</b>
-<i>373</i>&nbsp;    }
+<i>371</i>&nbsp;    @Override
+<i>372</i>&nbsp;    public void updateBoard(UpdateBoardMsg updateBoardMsg) {
+<i>373</i>&nbsp;        //System.out.println(&quot;Ho ricevuto una Board&quot;);
 <i>374</i>&nbsp;
-<i>375</i>&nbsp;    @Override
-<i>376</i>&nbsp;    public void youWonMessage() {
-<b class="nc"><i>377</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;You win&quot;), &quot;Message from Gods!&quot;);</b>
+<b class="nc"><i>375</i>&nbsp;        game = (GameScreen) actualScreen;</b>
+<b class="nc"><i>376</i>&nbsp;        game.drawBoard(updateBoardMsg);</b>
+<i>377</i>&nbsp;    }
 <i>378</i>&nbsp;
-<b class="nc"><i>379</i>&nbsp;        startReloadTimer();</b>
-<i>380</i>&nbsp;    }
-<i>381</i>&nbsp;
-<i>382</i>&nbsp;    @Override
-<i>383</i>&nbsp;    public void youLostMessage() {
-<b class="nc"><i>384</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;You lose&quot;), &quot;Message from Gods!&quot;);</b>
-<b class="nc"><i>385</i>&nbsp;        startReloadTimer();</b>
-<i>386</i>&nbsp;    }
-<i>387</i>&nbsp;
-<i>388</i>&nbsp;    @Override
-<i>389</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
-<b class="nc"><i>390</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, otherLostMsg.getPlayer()+&quot; has lost the game&quot;), &quot;Message from Gods!&quot;);</b>
-<i>391</i>&nbsp;    }
-<i>392</i>&nbsp;
-<i>393</i>&nbsp;    @Override
-<i>394</i>&nbsp;    public void notYourTurnMessage() {
-<i>395</i>&nbsp;        // do nothing
-<i>396</i>&nbsp;    }
-<i>397</i>&nbsp;
-<i>398</i>&nbsp;    @Override
-<i>399</i>&nbsp;    public void closeGameMessage() {
-<i>400</i>&nbsp;
-<i>401</i>&nbsp;        try {
-<b class="nc"><i>402</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.GAME_CLOSING, null);</b>
-<b class="nc"><i>403</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>404</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>405</i>&nbsp;        }</b>
-<b class="nc"><i>406</i>&nbsp;        startReloadTimer();</b>
-<i>407</i>&nbsp;    }
-<i>408</i>&nbsp;
-<i>409</i>&nbsp;    @Override
-<i>410</i>&nbsp;    public void yourCardMessage(YourCardMsg yourCardMsg) {
-<i>411</i>&nbsp;        try {
-<b class="nc"><i>412</i>&nbsp;            if (needCard)</b>
-<i>413</i>&nbsp;            {
-<b class="nc"><i>414</i>&nbsp;                this.loadNewStatusScreen(GUIStatus.GAME, (Message) yourCardMsg);</b>
-<b class="nc"><i>415</i>&nbsp;                needCard = false;</b>
-<i>416</i>&nbsp;            }
-<b class="nc"><i>417</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>418</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>419</i>&nbsp;        }</b>
-<i>420</i>&nbsp;    }
-<i>421</i>&nbsp;
-<i>422</i>&nbsp;    /**
-<i>423</i>&nbsp;     * Start a timer, whene expires reload the setupscreen
-<i>424</i>&nbsp;     */
-<i>425</i>&nbsp;    private void startReloadTimer()
-<i>426</i>&nbsp;    {
-<i>427</i>&nbsp;
-<i>428</i>&nbsp;        //System.out.println(&quot;[DEBUG]: Starting reload timer&quot;);
-<b class="nc"><i>429</i>&nbsp;        Timer timer = new Timer();</b>
-<i>430</i>&nbsp;
-<b class="nc"><i>431</i>&nbsp;        needCard = true;</b>
-<b class="nc"><i>432</i>&nbsp;        TimerTask reloadGame = new TimerTask() {</b>
-<i>433</i>&nbsp;            @Override
-<i>434</i>&nbsp;            public void run() {
-<i>435</i>&nbsp;                try {
-<b class="nc"><i>436</i>&nbsp;                    gui.loadNewStatusScreen(GUIStatus.SETUP, null);</b>
-<b class="nc"><i>437</i>&nbsp;                    setup = (SetUpScreen) actualScreen;</b>
-<b class="nc"><i>438</i>&nbsp;                } catch (GUIStatusErrorException e) {</b>
-<b class="nc"><i>439</i>&nbsp;                    e.printStackTrace();</b>
-<b class="nc"><i>440</i>&nbsp;                }</b>
-<i>441</i>&nbsp;            }
-<i>442</i>&nbsp;        };
-<i>443</i>&nbsp;
-<b class="nc"><i>444</i>&nbsp;        timer.schedule(reloadGame, 5000);</b>
-<i>445</i>&nbsp;    }
-<i>446</i>&nbsp;
+<i>379</i>&nbsp;    @Override
+<i>380</i>&nbsp;    public void youWonMessage() {
+<b class="nc"><i>381</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;You win&quot;), &quot;Message from Gods!&quot;);</b>
+<i>382</i>&nbsp;
+<b class="nc"><i>383</i>&nbsp;        startReloadTimer();</b>
+<i>384</i>&nbsp;    }
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;    @Override
+<i>387</i>&nbsp;    public void youLostMessage() {
+<b class="nc"><i>388</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, &quot;You lose&quot;), &quot;Message from Gods!&quot;);</b>
+<b class="nc"><i>389</i>&nbsp;        startReloadTimer();</b>
+<i>390</i>&nbsp;    }
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    @Override
+<i>393</i>&nbsp;    public void otherPlayerLostMessage(OtherLostMsg otherLostMsg) {
+<b class="nc"><i>394</i>&nbsp;        SetupDialog setup = new SetupDialog(gui, new GenericMessageDialog(this, otherLostMsg.getPlayer()+&quot; has lost the game&quot;), &quot;Message from Gods!&quot;);</b>
+<i>395</i>&nbsp;    }
+<i>396</i>&nbsp;
+<i>397</i>&nbsp;    @Override
+<i>398</i>&nbsp;    public void notYourTurnMessage() {
+<i>399</i>&nbsp;        // do nothing
+<i>400</i>&nbsp;    }
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;    @Override
+<i>403</i>&nbsp;    public void closeGameMessage() {
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;        try {
+<b class="nc"><i>406</i>&nbsp;            gui.loadNewStatusScreen(GUIStatus.GAME_CLOSING, null);</b>
+<b class="nc"><i>407</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>408</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>409</i>&nbsp;        }</b>
+<b class="nc"><i>410</i>&nbsp;        startReloadTimer();</b>
+<i>411</i>&nbsp;    }
+<i>412</i>&nbsp;
+<i>413</i>&nbsp;    @Override
+<i>414</i>&nbsp;    public void yourCardMessage(YourCardMsg yourCardMsg) {
+<i>415</i>&nbsp;        try {
+<b class="nc"><i>416</i>&nbsp;            if (needCard)</b>
+<i>417</i>&nbsp;            {
+<b class="nc"><i>418</i>&nbsp;                this.loadNewStatusScreen(GUIStatus.GAME, (Message) yourCardMsg);</b>
+<b class="nc"><i>419</i>&nbsp;                needCard = false;</b>
+<i>420</i>&nbsp;            }
+<b class="nc"><i>421</i>&nbsp;        } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>422</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>423</i>&nbsp;        }</b>
+<i>424</i>&nbsp;    }
+<i>425</i>&nbsp;
+<i>426</i>&nbsp;    /**
+<i>427</i>&nbsp;     * Start a timer, whene expires reload the setupscreen
+<i>428</i>&nbsp;     */
+<i>429</i>&nbsp;    private void startReloadTimer()
+<i>430</i>&nbsp;    {
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;        //System.out.println(&quot;[DEBUG]: Starting reload timer&quot;);
+<b class="nc"><i>433</i>&nbsp;        Timer timer = new Timer();</b>
+<i>434</i>&nbsp;
+<b class="nc"><i>435</i>&nbsp;        needCard = true;</b>
+<b class="nc"><i>436</i>&nbsp;        TimerTask reloadGame = new TimerTask() {</b>
+<i>437</i>&nbsp;            @Override
+<i>438</i>&nbsp;            public void run() {
+<i>439</i>&nbsp;                try {
+<b class="nc"><i>440</i>&nbsp;                    gui.loadNewStatusScreen(GUIStatus.SETUP, null);</b>
+<b class="nc"><i>441</i>&nbsp;                    setup = (SetUpScreen) actualScreen;</b>
+<b class="nc"><i>442</i>&nbsp;                } catch (GUIStatusErrorException e) {</b>
+<b class="nc"><i>443</i>&nbsp;                    e.printStackTrace();</b>
+<b class="nc"><i>444</i>&nbsp;                }</b>
+<i>445</i>&nbsp;            }
+<i>446</i>&nbsp;        };
 <i>447</i>&nbsp;
-<i>448</i>&nbsp;
-<i>449</i>&nbsp;}
+<b class="nc"><i>448</i>&nbsp;        timer.schedule(reloadGame, 5000);</b>
+<i>449</i>&nbsp;    }
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;
+<i>453</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>

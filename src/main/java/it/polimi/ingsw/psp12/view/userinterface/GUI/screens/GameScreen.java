@@ -199,7 +199,13 @@ public class GameScreen extends Screen
         {
             actualBoard = new Board();
         }
-        selectdCells.add(actualBoard.getCell(p));
+
+        Cell selected = actualBoard.getCell(p);
+        // check if cell has not already been selected
+        if (selectdCells.contains(selected)) {
+            return;
+        }
+        selectdCells.add(selected);
 
         // Check the game phase
         switch (phase)

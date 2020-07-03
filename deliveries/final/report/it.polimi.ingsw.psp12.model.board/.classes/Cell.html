@@ -166,53 +166,54 @@
 <i>92</i>&nbsp;    /**
 <i>93</i>&nbsp;     * Check if worker can move on the current cell
 <i>94</i>&nbsp;     * @param currentLevel the level of the actual cell tower
-<i>95</i>&nbsp;     * @return true if tower.level - currentLevel &lt;= maxClimbLevel
-<i>96</i>&nbsp;     */
-<i>97</i>&nbsp;    public boolean canMoveOn(int currentLevel, int maxClimbLevel) {
-<b class="fc"><i>98</i>&nbsp;        return (tower.getLevel() - currentLevel) &lt;= maxClimbLevel &amp;&amp; !tower.hasDome();</b>
-<i>99</i>&nbsp;    }
-<i>100</i>&nbsp;
-<i>101</i>&nbsp;    /**
-<i>102</i>&nbsp;     * Check if worker can build on the current cell
-<i>103</i>&nbsp;     * @return true if worker can build on the current cell
-<i>104</i>&nbsp;     */
-<i>105</i>&nbsp;    public boolean canBuildOn() {
-<b class="fc"><i>106</i>&nbsp;        return !tower.hasDome();</b>
-<i>107</i>&nbsp;    }
-<i>108</i>&nbsp;
-<i>109</i>&nbsp;    /**
-<i>110</i>&nbsp;     * Determines if two cells are equal
-<i>111</i>&nbsp;     * @param o cell to compare
-<i>112</i>&nbsp;     * @return true if this cell equals the parameter
-<i>113</i>&nbsp;     */
-<i>114</i>&nbsp;    @Override
-<i>115</i>&nbsp;    public boolean equals(Object o) {
-<b class="fc"><i>116</i>&nbsp;        if (this == o) return true;</b>
-<b class="fc"><i>117</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
-<b class="fc"><i>118</i>&nbsp;        Cell cell = (Cell) o;</b>
-<b class="fc"><i>119</i>&nbsp;        return location.equals(cell.location);</b>
-<i>120</i>&nbsp;    }
-<i>121</i>&nbsp;
-<i>122</i>&nbsp;    /**
-<i>123</i>&nbsp;     * Returns a clone of the cell
-<i>124</i>&nbsp;     * @return cell clone
-<i>125</i>&nbsp;     */
-<i>126</i>&nbsp;    @Override
-<i>127</i>&nbsp;    public Cell clone() {
-<b class="fc"><i>128</i>&nbsp;        Cell c = new Cell(this.location.getX(), this.location.getY());</b>
-<b class="fc"><i>129</i>&nbsp;        c.tower = this.tower.clone();</b>
-<b class="fc"><i>130</i>&nbsp;        if (this.worker != null) {</b>
-<b class="fc"><i>131</i>&nbsp;            c.worker = this.worker.clone();</b>
-<i>132</i>&nbsp;        }
-<b class="fc"><i>133</i>&nbsp;        return c;</b>
-<i>134</i>&nbsp;    }
-<i>135</i>&nbsp;}
+<i>95</i>&nbsp;     * @param maxClimbLevel max number of level/s which is possible to climb
+<i>96</i>&nbsp;     * @return true if (tower.level - currentLevel) is low_equal to maxClimbLevel
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    public boolean canMoveOn(int currentLevel, int maxClimbLevel) {
+<b class="fc"><i>99</i>&nbsp;        return (tower.getLevel() - currentLevel) &lt;= maxClimbLevel &amp;&amp; !tower.hasDome();</b>
+<i>100</i>&nbsp;    }
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * Check if worker can build on the current cell
+<i>104</i>&nbsp;     * @return true if worker can build on the current cell
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public boolean canBuildOn() {
+<b class="fc"><i>107</i>&nbsp;        return !tower.hasDome();</b>
+<i>108</i>&nbsp;    }
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Determines if two cells are equal
+<i>112</i>&nbsp;     * @param o cell to compare
+<i>113</i>&nbsp;     * @return true if this cell equals the parameter
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    @Override
+<i>116</i>&nbsp;    public boolean equals(Object o) {
+<b class="fc"><i>117</i>&nbsp;        if (this == o) return true;</b>
+<b class="fc"><i>118</i>&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="fc"><i>119</i>&nbsp;        Cell cell = (Cell) o;</b>
+<b class="fc"><i>120</i>&nbsp;        return location.equals(cell.location);</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Returns a clone of the cell
+<i>125</i>&nbsp;     * @return cell clone
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    @Override
+<i>128</i>&nbsp;    public Cell clone() {
+<b class="fc"><i>129</i>&nbsp;        Cell c = new Cell(this.location.getX(), this.location.getY());</b>
+<b class="fc"><i>130</i>&nbsp;        c.tower = this.tower.clone();</b>
+<b class="fc"><i>131</i>&nbsp;        if (this.worker != null) {</b>
+<b class="fc"><i>132</i>&nbsp;            c.worker = this.worker.clone();</b>
+<i>133</i>&nbsp;        }
+<b class="fc"><i>134</i>&nbsp;        return c;</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>

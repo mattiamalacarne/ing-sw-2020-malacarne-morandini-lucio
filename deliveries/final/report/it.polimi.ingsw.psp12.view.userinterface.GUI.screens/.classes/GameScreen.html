@@ -166,8 +166,8 @@
 <i>66</i>&nbsp;
 <i>67</i>&nbsp;
 <i>68</i>&nbsp;    /**
-<i>69</i>&nbsp;     * init a gamescreen
-<i>70</i>&nbsp;     * @param gui
+<i>69</i>&nbsp;     * init a game screen
+<i>70</i>&nbsp;     * @param gui the GUI
 <i>71</i>&nbsp;     * @param cardMsg draw the correct card on screen
 <i>72</i>&nbsp;     */
 <i>73</i>&nbsp;    public GameScreen(GUinterface gui, YourCardMsg cardMsg)
@@ -195,7 +195,7 @@
 <i>95</i>&nbsp;
 <i>96</i>&nbsp;    /**
 <i>97</i>&nbsp;     * Set a new game phase
-<i>98</i>&nbsp;     * @param phase
+<i>98</i>&nbsp;     * @param phase the game phase
 <i>99</i>&nbsp;     */
 <i>100</i>&nbsp;    public void setGamePhase(GamePhase phase)
 <i>101</i>&nbsp;    {
@@ -241,7 +241,7 @@
 <i>141</i>&nbsp;
 <i>142</i>&nbsp;    /**
 <i>143</i>&nbsp;     * Tell the gameBoard to draw worker and tower
-<i>144</i>&nbsp;     * @param msg
+<i>144</i>&nbsp;     * @param msg the UpdateBoardMsg message
 <i>145</i>&nbsp;     */
 <i>146</i>&nbsp;    public void drawBoard(UpdateBoardMsg msg)
 <i>147</i>&nbsp;    {
@@ -259,7 +259,7 @@
 <i>159</i>&nbsp;
 <i>160</i>&nbsp;    /**
 <i>161</i>&nbsp;     * Setup the player selecting color and the start position of the worker
-<i>162</i>&nbsp;     * @param msg
+<i>162</i>&nbsp;     * @param msg the RequestInfoMsg message
 <i>163</i>&nbsp;     */
 <i>164</i>&nbsp;    public void setUp(RequestInfoMsg msg)
 <i>165</i>&nbsp;    {
@@ -270,8 +270,8 @@
 <i>170</i>&nbsp;    }
 <i>171</i>&nbsp;
 <i>172</i>&nbsp;    /**
-<i>173</i>&nbsp;     * Extract the location of the selectable cells and make it readable for validateboard
-<i>174</i>&nbsp;     * @param cells
+<i>173</i>&nbsp;     * Extract the location of the selectable cells and make it readable for validate board
+<i>174</i>&nbsp;     * @param cells the list of the selectable cells
 <i>175</i>&nbsp;     */
 <i>176</i>&nbsp;    public void displayPossibility(List&lt;Cell&gt; cells)
 <i>177</i>&nbsp;    {
@@ -313,7 +313,7 @@
 <i>213</i>&nbsp;
 <i>214</i>&nbsp;    /**
 <i>215</i>&nbsp;     * Generate the list of possible action for the user
-<i>216</i>&nbsp;     * @param actions
+<i>216</i>&nbsp;     * @param actions the list of possible action for the user
 <i>217</i>&nbsp;     */
 <i>218</i>&nbsp;    public void setPossibleActionList(List&lt;Action&gt; actions)
 <i>219</i>&nbsp;    {
@@ -333,7 +333,7 @@
 <i>233</i>&nbsp;
 <i>234</i>&nbsp;    /**
 <i>235</i>&nbsp;     * Display a box with possible action list
-<i>236</i>&nbsp;     * @param poss
+<i>236</i>&nbsp;     * @param poss list of possible action
 <i>237</i>&nbsp;     */
 <i>238</i>&nbsp;    public void displayActionSelection(List&lt;Action&gt; poss)
 <i>239</i>&nbsp;    {
@@ -342,7 +342,7 @@
 <i>242</i>&nbsp;
 <i>243</i>&nbsp;    /**
 <i>244</i>&nbsp;     * Choose an action from the list
-<i>245</i>&nbsp;     * @param action
+<i>245</i>&nbsp;     * @param action the action
 <i>246</i>&nbsp;     */
 <i>247</i>&nbsp;    public void chooseAction(int action) {
 <i>248</i>&nbsp;
@@ -392,8 +392,8 @@
 <i>292</i>&nbsp;    }
 <i>293</i>&nbsp;
 <i>294</i>&nbsp;    /**
-<i>295</i>&nbsp;     * Choose if confirm the turn or rpeat
-<i>296</i>&nbsp;     * @param cmd
+<i>295</i>&nbsp;     * Choose if confirm the turn or repeat
+<i>296</i>&nbsp;     * @param cmd the command
 <i>297</i>&nbsp;     */
 <i>298</i>&nbsp;    public void chooseUndo(MsgCommand cmd)
 <i>299</i>&nbsp;    {
@@ -420,7 +420,7 @@
 <i>320</i>&nbsp;
 <i>321</i>&nbsp;    /**
 <i>322</i>&nbsp;     * Display a box with possible build list
-<i>323</i>&nbsp;     * @param poss
+<i>323</i>&nbsp;     * @param poss the list of possible build option
 <i>324</i>&nbsp;     */
 <i>325</i>&nbsp;    public void displayBuildSelection(List&lt;BuildOption&gt; poss)
 <i>326</i>&nbsp;    {
@@ -429,7 +429,7 @@
 <i>329</i>&nbsp;
 <i>330</i>&nbsp;    /**
 <i>331</i>&nbsp;     * Choose the type of build
-<i>332</i>&nbsp;     * @param buildOption
+<i>332</i>&nbsp;     * @param buildOption the build option
 <i>333</i>&nbsp;     */
 <i>334</i>&nbsp;    public void chooseBuild(BuildOption buildOption)
 <i>335</i>&nbsp;    {
@@ -442,7 +442,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>

@@ -162,59 +162,60 @@
 <i>88</i>&nbsp;    /**
 <i>89</i>&nbsp;     * Determines the list of next possible actions based on the current turn state
 <i>90</i>&nbsp;     * @param turnState current turn state
-<i>91</i>&nbsp;     * @return list of actions that can be performed next
-<i>92</i>&nbsp;     */
-<i>93</i>&nbsp;    public abstract List&lt;Action&gt; nextActions(TurnState turnState, Board b);
-<i>94</i>&nbsp;
-<i>95</i>&nbsp;    /**
-<i>96</i>&nbsp;     * Determines the new position of another worker when it is forced to move by the current worker
-<i>97</i>&nbsp;     * @param currentPos current position of the current worker
-<i>98</i>&nbsp;     * @param otherPos current position of the other worker
-<i>99</i>&nbsp;     * @return new position of the other worker
-<i>100</i>&nbsp;     */
-<i>101</i>&nbsp;    public abstract Point getOtherWorkerMove(Point currentPos, Point otherPos);
-<i>102</i>&nbsp;
-<i>103</i>&nbsp;    /**
-<i>104</i>&nbsp;     * Save the last move position after the worker moved
-<i>105</i>&nbsp;     * @param position current cell
-<i>106</i>&nbsp;     */
-<i>107</i>&nbsp;    public abstract void moved(Cell position);
-<i>108</i>&nbsp;
-<i>109</i>&nbsp;    /**
-<i>110</i>&nbsp;     * Save the initial position of the current worker at the beginning of a turn
-<i>111</i>&nbsp;     * @param position initial position of the worker
-<i>112</i>&nbsp;     */
-<i>113</i>&nbsp;    public abstract void setInitialPosition(Cell position);
-<i>114</i>&nbsp;
-<i>115</i>&nbsp;    /**
-<i>116</i>&nbsp;     * Save the last build position after the worker has built
-<i>117</i>&nbsp;     * @param position build cell
-<i>118</i>&nbsp;     */
-<i>119</i>&nbsp;    public abstract void hasBuilt(Cell position);
-<i>120</i>&nbsp;
-<i>121</i>&nbsp;    /**
-<i>122</i>&nbsp;     * Set the cell where the next build will be performed
-<i>123</i>&nbsp;     * @param position next build cell
-<i>124</i>&nbsp;     */
-<i>125</i>&nbsp;    public abstract void setBuildInProgress(Cell position);
-<i>126</i>&nbsp;
-<i>127</i>&nbsp;    /**
-<i>128</i>&nbsp;     * Get the cell where the next build will be performed
-<i>129</i>&nbsp;     * @return next build cell
-<i>130</i>&nbsp;     */
-<i>131</i>&nbsp;    public abstract Cell getBuildInProgress();
-<i>132</i>&nbsp;
-<i>133</i>&nbsp;    /**
-<i>134</i>&nbsp;     * Reset all Power&#39;s attributes to basic power condition
-<i>135</i>&nbsp;     */
-<i>136</i>&nbsp;    public abstract void reset();
-<i>137</i>&nbsp;}
+<i>91</i>&nbsp;     * @param b the Board
+<i>92</i>&nbsp;     * @return list of actions that can be performed next
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public abstract List&lt;Action&gt; nextActions(TurnState turnState, Board b);
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * Determines the new position of another worker when it is forced to move by the current worker
+<i>98</i>&nbsp;     * @param currentPos current position of the current worker
+<i>99</i>&nbsp;     * @param otherPos current position of the other worker
+<i>100</i>&nbsp;     * @return new position of the other worker
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    public abstract Point getOtherWorkerMove(Point currentPos, Point otherPos);
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Save the last move position after the worker moved
+<i>106</i>&nbsp;     * @param position current cell
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    public abstract void moved(Cell position);
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Save the initial position of the current worker at the beginning of a turn
+<i>112</i>&nbsp;     * @param position initial position of the worker
+<i>113</i>&nbsp;     */
+<i>114</i>&nbsp;    public abstract void setInitialPosition(Cell position);
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Save the last build position after the worker has built
+<i>118</i>&nbsp;     * @param position build cell
+<i>119</i>&nbsp;     */
+<i>120</i>&nbsp;    public abstract void hasBuilt(Cell position);
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Set the cell where the next build will be performed
+<i>124</i>&nbsp;     * @param position next build cell
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public abstract void setBuildInProgress(Cell position);
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Get the cell where the next build will be performed
+<i>130</i>&nbsp;     * @return next build cell
+<i>131</i>&nbsp;     */
+<i>132</i>&nbsp;    public abstract Cell getBuildInProgress();
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Reset all Power&#39;s attributes to basic power condition
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public abstract void reset();
+<i>138</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-02 22:11</div>
+    <div style="float:right;">generated on 2020-07-03 19:12</div>
 </div>
 </body>
 </html>
